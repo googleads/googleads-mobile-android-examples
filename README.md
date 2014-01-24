@@ -8,10 +8,10 @@ Samples
 =======
 Admob
 -----
-* [Banner](https://github.com/googleads/googleads-mobile-android/tree/master/admob/banner) (Banner is created in code)
-* [Banner XML](https://github.com/googleads/googleads-mobile-android/tree/master/admob/banner-xml) (Banner is created in XML)
-* [Banner AdListener](https://github.com/googleads/googleads-mobile-android/tree/master/admob/banner-adlistener) (Implementing an AdListener)
-* [Interstitial](https://github.com/googleads/googleads-mobile-android/tree/master/admob/interstitial)
+* [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/banner) (Banner is created in code)
+* [Banner XML](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/banner-xml) (Banner is created in XML)
+* [Banner AdListener](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/banner-adlistener) (Implementing an AdListener)
+* [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/interstitial)
 
 Doubleclick
 -----------
@@ -19,7 +19,7 @@ Coming soon
 
 Downloads
 =========
-Please check out our [releases](https://github.com/googleads/googleads-mobile-android/releases) for the latest downloads for the different sample apps.
+Please check out our [releases](https://github.com/googleads/googleads-mobile-android-examples/releases) for the latest downloads for the different sample apps.
 
 Documentation
 ==============
@@ -27,7 +27,7 @@ Check out our [developers site](https://developers.google.com/mobile-ads-sdk/) f
 
 Suggesting improvements
 =======================
-To file bugs, make feature requests, or to suggest other improvements, please use [github's issue tracker](https://github.com/googleads/googleads-mobile-android/issues).
+To file bugs, make feature requests, or to suggest other improvements, please use [github's issue tracker](https://github.com/googleads/googleads-mobile-android-examples/issues).
 
 License
 =======
