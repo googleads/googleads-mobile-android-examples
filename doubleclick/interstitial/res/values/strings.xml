@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DFP Interstitial Sample</string>
+    <string name="load_interstitial">Load Interstitial</string>
+    <string name="title_activity_interstitial_sample">DFP Interstitial Sample</string>
+</resources>

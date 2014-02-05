@@ -1,0 +1,80 @@
+This sample app shows off a basic banner from DFP, multiple ad sizes, and app
+events features. To choose which sample to run, update the SAMPLE_TO_RUN
+constant in BannerSamples.java.
+
+For the app events sample, the sample creative code is provided below, showing
+how the creative sends events to the app.
+
+-------------------------------------------------------------------------------
+SAMPLE CREATIVE WITH APP EVENTS
+-------------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width,
+                 height=device-height,
+                 user-scalable=0,
+                 minimum-scale=1.0,
+                 maximum-scale=1.0"/>
+  <script type="text/javascript"
+      src="http://media.admob.com/api/v1/google_mobile_app_ads.js"></script>
+  <script>
+    handleClick = function() {
+      admob.events.dispatchAppEvent('color', 'green');
+      return false;
+    };
+
+    admob.events.dispatchAppEvent('color', 'red');
+
+    var counter = 5;
+    function decrementAppEventCounter() {
+      if (counter > 0) {
+        document.getElementById('count').innerHTML = counter;
+        counter--;
+        setTimeout(decrementAppEventCounter, 1000);
+      } else if (counter == 0) {
+        counter = -1;
+        document.getElementById('clk').innerHTML = 'Sent app event!';
+        admob.events.dispatchAppEvent('color', 'blue');
+        var htmlSource = document.documentElement.outerHTML;
+        admob.events.dispatchAppEvent('html', htmlSource)
+      }
+    }
+  </script>
+  <style>
+    * {
+      border: 0;
+      margin: 0;
+      outline: 0;
+      padding: 0;
+      -webkit-user-select: none;
+    }
+
+    body {
+      font-size: 20pt;
+      background: #000;
+      color: #000;
+      font-weight: bold;
+      font-family: helvetica;
+    }
+
+    #clk {
+      height: 50px;
+      width: 320px;
+      top: 0px;
+      left: 0px;
+      position: absolute;
+      background: #F80;
+      text-align: center;
+    }
+  </style>
+</head>
+<body onload="decrementAppEventCounter()">
+  <div id="clk" onClick="handleClick(); return false;">
+    Sending app event in: <span id="count"></span>
+  </div>
+</body>
+</html>

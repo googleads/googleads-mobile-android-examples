@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DFP Banner Sample</string>
+    <string name="title_activity_banner_sample">DFP Banner Sample</string>
+    <string name="refresh">Refresh</string>
+</resources>
