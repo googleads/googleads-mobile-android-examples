@@ -12,10 +12,12 @@ Admob
 * [Banner XML](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/banner-xml) (Banner is created in XML)
 * [Banner AdListener](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/banner-adlistener) (Implementing an AdListener)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/interstitial)
+* [Splash Screen Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/splash_interstitial)
 
 Doubleclick
 -----------
-Coming soon
+* [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/banner) (includes multiple ad sizes and app event examples)
+* [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/interstitial)
 
 Downloads
 =========
