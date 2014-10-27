@@ -1,6 +1,6 @@
 Google Mobile Ads SDK for Android
 =================================
-The Google Mobile Ads SDK is the latest generation in Google mobile advertising featuring refined ad formats and streamlined APIs for access to mobile ad networks and advertising solutions. The SDK enables mobile app developers to maximize their monetization in native mobile apps.
+The Google Mobile Ads SDK is the latest generation in Google mobile advertising, featuring refined ad formats and streamlined APIs for access to mobile ad networks and advertising solutions. The SDK enables mobile app developers to maximize their monetization in native mobile apps.
 
 This repository contains the source code of samples and developer resources related to the Google Play Services Android SDKs for AdMob and Doubleclick For Publishers.
 
@@ -25,11 +25,11 @@ Please check out our [releases](https://github.com/googleads/googleads-mobile-an
 
 Documentation
 ==============
-Check out our [developers site](https://developers.google.com/mobile-ads-sdk/) for documentation on using the SDK, and join the developer community on [our forum](https://groups.google.com/forum/#!forum/google-admob-ads-sdk).
+Check out our [developers' site](https://developers.google.com/mobile-ads-sdk/) for documentation on using the SDK, and join the developer community on [our forum](https://groups.google.com/forum/#!forum/google-admob-ads-sdk).
 
 Suggesting improvements
 =======================
-To file bugs, make feature requests, or to suggest other improvements, please use [github's issue tracker](https://github.com/googleads/googleads-mobile-android-examples/issues).
+To file bugs, make feature requests, or to suggest other improvements, please use [Github's issue tracker](https://github.com/googleads/googleads-mobile-android-examples/issues).
 
 License
 =======
