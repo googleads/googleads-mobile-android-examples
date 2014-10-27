@@ -17,7 +17,7 @@ Admob
 Doubleclick
 -----------
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/BannerExample)
-* [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/interstitial)
+* [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/interstitial)
 
 Downloads
 =========
