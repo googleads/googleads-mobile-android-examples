@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.google.android.gms.example.bannerexample"
+        applicationId "com.google.android.gms.example.interstitialexample"
         minSdkVersion 9
         targetSdkVersion 20
         versionCode 1
