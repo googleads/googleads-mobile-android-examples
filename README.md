@@ -17,12 +17,14 @@ Admob
 
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/BannerExample)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/InterstitialExample)
+* [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExample)
 
 Doubleclick
 -----------
 
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/BannerExample)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/InterstitialExample)
+* [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/NativeExample)
 
 Downloads
 =========
@@ -44,10 +46,4 @@ To file bugs, make feature requests, or to suggest other improvements, please us
 License
 =======
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html)
-
-Contributing
-============
-Pull requests are welcome! Please sign
-[this Google Code contributor agreement](https://developers.google.com/open-source/cla/individual?csw=1)
-before submitting.
 
