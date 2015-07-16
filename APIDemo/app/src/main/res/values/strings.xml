@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mobile Ads API Demos</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="unspecified">Unspecified</string>
+    <string name="choose">Choose...</string>
+
+    <string name="targeting_location">Location</string>
+    <string name="targeting_birthday">Birth Date</string>
+    <string name="targeting_gender">Gender</string>
+    <string name="targeting_child">Use Child-Directed Treatment</string>
+    <string name="targeting_male">Male</string>
+    <string name="targeting_female">Female</string>
+    <string name="targeting_load">Load Targeted Ad</string>
+    <string name="bannersizes_size">Size</string>
+    <string name="bannersizes_loadad">Load New Ad</string>
+
+    <string-array name="bannersizes_largesizes">
+        <item>Banner</item>
+        <item>Large Banner</item>
+        <item>Smart Banner</item>
+        <item>Full Banner</item>
+        <item>Medium Rectangle</item>
+        <item>Leaderboard</item>
+    </string-array>
+
+    <string-array name="bannersizes_smallsizes">
+        <item>Banner</item>
+        <item>Large Banner</item>
+        <item>Smart Banner</item>
+    </string-array>
+
+    <string name="appevents_adunitid">/6499/example/APIDemo/AppEvents</string>
+
+    <string name="customtargeting_adunitid">/6499/example/APIDemo/CustomTargeting</string>
+    <string name="customtargeting_sport">Favorite Sport</string>
+    <string name="customtargeting_loadad">Load New Ad</string>
+    <string name="customtargeting_key">sportpref</string>
+
+    <string-array name="customtargeting_sports">
+        <item>Baseball</item>
+        <item>Basketball</item>
+        <item>Bobsled</item>
+        <item>Football</item>
+        <item>Ice Hockey</item>
+        <item>Running</item>
+        <item>Skiing</item>
+        <item>Snowboarding</item>
+        <item>Softball</item>
+    </string-array>
+
+    <string name="categoryexclusion_adunitid">/6499/example/APIDemo/CategoryExclusion</string>
+    <string name="categoryexclusion_catscategoryname">apidemo_exclude_cats</string>
+    <string name="categoryexclusion_dogscategoryname">apidemo_exclude_dogs</string>
+    <string name="categoryexclusion_catsexcluded">Banner (excluding cats)</string>
+    <string name="categoryexclusion_dogsexcluded">Banner (excluding dogs)</string>
+
+    <string name="ppid_adunitid">/6499/example/APIDemo/PPID</string>
+    <string name="ppid_username">Example Username</string>
+    <string name="ppid_username_hint">e.g. "user123"</string>
+    <string name="ppid_loadad">Load New Ad</string>
+
+    <string name="adsizes_adunitid">/6499/example/APIDemo/AdSizes</string>
+    <string name="adsizes_size">Available sizes</string>
+    <string name="adsizes_loadad">Load New Ad</string>
+
+    <string name="customevent_bannertext">
+        This is a Custom Event Banner\nwith a parameter of \"%s\".
+    </string>
+
+    <string-array name="fragment_names">
+        <item>AdMob - Ad Listener</item>
+        <item>AdMob - Ad Targeting</item>
+        <item>AdMob - Banner Sizes</item>
+        <item>AdMob - Custom Event</item>
+        <item>DFP - PPID</item>
+        <item>DFP - Custom Targeting</item>
+        <item>DFP - Category Exclusions</item>
+        <item>DFP - Ad Sizes</item>
+        <item>DFP - App Events</item>
+    </string-array>
+
+    <string name="admob_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_customevent_ad_unit_id">ca-app-pub-3940256099942544/3325725716</string>
+
+    <string name="listener_fragment_title">AdMob Ad Listener</string>
+    <string name="targeting_fragment_title">AdMob Ad Targeting</string>
+    <string name="bannersizes_fragment_title">AdMob Banner Sizes</string>
+    <string name="customevent_fragment_title">AdMob Custom Event</string>
+    <string name="appevents_fragment_title">DFP App Events</string>
+    <string name="categoryexclusion_fragment_title">DFP Category Exclusion</string>
+    <string name="customtargeting_fragment_title">DFP Custom Targeting</string>
+    <string name="adsizes_fragment_title">DFP Multiple Ad Sizes</string>
+    <string name="ppid_fragment_title">DFP PPID</string>
+
+</resources>

@@ -26,6 +26,11 @@ Doubleclick
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/InterstitialExample)
 * [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/NativeExample)
 
+Advanced (featuring both AdMob and DoubleClick technologies)
+------------------------------------------------------------
+
+* [APIDemo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/APIDemo)
+
 Downloads
 =========
 Please check out our
