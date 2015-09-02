@@ -29,7 +29,8 @@ Doubleclick
 Advanced (featuring both AdMob and DoubleClick technologies)
 ------------------------------------------------------------
 
-* [APIDemo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/APIDemo)
+* [APIDemo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo)
+* [NativeListViewExample](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample)
 
 Downloads
 =========
@@ -51,4 +52,3 @@ To file bugs, make feature requests, or to suggest other improvements, please us
 License
 =======
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html)
-

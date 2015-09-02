@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Native Ads Example</string>
+    <string name="action_settings">Settings</string>
+    <string name="appinstall_imagedescription">Screenshot</string>
+    <string name="advertisement">Advertisement</string>
+    <string formatted="false" name="custom_click_toast">A custom click event has occurred for the %s asset in the %s template.</string>
+
+</resources>
