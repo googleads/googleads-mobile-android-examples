@@ -7,7 +7,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="unspecified">Unspecified</string>
-    <string name="choose">Choose...</string>
+    <string name="choose">Choose…</string>
 
     <string name="targeting_location">Location</string>
     <string name="targeting_birthday">Birth Date</string>
@@ -35,6 +35,10 @@
     </string-array>
 
     <string name="appevents_adunitid">/6499/example/APIDemo/AppEvents</string>
+
+    <string name="fluid_adunitid">/6499/example/APIDemo/Fluid</string>
+    <string name="fluid_above">(this TextView is above the ad)</string>
+    <string name="fluid_below">(this TextView is below the ad)</string>
 
     <string name="customtargeting_adunitid">/6499/example/APIDemo/CustomTargeting</string>
     <string name="customtargeting_sport">Favorite Sport</string>
@@ -68,15 +72,11 @@
     <string name="adsizes_size">Available sizes</string>
     <string name="adsizes_loadad">Load New Ad</string>
 
-    <string name="customevent_bannertext">
-        This is a Custom Event Banner\nwith a parameter of \"%s\".
-    </string>
-
     <string-array name="fragment_names">
         <item>AdMob - Ad Listener</item>
         <item>AdMob - Ad Targeting</item>
         <item>AdMob - Banner Sizes</item>
-        <item>AdMob - Custom Event</item>
+        <item>DFP - Fluid Size</item>
         <item>DFP - PPID</item>
         <item>DFP - Custom Targeting</item>
         <item>DFP - Category Exclusions</item>
@@ -90,7 +90,7 @@
     <string name="listener_fragment_title">AdMob Ad Listener</string>
     <string name="targeting_fragment_title">AdMob Ad Targeting</string>
     <string name="bannersizes_fragment_title">AdMob Banner Sizes</string>
-    <string name="customevent_fragment_title">AdMob Custom Event</string>
+    <string name="fluid_fragment_title">DFP Fluid Ad Size</string>
     <string name="appevents_fragment_title">DFP App Events</string>
     <string name="categoryexclusion_fragment_title">DFP Category Exclusion</string>
     <string name="customtargeting_fragment_title">DFP Custom Targeting</string>

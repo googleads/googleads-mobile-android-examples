@@ -1,0 +1,52 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.google.android.gms.example.apidemo.DFPFluidSizeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fluid_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@string/fluid_fragment_title"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+
+        <TextView
+            android:id="@+id/fluid_tv_beforebanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:paddingTop="16dp"
+            android:text="@string/fluid_above"
+            android:textAppearance="@android:style/TextAppearance.Medium" />
+
+        <com.google.android.gms.ads.doubleclick.PublisherAdView
+            android:id="@+id/fluid_av_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="FLUID"
+            ads:adUnitId="@string/fluid_adunitid" />
+
+        <TextView
+            android:id="@+id/fluid_tv_afterbanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp"
+            android:paddingTop="8dp"
+            android:text="@string/fluid_below"
+            android:textAppearance="@android:style/TextAppearance.Medium" />
+
+
+    </LinearLayout>
+</ScrollView>

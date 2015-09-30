@@ -21,38 +21,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
 /**
- * The {@link AdMobCustomEventFragment} class demonstrates how to use an AdMob custom event. The
- * ad unit used below returns a mediation stack that references {@link SampleCustomEvent}, so an
- * instance of that custom event class will be loaded.
+ * The {@link DFPFluidSizeFragment} demonstrates the use of the {@code AdSize.FLUID} ad size.
  */
-public class AdMobCustomEventFragment extends Fragment {
+public class DFPFluidSizeFragment extends Fragment {
 
-    private AdView mAdView;
+    private PublisherAdView mPublisherAdView;
 
-    public AdMobCustomEventFragment() {
+    public DFPFluidSizeFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admob_custom_event, container, false);
+        return inflater.inflate(R.layout.fragment_dfp_fluid_size, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Note that when running on an emulator, AdMob will only serve test ads. That's fine for
-        // the other demonstrations, but it will prevent the custom event from being used in this
-        // one. In order to properly experience this demo, you'll need to run it on a hardware
-        // device.
+        // The size for this PublisherAdView is defined in the XML layout as AdSize.FLUID. It could
+        // also be set here by calling mPublisherAdView.setAdSizes(AdSize.FLUID).
+        //
+        // An ad with fluid size will automatically stretch or shrink to fit the height of its
+        // content, which can help layout designers cut down on excess whitespace.
+        mPublisherAdView = (PublisherAdView) getView().findViewById(R.id.fluid_av_main);
 
-        mAdView = (AdView) getView().findViewById(R.id.customevent_av_main);
-        mAdView.loadAd(new AdRequest.Builder().build());
+        PublisherAdRequest publisherAdRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(publisherAdRequest);
     }
 }

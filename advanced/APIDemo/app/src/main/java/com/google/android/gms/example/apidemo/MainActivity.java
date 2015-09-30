@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity
             case 0: trans.replace(R.id.container, new AdMobAdListenerFragment()); break;
             case 1: trans.replace(R.id.container, new AdMobAdTargetingFragment()); break;
             case 2: trans.replace(R.id.container, new AdMobBannerSizesFragment()); break;
-            case 3: trans.replace(R.id.container, new AdMobCustomEventFragment()); break;
+            case 3: trans.replace(R.id.container, new DFPFluidSizeFragment()); break;
             case 4: trans.replace(R.id.container, new DFPPPIDFragment()); break;
             case 5: trans.replace(R.id.container, new DFPCustomTargetingFragment()); break;
             case 6: trans.replace(R.id.container, new DFPCategoryExclusionFragment()); break;

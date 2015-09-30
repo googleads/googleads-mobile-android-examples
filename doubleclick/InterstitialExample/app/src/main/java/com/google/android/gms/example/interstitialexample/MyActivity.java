@@ -18,24 +18,29 @@ package com.google.android.gms.example.interstitialexample;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 
 /**
- * Main Activity. Inflates main activity xml and child fragments.
+ * Main Activity. Inflates main activity xml.
  */
 public class MyActivity extends ActionBarActivity {
+
+    private static final long GAME_LENGTH_MILLISECONDS = 3000;
 
     private PublisherInterstitialAd mInterstitialAd;
     private CountDownTimer mCountDownTimer;
     private Button mRetryButton;
+    private boolean mGameIsInProgress;
+    private boolean mAdIsLoading;
+    private long mTimerMilliseconds;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,23 @@ public class MyActivity extends ActionBarActivity {
         // Defined in res/values/strings.xml
         mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
 
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                startGame();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                mAdIsLoading = false;
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                mAdIsLoading = false;
+            }
+        });
+
         // Create the "retry" button, which tries to show an interstitial between game plays.
         mRetryButton = ((Button) findViewById(R.id.retry_button));
         mRetryButton.setVisibility(View.INVISIBLE);
@@ -57,17 +79,28 @@ public class MyActivity extends ActionBarActivity {
             }
         });
 
+        startGame();
+    }
+
+    private void createTimer(final long milliseconds) {
         // Create the game timer, which counts down to the end of the level
         // and shows the "retry" button.
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+
         final TextView textView = ((TextView) findViewById(R.id.timer));
-        mCountDownTimer = new CountDownTimer(3000, 50) {
+
+        mCountDownTimer = new CountDownTimer(milliseconds, 50) {
             @Override
             public void onTick(long millisUnitFinished) {
+                mTimerMilliseconds = millisUnitFinished;
                 textView.setText("seconds remaining: " + ((millisUnitFinished / 1000) + 1));
             }
 
             @Override
             public void onFinish() {
+                mGameIsInProgress = false;
                 textView.setText("done!");
                 mRetryButton.setVisibility(View.VISIBLE);
             }
@@ -75,30 +108,13 @@ public class MyActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-   @Override
     public void onResume() {
-        // Initialize the timer if it hasn't been initialized yet.
-        // Start the game.
+        // Start or resume the game.
         super.onResume();
-        startGame();
+
+        if (mGameIsInProgress) {
+            resumeGame(mTimerMilliseconds);
+        }
     }
 
     @Override
@@ -119,10 +135,22 @@ public class MyActivity extends ActionBarActivity {
     }
 
     private void startGame() {
-        // Hide the retry button, load the ad, and start the timer.
+        // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
+        if (!mAdIsLoading && !mInterstitialAd.isLoaded()) {
+            mAdIsLoading = true;
+            PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+            mInterstitialAd.loadAd(adRequest);
+        }
+
         mRetryButton.setVisibility(View.INVISIBLE);
-        PublisherAdRequest publisherAdRequest = new PublisherAdRequest.Builder().build();
-        mInterstitialAd.loadAd(publisherAdRequest);
+        resumeGame(GAME_LENGTH_MILLISECONDS);
+    }
+
+    private void resumeGame(long milliseconds) {
+        // Create a new timer for the correct length and start it.
+        mGameIsInProgress = true;
+        mTimerMilliseconds = milliseconds;
+        createTimer(milliseconds);
         mCountDownTimer.start();
     }
 }
