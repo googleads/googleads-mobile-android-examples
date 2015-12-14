@@ -60,6 +60,7 @@
     <string name="categoryexclusion_adunitid">/6499/example/APIDemo/CategoryExclusion</string>
     <string name="categoryexclusion_catscategoryname">apidemo_exclude_cats</string>
     <string name="categoryexclusion_dogscategoryname">apidemo_exclude_dogs</string>
+    <string name="categoryexclusion_noexclusions">Banner (no exclusions - cats or dogs)</string>
     <string name="categoryexclusion_catsexcluded">Banner (excluding cats)</string>
     <string name="categoryexclusion_dogsexcluded">Banner (excluding dogs)</string>
 

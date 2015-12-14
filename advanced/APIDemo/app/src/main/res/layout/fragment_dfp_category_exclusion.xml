@@ -18,11 +18,30 @@
         android:textAppearance="@android:style/TextAppearance.Large" />
 
     <TextView
+        android:id="@+id/no_exclusions_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="@string/categoryexclusion_noexclusions"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <com.google.android.gms.ads.doubleclick.PublisherAdView
+        android:id="@+id/no_exclusions_av"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/categoryexclusion_adunitid" />
+
+    <TextView
         android:id="@+id/exclusions_tv_dogsexcluded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="30dp"
         android:text="@string/categoryexclusion_dogsexcluded"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -50,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         ads:adSize="BANNER"
         ads:adUnitId="@string/categoryexclusion_adunitid" />
 

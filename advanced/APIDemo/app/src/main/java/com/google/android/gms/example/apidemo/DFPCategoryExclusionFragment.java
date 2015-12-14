@@ -30,6 +30,7 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
  */
 public class DFPCategoryExclusionFragment extends Fragment {
 
+    private PublisherAdView mNoExclusionsAdView;
     private PublisherAdView mDogsExcludedAdView;
     private PublisherAdView mCatsExcludedAdView;
 
@@ -46,11 +47,14 @@ public class DFPCategoryExclusionFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mNoExclusionsAdView =
+                (PublisherAdView) getView().findViewById(R.id.no_exclusions_av);
         mDogsExcludedAdView =
                 (PublisherAdView) getView().findViewById(R.id.exclusions_av_dogsexcluded);
         mCatsExcludedAdView =
                 (PublisherAdView) getView().findViewById(R.id.exclusions_av_catsexcluded);
 
+        PublisherAdRequest noExclusionsRequest = new PublisherAdRequest.Builder().build();
         PublisherAdRequest dogsExcludedRequest = new PublisherAdRequest.Builder()
                 .addCategoryExclusion(getString(R.string.categoryexclusion_dogscategoryname))
                 .build();
@@ -58,6 +62,7 @@ public class DFPCategoryExclusionFragment extends Fragment {
                 .addCategoryExclusion(getString(R.string.categoryexclusion_catscategoryname))
                 .build();
 
+        mNoExclusionsAdView.loadAd(noExclusionsRequest);
         mDogsExcludedAdView.loadAd(dogsExcludedRequest);
         mCatsExcludedAdView.loadAd(catsExcludedRequest);
     }
