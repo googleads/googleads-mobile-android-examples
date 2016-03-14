@@ -92,22 +92,42 @@ public class MainActivity extends ActionBarActivity {
         adView.setStarRatingView(adView.findViewById(R.id.appinstall_stars));
         adView.setStoreView(adView.findViewById(R.id.appinstall_store));
 
+        // Some assets are guaranteed to be in every NativeAppInstallAd.
         ((TextView) adView.getHeadlineView()).setText(nativeAppInstallAd.getHeadline());
         ((TextView) adView.getBodyView()).setText(nativeAppInstallAd.getBody());
-        ((TextView) adView.getPriceView()).setText(nativeAppInstallAd.getPrice());
-        ((TextView) adView.getStoreView()).setText(nativeAppInstallAd.getStore());
         ((Button) adView.getCallToActionView()).setText(nativeAppInstallAd.getCallToAction());
         ((ImageView) adView.getIconView()).setImageDrawable(nativeAppInstallAd.getIcon()
                 .getDrawable());
-        ((RatingBar) adView.getStarRatingView())
-                .setRating(nativeAppInstallAd.getStarRating().floatValue());
 
         List<NativeAd.Image> images = nativeAppInstallAd.getImages();
 
         if (images.size() > 0) {
-            ((ImageView) adView.getImageView())
-                    .setImageDrawable(images.get(0).getDrawable());
+            ((ImageView) adView.getImageView()).setImageDrawable(images.get(0).getDrawable());
         }
+
+        // Some aren't guaranteed, however, and should be checked.
+        if (nativeAppInstallAd.getPrice() == null) {
+            adView.getPriceView().setVisibility(View.INVISIBLE);
+        } else {
+            adView.getPriceView().setVisibility(View.VISIBLE);
+            ((TextView) adView.getPriceView()).setText(nativeAppInstallAd.getPrice());
+        }
+
+        if (nativeAppInstallAd.getStore() == null) {
+            adView.getStoreView().setVisibility(View.INVISIBLE);
+        } else {
+            adView.getStoreView().setVisibility(View.VISIBLE);
+            ((TextView) adView.getStoreView()).setText(nativeAppInstallAd.getStore());
+        }
+
+        if (nativeAppInstallAd.getStarRating() == null) {
+            adView.getStarRatingView().setVisibility(View.INVISIBLE);
+        } else {
+            ((RatingBar) adView.getStarRatingView())
+                    .setRating(nativeAppInstallAd.getStarRating().floatValue());
+            adView.getStarRatingView().setVisibility(View.VISIBLE);
+        }
+
 
         // Assign native ad object to the native view.
         adView.setNativeAd(nativeAppInstallAd);
@@ -129,6 +149,7 @@ public class MainActivity extends ActionBarActivity {
         adView.setLogoView(adView.findViewById(R.id.contentad_logo));
         adView.setAdvertiserView(adView.findViewById(R.id.contentad_advertiser));
 
+        // Some assets are guaranteed to be in every NativeContentAd.
         ((TextView) adView.getHeadlineView()).setText(nativeContentAd.getHeadline());
         ((TextView) adView.getBodyView()).setText(nativeContentAd.getBody());
         ((TextView) adView.getCallToActionView()).setText(nativeContentAd.getCallToAction());
@@ -136,16 +157,18 @@ public class MainActivity extends ActionBarActivity {
 
         List<NativeAd.Image> images = nativeContentAd.getImages();
 
-        if (images != null && images.size() > 0) {
-            ((ImageView) adView.getImageView())
-                    .setImageDrawable(images.get(0).getDrawable());
+        if (images.size() > 0) {
+            ((ImageView) adView.getImageView()).setImageDrawable(images.get(0).getDrawable());
         }
 
+        // Some aren't guaranteed, however, and should be checked.
         NativeAd.Image logoImage = nativeContentAd.getLogo();
 
-        if (logoImage != null) {
-            ((ImageView) adView.getLogoView())
-                    .setImageDrawable(logoImage.getDrawable());
+        if (logoImage == null) {
+            adView.getLogoView().setVisibility(View.INVISIBLE);
+        } else {
+            ((ImageView) adView.getLogoView()).setImageDrawable(logoImage.getDrawable());
+            adView.getLogoView().setVisibility(View.VISIBLE);
         }
 
         // Assign native ad object to the native view.

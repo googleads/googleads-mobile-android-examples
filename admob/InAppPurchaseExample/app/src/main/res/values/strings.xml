@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">InAppPurchaseExample</string>
+    <string name="load_ad">Load Ad</string>
+    <string name="show_ad">Show Ad</string>
+</resources>
