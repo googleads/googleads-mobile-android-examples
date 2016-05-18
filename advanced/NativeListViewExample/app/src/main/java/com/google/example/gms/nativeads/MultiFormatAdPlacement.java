@@ -47,10 +47,6 @@ public class MultiFormatAdPlacement
 
         if (convertView == null) {
             mFrame = new FrameLayout(parent.getContext());
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            mFrame.setLayoutParams(layoutParams);
         }
 
         // This statement kicks off the ad loading process.  The ViewHolder has some interface
@@ -144,8 +140,8 @@ public class MultiFormatAdPlacement
 
             LayoutInflater inflater = (LayoutInflater) mFrame.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View adView = inflater.inflate(R.layout.item_extended_custom_template_ad,
-                    mFrame, false);
+            View adView = inflater.inflate(R.layout.item_extended_custom_template_ad, mFrame,
+                    false);
             mFrame.addView(adView);
 
             ExtendedCustomTemplateAdViewHolder extendedCustomTemplateAdViewHolder =

@@ -50,10 +50,6 @@ public class ContentAdPlacement implements AdPlacement {
         // and ViewHolder should be created and used.
         if (holder == null) {
             frameLayout = new FrameLayout(parent.getContext());
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            frameLayout.setLayoutParams(layoutParams);
 
             LayoutInflater inflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

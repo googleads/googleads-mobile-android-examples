@@ -145,7 +145,9 @@ public class MultiFormatAdFetcher {
                         .withAdListener(new AdListener() {
                             @Override
                             public void onAdFailedToLoad(int errorCode) {
-                                mPlacement.getCurrentViewHolder().hideView();
+                                if (mPlacement.getCurrentViewHolder() != null) {
+                                    mPlacement.getCurrentViewHolder().hideView();
+                                }
                                 Log.e(MainActivity.LOG_TAG,
                                         "Multi-Format Ad Failed to load: " + errorCode);
                             }

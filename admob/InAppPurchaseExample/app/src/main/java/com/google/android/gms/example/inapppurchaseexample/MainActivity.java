@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.purchase.InAppPurchaseResult;
 import com.google.android.gms.ads.purchase.PlayStorePurchaseListener;
 
@@ -54,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements PlayStorePurchase
      * Your ad unit ID for in-app purchase ads.
      */
     private static final String AD_UNIT_ID = "/6499/example/iap";
+
+    /**
+     * Your AdMob Application ID.
+     */
+    private static final String APP_ID = "ca-app-pub-3940256099942544~3347511713";
 
     /**
      * The key for the billing response code in the Intent extras.
@@ -99,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements PlayStorePurchase
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, APP_ID);
 
         mGoods = 0;
         mGoodsTextView = (TextView) findViewById(R.id.tv_goods);

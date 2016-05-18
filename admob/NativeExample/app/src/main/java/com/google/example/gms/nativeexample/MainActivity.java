@@ -19,6 +19,7 @@ package com.google.example.gms.nativeexample;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.ads.formats.NativeAppInstallAd;
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
@@ -44,6 +45,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
+    private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
 
     private Button mRefresh;
     private CheckBox mRequestAppInstallAds;
@@ -53,6 +55,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, ADMOB_APP_ID);
 
         mRefresh = (Button) findViewById(R.id.btn_refresh);
         mRequestAppInstallAds = (CheckBox) findViewById(R.id.cb_appinstall);

@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_id": "this-is-a-sample",
+    "project_number": "999999999999",
+    "name": "AdMob Samples",
+    "firebase_url": "https://this-is-a-sample-do-not-use.firebaseio.com",
+    "storage_bucket": "this-is-a-sample-do-not-use.storage.firebase.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999999999999:android:0000000000000000",
+        "client_id": "android:com.google.android.gms.example.bannerexample",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.google.android.gms.example.bannerexample",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "this-is-a-sample-do-not-use.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.android.gms.example.bannerexample",
+            "certificate_hash": "0000000000000000000000000000000000000000"
+          }
+        },
+        {
+          "client_id": "this-is-a-sample-do-not-use.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "000000000000000000000000000000000000000"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 2,
+          "test_banner_ad_unit_id": "ca-app-pub-3940256099942544/6300978111",
+          "test_interstitial_ad_unit_id": "ca-app-pub-3940256099942544/1033173712"
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
