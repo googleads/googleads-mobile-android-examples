@@ -1,55 +1,58 @@
-Google Mobile Ads SDK for Android
-=================================
+# Google Mobile Ads SDK for Android
+
 The Google Mobile Ads SDK is the latest generation in Google mobile advertising,
 featuring refined ad formats and streamlined APIs for access to mobile ad
 networks and advertising solutions. The SDK enables mobile app developers to
 maximize their monetization in native mobile apps.
 
-This repository contains the source code of samples and developer resources
-related to the Google Play Services Android SDKs for AdMob and Doubleclick For
-Publishers.
+This repository contains open source examples and developer resources for both
+the AdMob and DoubleClick For Publishers components of the Google Mobile Ads
+SDK.
 
-Samples
-=======
+# Google Mobile Ads SDK Developers forum
 
-Admob
------
+To report SDK feature requests, bugs, and crashes or to browse SDK-related
+discusssions, please use our [Google Mobile Ads SDK Developers forum](https://groups.google.com/forum/#!forum/google-admob-ads-sdk).
+The forum provides the latest SDK announcements and updates as well as
+technical SDK support for our [Android developers](https://groups.google.com/forum/#!categories/google-admob-ads-sdk/android).
+
+# Examples
+
+## AdMob
 
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/BannerExample)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/InterstitialExample)
 * [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExample)
 * [Native Express](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExpressExample)
 
-Doubleclick
------------
+## Advanced
+
+* [APIDemo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo) -Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
+* [NativeListViewExample](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample)
+
+## DoubleClick
 
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/BannerExample)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/InterstitialExample)
 * [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/NativeExample)
 
-Advanced (featuring both AdMob and DoubleClick technologies)
-------------------------------------------------------------
+# Downloads
 
-* [APIDemo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo)
-* [NativeListViewExample](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample)
+Please check out our [releases](https://github.com/googleads/googleads-mobile-android-examples/releases)
+for the latest downloads of our example apps.
 
-Downloads
-=========
-Please check out our
-[releases](https://github.com/googleads/googleads-mobile-android-examples/releases)
-for the latest downloads for the different sample apps.
+# Documentation
 
-Documentation
-==============
-Check out our [developers' site](https://developers.google.com/mobile-ads-sdk/)
-for documentation on using the SDK, and join the developer community on
-[our forum](https://groups.google.com/forum/#!forum/google-admob-ads-sdk).
+Check out our [developers site](https://developers.google.com/mobile-ads-sdk/)
+for documentation on using the Mobile Ads SDK.
 
-Suggesting improvements
-=======================
-To file bugs, make feature requests, or to suggest other improvements, please use
-[Github's issue tracker](https://github.com/googleads/googleads-mobile-android-examples/issues).
+# GitHub issue tracker
 
-License
-=======
+To file bugs, make feature requests, or suggest improvements for the
+**Android example apps**, please use [GitHub's issue tracker](https://github.com/googleads/googleads-mobile-android-examples/issues).
+
+For SDK support issues, please use the [Google Mobile Ads SDK Developers forum](https://groups.google.com/forum/#!forum/google-admob-ads-sdk).
+
+# License
+
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html)
