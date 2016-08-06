@@ -27,8 +27,8 @@ technical SDK support for our [Android developers](https://groups.google.com/for
 
 ## Advanced
 
-* [APIDemo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo) -Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
-* [NativeListViewExample](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample)
+* [API Demo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo) - Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
+* [Native ListView Example](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample)
 
 ## DoubleClick
 

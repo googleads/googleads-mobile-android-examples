@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RewardedVideoExample</string>
+    <string name="action_settings">Settings</string>
+    <string name="impossible_game">Impossible Game</string>
+    <string name="retry_button_text">Retry</string>
+    <string name="watch_video_button_text">Watch Video for 10 additional coins</string>
+    <string name="default_coin_text">Coins: 0</string>
+</resources>
