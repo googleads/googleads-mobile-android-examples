@@ -28,7 +28,8 @@ technical SDK support for our [Android developers](https://groups.google.com/for
 ## Advanced
 
 * [API Demo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo) - Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
-* [Native ListView Example](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample)
+* [Native Express RecyclerView](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExpressRecyclerViewExample) - Provides an example for displaying ads from AdMob Native Ads Express in a RecyclerView widget.
+* [Native ListView Example](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample) - Provides an example for displaying ads from DFP Custom Rendering in a ListView.
 
 ## DoubleClick
 
