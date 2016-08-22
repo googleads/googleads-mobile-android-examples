@@ -22,20 +22,20 @@ technical SDK support for our [Android developers](https://groups.google.com/for
 
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/BannerExample)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/InterstitialExample)
-* [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExample)
+* [Native Advanced](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeAdvancedExample)
 * [Native Express](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExpressExample)
 
 ## Advanced
 
 * [API Demo](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/APIDemo) - Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
-* [Native Express RecyclerView](https://github.com/googleads/googleads-mobile-android-examples/tree/master/admob/NativeExpressRecyclerViewExample) - Provides an example for displaying ads from AdMob Native Ads Express in a RecyclerView widget.
-* [Native ListView Example](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample) - Provides an example for displaying ads from DFP Custom Rendering in a ListView.
+* [Native Express RecyclerView](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeExpressRecyclerViewExample) - Provides an example for displaying ads from AdMob Native Ads Express in a RecyclerView widget.
+* [Native ListView](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample) - Provides an example for displaying ads from DFP Custom Rendering in a ListView.
 
 ## DoubleClick
 
 * [Banner](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/BannerExample)
 * [Interstitial](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/InterstitialExample)
-* [Native](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/NativeExample)
+* [Custom Rendering](https://github.com/googleads/googleads-mobile-android-examples/tree/master/doubleclick/CustomRenderingExample)
 
 # Downloads
 
