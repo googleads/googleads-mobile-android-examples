@@ -31,19 +31,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/targeting_tv_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/targeting_location"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/targeting_tv_locationvalue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
                 android:id="@+id/targeting_tv_birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

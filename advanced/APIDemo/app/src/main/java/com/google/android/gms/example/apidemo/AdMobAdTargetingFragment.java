@@ -15,10 +15,7 @@
  */
 package com.google.android.gms.example.apidemo;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,7 +26,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -48,14 +44,12 @@ public class AdMobAdTargetingFragment extends Fragment
     private AdView mAdView;
     private Button mDatePickButton;
     private Button mLoadAdButton;
-    private TextView mLocationText;
     private EditText mBirthdayEdit;
     private RadioButton mMaleRadio;
     private RadioButton mFemaleRadio;
     private RadioButton mChildRadio;
     private RadioButton mNotChildRadio;
     private RadioButton mUnspecifiedRadio;
-    private Location mLastLocation;
     private SimpleDateFormat mDateFormat = new SimpleDateFormat("M/d/yyyy");
 
     public AdMobAdTargetingFragment() {
@@ -69,18 +63,12 @@ public class AdMobAdTargetingFragment extends Fragment
         mAdView = (AdView) rootView.findViewById(R.id.targeting_av_main);
         mLoadAdButton = (Button) rootView.findViewById(R.id.targeting_btn_loadad);
         mDatePickButton = (Button) rootView.findViewById(R.id.targeting_btn_datepick);
-        mLocationText = (TextView) rootView.findViewById(R.id.targeting_tv_locationvalue);
         mBirthdayEdit = (EditText) rootView.findViewById(R.id.targeting_et_birthday);
         mMaleRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_male);
         mFemaleRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_female);
         mChildRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_child);
         mNotChildRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_notchild);
         mUnspecifiedRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_unspecified);
-
-        if (mLastLocation != null) {
-            mLocationText.setText(String.format("%.3f, %.3f",
-                    mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-        }
 
         mDatePickButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,10 +83,6 @@ public class AdMobAdTargetingFragment extends Fragment
             @Override
             public void onClick(View v) {
                 AdRequest.Builder builder = new AdRequest.Builder();
-
-                if (mLastLocation != null) {
-                    builder.setLocation(mLastLocation);
-                }
 
                 try {
                     String birthdayString = mBirthdayEdit.getText().toString();
@@ -131,15 +115,6 @@ public class AdMobAdTargetingFragment extends Fragment
         });
 
         return rootView;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        LocationManager mgr =
-                (LocationManager) getActivity().getSystemService(Activity.LOCATION_SERVICE);
-        mLastLocation = mgr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        super.onCreate(savedInstanceState);
     }
 
     @Override
