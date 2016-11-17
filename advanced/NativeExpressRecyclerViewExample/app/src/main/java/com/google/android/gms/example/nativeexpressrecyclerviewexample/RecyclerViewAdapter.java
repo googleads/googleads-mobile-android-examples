@@ -120,7 +120,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 // Get the menu item image resource ID.
                 String imageName = menuItem.getImageName();
-                int imageResID = mContext.getResources().getIdentifier(imageName, "mipmap",
+                int imageResID = mContext.getResources().getIdentifier(imageName, "drawable",
                         mContext.getPackageName());
 
                 // Add the menu item details to the menu item view.

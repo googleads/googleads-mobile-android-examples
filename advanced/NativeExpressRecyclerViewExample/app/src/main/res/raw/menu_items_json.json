@@ -1,0 +1,247 @@
+[{
+  "name": "Cherry Avocado",
+  "description": "cherries, garlic, serrano, mayo",
+  "price": "$7.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Fried Baby Onions",
+  "description": "maple syrup, walnut salsa, sauce",
+  "price": "$11.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Fried Rice",
+  "description": "red onion, kale, puffed wild rice",
+  "price": "$10.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Beet Fries",
+  "description": "cilantro, raw beet, feta, sumac",
+  "price": "$9.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Sautéed Spaghetti",
+  "description": "garlic, poached egg, almonds",
+  "price": "$12.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Grape Toast",
+  "description": "red cabbage, sweet onion, beef",
+  "price": "$14.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Fresh Acorn Squash",
+  "description": "pumplin mole, pomegranate, seed",
+  "price": "$11.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Quad Burgers",
+  "description": "biscuits, bacon, honey butter",
+  "price": "$7.00",
+  "category": "Dinner",
+  "photo": "menu_item_image"
+}, {
+  "name": "The Mister Burger",
+  "description": "pepperoni, cheese, lettuce fries",
+  "price": "$16.00",
+  "category": "Dinner",
+  "photo": "menu_item_image"
+}, {
+  "name": "Deep Fried String Cheese",
+  "description": "dipped in a honey mustard aioli",
+  "price": "$7.00",
+  "category": "Dinner",
+  "photo": "menu_item_image"
+}, {
+  "name": "Cheese Plate",
+  "description": "a bunch of different types of cheeses",
+  "price": "$16.00",
+  "category": "Dinner",
+  "photo": "menu_item_image"
+}, {
+  "name": "Pear and Jicama",
+  "description": "cheese, chardonnay vinaigrette",
+  "price": "$12.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "The Caesar",
+  "description": "garlic dressing, egg, olive oil, walnut breadcrumbs",
+  "price": "$10.00",
+  "category": "Dinner - Veggies, Grains, Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Cold Brussels Sprouts",
+  "description": "shaved, raisins",
+  "price": "$10.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Deep Fried Brussels Sprouts",
+  "description": "smoked yogurt and tea",
+  "price": "$12.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Bread & Whipped Cream",
+  "description": "bread with whipped cream",
+  "price": "$3.00",
+  "category": "Dinner - Salads",
+  "photo": "menu_item_image"
+}, {
+  "name": "Lamb Steaks",
+  "description": "fregola, cucumber, lemon, rosemary",
+  "price": "$15.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Grilled Pork Chop",
+  "description": "scallion-cilantro salad, chili",
+  "price": "$14.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Lobster Dumplings",
+  "description": "chili oil, garlic, celery",
+  "price": "$16.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Grilled Scallops",
+  "description": "hummus, crispy fries",
+  "price": "$16.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "White Tuna",
+  "description": "crispy garlic, green olives, oil",
+  "price": "$15.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Oysters",
+  "description": "cilantro, kale, lemons",
+  "price": "$3.50",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Crab legs",
+  "description": "quinoa, kumquat, black garlic",
+  "price": "$15.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Lobster Rolls and Tuna",
+  "description": "ahi tuna, cucumber, tomato",
+  "price": "$14.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "King Salmon",
+  "description": "maple glaze, tomato, cucumber, lemon",
+  "price": "$30.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Tempura Tacos",
+  "description": "olive aioli, radish salad",
+  "price": "$16.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Grilled Pork Belly",
+  "description": "sweet soya, charred scallion",
+  "price": "$15.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Singaporean Fried Chicken",
+  "description": "green onion, sweet heat",
+  "price": "$7.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Live Quail",
+  "description": "crisp potatoes, cumin syrup, mushrooms",
+  "price": "$15.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Raw Beef",
+  "description": "raw beef, beech mushrooms, coddled egg",
+  "price": "$13.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Mac 'n Cheese",
+  "description": "fried mortadella, white cheddar",
+  "price": "$10.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Blackened Ribeye Steak",
+  "description": "beef, cheese, beans, lemon",
+  "price": "$56.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Braised Beef Tacos",
+  "description": "salsa salad, corn tortillas",
+  "price": "$15.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Smoked Duck",
+  "description": "blood orange, carrot, cocoa, raisins",
+  "price": "$13.00",
+  "category": "Dinner - Meat",
+  "photo": "menu_item_image"
+}, {
+  "name": "Shrimp & Grits",
+  "description": "shrimp, grits, fries, lemon",
+  "price": "$16.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Mussels",
+  "description": "spiced butter, toasted bread herb salad",
+  "price": "$14.00",
+  "category": "Dinner - Seafood",
+  "photo": "menu_item_image"
+}, {
+  "name": "Beer Burger",
+  "description": "beer of the day on a burger",
+  "price": "$10.00",
+  "category": "Dinner",
+  "photo": "menu_item_image"
+}, {
+  "name": "Sundae",
+  "description": "maple ice cream, blueberry, graham cracker",
+  "price": "$7.00",
+  "category": "Dinner - Sweet",
+  "photo": "menu_item_image"
+}, {
+  "name": "Honey Ice Cream",
+  "description": "toasted nuts, dried fruits",
+  "price": "$7.00",
+  "category": "Dinner - Sweet",
+  "photo": "menu_item_image"
+}, {
+  "name": "Chocolate Cake",
+  "description": "orange almonds",
+  "price": "$7.00",
+  "category": "Dinner - Sweet",
+  "photo": "menu_item_image"
+}, {
+  "name": "Toffee Pudding",
+  "description": "dates, toffee, seeds",
+  "price": "$7.00",
+  "category": "Dinner - Sweet",
+  "photo": "menu_item_image"
+}]

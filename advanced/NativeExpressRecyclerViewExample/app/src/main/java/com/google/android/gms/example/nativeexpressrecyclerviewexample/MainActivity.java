@@ -11,6 +11,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
 
     // List of Native Express ads and MenuItems that populate the RecyclerView.
-    private List<Object> mRecyclerViewItems;
+    private List<Object> mRecyclerViewItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,105 +63,14 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        // Create a list containing menu items and Native Express ads.
-        mRecyclerViewItems = new ArrayList<>();
-        addMenuItems();
+        // Update the RecyclerView item's list with menu items and Native Express ads.
+        addMenuItemsFromJson();
         addNativeExpressAds();
         setUpAndLoadNativeExpressAds();
 
         // Specify an adapter.
         RecyclerView.Adapter adapter = new RecyclerViewAdapter(this, mRecyclerViewItems);
         mRecyclerView.setAdapter(adapter);
-    }
-
-    /**
-     * Adds {@link MenuItem}'s to the items list.
-     */
-    private void addMenuItems() {
-
-        // Add the menu items.
-        mRecyclerViewItems.add(new MenuItem("Cherry Avocado", "cherries, garlic, serrano, mayo",
-                "$7.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Fried Baby Onions", "maple syrup, walnut salsa, sauce",
-                "$11.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Fried Rice", "red onion, kale, puffed wild rice",
-                "$10.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Beet Fries", "cilantro, raw beet, feta, sumac",
-                "$9.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Sautéed Spaghetti", "garlic, poached egg, almonds",
-                "$12.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Grape Toast", "red cabbage, sweet onion, beef",
-                "$14.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Fresh Acorn Squash", "pumplin mole, pomegranate, seed",
-                "$11.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Quad Burgers", "biscuits, bacon, honey butter",
-                "$7.00", "Dinner", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("The Mister Burger", "pepperoni, cheese, lettuce fries",
-                "$16.00", "Dinner", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Deep Fried String Cheese", "dipped in a honey mustard"
-                + " aioli", "$7.00", "Dinner", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Cheese Plate", "a bunch of different types of cheeses",
-                "$16.00", "Dinner", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Pear and Jicama", "cheese, chardonnay vinaigrette",
-                "$12.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("The Caesar", "garlic dressing, egg, olive oil, walnut"
-                + " breadcrumbs", "$10.00", "Dinner - Veggies, Grains, Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Cold Brussels Sprouts", "shaved, raisins", "$10.00",
-                "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Deep Fried Brussels Sprouts", "smoked yogurt and tea",
-                "$12.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Bread & Whipped Cream", "bread with whipped cream",
-                "$3.00", "Dinner - Salads", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Lamb Steaks", "fregola, cucumber, lemon, rosemary",
-                "$15.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Grilled Pork Chop", "scallion-cilantro salad, chili",
-                "$14.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Lobster Dumplings", "chili oil, garlic, celery",
-                "$16.00", "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Grilled Scallops", "hummus, crispy fries", "$16.00",
-                "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("White Tuna", "crispy garlic, green olives, oil",
-                "$15.00", "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Oysters", "cilantro, kale, lemons", "$3.50",
-                "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Crab legs", "quinoa, kumquat, black garlic", "$15.00",
-                "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Lobster Rolls and Tuna", "ahi tuna, cucumber, tomato",
-                "$14.00", "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("King Salmon", "maple glaze, tomato, cucumber, lemon",
-                "$30.00", "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Tempura Tacos", "olive aioli, radish salad", "$16.00",
-                "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Grilled Pork Belly", "sweet soya, charred scallion",
-                "$15.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Singaporean Fried Chicken", "green onion, sweet heat",
-                "$7.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Live Quail", "crisp potatoes, cumin syrup, mushrooms",
-                "$15.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Raw Beef", "raw beef, beech mushrooms, coddled egg",
-                "$13.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Mac 'n Cheese", "fried mortadella, white cheddar",
-                "$10.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Blackened Ribeye Steak", "beef, cheese, beans, lemon",
-                "$56.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Braised Beef Tacos", "salsa salad, corn tortillas",
-                "$15.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Smoked Duck", "blood orange, carrot, cocoa, raisins",
-                "$13.00", "Dinner - Meat", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Shrimp & Grits", "shrimp, grits, fries, lemon",
-                "$16.00", "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Mussels", "spiced butter, toasted bread herb salad",
-                "$14.00", "Dinner - Seafood", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Beer Burger", "beer of the day on a burger", "$10.00",
-                "Dinner", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Sundae", "maple ice cream, blueberry, graham cracker",
-                "$7.00", "Dinner - Sweet", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Honey Ice Cream", "toasted nuts, dried fruits",
-                "$7.00", "Dinner - Sweet", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Chocolate Cake", "orange almonds", "$7.00",
-                "Dinner - Sweet", "menu_item_image"));
-        mRecyclerViewItems.add(new MenuItem("Toffee Pudding", "dates, toffee, seeds", "$7.00",
-                "Dinner - Sweet", "menu_item_image"));
     }
 
     /**
@@ -237,6 +154,61 @@ public class MainActivity extends AppCompatActivity {
 
         // Load the Native Express ad.
         adView.loadAd(new AdRequest.Builder().build());
+    }
+
+    /**
+     * Adds {@link MenuItem}'s from a JSON file.
+     */
+    private void addMenuItemsFromJson() {
+        try {
+            String jsonDataString = readJsonDataFromFile();
+            JSONArray menuItemsJsonArray = new JSONArray(jsonDataString);
+
+            for (int i = 0; i < menuItemsJsonArray.length(); ++i) {
+
+                JSONObject menuItemObject = menuItemsJsonArray.getJSONObject(i);
+
+                String menuItemName = menuItemObject.getString("name");
+                String menuItemDescription = menuItemObject.getString("description");
+                String menuItemPrice = menuItemObject.getString("price");
+                String menuItemCategory = menuItemObject.getString("category");
+                String menuItemImageName = menuItemObject.getString("photo");
+
+                MenuItem menuItem = new MenuItem(menuItemName, menuItemDescription, menuItemPrice,
+                        menuItemCategory, menuItemImageName);
+                mRecyclerViewItems.add(menuItem);
+            }
+        } catch (IOException | JSONException exception) {
+            Log.e(MainActivity.class.getName(), "Unable to parse JSON file.", exception);
+        }
+    }
+
+    /**
+     * Reads the JSON file and converts the JSON data to a {@link String}.
+     *
+     * @return A {@link String} representation of the JSON data.
+     * @throws IOException if unable to read the JSON file.
+     */
+    private String readJsonDataFromFile() throws IOException {
+
+        InputStream inputStream = null;
+        StringBuilder builder = new StringBuilder();
+
+        try {
+            String jsonDataString = null;
+            inputStream = getResources().openRawResource(R.raw.menu_items_json);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, "UTF-8"));
+            while ((jsonDataString = bufferedReader.readLine()) != null) {
+                builder.append(jsonDataString);
+            }
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+
+        return new String(builder);
     }
 
 }
