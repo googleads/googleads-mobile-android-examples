@@ -20,9 +20,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+
+import java.util.Locale;
 
 /**
  * The {@link DFPFluidSizeFragment} demonstrates the use of the {@code AdSize.FLUID} ad size.
@@ -30,6 +34,10 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
 public class DFPFluidSizeFragment extends Fragment {
 
     private PublisherAdView mPublisherAdView;
+    private Button mChangeAdViewWidthButton;
+    private TextView mCurrentWidthTextView;
+    private final int[] mAdViewWidths = new int[] {200, 250, 320};
+    private int mCurrentIndex = 0;
 
     public DFPFluidSizeFragment() {
     }
@@ -54,5 +62,24 @@ public class DFPFluidSizeFragment extends Fragment {
 
         PublisherAdRequest publisherAdRequest = new PublisherAdRequest.Builder().build();
         mPublisherAdView.loadAd(publisherAdRequest);
+
+        mChangeAdViewWidthButton = (Button) getView().findViewById(R.id.fluid_btn_change_width);
+        mChangeAdViewWidthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int newWidth = mAdViewWidths[mCurrentIndex % mAdViewWidths.length];
+                mCurrentIndex += 1;
+                // Change the PublisherAdView's width.
+                ViewGroup.LayoutParams layoutParams = mPublisherAdView.getLayoutParams();
+                final float scale = getResources().getDisplayMetrics().density;
+                layoutParams.width = (int) (newWidth * scale + 0.5f);
+                mPublisherAdView.setLayoutParams(layoutParams);
+                // Update the TextView with the new width.
+                mCurrentWidthTextView =
+                        (TextView) getView().findViewById(R.id.fluid_tv_current_width);
+                mCurrentWidthTextView.setText(
+                        String.format(Locale.getDefault(), "%d dp", newWidth));
+            }
+        });
     }
 }

@@ -21,14 +21,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:checked="true"
-            android:text="Request App Install Ads" />
+            android:text="Request app install ads" />
 
         <CheckBox
             android:id="@+id/cb_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Request Content Ads" />
+            android:text="Request content ads" />
+
+        <CheckBox
+            android:id="@+id/cb_start_muted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Start video ads muted" />
 
         <Button
             android:id="@+id/btn_refresh"
@@ -38,6 +45,15 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:text="Refresh Ad" />
+
+        <TextView
+            android:text="Video status: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:id="@+id/tv_video_status"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 
     </LinearLayout>

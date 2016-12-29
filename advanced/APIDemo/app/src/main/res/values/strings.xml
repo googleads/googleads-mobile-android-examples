@@ -37,6 +37,8 @@
     <string name="appevents_adunitid">/6499/example/APIDemo/AppEvents</string>
 
     <string name="fluid_adunitid">/6499/example/APIDemo/Fluid</string>
+    <string name="fluid_btn_text">Change Ad Width</string>
+    <string name="fluid_tv_current_width_text">320 dp</string>
     <string name="fluid_above">(this TextView is above the ad)</string>
     <string name="fluid_below">(this TextView is below the ad)</string>
 

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="320x150"
+        ads:adSize="320x300"
         ads:adUnitId="@string/ad_unit_id">
     </com.google.android.gms.ads.NativeExpressAdView>
 </RelativeLayout>

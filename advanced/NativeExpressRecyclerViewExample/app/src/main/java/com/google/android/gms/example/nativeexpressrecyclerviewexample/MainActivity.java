@@ -2,6 +2,7 @@ package com.google.android.gms.example.nativeexpressrecyclerviewexample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -96,14 +97,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                final float density = MainActivity.this.getResources().getDisplayMetrics().density;
+                final float scale = MainActivity.this.getResources().getDisplayMetrics().density;
                 // Set the ad size and ad unit ID for each Native Express ad in the items list.
                 for (int i = 0; i <= mRecyclerViewItems.size(); i += ITEMS_PER_AD) {
                     final NativeExpressAdView adView =
                             (NativeExpressAdView) mRecyclerViewItems.get(i);
-                    AdSize adSize = new AdSize(
-                            (int) (mRecyclerView.getWidth() / density),
-                            NATIVE_EXPRESS_AD_HEIGHT);
+                    final CardView cardView = (CardView) findViewById(R.id.ad_card_view);
+                    final int adWidth = cardView.getWidth() - cardView.getPaddingLeft()
+                            - cardView.getPaddingRight();
+                    AdSize adSize = new AdSize((int) (adWidth / scale), NATIVE_EXPRESS_AD_HEIGHT);
                     adView.setAdSize(adSize);
                     adView.setAdUnitId(AD_UNIT_ID);
                 }
