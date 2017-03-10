@@ -26,16 +26,22 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.VideoController;
+import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAd;
+import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.NativeAppInstallAd;
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
-import java.util.List;
+
+import java.util.Locale;
 
 /**
  * A simple activity class that displays native ad formats.
@@ -43,12 +49,14 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     private static final String DFP_AD_UNIT_ID = "/6499/example/native";
-    private static final String SIMPLE_TEMPLATE_ID = "10063170";
+    private static final String SIMPLE_TEMPLATE_ID = "10104090";
 
     private Button mRefresh;
     private CheckBox mRequestAppInstallAds;
     private CheckBox mRequestContentAds;
     private CheckBox mRequestCustomTemplateAds;
+    private CheckBox mStartVideoAdsMuted;
+    private TextView mVideoStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,8 @@ public class MainActivity extends ActionBarActivity {
         mRequestAppInstallAds = (CheckBox) findViewById(R.id.cb_appinstall);
         mRequestContentAds = (CheckBox) findViewById(R.id.cb_content);
         mRequestCustomTemplateAds = (CheckBox) findViewById(R.id.cb_customtemplate);
+        mStartVideoAdsMuted = (CheckBox) findViewById(R.id.cb_start_muted);
+        mVideoStatus = (TextView) findViewById(R.id.tv_video_status);
 
         mRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,13 +92,15 @@ public class MainActivity extends ActionBarActivity {
     private void populateAppInstallAdView(NativeAppInstallAd nativeAppInstallAd,
                                           NativeAppInstallAdView adView) {
         adView.setHeadlineView(adView.findViewById(R.id.appinstall_headline));
-        adView.setImageView(adView.findViewById(R.id.appinstall_image));
         adView.setBodyView(adView.findViewById(R.id.appinstall_body));
         adView.setCallToActionView(adView.findViewById(R.id.appinstall_call_to_action));
         adView.setIconView(adView.findViewById(R.id.appinstall_app_icon));
         adView.setPriceView(adView.findViewById(R.id.appinstall_price));
         adView.setStarRatingView(adView.findViewById(R.id.appinstall_stars));
         adView.setStoreView(adView.findViewById(R.id.appinstall_store));
+        // The MediaView will display a video asset if one is present in the ad, and the first image
+        // asset otherwise.
+        adView.setMediaView((MediaView) adView.findViewById(R.id.appinstall_media));
 
         // Some assets are guaranteed to be in every NativeAppInstallAd.
         ((TextView) adView.getHeadlineView()).setText(nativeAppInstallAd.getHeadline());
@@ -97,13 +109,36 @@ public class MainActivity extends ActionBarActivity {
         ((ImageView) adView.getIconView()).setImageDrawable(nativeAppInstallAd.getIcon()
                 .getDrawable());
 
-        List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
+        // have a video asset.
+        VideoController vc = nativeAppInstallAd.getVideoController();
 
-        if (images.size() > 0) {
-            ((ImageView) adView.getImageView()).setImageDrawable(images.get(0).getDrawable());
+        // Apps can check the VideoController's hasVideoContent property to determine if the
+        // NativeAppInstallAd has a video asset.
+        if (vc.hasVideoContent()) {
+            mVideoStatus.setText(String.format(Locale.getDefault(),
+                    "Video status: Ad contains a %.2f:1 video asset.",
+                    vc.getAspectRatio()));
+
+            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+            // VideoController will call methods on this object when events occur in the video
+            // lifecycle.
+            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+                public void onVideoEnd() {
+                    // Publishers should allow native ads to complete video playback before
+                    // refreshing or replacing them with another ad in the same UI location.
+                    mRefresh.setEnabled(true);
+                    mVideoStatus.setText("Video status: Video playback has ended.");
+                    super.onVideoEnd();
+                }
+            });
+        } else {
+            mRefresh.setEnabled(true);
+            mVideoStatus.setText("Video status: Ad does not contain a video asset.");
         }
 
-        // Some aren't guaranteed, however, and should be checked.
+        // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
+        // check before trying to display them.
         if (nativeAppInstallAd.getPrice() == null) {
             adView.getPriceView().setVisibility(View.INVISIBLE);
         } else {
@@ -141,11 +176,13 @@ public class MainActivity extends ActionBarActivity {
     private void populateContentAdView(NativeContentAd nativeContentAd,
                                        NativeContentAdView adView) {
         adView.setHeadlineView(adView.findViewById(R.id.contentad_headline));
-        adView.setImageView(adView.findViewById(R.id.contentad_image));
         adView.setBodyView(adView.findViewById(R.id.contentad_body));
         adView.setCallToActionView(adView.findViewById(R.id.contentad_call_to_action));
         adView.setLogoView(adView.findViewById(R.id.contentad_logo));
         adView.setAdvertiserView(adView.findViewById(R.id.contentad_advertiser));
+        // The MediaView will display a video asset if one is present in the ad, and the first image
+        // asset otherwise.
+        adView.setMediaView((MediaView) adView.findViewById(R.id.contentad_media));
 
         // Some assets are guaranteed to be in every NativeContentAd.
         ((TextView) adView.getHeadlineView()).setText(nativeContentAd.getHeadline());
@@ -153,13 +190,36 @@ public class MainActivity extends ActionBarActivity {
         ((TextView) adView.getCallToActionView()).setText(nativeContentAd.getCallToAction());
         ((TextView) adView.getAdvertiserView()).setText(nativeContentAd.getAdvertiser());
 
-        List<NativeAd.Image> images = nativeContentAd.getImages();
+        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
+        // have a video asset.
+        VideoController vc = nativeContentAd.getVideoController();
 
-        if (images.size() > 0) {
-            ((ImageView) adView.getImageView()).setImageDrawable(images.get(0).getDrawable());
+        // Apps can check the VideoController's hasVideoContent property to determine if the
+        // NativeContentAd has a video asset.
+        if (vc.hasVideoContent()) {
+            mVideoStatus.setText(String.format(Locale.getDefault(),
+                    "Video status: Ad contains a %.2f:1 video asset.",
+                    vc.getAspectRatio()));
+
+            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+            // VideoController will call methods on this object when events occur in the video
+            // lifecycle.
+            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+                public void onVideoEnd() {
+                    // Publishers should allow native ads to complete video playback before
+                    // refreshing or replacing them with another ad in the same UI location.
+                    mRefresh.setEnabled(true);
+                    mVideoStatus.setText("Video status: Video playback has ended.");
+                    super.onVideoEnd();
+                }
+            });
+        } else {
+            mRefresh.setEnabled(true);
+            mVideoStatus.setText("Video status: Ad does not contain a video asset.");
         }
 
-        // Some aren't guaranteed, however, and should be checked.
+        // These assets aren't guaranteed to be in every NativeContentAd, so it's important to
+        // check before trying to display them.
         NativeAd.Image logoImage = nativeContentAd.getLogo();
 
         if (logoImage == null) {
@@ -182,22 +242,54 @@ public class MainActivity extends ActionBarActivity {
      */
     private void populateSimpleTemplateAdView(final NativeCustomTemplateAd nativeCustomTemplateAd,
                                               View adView) {
-        ImageView mainImage = (ImageView) adView.findViewById(R.id.simplecustom_image);
         TextView headline = (TextView) adView.findViewById(R.id.simplecustom_headline);
         TextView caption = (TextView) adView.findViewById(R.id.simplecustom_caption);
 
         headline.setText(nativeCustomTemplateAd.getText("Headline"));
         caption.setText(nativeCustomTemplateAd.getText("Caption"));
 
-        mainImage.setImageDrawable(
-                nativeCustomTemplateAd.getImage("MainImage").getDrawable());
+        FrameLayout mediaPlaceholder =
+                (FrameLayout) adView.findViewById(R.id.simplecustom_media_placeholder);
 
-        mainImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nativeCustomTemplateAd.performClick("MainImage");
-            }
-        });
+        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
+        // have a video asset.
+        VideoController vc = nativeCustomTemplateAd.getVideoController();
+
+        // Apps can check the VideoController's hasVideoContent property to determine if the
+        // NativeCustomTemplateAd has a video asset.
+        if (vc.hasVideoContent()) {
+            mediaPlaceholder.addView(nativeCustomTemplateAd.getVideoMediaView());
+            mVideoStatus.setText(String.format(Locale.getDefault(),
+                    "Video status: Ad contains a %.2f:1 video asset.",
+                    vc.getAspectRatio()));
+
+            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+            // VideoController will call methods on this object when events occur in the video
+            // lifecycle.
+            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+                public void onVideoEnd() {
+                    // Publishers should allow native ads to complete video playback before
+                    // refreshing or replacing them with another ad in the same UI location.
+                    mRefresh.setEnabled(true);
+                    mVideoStatus.setText("Video status: Video playback has ended.");
+                    super.onVideoEnd();
+                }
+            });
+        } else {
+            ImageView mainImage = new ImageView(this);
+            mainImage.setAdjustViewBounds(true);
+            mainImage.setImageDrawable(nativeCustomTemplateAd.getImage("MainImage").getDrawable());
+
+            mainImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nativeCustomTemplateAd.performClick("MainImage");
+                }
+            });
+            mediaPlaceholder.addView(mainImage);
+            mRefresh.setEnabled(true);
+            mVideoStatus.setText("Video status: Ad does not contain a video asset.");
+        }
     }
 
     /**
@@ -215,6 +307,8 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
+        mRefresh.setEnabled(false);
 
         AdLoader.Builder builder = new AdLoader.Builder(this, DFP_AD_UNIT_ID);
 
@@ -272,14 +366,27 @@ public class MainActivity extends ActionBarActivity {
                     });
         }
 
+        VideoOptions videoOptions = new VideoOptions.Builder()
+                .setStartMuted(mStartVideoAdsMuted.isChecked())
+                .build();
+
+        NativeAdOptions adOptions = new NativeAdOptions.Builder()
+                .setVideoOptions(videoOptions)
+                .build();
+
+        builder.withNativeAdOptions(adOptions);
+
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int errorCode) {
+                mRefresh.setEnabled(true);
                 Toast.makeText(MainActivity.this, "Failed to load native ad: "
                         + errorCode, Toast.LENGTH_SHORT).show();
             }
         }).build();
 
         adLoader.loadAd(new PublisherAdRequest.Builder().build());
+
+        mVideoStatus.setText("");
     }
 }

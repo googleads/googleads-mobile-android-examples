@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF"
+    android:background="#D4D4D4"
     android:minHeight="50dp">
 
     <LinearLayout
@@ -31,17 +31,23 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.35"
+                android:layout_weight="0.5"
                 android:orientation="vertical" >
 
-                <ImageView
+                <com.google.android.gms.ads.formats.MediaView
+                    android:id="@+id/contentad_media"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="8dp" />
+
+                <!--<ImageView
                     android:id="@+id/contentad_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:maxHeight="100dp"
-                    android:adjustViewBounds="true" />
+                    android:adjustViewBounds="true" />-->
 
                 <TextView
                     android:id="@+id/contentad_call_to_action"
@@ -64,6 +70,7 @@
                     android:id="@+id/contentad_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:textSize="16sp" />
 
                 <LinearLayout
