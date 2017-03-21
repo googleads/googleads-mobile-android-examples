@@ -18,8 +18,8 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
  * Main Activity. Inflates main activity xml and implements RewardedVideoAdListener.
  */
 public class MainActivity extends Activity implements RewardedVideoAdListener {
-    private static final String AD_UNIT_ID = "INSERT_AD_UNIT_HERE";
-    private static final String APP_ID = "INSERT_APP_ID_HERE";
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+    private static final String APP_ID = "ca-app-pub-3940256099942544~3347511713";
     private static final long COUNTER_TIME = 10;
     private static final int GAME_OVER_REWARD = 1;
 
