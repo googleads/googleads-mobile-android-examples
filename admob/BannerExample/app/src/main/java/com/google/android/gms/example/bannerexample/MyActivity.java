@@ -16,7 +16,7 @@
 package com.google.android.gms.example.bannerexample;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,7 +27,7 @@ import com.google.android.gms.ads.MobileAds;
 /**
  * Main Activity. Inflates main activity xml and child fragments.
  */
-public class MyActivity extends ActionBarActivity {
+public class MyActivity extends AppCompatActivity {
 
     private AdView mAdView;
 

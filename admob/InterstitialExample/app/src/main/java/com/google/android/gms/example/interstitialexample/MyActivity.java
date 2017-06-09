@@ -17,7 +17,7 @@ package com.google.android.gms.example.interstitialexample;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +31,7 @@ import com.google.android.gms.ads.MobileAds;
 /**
  * Main Activity. Inflates main activity xml.
  */
-public class MyActivity extends ActionBarActivity {
+public class MyActivity extends AppCompatActivity {
 
     private static final long GAME_LENGTH_MILLISECONDS = 3000;
 

@@ -17,7 +17,7 @@
 package com.google.example.gms.nativeadvancedexample;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -47,7 +47,7 @@ import java.util.Locale;
 /**
  * A simple activity class that displays native ad formats.
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
     private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
