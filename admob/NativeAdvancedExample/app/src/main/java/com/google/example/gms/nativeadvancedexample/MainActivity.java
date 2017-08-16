@@ -127,15 +127,9 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) adView.getHeadlineView()).setText(nativeAppInstallAd.getHeadline());
         ((TextView) adView.getBodyView()).setText(nativeAppInstallAd.getBody());
         ((Button) adView.getCallToActionView()).setText(nativeAppInstallAd.getCallToAction());
+        ((ImageView) adView.getIconView()).setImageDrawable(
+                nativeAppInstallAd.getIcon().getDrawable());
 
-        NativeAd.Image logoImage = nativeAppInstallAd.getIcon();
-        if (logoImage == null) {
-            adView.getIconView().setVisibility(View.INVISIBLE);
-        } else {
-            ((ImageView) adView.getIconView()).setImageDrawable(logoImage.getDrawable());
-            adView.getIconView().setVisibility(View.VISIBLE);
-        }
-        
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
@@ -155,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             adView.getPriceView().setVisibility(View.VISIBLE);
             ((TextView) adView.getPriceView()).setText(nativeAppInstallAd.getPrice());
         }
-        
+
         if (nativeAppInstallAd.getStore() == null) {
             adView.getStoreView().setVisibility(View.INVISIBLE);
         } else {
