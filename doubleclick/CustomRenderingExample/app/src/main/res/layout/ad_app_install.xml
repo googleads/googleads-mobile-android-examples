@@ -57,6 +57,13 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp" />
 
+            <ImageView
+                android:id="@+id/appinstall_image"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp" />
+
             <com.google.android.gms.ads.formats.MediaView
                 android:id="@+id/appinstall_media"
                 android:layout_width="match_parent"

@@ -66,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this, ADMOB_APP_ID);
 
-        mRefresh = (Button) findViewById(R.id.btn_refresh);
-        mRequestAppInstallAds = (CheckBox) findViewById(R.id.cb_appinstall);
-        mRequestContentAds = (CheckBox) findViewById(R.id.cb_content);
-        mStartVideoAdsMuted = (CheckBox) findViewById(R.id.cb_start_muted);
-        mVideoStatus = (TextView) findViewById(R.id.tv_video_status);
+        mRefresh = findViewById(R.id.btn_refresh);
+        mRequestAppInstallAds = findViewById(R.id.cb_appinstall);
+        mRequestContentAds = findViewById(R.id.cb_content);
+        mStartVideoAdsMuted = findViewById(R.id.cb_start_muted);
+        mVideoStatus = findViewById(R.id.tv_video_status);
 
         mRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,11 +118,6 @@ public class MainActivity extends AppCompatActivity {
         adView.setStarRatingView(adView.findViewById(R.id.appinstall_stars));
         adView.setStoreView(adView.findViewById(R.id.appinstall_store));
 
-        // The MediaView will display a video asset if one is present in the ad, and the first image
-        // asset otherwise.
-        MediaView mediaView = (MediaView) adView.findViewById(R.id.appinstall_media);
-        adView.setMediaView(mediaView);
-
         // Some assets are guaranteed to be in every NativeAppInstallAd.
         ((TextView) adView.getHeadlineView()).setText(nativeAppInstallAd.getHeadline());
         ((TextView) adView.getBodyView()).setText(nativeAppInstallAd.getBody());
@@ -130,13 +125,25 @@ public class MainActivity extends AppCompatActivity {
         ((ImageView) adView.getIconView()).setImageDrawable(
                 nativeAppInstallAd.getIcon().getDrawable());
 
+        MediaView mediaView = adView.findViewById(R.id.appinstall_media);
+        ImageView mainImageView = adView.findViewById(R.id.appinstall_image);
+
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
+            adView.setMediaView(mediaView);
+            mainImageView.setVisibility(View.GONE);
             mVideoStatus.setText(String.format(Locale.getDefault(),
                     "Video status: Ad contains a %.2f:1 video asset.",
                     vc.getAspectRatio()));
         } else {
+            adView.setImageView(mainImageView);
+            mediaView.setVisibility(View.GONE);
+
+            // At least one image is guaranteed.
+            List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+            mainImageView.setImageDrawable(images.get(0).getDrawable());
+
             mRefresh.setEnabled(true);
             mVideoStatus.setText("Video status: Ad does not contain a video asset.");
         }
@@ -237,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onAppInstallAdLoaded(NativeAppInstallAd ad) {
                     FrameLayout frameLayout =
-                            (FrameLayout) findViewById(R.id.fl_adplaceholder);
+                            findViewById(R.id.fl_adplaceholder);
                     NativeAppInstallAdView adView = (NativeAppInstallAdView) getLayoutInflater()
                             .inflate(R.layout.ad_app_install, null);
                     populateAppInstallAdView(ad, adView);
@@ -252,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onContentAdLoaded(NativeContentAd ad) {
                     FrameLayout frameLayout =
-                            (FrameLayout) findViewById(R.id.fl_adplaceholder);
+                            findViewById(R.id.fl_adplaceholder);
                     NativeContentAdView adView = (NativeContentAdView) getLayoutInflater()
                             .inflate(R.layout.ad_content, null);
                     populateContentAdView(ad, adView);

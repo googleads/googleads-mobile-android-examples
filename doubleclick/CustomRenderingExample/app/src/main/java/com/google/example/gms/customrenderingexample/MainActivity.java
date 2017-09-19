@@ -41,6 +41,7 @@ import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -63,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRefresh = (Button) findViewById(R.id.btn_refresh);
-        mRequestAppInstallAds = (CheckBox) findViewById(R.id.cb_appinstall);
-        mRequestContentAds = (CheckBox) findViewById(R.id.cb_content);
-        mRequestCustomTemplateAds = (CheckBox) findViewById(R.id.cb_customtemplate);
-        mStartVideoAdsMuted = (CheckBox) findViewById(R.id.cb_start_muted);
-        mVideoStatus = (TextView) findViewById(R.id.tv_video_status);
+        mRefresh = findViewById(R.id.btn_refresh);
+        mRequestAppInstallAds = findViewById(R.id.cb_appinstall);
+        mRequestContentAds = findViewById(R.id.cb_content);
+        mRequestCustomTemplateAds = findViewById(R.id.cb_customtemplate);
+        mStartVideoAdsMuted = findViewById(R.id.cb_start_muted);
+        mVideoStatus = findViewById(R.id.tv_video_status);
 
         mRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +99,6 @@ public class MainActivity extends AppCompatActivity {
         adView.setPriceView(adView.findViewById(R.id.appinstall_price));
         adView.setStarRatingView(adView.findViewById(R.id.appinstall_stars));
         adView.setStoreView(adView.findViewById(R.id.appinstall_store));
-        // The MediaView will display a video asset if one is present in the ad, and the first image
-        // asset otherwise.
-        adView.setMediaView((MediaView) adView.findViewById(R.id.appinstall_media));
 
         // Some assets are guaranteed to be in every NativeAppInstallAd.
         ((TextView) adView.getHeadlineView()).setText(nativeAppInstallAd.getHeadline());
@@ -113,9 +111,15 @@ public class MainActivity extends AppCompatActivity {
         // have a video asset.
         VideoController vc = nativeAppInstallAd.getVideoController();
 
+        MediaView mediaView = adView.findViewById(R.id.appinstall_media);
+        ImageView mainImageView = adView.findViewById(R.id.appinstall_image);
+
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
+            mainImageView.setVisibility(View.GONE);
+            adView.setMediaView(mediaView);
+
             mVideoStatus.setText(String.format(Locale.getDefault(),
                     "Video status: Ad contains a %.2f:1 video asset.",
                     vc.getAspectRatio()));
@@ -133,6 +137,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
+            mediaView.setVisibility(View.GONE);
+            adView.setImageView(mainImageView);
+
+            // At least one image is guaranteed.
+            List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+            mainImageView.setImageDrawable(images.get(0).getDrawable());
+
             mRefresh.setEnabled(true);
             mVideoStatus.setText("Video status: Ad does not contain a video asset.");
         }
@@ -180,9 +191,6 @@ public class MainActivity extends AppCompatActivity {
         adView.setCallToActionView(adView.findViewById(R.id.contentad_call_to_action));
         adView.setLogoView(adView.findViewById(R.id.contentad_logo));
         adView.setAdvertiserView(adView.findViewById(R.id.contentad_advertiser));
-        // The MediaView will display a video asset if one is present in the ad, and the first image
-        // asset otherwise.
-        adView.setMediaView((MediaView) adView.findViewById(R.id.contentad_media));
 
         // Some assets are guaranteed to be in every NativeContentAd.
         ((TextView) adView.getHeadlineView()).setText(nativeContentAd.getHeadline());
@@ -194,9 +202,15 @@ public class MainActivity extends AppCompatActivity {
         // have a video asset.
         VideoController vc = nativeContentAd.getVideoController();
 
+        MediaView mediaView = adView.findViewById(R.id.contentad_media);
+        ImageView mainImageView = adView.findViewById(R.id.contentad_image);
+
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeContentAd has a video asset.
         if (vc.hasVideoContent()) {
+            mainImageView.setVisibility(View.GONE);
+            adView.setMediaView(mediaView);
+
             mVideoStatus.setText(String.format(Locale.getDefault(),
                     "Video status: Ad contains a %.2f:1 video asset.",
                     vc.getAspectRatio()));
@@ -214,6 +228,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
+            mediaView.setVisibility(View.GONE);
+            adView.setImageView(mainImageView);
+
+            // At least one image is guaranteed.
+            List<NativeAd.Image> images = nativeContentAd.getImages();
+            mainImageView.setImageDrawable(images.get(0).getDrawable());
+
             mRefresh.setEnabled(true);
             mVideoStatus.setText("Video status: Ad does not contain a video asset.");
         }
@@ -242,14 +263,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private void populateSimpleTemplateAdView(final NativeCustomTemplateAd nativeCustomTemplateAd,
                                               View adView) {
-        TextView headline = (TextView) adView.findViewById(R.id.simplecustom_headline);
-        TextView caption = (TextView) adView.findViewById(R.id.simplecustom_caption);
+        TextView headline = adView.findViewById(R.id.simplecustom_headline);
+        TextView caption = adView.findViewById(R.id.simplecustom_caption);
 
         headline.setText(nativeCustomTemplateAd.getText("Headline"));
         caption.setText(nativeCustomTemplateAd.getText("Caption"));
 
-        FrameLayout mediaPlaceholder =
-                (FrameLayout) adView.findViewById(R.id.simplecustom_media_placeholder);
+        FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
 
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
         // have a video asset.
@@ -316,8 +336,7 @@ public class MainActivity extends AppCompatActivity {
             builder.forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
                 @Override
                 public void onAppInstallAdLoaded(NativeAppInstallAd ad) {
-                    FrameLayout frameLayout =
-                            (FrameLayout) findViewById(R.id.fl_adplaceholder);
+                    FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
                     NativeAppInstallAdView adView = (NativeAppInstallAdView) getLayoutInflater()
                             .inflate(R.layout.ad_app_install, null);
                     populateAppInstallAdView(ad, adView);
@@ -331,8 +350,7 @@ public class MainActivity extends AppCompatActivity {
             builder.forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
                 @Override
                 public void onContentAdLoaded(NativeContentAd ad) {
-                    FrameLayout frameLayout =
-                            (FrameLayout) findViewById(R.id.fl_adplaceholder);
+                    FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
                     NativeContentAdView adView = (NativeContentAdView) getLayoutInflater()
                             .inflate(R.layout.ad_content, null);
                     populateContentAdView(ad, adView);
@@ -347,8 +365,7 @@ public class MainActivity extends AppCompatActivity {
                     new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
                         @Override
                         public void onCustomTemplateAdLoaded(NativeCustomTemplateAd ad) {
-                            FrameLayout frameLayout =
-                                    (FrameLayout) findViewById(R.id.fl_adplaceholder);
+                            FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
                             View adView = getLayoutInflater()
                                     .inflate(R.layout.ad_simple_custom_template, null);
                             populateSimpleTemplateAdView(ad, adView);
