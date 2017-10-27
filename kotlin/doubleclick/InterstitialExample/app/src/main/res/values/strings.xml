@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">InterstitialExample</string>
+    <string name="impossible_game">Impossible Game</string>
+    <string name="seconds_remaining">seconds remaining: %d</string>
+    <string name="done">done!</string>
+
+</resources>

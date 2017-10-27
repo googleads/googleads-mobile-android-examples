@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/adsizes_rl_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.google.android.gms.example.apidemo.DFPMultipleAdSizesFragment">
+
+    <TextView
+        android:id="@+id/adsizes_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:text="@string/adsizes_fragment_title"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <LinearLayout
+        android:id="@+id/adsizes_ll_inner"
+        android:layout_below="@id/adsizes_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/adsizes_tv_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/adsizes_size"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/adsizes_cb_120x20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="120x20" />
+
+            <CheckBox
+                android:id="@+id/adsizes_cb_320x50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="320x50" />
+
+            <CheckBox
+                android:id="@+id/adsizes_cb_300x250"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="300x250" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/adsizes_btn_loadad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:text="@string/adsizes_loadad" />
+    </LinearLayout>
+
+    <com.google.android.gms.ads.doubleclick.PublisherAdView
+        android:id="@+id/adsizes_pav_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/adsizes_adunitid" />
+
+</RelativeLayout>
