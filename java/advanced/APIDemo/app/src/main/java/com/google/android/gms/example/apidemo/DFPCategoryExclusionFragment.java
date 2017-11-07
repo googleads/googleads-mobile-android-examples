@@ -48,11 +48,11 @@ public class DFPCategoryExclusionFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mNoExclusionsAdView =
-                (PublisherAdView) getView().findViewById(R.id.no_exclusions_av);
+                getView().findViewById(R.id.no_exclusions_av);
         mDogsExcludedAdView =
-                (PublisherAdView) getView().findViewById(R.id.exclusions_av_dogsexcluded);
+                getView().findViewById(R.id.exclusions_av_dogsexcluded);
         mCatsExcludedAdView =
-                (PublisherAdView) getView().findViewById(R.id.exclusions_av_catsexcluded);
+                getView().findViewById(R.id.exclusions_av_catsexcluded);
 
         PublisherAdRequest noExclusionsRequest = new PublisherAdRequest.Builder().build();
         PublisherAdRequest dogsExcludedRequest = new PublisherAdRequest.Builder()

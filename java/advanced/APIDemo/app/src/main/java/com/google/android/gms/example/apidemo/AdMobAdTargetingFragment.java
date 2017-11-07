@@ -60,15 +60,15 @@ public class AdMobAdTargetingFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_admob_ad_targeting, container, false);
 
-        mAdView = (AdView) rootView.findViewById(R.id.targeting_av_main);
-        mLoadAdButton = (Button) rootView.findViewById(R.id.targeting_btn_loadad);
-        mDatePickButton = (Button) rootView.findViewById(R.id.targeting_btn_datepick);
-        mBirthdayEdit = (EditText) rootView.findViewById(R.id.targeting_et_birthday);
-        mMaleRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_male);
-        mFemaleRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_female);
-        mChildRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_child);
-        mNotChildRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_notchild);
-        mUnspecifiedRadio = (RadioButton) rootView.findViewById(R.id.targeting_rb_unspecified);
+        mAdView = rootView.findViewById(R.id.targeting_av_main);
+        mLoadAdButton = rootView.findViewById(R.id.targeting_btn_loadad);
+        mDatePickButton = rootView.findViewById(R.id.targeting_btn_datepick);
+        mBirthdayEdit = rootView.findViewById(R.id.targeting_et_birthday);
+        mMaleRadio = rootView.findViewById(R.id.targeting_rb_male);
+        mFemaleRadio = rootView.findViewById(R.id.targeting_rb_female);
+        mChildRadio = rootView.findViewById(R.id.targeting_rb_child);
+        mNotChildRadio = rootView.findViewById(R.id.targeting_rb_notchild);
+        mUnspecifiedRadio = rootView.findViewById(R.id.targeting_rb_unspecified);
 
         mDatePickButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -35,7 +35,7 @@ public class MyActivity extends AppCompatActivity {
 
         // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
         // values/strings.xml.
-        mAdView = (PublisherAdView) findViewById(R.id.ad_view);
+        mAdView = findViewById(R.id.ad_view);
 
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.

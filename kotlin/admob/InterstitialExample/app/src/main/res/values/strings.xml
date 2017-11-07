@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InterstitialExample</string>
+    <string name="app_name">AdMob Interstitial Example</string>
     <string name="impossible_game">Impossible Game</string>
     <string name="retry_button_text">Retry</string>
 </resources>

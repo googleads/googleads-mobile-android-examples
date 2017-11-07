@@ -51,9 +51,9 @@ public class DFPCustomTargetingFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSportsSpinner = (Spinner) getView().findViewById(R.id.customtargeting_spn_sport);
-        mLoadButton = (Button) getView().findViewById(R.id.customtargeting_btn_loadad);
-        mAdView = (PublisherAdView) getView().findViewById(R.id.customtargeting_av_main);
+        mSportsSpinner = getView().findViewById(R.id.customtargeting_spn_sport);
+        mLoadButton = getView().findViewById(R.id.customtargeting_btn_loadad);
+        mAdView = getView().findViewById(R.id.customtargeting_av_main);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getView().getContext(),
                 R.array.customtargeting_sports, android.R.layout.simple_spinner_item);

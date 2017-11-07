@@ -49,7 +49,7 @@ public class DFPAppEventsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdView = (PublisherAdView) getView().findViewById(R.id.appevents_av_main);
+        mAdView = getView().findViewById(R.id.appevents_av_main);
 
         mAdView.setAppEventListener(new AppEventListener() {
             @Override

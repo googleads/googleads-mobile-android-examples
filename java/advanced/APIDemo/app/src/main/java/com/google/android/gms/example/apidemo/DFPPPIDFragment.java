@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
@@ -41,7 +40,6 @@ public class DFPPPIDFragment extends Fragment {
 
     private Button mLoadAdButton;
     private PublisherAdView mPublisherAdView;
-    private FrameLayout mAdFrameLayout;
     private EditText mUsernameEditText;
 
     public DFPPPIDFragment() {
@@ -57,9 +55,9 @@ public class DFPPPIDFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mUsernameEditText = (EditText) getView().findViewById(R.id.ppid_et_username);
-        mLoadAdButton = (Button) getView().findViewById(R.id.ppid_btn_loadad);
-        mPublisherAdView = (PublisherAdView) getView().findViewById(R.id.ppid_pav_main);
+        mUsernameEditText = getView().findViewById(R.id.ppid_et_username);
+        mLoadAdButton = getView().findViewById(R.id.ppid_btn_loadad);
+        mPublisherAdView = getView().findViewById(R.id.ppid_pav_main);
 
         mLoadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override

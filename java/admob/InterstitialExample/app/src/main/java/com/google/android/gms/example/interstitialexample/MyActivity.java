@@ -62,7 +62,7 @@ public class MyActivity extends AppCompatActivity {
         });
 
         // Create the "retry" button, which tries to show an interstitial between game plays.
-        mRetryButton = ((Button) findViewById(R.id.retry_button));
+        mRetryButton = findViewById(R.id.retry_button);
         mRetryButton.setVisibility(View.INVISIBLE);
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +81,7 @@ public class MyActivity extends AppCompatActivity {
             mCountDownTimer.cancel();
         }
 
-        final TextView textView = ((TextView) findViewById(R.id.timer));
+        final TextView textView = findViewById(R.id.timer);
 
         mCountDownTimer = new CountDownTimer(milliseconds, 50) {
             @Override

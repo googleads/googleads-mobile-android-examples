@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView.
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i <= mRecyclerViewItems.size(); i += ITEMS_PER_AD) {
                     final NativeExpressAdView adView =
                             (NativeExpressAdView) mRecyclerViewItems.get(i);
-                    final CardView cardView = (CardView) findViewById(R.id.ad_card_view);
+                    final CardView cardView = findViewById(R.id.ad_card_view);
                     final int adWidth = cardView.getWidth() - cardView.getPaddingLeft()
                             - cardView.getPaddingRight();
                     AdSize adSize = new AdSize((int) (adWidth / scale), NATIVE_EXPRESS_AD_HEIGHT);

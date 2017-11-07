@@ -49,9 +49,9 @@ public class AdMobBannerSizesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_admob_banner_sizes, container, false);
 
-        mSizesSpinner = (Spinner) rootView.findViewById(R.id.bannersizes_spn_size);
-        mLoadButton = (Button) rootView.findViewById(R.id.bannersizes_btn_loadad);
-        mAdFrameLayout = (FrameLayout) rootView.findViewById(R.id.bannersizes_fl_adframe);
+        mSizesSpinner = rootView.findViewById(R.id.bannersizes_spn_size);
+        mLoadButton = rootView.findViewById(R.id.bannersizes_btn_loadad);
+        mAdFrameLayout = rootView.findViewById(R.id.bannersizes_fl_adframe);
 
         String[] sizesArray;
 

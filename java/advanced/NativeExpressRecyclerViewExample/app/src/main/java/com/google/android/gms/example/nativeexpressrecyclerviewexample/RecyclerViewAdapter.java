@@ -52,11 +52,11 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         MenuItemViewHolder(View view) {
             super(view);
-            menuItemImage = (ImageView) view.findViewById(R.id.menu_item_image);
-            menuItemName = (TextView) view.findViewById(R.id.menu_item_name);
-            menuItemPrice = (TextView) view.findViewById(R.id.menu_item_price);
-            menuItemCategory = (TextView) view.findViewById(R.id.menu_item_category);
-            menuItemDescription = (TextView) view.findViewById(R.id.menu_item_description);
+            menuItemImage = view.findViewById(R.id.menu_item_image);
+            menuItemName = view.findViewById(R.id.menu_item_name);
+            menuItemPrice = view.findViewById(R.id.menu_item_price);
+            menuItemCategory = view.findViewById(R.id.menu_item_category);
+            menuItemDescription = view.findViewById(R.id.menu_item_description);
         }
     }
 
@@ -103,12 +103,11 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         viewGroup, false);
                 return new NativeExpressAdViewHolder(nativeExpressLayoutView);
         }
-
     }
 
     /**
-     *  Replaces the content in the views that make up the menu item view and the
-     *  Native Express ad view. This method is invoked by the layout manager.
+     * Replaces the content in the views that make up the menu item view and the
+     * Native Express ad view. This method is invoked by the layout manager.
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {

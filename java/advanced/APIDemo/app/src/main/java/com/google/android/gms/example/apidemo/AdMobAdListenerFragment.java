@@ -40,15 +40,14 @@ public class AdMobAdListenerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_admob_ad_listener, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_admob_ad_listener, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdView = (AdView) getView().findViewById(R.id.listener_av_main);
+        mAdView = getView().findViewById(R.id.listener_av_main);
 
         mAdView.setAdListener(new AdListener() {
             private void showToast(String message) {

@@ -36,7 +36,7 @@ public class DFPFluidSizeFragment extends Fragment {
     private PublisherAdView mPublisherAdView;
     private Button mChangeAdViewWidthButton;
     private TextView mCurrentWidthTextView;
-    private final int[] mAdViewWidths = new int[] {200, 250, 320};
+    private final int[] mAdViewWidths = new int[]{200, 250, 320};
     private int mCurrentIndex = 0;
 
     public DFPFluidSizeFragment() {
@@ -58,12 +58,12 @@ public class DFPFluidSizeFragment extends Fragment {
         //
         // An ad with fluid size will automatically stretch or shrink to fit the height of its
         // content, which can help layout designers cut down on excess whitespace.
-        mPublisherAdView = (PublisherAdView) getView().findViewById(R.id.fluid_av_main);
+        mPublisherAdView = getView().findViewById(R.id.fluid_av_main);
 
         PublisherAdRequest publisherAdRequest = new PublisherAdRequest.Builder().build();
         mPublisherAdView.loadAd(publisherAdRequest);
 
-        mChangeAdViewWidthButton = (Button) getView().findViewById(R.id.fluid_btn_change_width);
+        mChangeAdViewWidthButton = getView().findViewById(R.id.fluid_btn_change_width);
         mChangeAdViewWidthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,8 +75,7 @@ public class DFPFluidSizeFragment extends Fragment {
                 layoutParams.width = (int) (newWidth * scale + 0.5f);
                 mPublisherAdView.setLayoutParams(layoutParams);
                 // Update the TextView with the new width.
-                mCurrentWidthTextView =
-                        (TextView) getView().findViewById(R.id.fluid_tv_current_width);
+                mCurrentWidthTextView = getView().findViewById(R.id.fluid_tv_current_width);
                 mCurrentWidthTextView.setText(
                         String.format(Locale.getDefault(), "%d dp", newWidth));
             }

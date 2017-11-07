@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
         loadRewardedVideoAd();
 
         // Create the "retry" button, which tries to show an interstitial between game plays.
-        mRetryButton = ((Button) findViewById(R.id.retry_button));
+        mRetryButton = findViewById(R.id.retry_button);
         mRetryButton.setVisibility(View.INVISIBLE);
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +56,7 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
         });
 
         // Create the "show" button, which shows a rewarded video if one is loaded.
-        mShowVideoButton = ((Button) findViewById(R.id.watch_video));
+        mShowVideoButton = findViewById(R.id.watch_video);
         mShowVideoButton.setVisibility(View.INVISIBLE);
         mShowVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
         });
 
         // Display current coin count to user.
-        mCoinCountText = ((TextView) findViewById(R.id.coin_count_text));
+        mCoinCountText = findViewById(R.id.coin_count_text);
         mCoinCount = 0;
         mCoinCountText.setText("Coins: " + mCoinCount);
 
@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
     // Create the game timer, which counts down to the end of the level
     // and shows the "retry" button.
     private void createTimer(long time) {
-        final TextView textView = ((TextView) findViewById(R.id.timer));
+        final TextView textView = findViewById(R.id.timer);
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }

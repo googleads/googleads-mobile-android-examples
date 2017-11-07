@@ -58,11 +58,11 @@ public class DFPMultipleAdSizesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mLoadButton = (Button) getView().findViewById(R.id.adsizes_btn_loadad);
-        m120x20CheckBox = (CheckBox) getView().findViewById(R.id.adsizes_cb_120x20);
-        m320x50CheckBox = (CheckBox) getView().findViewById(R.id.adsizes_cb_320x50);
-        m300x250CheckBox = (CheckBox) getView().findViewById(R.id.adsizes_cb_300x250);
-        mPublisherAdView = (PublisherAdView) getView().findViewById(R.id.adsizes_pav_main);
+        mLoadButton = getView().findViewById(R.id.adsizes_btn_loadad);
+        m120x20CheckBox = getView().findViewById(R.id.adsizes_cb_120x20);
+        m320x50CheckBox = getView().findViewById(R.id.adsizes_cb_320x50);
+        m300x250CheckBox = getView().findViewById(R.id.adsizes_cb_300x250);
+        mPublisherAdView = getView().findViewById(R.id.adsizes_pav_main);
 
         mPublisherAdView.setAdListener(new AdListener() {
             @Override
@@ -80,7 +80,7 @@ public class DFPMultipleAdSizesFragment extends Fragment {
                     Toast.makeText(DFPMultipleAdSizesFragment.this.getActivity(),
                             "At least one size is required.", Toast.LENGTH_SHORT).show();
                 } else {
-                    List<AdSize> sizeList = new ArrayList<AdSize>();
+                    List<AdSize> sizeList = new ArrayList<>();
 
                     if (m120x20CheckBox.isChecked()) {
                         sizeList.add(new AdSize(120, 20));

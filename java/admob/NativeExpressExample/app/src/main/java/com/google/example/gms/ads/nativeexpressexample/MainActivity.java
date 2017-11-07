@@ -26,7 +26,6 @@ import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 
-
 /**
  * A simple activity showing the use of a {@link NativeExpressAdView}.
  */
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Locate the NativeExpressAdView.
-        mAdView = (NativeExpressAdView) findViewById(R.id.adView);
+        mAdView = findViewById(R.id.adView);
 
         // Set its video options.
         mAdView.setVideoOptions(new VideoOptions.Builder()
