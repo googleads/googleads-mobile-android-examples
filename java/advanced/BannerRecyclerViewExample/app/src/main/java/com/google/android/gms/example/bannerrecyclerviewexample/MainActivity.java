@@ -1,8 +1,7 @@
-package com.google.android.gms.example.nativeexpressrecyclerviewexample;
+package com.google.android.gms.example.bannerrecyclerviewexample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,11 +9,7 @@ import android.util.Log;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.NativeExpressAdView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.ads.AdView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,8 +18,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
- * A simple activity showing the use of {@link NativeExpressAdView} ads in
+ * A simple activity showing the use of {@link AdView} ads in
  * a {@link RecyclerView} widget.
  * <p>The {@link RecyclerView} widget is a more advanced and flexible version of
  * ListView. This widget helps simplify the display and handling of large data sets
@@ -34,19 +33,15 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    // A Native Express ad is placed in every nth position in the RecyclerView.
+    // A banner ad is placed in every 8th position in the RecyclerView.
     public static final int ITEMS_PER_AD = 8;
 
-    // The Native Express ad height.
-    private static final int NATIVE_EXPRESS_AD_HEIGHT = 150;
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/4177191030";
 
-    // The Native Express ad unit ID.
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1072772517";
-
-    // The RecyclerView that holds and displays Native Express ads and menu items.
+    // The RecyclerView that holds and displays banner ads and menu items.
     private RecyclerView mRecyclerView;
 
-    // List of Native Express ads and MenuItems that populate the RecyclerView.
+    // List of banner ads and MenuItems that populate the RecyclerView.
     private List<Object> mRecyclerViewItems = new ArrayList<>();
 
     @Override
@@ -64,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        // Update the RecyclerView item's list with menu items and Native Express ads.
+        // Update the RecyclerView item's list with menu items and banner ads.
         addMenuItemsFromJson();
-        addNativeExpressAds();
-        setUpAndLoadNativeExpressAds();
+        addBannerAds();
+        loadBannerAds();
 
         // Specify an adapter.
         RecyclerView.Adapter adapter = new RecyclerViewAdapter(this, mRecyclerViewItems);
@@ -75,86 +70,67 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Adds Native Express ads to the items list.
+     * Adds banner ads to the items list.
      */
-    private void addNativeExpressAds() {
-
-        // Loop through the items array and place a new Native Express ad in every ith position in
+    private void addBannerAds() {
+        // Loop through the items array and place a new banner ad in every ith position in
         // the items List.
         for (int i = 0; i <= mRecyclerViewItems.size(); i += ITEMS_PER_AD) {
-            final NativeExpressAdView adView = new NativeExpressAdView(MainActivity.this);
+            final AdView adView = new AdView(MainActivity.this);
+            adView.setAdSize(AdSize.BANNER);
+            adView.setAdUnitId(AD_UNIT_ID);
             mRecyclerViewItems.add(i, adView);
         }
     }
 
     /**
-     * Sets up and loads the Native Express ads.
+     * Sets up and loads the banner ads.
      */
-    private void setUpAndLoadNativeExpressAds() {
-        // Use a Runnable to ensure that the RecyclerView has been laid out before setting the
-        // ad size for the Native Express ad. This allows us to set the Native Express ad's
-        // width to match the full width of the RecyclerView.
-        mRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                final float scale = MainActivity.this.getResources().getDisplayMetrics().density;
-                // Set the ad size and ad unit ID for each Native Express ad in the items list.
-                for (int i = 0; i <= mRecyclerViewItems.size(); i += ITEMS_PER_AD) {
-                    final NativeExpressAdView adView =
-                            (NativeExpressAdView) mRecyclerViewItems.get(i);
-                    final CardView cardView = findViewById(R.id.ad_card_view);
-                    final int adWidth = cardView.getWidth() - cardView.getPaddingLeft()
-                            - cardView.getPaddingRight();
-                    AdSize adSize = new AdSize((int) (adWidth / scale), NATIVE_EXPRESS_AD_HEIGHT);
-                    adView.setAdSize(adSize);
-                    adView.setAdUnitId(AD_UNIT_ID);
-                }
-
-                // Load the first Native Express ad in the items list.
-                loadNativeExpressAd(0);
-            }
-        });
+    private void loadBannerAds() {
+        // Load the first banner ad in the items list (subsequent ads will be loaded automatically
+        // in sequence).
+        loadBannerAd(0);
     }
 
     /**
-     * Loads the Native Express ads in the items list.
+     * Loads the banner ads in the items list.
      */
-    private void loadNativeExpressAd(final int index) {
+    private void loadBannerAd(final int index) {
 
         if (index >= mRecyclerViewItems.size()) {
             return;
         }
 
         Object item = mRecyclerViewItems.get(index);
-        if (!(item instanceof NativeExpressAdView)) {
-            throw new ClassCastException("Expected item at index " + index + " to be a Native"
-                    + " Express ad.");
+        if (!(item instanceof AdView)) {
+            throw new ClassCastException("Expected item at index " + index + " to be a banner ad"
+                    + " ad.");
         }
 
-        final NativeExpressAdView adView = (NativeExpressAdView) item;
+        final AdView adView = (AdView) item;
 
-        // Set an AdListener on the NativeExpressAdView to wait for the previous Native Express ad
+        // Set an AdListener on the AdView to wait for the previous banner ad
         // to finish loading before loading the next ad in the items list.
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
-                // The previous Native Express ad loaded successfully, call this method again to
+                // The previous banner ad loaded successfully, call this method again to
                 // load the next ad in the items list.
-                loadNativeExpressAd(index + ITEMS_PER_AD);
+                loadBannerAd(index + ITEMS_PER_AD);
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                // The previous Native Express ad failed to load. Call this method again to load
+                // The previous banner ad failed to load. Call this method again to load
                 // the next ad in the items list.
-                Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
-                        + " load the next Native Express ad in the items list.");
-                loadNativeExpressAd(index + ITEMS_PER_AD);
+                Log.e("MainActivity", "The previous banner ad failed to load. Attempting to"
+                        + " load the next banner ad in the items list.");
+                loadBannerAd(index + ITEMS_PER_AD);
             }
         });
 
-        // Load the Native Express ad.
+        // Load the banner ad.
         adView.loadAd(new AdRequest.Builder().build());
     }
 

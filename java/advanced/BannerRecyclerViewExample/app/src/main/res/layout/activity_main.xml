@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context="com.google.android.gms.example.nativeexpressrecyclerviewexample.MainActivity">
+    tools:context="com.google.android.gms.example.bannerrecyclerviewexample.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.3"
     defaultConfig {
-        applicationId "com.google.android.gms.example.nativeexpressrecyclerviewexample"
+        applicationId "com.google.android.gms.example.bannerrecyclerviewexample"
         minSdkVersion 14
         targetSdkVersion 26
         versionCode 1

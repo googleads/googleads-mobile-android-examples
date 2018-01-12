@@ -8,6 +8,9 @@
     android:orientation="vertical"
     android:layout_marginBottom="10dp"
     card_view:cardCornerRadius="@dimen/cardview_default_radius"
-    card_view:cardElevation="@dimen/cardview_default_elevation" >
+    card_view:cardElevation="@dimen/cardview_default_elevation"
+    card_view:contentPaddingTop="10dp"
+    card_view:contentPaddingBottom="10dp"
+    >
 
 </android.support.v7.widget.CardView>

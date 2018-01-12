@@ -1,4 +1,4 @@
-package com.google.android.gms.example.nativeexpressrecyclerviewexample;
+package com.google.android.gms.example.bannerrecyclerviewexample;
 
 /**
  * The {@link MenuItem} class.

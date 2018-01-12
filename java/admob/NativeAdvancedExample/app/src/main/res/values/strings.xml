@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AdMob Native Advanced Example</string>
+    <string name="ad_attribution">Ad</string>
 </resources>

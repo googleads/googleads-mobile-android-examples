@@ -1,4 +1,4 @@
-package com.google.android.gms.example.nativeexpressrecyclerviewexample;
+package com.google.android.gms.example.bannerrecyclerviewexample;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,31 +8,31 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.AdView;
 
 import java.util.List;
 
 /**
  * The {@link RecyclerViewAdapter} class.
  * <p>The adapter provides access to the items in the {@link MenuItemViewHolder}
- * or the {@link NativeExpressAdViewHolder}.</p>
+ * or the {@link AdViewHolder}.</p>
  */
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // A menu item view type.
     private static final int MENU_ITEM_VIEW_TYPE = 0;
 
-    // The Native Express ad view type.
-    private static final int NATIVE_EXPRESS_AD_VIEW_TYPE = 1;
+    // The banner ad view type.
+    private static final int BANNER_AD_VIEW_TYPE = 1;
 
     // An Activity's Context.
     private final Context mContext;
 
-    // The list of Native Express ads and menu items.
+    // The list of banner ads and menu items.
     private final List<Object> mRecyclerViewItems;
 
     /**
      * For this example app, the recyclerViewItems list contains only
-     * {@link MenuItem} and {@link NativeExpressAdView} types.
+     * {@link MenuItem} and {@link AdView} types.
      */
     public RecyclerViewAdapter(Context context, List<Object> recyclerViewItems) {
         this.mContext = context;
@@ -61,11 +61,11 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     /**
-     * The {@link NativeExpressAdViewHolder} class.
+     * The {@link AdViewHolder} class.
      */
-    public class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
+    public class AdViewHolder extends RecyclerView.ViewHolder {
 
-        NativeExpressAdViewHolder(View view) {
+        AdViewHolder(View view) {
             super(view);
         }
     }
@@ -80,12 +80,12 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     @Override
     public int getItemViewType(int position) {
-        return (position % MainActivity.ITEMS_PER_AD == 0) ? NATIVE_EXPRESS_AD_VIEW_TYPE
+        return (position % MainActivity.ITEMS_PER_AD == 0) ? BANNER_AD_VIEW_TYPE
                 : MENU_ITEM_VIEW_TYPE;
     }
 
     /**
-     * Creates a new view for a menu item view or a Native Express ad view
+     * Creates a new view for a menu item view or a banner ad view
      * based on the viewType. This method is invoked by the layout manager.
      */
     @Override
@@ -95,19 +95,19 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 View menuItemLayoutView = LayoutInflater.from(viewGroup.getContext()).inflate(
                         R.layout.menu_item_container, viewGroup, false);
                 return new MenuItemViewHolder(menuItemLayoutView);
-            case NATIVE_EXPRESS_AD_VIEW_TYPE:
+            case BANNER_AD_VIEW_TYPE:
                 // fall through
             default:
-                View nativeExpressLayoutView = LayoutInflater.from(
-                        viewGroup.getContext()).inflate(R.layout.native_express_ad_container,
+                View bannerLayoutView = LayoutInflater.from(
+                        viewGroup.getContext()).inflate(R.layout.banner_ad_container,
                         viewGroup, false);
-                return new NativeExpressAdViewHolder(nativeExpressLayoutView);
+                return new AdViewHolder(bannerLayoutView);
         }
     }
 
     /**
      * Replaces the content in the views that make up the menu item view and the
-     * Native Express ad view. This method is invoked by the layout manager.
+     * banner ad view. This method is invoked by the layout manager.
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -129,19 +129,17 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 menuItemHolder.menuItemCategory.setText(menuItem.getCategory());
                 menuItemHolder.menuItemDescription.setText(menuItem.getDescription());
                 break;
-            case NATIVE_EXPRESS_AD_VIEW_TYPE:
+            case BANNER_AD_VIEW_TYPE:
                 // fall through
             default:
-                NativeExpressAdViewHolder nativeExpressHolder =
-                        (NativeExpressAdViewHolder) holder;
-                NativeExpressAdView adView =
-                        (NativeExpressAdView) mRecyclerViewItems.get(position);
-                ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
-                // The NativeExpressAdViewHolder recycled by the RecyclerView may be a different
+                AdViewHolder bannerHolder = (AdViewHolder) holder;
+                AdView adView = (AdView) mRecyclerViewItems.get(position);
+                ViewGroup adCardView = (ViewGroup) bannerHolder.itemView;
+                // The AdViewHolder recycled by the RecyclerView may be a different
                 // instance than the one used previously for this position. Clear the
-                // NativeExpressAdViewHolder of any subviews in case it has a different
+                // AdViewHolder of any subviews in case it has a different
                 // AdView associated with it, and make sure the AdView for this position doesn't
-                // already have a parent of a different recycled NativeExpressAdViewHolder.
+                // already have a parent of a different recycled AdViewHolder.
                 if (adCardView.getChildCount() > 0) {
                     adCardView.removeAllViews();
                 }
@@ -149,7 +147,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     ((ViewGroup) adView.getParent()).removeView(adView);
                 }
 
-                // Add the Native Express ad to the native express ad view.
+                // Add the banner ad to the ad view.
                 adCardView.addView(adView);
         }
     }
