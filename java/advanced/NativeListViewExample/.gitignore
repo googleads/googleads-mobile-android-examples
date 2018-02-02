@@ -1,8 +1,0 @@
-# Android Studio-generated files
-.gradle/
-.idea/
-build/
-app/libs/
-*.iml
-local.properties
-gradle-wrapper.jar

@@ -5,15 +5,14 @@ import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.reward.RewardItem
 import com.google.android.gms.ads.reward.RewardedVideoAd
 import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import kotlinx.android.synthetic.main.activity_main.*
 
-const val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"
-const val APP_ID = "ca-app-pub-3940256099942544~3347511713"
+const val AD_UNIT_ID = "/6499/example/rewarded-video"
 const val COUNTER_TIME = 10L
 const val GAME_OVER_REWARD = 1
 
@@ -29,9 +28,6 @@ class MainActivity : AppCompatActivity(), RewardedVideoAdListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, APP_ID)
 
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
         mRewardedVideoAd.rewardedVideoAdListener = this
@@ -77,7 +73,7 @@ class MainActivity : AppCompatActivity(), RewardedVideoAdListener {
 
     private fun loadRewardedVideoAd() {
         if (!mRewardedVideoAd.isLoaded) {
-            mRewardedVideoAd.loadAd(AD_UNIT_ID, AdRequest.Builder().build())
+            mRewardedVideoAd.loadAd(AD_UNIT_ID, PublisherAdRequest.Builder().build())
         }
     }
 

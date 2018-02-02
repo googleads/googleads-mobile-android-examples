@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
@@ -18,8 +18,7 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
  * Main Activity. Inflates main activity xml and implements RewardedVideoAdListener.
  */
 public class MainActivity extends Activity implements RewardedVideoAdListener {
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-    private static final String APP_ID = "ca-app-pub-3940256099942544~3347511713";
+    private static final String AD_UNIT_ID = "/6499/example/rewarded-video";
     private static final long COUNTER_TIME = 10;
     private static final int GAME_OVER_REWARD = 1;
 
@@ -37,9 +36,6 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, APP_ID);
 
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(this);
@@ -101,7 +97,7 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
 
     private void loadRewardedVideoAd() {
         if (!mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
+            mRewardedVideoAd.loadAd(AD_UNIT_ID, new PublisherAdRequest.Builder().build());
         }
     }
 

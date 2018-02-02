@@ -29,13 +29,13 @@ technical SDK support for our [Android developers](https://groups.google.com/for
 ## Advanced
 
 * API Demo: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/advanced/APIDemo), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/advanced/APIDemo) - Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
-* Native Express RecyclerView: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeExpressRecyclerViewExample) - Provides an example for displaying ads from AdMob Native Ads Express in a RecyclerView widget.
-* Native ListView: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/advanced/NativeListViewExample) - Provides an example for displaying ads from DFP Custom Rendering in a ListView.
+* Banner RecyclerView: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/advanced/BannerRecyclerViewExample) - Provides an example for displaying ads from AdMob Banner ads in a RecyclerView widget.
 
 ## DoubleClick
 
 * Banner: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/BannerExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/BannerExample)
 * Interstitial: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/InterstitialExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/InterstitialExample)
+* Rewarded Video: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/RewardedVideoExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/RewardedVideoExample)
 * Custom Rendering: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/CustomRenderingExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/CustomRenderingExample)
 
 # Downloads
@@ -45,7 +45,7 @@ for the latest downloads of our example apps.
 
 # Documentation
 
-Check out our [developers site](https://developers.google.com/mobile-ads-sdk/)
+Check out our [developers site](https://developers.google.com/admob/)
 for documentation on using the Mobile Ads SDK.
 
 # GitHub issue tracker
