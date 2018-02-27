@@ -32,7 +32,7 @@ import com.google.android.gms.ads.AdView;
  */
 public class AdMobAdListenerFragment extends Fragment {
 
-    private AdView mAdView;
+    private AdView adView;
 
     public AdMobAdListenerFragment() {
     }
@@ -47,9 +47,9 @@ public class AdMobAdListenerFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdView = getView().findViewById(R.id.listener_av_main);
+        adView = getView().findViewById(R.id.listener_av_main);
 
-        mAdView.setAdListener(new AdListener() {
+        adView.setAdListener(new AdListener() {
             private void showToast(String message) {
                 View view = getView();
                 if (view != null) {
@@ -84,6 +84,6 @@ public class AdMobAdListenerFragment extends Fragment {
         });
 
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        adView.loadAd(adRequest);
     }
 }

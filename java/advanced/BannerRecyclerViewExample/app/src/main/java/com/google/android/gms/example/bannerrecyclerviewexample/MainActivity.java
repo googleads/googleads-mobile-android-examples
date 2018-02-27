@@ -39,25 +39,25 @@ public class MainActivity extends AppCompatActivity {
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/4177191030";
 
     // The RecyclerView that holds and displays banner ads and menu items.
-    private RecyclerView mRecyclerView;
+    private RecyclerView recyclerView;
 
     // List of banner ads and MenuItems that populate the RecyclerView.
-    private List<Object> mRecyclerViewItems = new ArrayList<>();
+    private List<Object> recyclerViewItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView.
-        mRecyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
 
         // Specify a linear layout manager.
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         // Update the RecyclerView item's list with menu items and banner ads.
         addMenuItemsFromJson();
@@ -65,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
         loadBannerAds();
 
         // Specify an adapter.
-        RecyclerView.Adapter adapter = new RecyclerViewAdapter(this, mRecyclerViewItems);
-        mRecyclerView.setAdapter(adapter);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new RecyclerViewAdapter(this,
+            recyclerViewItems);
+        recyclerView.setAdapter(adapter);
     }
 
     /**
@@ -75,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
     private void addBannerAds() {
         // Loop through the items array and place a new banner ad in every ith position in
         // the items List.
-        for (int i = 0; i <= mRecyclerViewItems.size(); i += ITEMS_PER_AD) {
+        for (int i = 0; i <= recyclerViewItems.size(); i += ITEMS_PER_AD) {
             final AdView adView = new AdView(MainActivity.this);
             adView.setAdSize(AdSize.BANNER);
             adView.setAdUnitId(AD_UNIT_ID);
-            mRecyclerViewItems.add(i, adView);
+            recyclerViewItems.add(i, adView);
         }
     }
 
@@ -97,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadBannerAd(final int index) {
 
-        if (index >= mRecyclerViewItems.size()) {
+        if (index >= recyclerViewItems.size()) {
             return;
         }
 
-        Object item = mRecyclerViewItems.get(index);
+        Object item = recyclerViewItems.get(index);
         if (!(item instanceof AdView)) {
             throw new ClassCastException("Expected item at index " + index + " to be a banner ad"
                     + " ad.");
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                 MenuItem menuItem = new MenuItem(menuItemName, menuItemDescription, menuItemPrice,
                         menuItemCategory, menuItemImageName);
-                mRecyclerViewItems.add(menuItem);
+                recyclerViewItems.add(menuItem);
             }
         } catch (IOException | JSONException exception) {
             Log.e(MainActivity.class.getName(), "Unable to parse JSON file.", exception);

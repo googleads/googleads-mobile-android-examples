@@ -34,9 +34,9 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
  */
 public class DFPCustomTargetingFragment extends Fragment {
 
-    private Spinner mSportsSpinner;
-    private Button mLoadButton;
-    private PublisherAdView mAdView;
+    private Spinner sportsSpinner;
+    private Button loadButton;
+    private PublisherAdView adView;
 
     public DFPCustomTargetingFragment() {
     }
@@ -51,24 +51,24 @@ public class DFPCustomTargetingFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSportsSpinner = getView().findViewById(R.id.customtargeting_spn_sport);
-        mLoadButton = getView().findViewById(R.id.customtargeting_btn_loadad);
-        mAdView = getView().findViewById(R.id.customtargeting_av_main);
+        sportsSpinner = getView().findViewById(R.id.customtargeting_spn_sport);
+        loadButton = getView().findViewById(R.id.customtargeting_btn_loadad);
+        adView = getView().findViewById(R.id.customtargeting_av_main);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getView().getContext(),
                 R.array.customtargeting_sports, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSportsSpinner.setAdapter(adapter);
+        sportsSpinner.setAdapter(adapter);
 
-        mLoadButton.setOnClickListener(new View.OnClickListener() {
+        loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
                         .addCustomTargeting(getString(R.string.customtargeting_key),
-                                (String) mSportsSpinner.getSelectedItem())
+                                (String) sportsSpinner.getSelectedItem())
                         .build();
 
-                mAdView.loadAd(adRequest);
+                adView.loadAd(adRequest);
             }
         });
     }

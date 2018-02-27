@@ -38,11 +38,11 @@ import java.util.List;
  */
 public class DFPMultipleAdSizesFragment extends Fragment {
 
-    private Button mLoadButton;
-    private PublisherAdView mPublisherAdView;
-    private CheckBox m320x50CheckBox;
-    private CheckBox m300x250CheckBox;
-    private CheckBox m120x20CheckBox;
+    private Button loadButton;
+    private PublisherAdView publisherAdView;
+    private CheckBox cb320x50;
+    private CheckBox cb300x250;
+    private CheckBox cb120x20;
 
     public DFPMultipleAdSizesFragment() {
     }
@@ -58,45 +58,45 @@ public class DFPMultipleAdSizesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mLoadButton = getView().findViewById(R.id.adsizes_btn_loadad);
-        m120x20CheckBox = getView().findViewById(R.id.adsizes_cb_120x20);
-        m320x50CheckBox = getView().findViewById(R.id.adsizes_cb_320x50);
-        m300x250CheckBox = getView().findViewById(R.id.adsizes_cb_300x250);
-        mPublisherAdView = getView().findViewById(R.id.adsizes_pav_main);
+        loadButton = getView().findViewById(R.id.adsizes_btn_loadad);
+        cb120x20 = getView().findViewById(R.id.adsizes_cb_120x20);
+        cb320x50 = getView().findViewById(R.id.adsizes_cb_320x50);
+        cb300x250 = getView().findViewById(R.id.adsizes_cb_300x250);
+        publisherAdView = getView().findViewById(R.id.adsizes_pav_main);
 
-        mPublisherAdView.setAdListener(new AdListener() {
+        publisherAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                mPublisherAdView.setVisibility(View.VISIBLE);
+                publisherAdView.setVisibility(View.VISIBLE);
             }
         });
 
-        mLoadButton.setOnClickListener(new View.OnClickListener() {
+        loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!m120x20CheckBox.isChecked()
-                        && !m320x50CheckBox.isChecked()
-                        && !m300x250CheckBox.isChecked()) {
+                if (!cb120x20.isChecked()
+                        && !cb320x50.isChecked()
+                        && !cb300x250.isChecked()) {
                     Toast.makeText(DFPMultipleAdSizesFragment.this.getActivity(),
                             "At least one size is required.", Toast.LENGTH_SHORT).show();
                 } else {
                     List<AdSize> sizeList = new ArrayList<>();
 
-                    if (m120x20CheckBox.isChecked()) {
+                    if (cb120x20.isChecked()) {
                         sizeList.add(new AdSize(120, 20));
                     }
 
-                    if (m320x50CheckBox.isChecked()) {
+                    if (cb320x50.isChecked()) {
                         sizeList.add(AdSize.BANNER);
                     }
 
-                    if (m300x250CheckBox.isChecked()) {
+                    if (cb300x250.isChecked()) {
                         sizeList.add(AdSize.MEDIUM_RECTANGLE);
                     }
 
-                    mPublisherAdView.setVisibility(View.INVISIBLE);
-                    mPublisherAdView.setAdSizes(sizeList.toArray(new AdSize[sizeList.size()]));
-                    mPublisherAdView.loadAd(new PublisherAdRequest.Builder().build());
+                    publisherAdView.setVisibility(View.INVISIBLE);
+                    publisherAdView.setAdSizes(sizeList.toArray(new AdSize[sizeList.size()]));
+                    publisherAdView.loadAd(new PublisherAdRequest.Builder().build());
                 }
             }
         });

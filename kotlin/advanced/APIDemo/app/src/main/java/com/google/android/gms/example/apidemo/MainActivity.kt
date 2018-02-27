@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_dfp_customtargeting -> DFPCustomTargetingFragment()
             R.id.nav_dfp_fluid -> DFPFluidSizeFragment()
             R.id.nav_dfp_ppid -> DFPPPIDFragment()
+            R.id.nav_dfp_customcontrols -> DFPCustomControlsFragment()
             else -> DFPCategoryExclusionFragment()
         }
 

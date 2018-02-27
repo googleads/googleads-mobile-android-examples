@@ -41,16 +41,16 @@ import java.util.Date;
 public class AdMobAdTargetingFragment extends Fragment
         implements DatePickerDialog.OnDateSetListener {
 
-    private AdView mAdView;
-    private Button mDatePickButton;
-    private Button mLoadAdButton;
-    private EditText mBirthdayEdit;
-    private RadioButton mMaleRadio;
-    private RadioButton mFemaleRadio;
-    private RadioButton mChildRadio;
-    private RadioButton mNotChildRadio;
-    private RadioButton mUnspecifiedRadio;
-    private SimpleDateFormat mDateFormat = new SimpleDateFormat("M/d/yyyy");
+    private AdView adView;
+    private Button datePickButton;
+    private Button loadAdButton;
+    private EditText birthdayEdit;
+    private RadioButton maleRadio;
+    private RadioButton femaleRadio;
+    private RadioButton childRadio;
+    private RadioButton notChildRadio;
+    private RadioButton unspecifiedRadio;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy");
 
     public AdMobAdTargetingFragment() {
     }
@@ -60,17 +60,17 @@ public class AdMobAdTargetingFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_admob_ad_targeting, container, false);
 
-        mAdView = rootView.findViewById(R.id.targeting_av_main);
-        mLoadAdButton = rootView.findViewById(R.id.targeting_btn_loadad);
-        mDatePickButton = rootView.findViewById(R.id.targeting_btn_datepick);
-        mBirthdayEdit = rootView.findViewById(R.id.targeting_et_birthday);
-        mMaleRadio = rootView.findViewById(R.id.targeting_rb_male);
-        mFemaleRadio = rootView.findViewById(R.id.targeting_rb_female);
-        mChildRadio = rootView.findViewById(R.id.targeting_rb_child);
-        mNotChildRadio = rootView.findViewById(R.id.targeting_rb_notchild);
-        mUnspecifiedRadio = rootView.findViewById(R.id.targeting_rb_unspecified);
+        adView = rootView.findViewById(R.id.targeting_av_main);
+        loadAdButton = rootView.findViewById(R.id.targeting_btn_loadad);
+        datePickButton = rootView.findViewById(R.id.targeting_btn_datepick);
+        birthdayEdit = rootView.findViewById(R.id.targeting_et_birthday);
+        maleRadio = rootView.findViewById(R.id.targeting_rb_male);
+        femaleRadio = rootView.findViewById(R.id.targeting_rb_female);
+        childRadio = rootView.findViewById(R.id.targeting_rb_child);
+        notChildRadio = rootView.findViewById(R.id.targeting_rb_notchild);
+        unspecifiedRadio = rootView.findViewById(R.id.targeting_rb_unspecified);
 
-        mDatePickButton.setOnClickListener(new View.OnClickListener() {
+        datePickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerFragment newFragment = new DatePickerFragment();
@@ -79,38 +79,38 @@ public class AdMobAdTargetingFragment extends Fragment
             }
         });
 
-        mLoadAdButton.setOnClickListener(new View.OnClickListener() {
+        loadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AdRequest.Builder builder = new AdRequest.Builder();
 
                 try {
-                    String birthdayString = mBirthdayEdit.getText().toString();
-                    Date birthday = mDateFormat.parse(birthdayString);
+                    String birthdayString = birthdayEdit.getText().toString();
+                    Date birthday = dateFormat.parse(birthdayString);
                     builder.setBirthday(birthday);
                 } catch (ParseException ex) {
                     Log.d(MainActivity.LOG_TAG, "Failed to parse birthday");
                 }
 
-                if (mMaleRadio.isChecked()) {
+                if (maleRadio.isChecked()) {
                     builder.setGender(AdRequest.GENDER_MALE);
-                } else if (mFemaleRadio.isChecked()) {
+                } else if (femaleRadio.isChecked()) {
                     builder.setGender(AdRequest.GENDER_FEMALE);
                 }
 
-                if (mUnspecifiedRadio.isChecked()) {
+                if (unspecifiedRadio.isChecked()) {
                     // There's actually nothing to be done here. If you're unsure whether or not
                     // the user should receive child-directed treatment, simply avoid calling the
                     // tagForChildDirectedTreatment method. The ad request will not contain any
                     // indication one way or the other.
-                } else if (mChildRadio.isChecked()) {
+                } else if (childRadio.isChecked()) {
                     builder.tagForChildDirectedTreatment(true);
-                } else if (mNotChildRadio.isChecked()) {
+                } else if (notChildRadio.isChecked()) {
                     builder.tagForChildDirectedTreatment(false);
                 }
 
                 AdRequest request = builder.build();
-                mAdView.loadAd(request);
+                adView.loadAd(request);
             }
         });
 
@@ -121,6 +121,6 @@ public class AdMobAdTargetingFragment extends Fragment
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
-        mBirthdayEdit.setText(mDateFormat.format(calendar.getTime()));
+        birthdayEdit.setText(dateFormat.format(calendar.getTime()));
     }
 }

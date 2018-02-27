@@ -9,6 +9,8 @@
     <string name="unspecified">Unspecified</string>
     <string name="choose">Choose…</string>
 
+    <string name="ad_attribution">Ad</string>
+
     <string name="targeting_location">Location</string>
     <string name="targeting_birthday">Birth Date</string>
     <string name="targeting_gender">Gender</string>
@@ -85,6 +87,7 @@
         <item>DFP - Category Exclusions</item>
         <item>DFP - Ad Sizes</item>
         <item>DFP - App Events</item>
+        <item>DFP - Custom Video Controls</item>
     </string-array>
 
     <string name="admob_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
@@ -99,5 +102,18 @@
     <string name="customtargeting_fragment_title">DFP Custom Targeting</string>
     <string name="adsizes_fragment_title">DFP Multiple Ad Sizes</string>
     <string name="ppid_fragment_title">DFP PPID</string>
+
+    <string name="customcontrols_fragment_ad_unit_id">/6499/example/native-video</string>
+    <string name="customcontrols_fragment_template_id">10104090</string>
+    <string name="customcontrols_fragment_request_appinstall">Request App Install Ads</string>
+    <string name="customcontrols_fragment_request_content">Request Content Ads</string>
+    <string name="customcontrols_fragment_request_customtemplate">Request Custom Template Ads</string>
+    <string name="customcontrols_fragment_start_muted">Start video ads muted</string>
+    <string name="customcontrols_fragment_request_custom_controls">Request Custom Video Controls</string>
+    <string name="customcontrols_fragment_refresh">Refresh Ad</string>
+
+    <string name="customcontrols_view_mute">Mute</string>
+    <string name="customcontrols_view_play">Play</string>
+    <string name="customcontrols_view_video_status">Video Status: </string>
 
 </resources>

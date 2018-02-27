@@ -32,8 +32,8 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
  */
 public class DFPAppEventsFragment extends Fragment {
 
-    private PublisherAdView mAdView;
-    private View mRootView;
+    private PublisherAdView adView;
+    private View rootView;
 
     public DFPAppEventsFragment() {
     }
@@ -41,17 +41,17 @@ public class DFPAppEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_dfp_app_events, container, false);
-        return mRootView;
+        rootView = inflater.inflate(R.layout.fragment_dfp_app_events, container, false);
+        return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdView = getView().findViewById(R.id.appevents_av_main);
+        adView = getView().findViewById(R.id.appevents_av_main);
 
-        mAdView.setAppEventListener(new AppEventListener() {
+        adView.setAppEventListener(new AppEventListener() {
             @Override
             public void onAppEvent(String name, String data) {
 
@@ -67,13 +67,13 @@ public class DFPAppEventsFragment extends Fragment {
                 if (name.equals("color")) {
                     switch (data) {
                         case "blue":
-                            mRootView.setBackgroundColor(Color.rgb(0xD0, 0xD0, 0xFF));
+                            rootView.setBackgroundColor(Color.rgb(0xD0, 0xD0, 0xFF));
                             break;
                         case "red":
-                            mRootView.setBackgroundColor(Color.rgb(0xFF, 0xD0, 0xD0));
+                            rootView.setBackgroundColor(Color.rgb(0xFF, 0xD0, 0xD0));
                             break;
                         case "green":
-                            mRootView.setBackgroundColor(Color.rgb(0xD0, 0xFF, 0xD0));
+                            rootView.setBackgroundColor(Color.rgb(0xD0, 0xFF, 0xD0));
                             break;
                     }
                 }
@@ -81,6 +81,6 @@ public class DFPAppEventsFragment extends Fragment {
         });
 
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        adView.loadAd(adRequest);
     }
 }

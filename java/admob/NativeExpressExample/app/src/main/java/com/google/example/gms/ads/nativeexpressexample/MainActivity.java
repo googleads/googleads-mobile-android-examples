@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static String LOG_TAG = "EXAMPLE";
 
-    NativeExpressAdView mAdView;
-    VideoController mVideoController;
+    NativeExpressAdView adView;
+    VideoController videoController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +42,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Locate the NativeExpressAdView.
-        mAdView = findViewById(R.id.adView);
+        adView = findViewById(R.id.adView);
 
         // Set its video options.
-        mAdView.setVideoOptions(new VideoOptions.Builder()
+        adView.setVideoOptions(new VideoOptions.Builder()
                 .setStartMuted(true)
                 .build());
 
         // The VideoController can be used to get lifecycle events and info about an ad's video
         // asset. One will always be returned by getVideoController, even if the ad has no video
         // asset.
-        mVideoController = mAdView.getVideoController();
-        mVideoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+        videoController = adView.getVideoController();
+        videoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
             @Override
             public void onVideoEnd() {
                 Log.d(LOG_TAG, "Video playback is finished.");
@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Set an AdListener for the AdView, so the Activity can take action when an ad has finished
         // loading.
-        mAdView.setAdListener(new AdListener() {
+        adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                if (mVideoController.hasVideoContent()) {
+                if (videoController.hasVideoContent()) {
                     Log.d(LOG_TAG, "Received an ad that contains a video asset.");
                 } else {
                     Log.d(LOG_TAG, "Received an ad that does not contain a video asset.");
@@ -74,6 +74,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAdView.loadAd(new AdRequest.Builder().build());
+        adView.loadAd(new AdRequest.Builder().build());
     }
 }

@@ -52,31 +52,31 @@ public class MainActivity extends AppCompatActivity {
     private static final String DFP_AD_UNIT_ID = "/6499/example/native";
     private static final String SIMPLE_TEMPLATE_ID = "10104090";
 
-    private Button mRefresh;
-    private CheckBox mRequestAppInstallAds;
-    private CheckBox mRequestContentAds;
-    private CheckBox mRequestCustomTemplateAds;
-    private CheckBox mStartVideoAdsMuted;
-    private TextView mVideoStatus;
+    private Button refresh;
+    private CheckBox requestAppInstallAds;
+    private CheckBox requestContentAds;
+    private CheckBox requestCustomTemplateAds;
+    private CheckBox startVideoAdsMuted;
+    private TextView videoStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRefresh = findViewById(R.id.btn_refresh);
-        mRequestAppInstallAds = findViewById(R.id.cb_appinstall);
-        mRequestContentAds = findViewById(R.id.cb_content);
-        mRequestCustomTemplateAds = findViewById(R.id.cb_customtemplate);
-        mStartVideoAdsMuted = findViewById(R.id.cb_start_muted);
-        mVideoStatus = findViewById(R.id.tv_video_status);
+        refresh = findViewById(R.id.btn_refresh);
+        requestAppInstallAds = findViewById(R.id.cb_appinstall);
+        requestContentAds = findViewById(R.id.cb_content);
+        requestCustomTemplateAds = findViewById(R.id.cb_customtemplate);
+        startVideoAdsMuted = findViewById(R.id.cb_start_muted);
+        videoStatus = findViewById(R.id.tv_video_status);
 
-        mRefresh.setOnClickListener(new View.OnClickListener() {
+        refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshAd(mRequestAppInstallAds.isChecked(),
-                        mRequestContentAds.isChecked(),
-                        mRequestCustomTemplateAds.isChecked());
+                refreshAd(requestAppInstallAds.isChecked(),
+                        requestContentAds.isChecked(),
+                        requestCustomTemplateAds.isChecked());
             }
         });
 
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             mainImageView.setVisibility(View.GONE);
             adView.setMediaView(mediaView);
 
-            mVideoStatus.setText(String.format(Locale.getDefault(),
+            videoStatus.setText(String.format(Locale.getDefault(),
                     "Video status: Ad contains a %.2f:1 video asset.",
                     vc.getAspectRatio()));
 
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onVideoEnd() {
                     // Publishers should allow native ads to complete video playback before
                     // refreshing or replacing them with another ad in the same UI location.
-                    mRefresh.setEnabled(true);
-                    mVideoStatus.setText("Video status: Video playback has ended.");
+                    refresh.setEnabled(true);
+                    videoStatus.setText("Video status: Video playback has ended.");
                     super.onVideoEnd();
                 }
             });
@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
             List<NativeAd.Image> images = nativeAppInstallAd.getImages();
             mainImageView.setImageDrawable(images.get(0).getDrawable());
 
-            mRefresh.setEnabled(true);
-            mVideoStatus.setText("Video status: Ad does not contain a video asset.");
+            refresh.setEnabled(true);
+            videoStatus.setText("Video status: Ad does not contain a video asset.");
         }
 
         // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             mainImageView.setVisibility(View.GONE);
             adView.setMediaView(mediaView);
 
-            mVideoStatus.setText(String.format(Locale.getDefault(),
+            videoStatus.setText(String.format(Locale.getDefault(),
                     "Video status: Ad contains a %.2f:1 video asset.",
                     vc.getAspectRatio()));
 
@@ -222,8 +222,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onVideoEnd() {
                     // Publishers should allow native ads to complete video playback before
                     // refreshing or replacing them with another ad in the same UI location.
-                    mRefresh.setEnabled(true);
-                    mVideoStatus.setText("Video status: Video playback has ended.");
+                    refresh.setEnabled(true);
+                    videoStatus.setText("Video status: Video playback has ended.");
                     super.onVideoEnd();
                 }
             });
@@ -235,8 +235,8 @@ public class MainActivity extends AppCompatActivity {
             List<NativeAd.Image> images = nativeContentAd.getImages();
             mainImageView.setImageDrawable(images.get(0).getDrawable());
 
-            mRefresh.setEnabled(true);
-            mVideoStatus.setText("Video status: Ad does not contain a video asset.");
+            refresh.setEnabled(true);
+            videoStatus.setText("Video status: Ad does not contain a video asset.");
         }
 
         // These assets aren't guaranteed to be in every NativeContentAd, so it's important to
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         // NativeCustomTemplateAd has a video asset.
         if (vc.hasVideoContent()) {
             mediaPlaceholder.addView(nativeCustomTemplateAd.getVideoMediaView());
-            mVideoStatus.setText(String.format(Locale.getDefault(),
+            videoStatus.setText(String.format(Locale.getDefault(),
                     "Video status: Ad contains a %.2f:1 video asset.",
                     vc.getAspectRatio()));
 
@@ -290,8 +290,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onVideoEnd() {
                     // Publishers should allow native ads to complete video playback before
                     // refreshing or replacing them with another ad in the same UI location.
-                    mRefresh.setEnabled(true);
-                    mVideoStatus.setText("Video status: Video playback has ended.");
+                    refresh.setEnabled(true);
+                    videoStatus.setText("Video status: Video playback has ended.");
                     super.onVideoEnd();
                 }
             });
@@ -307,8 +307,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             mediaPlaceholder.addView(mainImage);
-            mRefresh.setEnabled(true);
-            mVideoStatus.setText("Video status: Ad does not contain a video asset.");
+            refresh.setEnabled(true);
+            videoStatus.setText("Video status: Ad does not contain a video asset.");
         }
     }
 
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        mRefresh.setEnabled(false);
+        refresh.setEnabled(false);
 
         AdLoader.Builder builder = new AdLoader.Builder(this, DFP_AD_UNIT_ID);
 
@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(mStartVideoAdsMuted.isChecked())
+                .setStartMuted(startVideoAdsMuted.isChecked())
                 .build();
 
         NativeAdOptions adOptions = new NativeAdOptions.Builder()
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                mRefresh.setEnabled(true);
+                refresh.setEnabled(true);
                 Toast.makeText(MainActivity.this, "Failed to load native ad: "
                         + errorCode, Toast.LENGTH_SHORT).show();
             }
@@ -404,6 +404,6 @@ public class MainActivity extends AppCompatActivity {
 
         adLoader.loadAd(new PublisherAdRequest.Builder().build());
 
-        mVideoStatus.setText("");
+        videoStatus.setText("");
     }
 }

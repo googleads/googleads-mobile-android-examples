@@ -26,7 +26,7 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
  */
 public class MyActivity extends AppCompatActivity {
 
-    private PublisherAdView mAdView;
+    private PublisherAdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class MyActivity extends AppCompatActivity {
 
         // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
         // values/strings.xml.
-        mAdView = findViewById(R.id.ad_view);
+        adView = findViewById(R.id.ad_view);
 
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
@@ -43,14 +43,14 @@ public class MyActivity extends AppCompatActivity {
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
 
         // Start loading the ad in the background.
-        mAdView.loadAd(adRequest);
+        adView.loadAd(adRequest);
     }
 
     /** Called when leaving the activity */
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
+        if (adView != null) {
+            adView.pause();
         }
         super.onPause();
     }
@@ -59,16 +59,16 @@ public class MyActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
+        if (adView != null) {
+            adView.resume();
         }
     }
 
     /** Called before the activity is destroyed */
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
+        if (adView != null) {
+            adView.destroy();
         }
         super.onDestroy();
     }

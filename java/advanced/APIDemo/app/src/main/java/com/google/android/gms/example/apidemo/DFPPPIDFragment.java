@@ -38,9 +38,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class DFPPPIDFragment extends Fragment {
 
-    private Button mLoadAdButton;
-    private PublisherAdView mPublisherAdView;
-    private EditText mUsernameEditText;
+    private Button loadAdButton;
+    private PublisherAdView publisherAdView;
+    private EditText usernameEditText;
 
     public DFPPPIDFragment() {
     }
@@ -55,14 +55,14 @@ public class DFPPPIDFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mUsernameEditText = getView().findViewById(R.id.ppid_et_username);
-        mLoadAdButton = getView().findViewById(R.id.ppid_btn_loadad);
-        mPublisherAdView = getView().findViewById(R.id.ppid_pav_main);
+        usernameEditText = getView().findViewById(R.id.ppid_et_username);
+        loadAdButton = getView().findViewById(R.id.ppid_btn_loadad);
+        publisherAdView = getView().findViewById(R.id.ppid_pav_main);
 
-        mLoadAdButton.setOnClickListener(new View.OnClickListener() {
+        loadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = mUsernameEditText.getText().toString();
+                String username = usernameEditText.getText().toString();
 
                 if (username.length() == 0) {
                     Toast.makeText(DFPPPIDFragment.this.getActivity(),
@@ -72,7 +72,7 @@ public class DFPPPIDFragment extends Fragment {
                     PublisherAdRequest request = new PublisherAdRequest.Builder()
                             .setPublisherProvidedId(ppid)
                             .build();
-                    mPublisherAdView.loadAd(request);
+                    publisherAdView.loadAd(request);
                 }
             }
         });

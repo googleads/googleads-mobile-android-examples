@@ -22,29 +22,29 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
     private static final long COUNTER_TIME = 10;
     private static final int GAME_OVER_REWARD = 1;
 
-    private int mCoinCount;
-    private TextView mCoinCountText;
-    private CountDownTimer mCountDownTimer;
-    private boolean mGameOver;
-    private boolean mGamePaused;
-    private RewardedVideoAd mRewardedVideoAd;
-    private Button mRetryButton;
-    private Button mShowVideoButton;
-    private long mTimeRemaining;
+    private int coinCount;
+    private TextView coinCountText;
+    private CountDownTimer countDownTimer;
+    private boolean gameOver;
+    private boolean gamePaused;
+    private RewardedVideoAd rewardedVideoAd;
+    private Button retryButton;
+    private Button showVideoButton;
+    private long timeRemaining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardedVideoAd.setRewardedVideoAdListener(this);
+        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        rewardedVideoAd.setRewardedVideoAdListener(this);
         loadRewardedVideoAd();
 
         // Create the "retry" button, which tries to show an interstitial between game plays.
-        mRetryButton = findViewById(R.id.retry_button);
-        mRetryButton.setVisibility(View.INVISIBLE);
-        mRetryButton.setOnClickListener(new View.OnClickListener() {
+        retryButton = findViewById(R.id.retry_button);
+        retryButton.setVisibility(View.INVISIBLE);
+        retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startGame();
@@ -52,9 +52,9 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
         });
 
         // Create the "show" button, which shows a rewarded video if one is loaded.
-        mShowVideoButton = findViewById(R.id.show_video_button);
-        mShowVideoButton.setVisibility(View.INVISIBLE);
-        mShowVideoButton.setOnClickListener(new View.OnClickListener() {
+        showVideoButton = findViewById(R.id.show_video_button);
+        showVideoButton.setVisibility(View.INVISIBLE);
+        showVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showRewardedVideo();
@@ -62,9 +62,9 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
         });
 
         // Display current coin count to user.
-        mCoinCountText = findViewById(R.id.coin_count_text);
-        mCoinCount = 0;
-        mCoinCountText.setText("Coins: " + mCoinCount);
+        coinCountText = findViewById(R.id.coin_count_text);
+        coinCount = 0;
+        coinCountText.setText("Coins: " + coinCount);
 
         startGame();
     }
@@ -73,81 +73,81 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
     public void onPause() {
         super.onPause();
         pauseGame();
-        mRewardedVideoAd.pause(this);
+        rewardedVideoAd.pause(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!mGameOver && mGamePaused) {
+        if (!gameOver && gamePaused) {
             resumeGame();
         }
-        mRewardedVideoAd.resume(this);
+        rewardedVideoAd.resume(this);
     }
 
     private void pauseGame() {
-        mCountDownTimer.cancel();
-        mGamePaused = true;
+        countDownTimer.cancel();
+        gamePaused = true;
     }
 
     private void resumeGame() {
-        createTimer(mTimeRemaining);
-        mGamePaused = false;
+        createTimer(timeRemaining);
+        gamePaused = false;
     }
 
     private void loadRewardedVideoAd() {
-        if (!mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd.loadAd(AD_UNIT_ID, new PublisherAdRequest.Builder().build());
+        if (!rewardedVideoAd.isLoaded()) {
+            rewardedVideoAd.loadAd(AD_UNIT_ID, new PublisherAdRequest.Builder().build());
         }
     }
 
     private void addCoins(int coins) {
-        mCoinCount += coins;
-        mCoinCountText.setText("Coins: " + mCoinCount);
+        coinCount += coins;
+        coinCountText.setText("Coins: " + coinCount);
     }
 
     private void startGame() {
         // Hide the retry button, load the ad, and start the timer.
-        mRetryButton.setVisibility(View.INVISIBLE);
-        mShowVideoButton.setVisibility(View.INVISIBLE);
+        retryButton.setVisibility(View.INVISIBLE);
+        showVideoButton.setVisibility(View.INVISIBLE);
         loadRewardedVideoAd();
         createTimer(COUNTER_TIME);
-        mGamePaused = false;
-        mGameOver = false;
+        gamePaused = false;
+        gameOver = false;
     }
 
     // Create the game timer, which counts down to the end of the level
     // and shows the "retry" button.
     private void createTimer(long time) {
         final TextView textView = findViewById(R.id.timer);
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
-        mCountDownTimer = new CountDownTimer(time * 1000, 50) {
+        countDownTimer = new CountDownTimer(time * 1000, 50) {
             @Override
             public void onTick(long millisUnitFinished) {
-                mTimeRemaining = ((millisUnitFinished / 1000) + 1);
-                textView.setText("seconds remaining: " + mTimeRemaining);
+                timeRemaining = ((millisUnitFinished / 1000) + 1);
+                textView.setText("seconds remaining: " + timeRemaining);
             }
 
             @Override
             public void onFinish() {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mShowVideoButton.setVisibility(View.VISIBLE);
+                if (rewardedVideoAd.isLoaded()) {
+                    showVideoButton.setVisibility(View.VISIBLE);
                 }
                 textView.setText("You Lose!");
                 addCoins(GAME_OVER_REWARD);
-                mRetryButton.setVisibility(View.VISIBLE);
-                mGameOver = true;
+                retryButton.setVisibility(View.VISIBLE);
+                gameOver = true;
             }
         };
-        mCountDownTimer.start();
+        countDownTimer.start();
     }
 
     private void showRewardedVideo() {
-        mShowVideoButton.setVisibility(View.INVISIBLE);
-        if (mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd.show();
+        showVideoButton.setVisibility(View.INVISIBLE);
+        if (rewardedVideoAd.isLoaded()) {
+            rewardedVideoAd.show();
         }
     }
 

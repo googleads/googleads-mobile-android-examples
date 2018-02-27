@@ -36,10 +36,10 @@ import com.google.android.gms.ads.AdView;
  */
 public class AdMobBannerSizesFragment extends Fragment {
 
-    private AdView mAdView;
-    private Button mLoadButton;
-    private FrameLayout mAdFrameLayout;
-    private Spinner mSizesSpinner;
+    private AdView adView;
+    private Button loadButton;
+    private FrameLayout adFrameLayout;
+    private Spinner sizesSpinner;
 
     public AdMobBannerSizesFragment() {
     }
@@ -49,9 +49,9 @@ public class AdMobBannerSizesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_admob_banner_sizes, container, false);
 
-        mSizesSpinner = rootView.findViewById(R.id.bannersizes_spn_size);
-        mLoadButton = rootView.findViewById(R.id.bannersizes_btn_loadad);
-        mAdFrameLayout = rootView.findViewById(R.id.bannersizes_fl_adframe);
+        sizesSpinner = rootView.findViewById(R.id.bannersizes_spn_size);
+        loadButton = rootView.findViewById(R.id.bannersizes_btn_loadad);
+        adFrameLayout = rootView.findViewById(R.id.bannersizes_fl_adframe);
 
         String[] sizesArray;
 
@@ -73,42 +73,44 @@ public class AdMobBannerSizesFragment extends Fragment {
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(rootView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item, sizesArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSizesSpinner.setAdapter(adapter);
+        sizesSpinner.setAdapter(adapter);
 
-        mLoadButton.setOnClickListener(new View.OnClickListener() {
+        loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAdView != null) {
-                    mAdFrameLayout.removeView(mAdView);
-                    mAdView.destroy();
+                if (adView != null) {
+                    adFrameLayout.removeView(adView);
+                    adView.destroy();
                 }
 
-                mAdView = new AdView(getActivity());
-                mAdView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
-                mAdFrameLayout.addView(mAdView);
+                adView = new AdView(getActivity());
+                adView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
+                adFrameLayout.addView(adView);
 
-                switch (mSizesSpinner.getSelectedItemPosition()) {
+                switch (sizesSpinner.getSelectedItemPosition()) {
                     case 0:
-                        mAdView.setAdSize(AdSize.BANNER);
+                        adView.setAdSize(AdSize.BANNER);
                         break;
                     case 1:
-                        mAdView.setAdSize(AdSize.LARGE_BANNER);
+                        adView.setAdSize(AdSize.LARGE_BANNER);
                         break;
                     case 2:
-                        mAdView.setAdSize(AdSize.SMART_BANNER);
+                        adView.setAdSize(AdSize.SMART_BANNER);
                         break;
                     case 3:
-                        mAdView.setAdSize(AdSize.FULL_BANNER);
+                        adView.setAdSize(AdSize.FULL_BANNER);
                         break;
                     case 4:
-                        mAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
+                        adView.setAdSize(AdSize.MEDIUM_RECTANGLE);
                         break;
                     case 5:
-                        mAdView.setAdSize(AdSize.LEADERBOARD);
+                        adView.setAdSize(AdSize.LEADERBOARD);
                         break;
+                    default:
+                        // fall through.
                 }
 
-                mAdView.loadAd(new AdRequest.Builder().build());
+                adView.loadAd(new AdRequest.Builder().build());
             }
         });
 

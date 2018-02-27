@@ -33,11 +33,11 @@ import java.util.Locale;
  */
 public class DFPFluidSizeFragment extends Fragment {
 
-    private PublisherAdView mPublisherAdView;
-    private Button mChangeAdViewWidthButton;
-    private TextView mCurrentWidthTextView;
-    private final int[] mAdViewWidths = new int[]{200, 250, 320};
-    private int mCurrentIndex = 0;
+    private PublisherAdView publisherAdView;
+    private Button changeAdViewWidthButton;
+    private TextView currentWidthTextView;
+    private final int[] adViewWidths = new int[]{200, 250, 320};
+    private int currentIndex = 0;
 
     public DFPFluidSizeFragment() {
     }
@@ -54,29 +54,29 @@ public class DFPFluidSizeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // The size for this PublisherAdView is defined in the XML layout as AdSize.FLUID. It could
-        // also be set here by calling mPublisherAdView.setAdSizes(AdSize.FLUID).
+        // also be set here by calling publisherAdView.setAdSizes(AdSize.FLUID).
         //
         // An ad with fluid size will automatically stretch or shrink to fit the height of its
         // content, which can help layout designers cut down on excess whitespace.
-        mPublisherAdView = getView().findViewById(R.id.fluid_av_main);
+        publisherAdView = getView().findViewById(R.id.fluid_av_main);
 
         PublisherAdRequest publisherAdRequest = new PublisherAdRequest.Builder().build();
-        mPublisherAdView.loadAd(publisherAdRequest);
+        publisherAdView.loadAd(publisherAdRequest);
 
-        mChangeAdViewWidthButton = getView().findViewById(R.id.fluid_btn_change_width);
-        mChangeAdViewWidthButton.setOnClickListener(new View.OnClickListener() {
+        changeAdViewWidthButton = getView().findViewById(R.id.fluid_btn_change_width);
+        changeAdViewWidthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int newWidth = mAdViewWidths[mCurrentIndex % mAdViewWidths.length];
-                mCurrentIndex += 1;
+                int newWidth = adViewWidths[currentIndex % adViewWidths.length];
+                currentIndex += 1;
                 // Change the PublisherAdView's width.
-                ViewGroup.LayoutParams layoutParams = mPublisherAdView.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = publisherAdView.getLayoutParams();
                 final float scale = getResources().getDisplayMetrics().density;
                 layoutParams.width = (int) (newWidth * scale + 0.5f);
-                mPublisherAdView.setLayoutParams(layoutParams);
+                publisherAdView.setLayoutParams(layoutParams);
                 // Update the TextView with the new width.
-                mCurrentWidthTextView = getView().findViewById(R.id.fluid_tv_current_width);
-                mCurrentWidthTextView.setText(
+                currentWidthTextView = getView().findViewById(R.id.fluid_tv_current_width);
+                currentWidthTextView.setText(
                         String.format(Locale.getDefault(), "%d dp", newWidth));
             }
         });

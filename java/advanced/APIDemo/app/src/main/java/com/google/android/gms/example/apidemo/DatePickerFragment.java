@@ -29,13 +29,13 @@ import java.util.Calendar;
  */
 public class DatePickerFragment extends DialogFragment {
 
-    private DatePickerDialog.OnDateSetListener mOnDateSetListener;
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
 
     public DatePickerFragment() {
     }
 
     public void setOnDateSetListener(DatePickerDialog.OnDateSetListener listener) {
-        mOnDateSetListener = listener;
+        onDateSetListener = listener;
     }
 
     @NonNull
@@ -47,6 +47,6 @@ public class DatePickerFragment extends DialogFragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(getActivity(), mOnDateSetListener, year, month, day);
+        return new DatePickerDialog(getActivity(), onDateSetListener, year, month, day);
     }
 }

@@ -25,18 +25,18 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int BANNER_AD_VIEW_TYPE = 1;
 
     // An Activity's Context.
-    private final Context mContext;
+    private final Context context;
 
     // The list of banner ads and menu items.
-    private final List<Object> mRecyclerViewItems;
+    private final List<Object> recyclerViewItems;
 
     /**
      * For this example app, the recyclerViewItems list contains only
      * {@link MenuItem} and {@link AdView} types.
      */
     public RecyclerViewAdapter(Context context, List<Object> recyclerViewItems) {
-        this.mContext = context;
-        this.mRecyclerViewItems = recyclerViewItems;
+        this.context = context;
+        this.recyclerViewItems = recyclerViewItems;
     }
 
     /**
@@ -72,7 +72,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mRecyclerViewItems.size();
+        return recyclerViewItems.size();
     }
 
     /**
@@ -115,12 +115,12 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         switch (viewType) {
             case MENU_ITEM_VIEW_TYPE:
                 MenuItemViewHolder menuItemHolder = (MenuItemViewHolder) holder;
-                MenuItem menuItem = (MenuItem) mRecyclerViewItems.get(position);
+                MenuItem menuItem = (MenuItem) recyclerViewItems.get(position);
 
                 // Get the menu item image resource ID.
                 String imageName = menuItem.getImageName();
-                int imageResID = mContext.getResources().getIdentifier(imageName, "drawable",
-                        mContext.getPackageName());
+                int imageResID = context.getResources().getIdentifier(imageName, "drawable",
+                        context.getPackageName());
 
                 // Add the menu item details to the menu item view.
                 menuItemHolder.menuItemImage.setImageResource(imageResID);
@@ -133,7 +133,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 // fall through
             default:
                 AdViewHolder bannerHolder = (AdViewHolder) holder;
-                AdView adView = (AdView) mRecyclerViewItems.get(position);
+                AdView adView = (AdView) recyclerViewItems.get(position);
                 ViewGroup adCardView = (ViewGroup) bannerHolder.itemView;
                 // The AdViewHolder recycled by the RecyclerView may be a different
                 // instance than the one used previously for this position. Clear the

@@ -34,24 +34,24 @@ public class MainActivity extends AppCompatActivity
 
     public static final String LOG_TAG = "APIDemos";
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragment navigationDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    private CharSequence title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+        navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        title = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+        navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
             case 6: trans.replace(R.id.container, new DFPCategoryExclusionFragment()); break;
             case 7: trans.replace(R.id.container, new DFPMultipleAdSizesFragment()); break;
             case 8: trans.replace(R.id.container, new DFPAppEventsFragment()); break;
+            case 9: trans.replace(R.id.container, new DFPCustomControlsFragment()); break;
         }
 
         trans.commit();
@@ -81,12 +82,12 @@ public class MainActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(title);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!navigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 }
