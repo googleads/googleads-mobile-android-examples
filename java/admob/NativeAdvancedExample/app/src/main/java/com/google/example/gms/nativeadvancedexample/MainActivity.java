@@ -142,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
             // At least one image is guaranteed.
             List<NativeAd.Image> images = nativeAppInstallAd.getImages();
-            mainImageView.setImageDrawable(images.get(0).getDrawable());
+            if (images.size() > 0) {
+                mainImageView.setImageDrawable(images.get(0).getDrawable());
+            }
 
             refresh.setEnabled(true);
             videoStatus.setText("Video status: Ad does not contain a video asset.");
