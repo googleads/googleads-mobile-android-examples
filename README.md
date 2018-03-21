@@ -24,7 +24,6 @@ technical SDK support for our [Android developers](https://groups.google.com/for
 * Interstitial: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/InterstitialExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admob/InterstitialExample)
 * Rewarded Video: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/RewardedVideoExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admob/RewardedVideoExample)
 * Native Advanced: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/NativeAdvancedExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admob/NativeAdvancedExample)
-* Native Express: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/NativeExpressExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admob/NativeExpressExample)
 
 ## Advanced
 
