@@ -159,4 +159,8 @@ class MainActivity : AppCompatActivity(), RewardedVideoAdListener {
     override fun onRewardedVideoStarted() {
         Toast.makeText(this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show()
     }
+
+    override fun onRewardedVideoCompleted() {
+        Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show()
+    }
 }
