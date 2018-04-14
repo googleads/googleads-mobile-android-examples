@@ -16,19 +16,12 @@
             android:layout_marginTop="16dp" />
 
         <CheckBox
-            android:id="@+id/cb_appinstall"
+            android:id="@+id/cb_nativeads"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:checked="true"
-            android:text="Request App Install Ads" />
-
-        <CheckBox
-            android:id="@+id/cb_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Request Content Ads" />
+            android:text="Request Unified Native Ads" />
 
         <CheckBox
             android:id="@+id/cb_customtemplate"

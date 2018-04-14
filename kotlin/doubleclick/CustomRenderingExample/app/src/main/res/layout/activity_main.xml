@@ -17,19 +17,12 @@
             android:layout_marginTop="16dp" />
 
         <CheckBox
-            android:id="@+id/appinstall_checkbox"
+            android:id="@+id/nativeads_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:checked="true"
-            android:text="Request App Install Ads" />
-
-        <CheckBox
-            android:id="@+id/content_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Request Content Ads" />
+            android:text="Request Unified Native Ads" />
 
         <CheckBox
             android:id="@+id/customtemplate_checkbox"

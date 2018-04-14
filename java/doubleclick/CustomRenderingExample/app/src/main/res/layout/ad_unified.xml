@@ -1,8 +1,8 @@
-<com.google.android.gms.ads.formats.NativeAppInstallAdView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.gms.ads.formats.UnifiedNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -26,11 +26,13 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/appinstall_app_icon"
+                    android:id="@+id/ad_app_icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
-                    android:paddingBottom="5dp" />
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -38,20 +40,35 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appinstall_headline"
+                        android:id="@+id/ad_headline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textColor="#0000FF"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <RatingBar
-                        android:id="@+id/appinstall_stars"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:stepSize="0.5" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/ad_advertiser"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="bottom"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                        <RatingBar
+                            android:id="@+id/ad_stars"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:stepSize="0.5" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -61,7 +78,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/appinstall_body"
+                    android:id="@+id/ad_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -69,14 +86,14 @@
                     android:textSize="12sp" />
 
                 <ImageView
-                    android:id="@+id/appinstall_image"
+                    android:id="@+id/ad_image"
                     android:layout_width="250dp"
                     android:layout_height="175dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp" />
 
                 <com.google.android.gms.ads.formats.MediaView
-                    android:id="@+id/appinstall_media"
+                    android:id="@+id/ad_media"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="250dp"
                     android:layout_height="175dp"
@@ -91,7 +108,7 @@
                     android:paddingTop="10dp">
 
                     <TextView
-                        android:id="@+id/appinstall_price"
+                        android:id="@+id/ad_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
@@ -101,7 +118,7 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/appinstall_store"
+                        android:id="@+id/ad_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
@@ -111,7 +128,7 @@
                         android:textSize="12sp" />
 
                     <Button
-                        android:id="@+id/appinstall_call_to_action"
+                        android:id="@+id/ad_call_to_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -120,4 +137,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</com.google.android.gms.ads.formats.NativeAppInstallAdView>
+</com.google.android.gms.ads.formats.UnifiedNativeAdView>

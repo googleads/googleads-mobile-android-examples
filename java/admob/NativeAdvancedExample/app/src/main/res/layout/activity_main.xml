@@ -16,21 +16,6 @@
             android:layout_marginTop="16dp" />
 
         <CheckBox
-            android:id="@+id/cb_appinstall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:checked="true"
-            android:text="Request app install ads" />
-
-        <CheckBox
-            android:id="@+id/cb_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Request content ads" />
-
-        <CheckBox
             android:id="@+id/cb_start_muted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
