@@ -191,4 +191,9 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
     public void onRewardedVideoStarted() {
         Toast.makeText(this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+        Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show();
+    }
 }

@@ -70,6 +70,39 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    protected void onResume() {
+        for (Object item : recyclerViewItems) {
+            if (item instanceof AdView) {
+                AdView adView = (AdView) item;
+                adView.resume();
+            }
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        for (Object item : recyclerViewItems) {
+            if (item instanceof AdView) {
+                AdView adView = (AdView) item;
+                adView.pause();
+            }
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        for (Object item : recyclerViewItems) {
+            if (item instanceof AdView) {
+                AdView adView = (AdView) item;
+                adView.destroy();
+            }
+        }
+        super.onDestroy();
+    }
+
     /**
      * Adds banner ads to the items list.
      */

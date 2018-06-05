@@ -16,6 +16,11 @@ discusssions, please use our [Google Mobile Ads SDK Developers forum](https://gr
 The forum provides the latest SDK announcements and updates as well as
 technical SDK support for our [Android developers](https://groups.google.com/forum/#!categories/google-admob-ads-sdk/android).
 
+# Documentation
+
+Check out our [developers site](https://developers.google.com/admob/) for
+documentation on using the Mobile Ads SDK.
+
 # Examples
 
 ## AdMob
@@ -41,11 +46,6 @@ technical SDK support for our [Android developers](https://groups.google.com/for
 
 Please check out our [releases](https://github.com/googleads/googleads-mobile-android-examples/releases)
 for the latest downloads of our example apps.
-
-# Documentation
-
-Check out our [developers site](https://developers.google.com/admob/)
-for documentation on using the Mobile Ads SDK.
 
 # GitHub issue tracker
 
