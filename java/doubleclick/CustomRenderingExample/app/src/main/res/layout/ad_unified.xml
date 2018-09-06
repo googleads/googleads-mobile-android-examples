@@ -85,13 +85,6 @@
                     android:layout_marginEnd="20dp"
                     android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ad_image"
-                    android:layout_width="250dp"
-                    android:layout_height="175dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp" />
-
                 <com.google.android.gms.ads.formats.MediaView
                     android:id="@+id/ad_media"
                     android:layout_gravity="center_horizontal"

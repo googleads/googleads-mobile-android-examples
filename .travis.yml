@@ -1,0 +1,36 @@
+language: android
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-27.0.3
+
+    # The SDK version used to compile your project
+    - android-26
+script:
+  - pushd "$PROJ_DIR"
+  - ./gradlew build
+  - popd
+env:
+  - PROJ_DIR="java/advanced/BannerRecyclerViewExample"
+  - PROJ_DIR="java/advanced/APIDemo"
+  - PROJ_DIR="java/admob/BannerExample"
+  - PROJ_DIR="java/admob/RewardedVideoExample"
+  - PROJ_DIR="java/admob/NativeAdvancedExample"
+  - PROJ_DIR="java/admob/InterstitialExample"
+  - PROJ_DIR="java/doubleclick/BannerExample"
+  - PROJ_DIR="java/doubleclick/CustomRenderingExample"
+  - PROJ_DIR="java/doubleclick/RewardedVideoExample"
+  - PROJ_DIR="java/doubleclick/InterstitialExample"
+  - PROJ_DIR="kotlin/advanced/APIDemo"
+  - PROJ_DIR="kotlin/admob/BannerExample"
+  - PROJ_DIR="kotlin/admob/RewardedVideoExample"
+  - PROJ_DIR="kotlin/admob/NativeAdvancedExample"
+  - PROJ_DIR="kotlin/admob/InterstitialExample"
+  - PROJ_DIR="kotlin/doubleclick/BannerExample"
+  - PROJ_DIR="kotlin/doubleclick/CustomRenderingExample"
+  - PROJ_DIR="kotlin/doubleclick/RewardedVideoExample"
+  - PROJ_DIR="kotlin/doubleclick/InterstitialExample"
