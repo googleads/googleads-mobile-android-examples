@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Ad Manager Custom Rendering Example</string>
+    <string name="ad_attribution">Ad</string>
+</resources>

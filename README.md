@@ -8,8 +8,7 @@ networks and advertising solutions. The SDK enables mobile app developers to
 maximize their monetization in native mobile apps.
 
 This repository contains open source examples and developer resources for both
-the AdMob and DoubleClick For Publishers components of the Google Mobile Ads
-SDK.
+the Google AdMob and Google Ad Manager components of the Google Mobile Ads SDK.
 
 # Google Mobile Ads SDK Developers forum
 
@@ -34,15 +33,30 @@ documentation on using the Mobile Ads SDK.
 
 ## Advanced
 
-* API Demo: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/advanced/APIDemo), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/advanced/APIDemo) - Provides additional examples for both AdMob and DoubleClick to help improve your mobile app integration of the Google Mobile Ads SDK.
-* Banner RecyclerView: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/advanced/BannerRecyclerViewExample) - Provides an example for displaying ads from AdMob Banner ads in a RecyclerView widget.
+*   API Demo:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/advanced/APIDemo),
+    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/advanced/APIDemo) -
+    Provides additional examples for both AdMob and Ad Manager to help improve
+    your mobile app integration of the Google Mobile Ads SDK.
+*   Banner RecyclerView:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/advanced/BannerRecyclerViewExample) -
+    Provides an example for displaying ads from AdMob Banner ads in a
+    RecyclerView widget.
 
-## DoubleClick
+## Ad Manager
 
-* Banner: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/BannerExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/BannerExample)
-* Interstitial: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/InterstitialExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/InterstitialExample)
-* Rewarded Video: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/RewardedVideoExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/RewardedVideoExample)
-* Custom Rendering: [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/doubleclick/CustomRenderingExample), [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/doubleclick/CustomRenderingExample)
+*   Banner:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/BannerExample),
+    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/BannerExample)
+*   Interstitial:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/InterstitialExample),
+    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/InterstitialExample)
+*   Rewarded Video:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/RewardedVideoExample),
+    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/RewardedVideoExample)
+*   Custom Rendering:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/CustomRenderingExample),
+    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/CustomRenderingExample)
 
 # Downloads
 
