@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BannerExample</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- This is an ad unit ID for a test ad. Replace with your own banner ad unit id. -->
+    <string name="ad_unit_id">/6499/example/banner</string>
+
+</resources>
