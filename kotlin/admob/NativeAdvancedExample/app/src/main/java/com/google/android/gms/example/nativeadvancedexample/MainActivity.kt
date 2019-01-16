@@ -30,6 +30,8 @@ import java.util.*
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
 const val ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
 
+var currentNativeAd: UnifiedNativeAd? = null
+
 /**
  * A simple activity class that displays native ad formats.
  */
@@ -55,6 +57,10 @@ class MainActivity : AppCompatActivity() {
      * @param adView          the view to be populated
      */
     private fun populateUnifiedNativeAdView(nativeAd: UnifiedNativeAd, adView: UnifiedNativeAdView) {
+        // You must call destroy on old ads when you are done with them,
+        // otherwise you will have a memory leak.
+        currentNativeAd?.destroy()
+        currentNativeAd = nativeAd
         // Set the media view. Media content will be automatically populated in the media view once
         // adView.setNativeAd() is called.
         adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
@@ -196,5 +202,10 @@ class MainActivity : AppCompatActivity() {
         adLoader.loadAd(AdRequest.Builder().build())
 
         videostatus_text.text = ""
+    }
+
+    override fun onDestroy() {
+        currentNativeAd?.destroy()
+        super.onDestroy()
     }
 }

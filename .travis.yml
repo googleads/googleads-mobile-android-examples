@@ -10,13 +10,13 @@ android:
 
     # The SDK version used to compile your project
     - android-26
-    
+
 licenses:
     - 'android-sdk-license-.+'
 
 before_install:
   - yes | sdkmanager "platforms;android-28"
-  
+
 script:
   - pushd "$PROJ_DIR"
   - ./gradlew build

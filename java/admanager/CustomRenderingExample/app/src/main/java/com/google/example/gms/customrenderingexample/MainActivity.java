@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
   private static final String AD_MANAGER_AD_UNIT_ID = "/6499/example/native";
     private static final String SIMPLE_TEMPLATE_ID = "10104090";
 
+    private UnifiedNativeAd nativeAd;
     private Button refresh;
     private CheckBox requestNativeAds;
     private CheckBox requestCustomTemplateAds;
@@ -268,6 +269,12 @@ public class MainActivity extends AppCompatActivity {
             builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                 @Override
                 public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                    // You must call destroy on old ads when you are done with them,
+                    // otherwise you will have a memory leak.
+                    if (nativeAd != null) {
+                        nativeAd.destroy();
+                    }
+                    nativeAd = unifiedNativeAd;
                     FrameLayout frameLayout =
                             findViewById(R.id.fl_adplaceholder);
                     UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater()
@@ -325,5 +332,13 @@ public class MainActivity extends AppCompatActivity {
         adLoader.loadAd(new PublisherAdRequest.Builder().build());
 
         videoStatus.setText("");
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (nativeAd != null) {
+            nativeAd.destroy();
+        }
+        super.onDestroy();
     }
 }

@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private Button refresh;
     private CheckBox startVideoAdsMuted;
     private TextView videoStatus;
+    private UnifiedNativeAd nativeAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +200,12 @@ public class MainActivity extends AppCompatActivity {
             // OnUnifiedNativeAdLoadedListener implementation.
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                // You must call destroy on old ads when you are done with them,
+                // otherwise you will have a memory leak.
+                if (nativeAd != null) {
+                    nativeAd.destroy();
+                }
+                nativeAd = unifiedNativeAd;
                 FrameLayout frameLayout =
                         findViewById(R.id.fl_adplaceholder);
                 UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater()
@@ -232,5 +239,13 @@ public class MainActivity extends AppCompatActivity {
         adLoader.loadAd(new AdRequest.Builder().build());
 
         videoStatus.setText("");
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (nativeAd != null) {
+            nativeAd.destroy();
+        }
+        super.onDestroy();
     }
 }
