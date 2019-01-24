@@ -66,13 +66,14 @@ public class MainActivity extends AppCompatActivity
             case 0: trans.replace(R.id.container, new AdMobAdListenerFragment()); break;
             case 1: trans.replace(R.id.container, new AdMobAdTargetingFragment()); break;
             case 2: trans.replace(R.id.container, new AdMobBannerSizesFragment()); break;
-            case 3: trans.replace(R.id.container, new DFPFluidSizeFragment()); break;
-            case 4: trans.replace(R.id.container, new DFPPPIDFragment()); break;
-            case 5: trans.replace(R.id.container, new DFPCustomTargetingFragment()); break;
-            case 6: trans.replace(R.id.container, new DFPCategoryExclusionFragment()); break;
-            case 7: trans.replace(R.id.container, new DFPMultipleAdSizesFragment()); break;
-            case 8: trans.replace(R.id.container, new DFPAppEventsFragment()); break;
-            case 9: trans.replace(R.id.container, new DFPCustomControlsFragment()); break;
+            case 3: trans.replace(R.id.container, new AdMobCustomMuteThisAdFragment()); break;
+            case 4: trans.replace(R.id.container, new DFPFluidSizeFragment()); break;
+            case 5: trans.replace(R.id.container, new DFPPPIDFragment()); break;
+            case 6: trans.replace(R.id.container, new DFPCustomTargetingFragment()); break;
+            case 7: trans.replace(R.id.container, new DFPCategoryExclusionFragment()); break;
+            case 8: trans.replace(R.id.container, new DFPMultipleAdSizesFragment()); break;
+            case 9: trans.replace(R.id.container, new DFPAppEventsFragment()); break;
+            case 10: trans.replace(R.id.container, new DFPCustomControlsFragment()); break;
         }
 
         trans.commit();

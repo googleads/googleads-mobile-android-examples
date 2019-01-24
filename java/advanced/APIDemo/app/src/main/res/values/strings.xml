@@ -81,6 +81,7 @@
         <item>AdMob - Ad Listener</item>
         <item>AdMob - Ad Targeting</item>
         <item>AdMob - Banner Sizes</item>
+        <item>AdMob - Custom Mute This Ad</item>
         <item>DFP - Fluid Size</item>
         <item>DFP - PPID</item>
         <item>DFP - Custom Targeting</item>
@@ -92,6 +93,10 @@
 
     <string name="admob_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_customevent_ad_unit_id">ca-app-pub-3940256099942544/3325725716</string>
+
+    <string name="custommute_fragment_ad_unit_id">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="custommute_fragment_mute">Mute Ad</string>
+    <string name="custommute_fragment_refresh">Refresh Ad</string>
 
     <string name="listener_fragment_title">AdMob Ad Listener</string>
     <string name="targeting_fragment_title">AdMob Ad Targeting</string>

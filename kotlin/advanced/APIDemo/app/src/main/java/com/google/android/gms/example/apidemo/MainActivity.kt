@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_admob_adlistener -> AdMobAdListenerFragment()
             R.id.nav_admob_adtargeting -> AdMobAdTargetingFragment()
             R.id.nav_admob_bannersizes -> AdMobBannerSizesFragment()
+            R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
             R.id.nav_dfp_adsizes -> DFPMultipleAdSizesFragment()
             R.id.nav_dfp_appevents -> DFPAppEventsFragment()
             R.id.nav_dfp_customtargeting -> DFPCustomTargetingFragment()
