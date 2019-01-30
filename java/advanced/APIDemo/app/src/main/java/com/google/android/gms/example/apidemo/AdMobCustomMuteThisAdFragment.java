@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Google, Inc.
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,60 +13,77 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.google.android.gms.example.apidemo;
 
-package com.google.example.gms.nativeadvancedexample;
-
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.MuteThisAdListener;
+import com.google.android.gms.ads.MuteThisAdReason;
 import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
-import java.util.Locale;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
- * A simple activity class that displays native ad formats.
+ * The {@link AdMobCustomMuteThisAdFragment} class demonstrates how to use custom mute
+ * with AdMob native ads.
  */
-public class MainActivity extends AppCompatActivity {
-
-    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
-    private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
+public class AdMobCustomMuteThisAdFragment extends Fragment {
 
     private Button refresh;
-    private CheckBox startVideoAdsMuted;
-    private TextView videoStatus;
+    private Button muteButton;
     private UnifiedNativeAd nativeAd;
+    private FrameLayout adContainer;
+
+    public AdMobCustomMuteThisAdFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_admob_custom_mute_this_ad, container, false);
+    }
 
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, ADMOB_APP_ID);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        refresh = findViewById(R.id.btn_refresh);
-        startVideoAdsMuted = findViewById(R.id.cb_start_muted);
-        videoStatus = findViewById(R.id.tv_video_status);
+        refresh = getView().findViewById(R.id.btn_refresh);
+        muteButton = getView().findViewById(R.id.btn_mute_ad);
+        adContainer = getView().findViewById(R.id.fl_adplaceholder);
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View unusedView) {
                 refreshAd();
+            }
+        });
+        muteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View unusedView) {
+                showMuteReasonsDialog();
             }
         });
 
@@ -78,15 +95,12 @@ public class MainActivity extends AppCompatActivity {
      * {@link UnifiedNativeAd}.
      *
      * @param nativeAd the object containing the ad's assets
-     * @param adView          the view to be populated
+     * @param adView the view to be populated
      */
     private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
-        // Set the media view. Media content will be automatically populated in the media view once
-        // adView.setNativeAd() is called.
         MediaView mediaView = adView.findViewById(R.id.ad_media);
         adView.setMediaView(mediaView);
 
-        // Set other ad assets.
         adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
         adView.setBodyView(adView.findViewById(R.id.ad_body));
         adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
@@ -96,52 +110,49 @@ public class MainActivity extends AppCompatActivity {
         adView.setStoreView(adView.findViewById(R.id.ad_store));
         adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
 
-        // The headline is guaranteed to be in every UnifiedNativeAd.
         ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
 
-        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-        // check before trying to display them.
         if (nativeAd.getBody() == null) {
-          adView.getBodyView().setVisibility(View.INVISIBLE);
+            adView.getBodyView().setVisibility(View.INVISIBLE);
         } else {
-          adView.getBodyView().setVisibility(View.VISIBLE);
-          ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+            ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+            adView.getBodyView().setVisibility(View.VISIBLE);
         }
 
         if (nativeAd.getCallToAction() == null) {
-          adView.getCallToActionView().setVisibility(View.INVISIBLE);
+            adView.getCallToActionView().setVisibility(View.INVISIBLE);
         } else {
-          adView.getCallToActionView().setVisibility(View.VISIBLE);
-          ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+            ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+            adView.getCallToActionView().setVisibility(View.VISIBLE);
         }
 
         if (nativeAd.getIcon() == null) {
             adView.getIconView().setVisibility(View.GONE);
         } else {
             ((ImageView) adView.getIconView()).setImageDrawable(
-                    nativeAd.getIcon().getDrawable());
+                nativeAd.getIcon().getDrawable());
             adView.getIconView().setVisibility(View.VISIBLE);
         }
 
         if (nativeAd.getPrice() == null) {
             adView.getPriceView().setVisibility(View.INVISIBLE);
         } else {
-            adView.getPriceView().setVisibility(View.VISIBLE);
             ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
+            adView.getPriceView().setVisibility(View.VISIBLE);
         }
 
         if (nativeAd.getStore() == null) {
             adView.getStoreView().setVisibility(View.INVISIBLE);
         } else {
-            adView.getStoreView().setVisibility(View.VISIBLE);
             ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
+            adView.getStoreView().setVisibility(View.VISIBLE);
         }
 
         if (nativeAd.getStarRating() == null) {
             adView.getStarRatingView().setVisibility(View.INVISIBLE);
         } else {
             ((RatingBar) adView.getStarRatingView())
-                    .setRating(nativeAd.getStarRating().floatValue());
+                .setRating(nativeAd.getStarRating().floatValue());
             adView.getStarRatingView().setVisibility(View.VISIBLE);
         }
 
@@ -152,78 +163,61 @@ public class MainActivity extends AppCompatActivity {
             adView.getAdvertiserView().setVisibility(View.VISIBLE);
         }
 
-        // This method tells the Google Mobile Ads SDK that you have finished populating your
-        // native ad view with this native ad. The SDK will populate the adView's MediaView
-        // with the media content from this native ad.
         adView.setNativeAd(nativeAd);
 
-        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-        // have a video asset.
         VideoController vc = nativeAd.getVideoController();
 
-        // Updates the UI to say whether or not this ad has a video asset.
         if (vc.hasVideoContent()) {
-            videoStatus.setText(String.format(Locale.getDefault(),
-                    "Video status: Ad contains a %.2f:1 video asset.",
-                    vc.getAspectRatio()));
-
-            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
-            // VideoController will call methods on this object when events occur in the video
-            // lifecycle.
             vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
                 @Override
                 public void onVideoEnd() {
-                    // Publishers should allow native ads to complete video playback before
-                    // refreshing or replacing them with another ad in the same UI location.
                     refresh.setEnabled(true);
-                    videoStatus.setText("Video status: Video playback has ended.");
                     super.onVideoEnd();
                 }
             });
         } else {
-            videoStatus.setText("Video status: Ad does not contain a video asset.");
             refresh.setEnabled(true);
         }
     }
 
     /**
-     * Creates a request for a new native ad based on the boolean parameters and calls the
-     * corresponding "populate" method when one is successfully returned.
-     *
+     * Creates a request for a new unified native ad based on the boolean parameters and calls the
+     * "populateUnifiedNativeAdView" method when one is successfully returned.
      */
     private void refreshAd() {
         refresh.setEnabled(false);
+        muteButton.setEnabled(false);
 
-        AdLoader.Builder builder = new AdLoader.Builder(this, ADMOB_AD_UNIT_ID);
+        Resources resources = getActivity().getResources();
+        AdLoader.Builder builder = new AdLoader.Builder(getActivity(),
+                resources.getString(R.string.custommute_fragment_ad_unit_id));
 
         builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
             // OnUnifiedNativeAdLoadedListener implementation.
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                // You must call destroy on old ads when you are done with them,
-                // otherwise you will have a memory leak.
-                if (nativeAd != null) {
-                    nativeAd.destroy();
-                }
-                nativeAd = unifiedNativeAd;
-                FrameLayout frameLayout =
-                        findViewById(R.id.fl_adplaceholder);
+                AdMobCustomMuteThisAdFragment.this.nativeAd = unifiedNativeAd;
+                muteButton.setEnabled(unifiedNativeAd.isCustomMuteThisAdEnabled());
+                nativeAd.setMuteThisAdListener(new MuteThisAdListener() {
+                    @Override
+                    public void onAdMuted() {
+                        muteAd();
+                        Toast.makeText(getActivity(), "Ad muted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater()
-                        .inflate(R.layout.ad_unified, null);
+                    .inflate(R.layout.ad_unified, null);
                 populateUnifiedNativeAdView(unifiedNativeAd, adView);
-                frameLayout.removeAllViews();
-                frameLayout.addView(adView);
+                adContainer.removeAllViews();
+                adContainer.addView(adView);
             }
 
         });
 
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(startVideoAdsMuted.isChecked())
-                .build();
-
         NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .build();
+            .setRequestCustomMuteThisAd(true)
+            .build();
 
         builder.withNativeAdOptions(adOptions);
 
@@ -231,21 +225,59 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 refresh.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Failed to load native ad: "
+                Toast.makeText(getActivity(), "Failed to load native ad: "
                         + errorCode, Toast.LENGTH_SHORT).show();
             }
         }).build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
-
-        videoStatus.setText("");
     }
 
-    @Override
-    protected void onDestroy() {
-        if (nativeAd != null) {
-            nativeAd.destroy();
+    private void showMuteReasonsDialog() {
+        class MuteThisAdReasonWrapper {
+            MuteThisAdReason reason;
+
+            MuteThisAdReasonWrapper(MuteThisAdReason reason) {
+                this.reason = reason;
+            }
+
+            @Override
+            public String toString() {
+                return reason.getDescription();
+            }
         }
-        super.onDestroy();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select a reason");
+        final List<MuteThisAdReason> reasons = nativeAd.getMuteThisAdReasons();
+        final List<MuteThisAdReasonWrapper> wrappedReasons = new ArrayList<>();
+        for (MuteThisAdReason reason : reasons) {
+            wrappedReasons.add(new MuteThisAdReasonWrapper(reason));
+        }
+
+        builder.setAdapter(
+            new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, wrappedReasons),
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    muteAdDialogDidSelectReason(wrappedReasons.get(which).reason);
+                }
+            });
+
+        builder.show();
+    }
+
+    private void muteAdDialogDidSelectReason(MuteThisAdReason reason) {
+        // Report the mute action and reason to the ad.
+        // The ad is actually muted (removed from UI) in the MuteThisAdListener callback.
+        nativeAd.muteThisAd(reason);
+    }
+
+    private void muteAd() {
+        // Disable mute button, remove ad.
+        muteButton.setEnabled(false);
+        adContainer.removeAllViews();
     }
 }

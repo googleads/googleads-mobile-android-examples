@@ -14,6 +14,9 @@
             <item
                 android:id="@+id/nav_admob_bannersizes"
                 android:title="Banner sizes" />
+            <item
+                android:id="@+id/nav_admob_custommute"
+                android:title="Custom Mute This Ad" />
         </menu>
     </item>
 

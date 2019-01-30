@@ -24,13 +24,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 
 /**
  * The {@link DFPPPIDFragment} class demonstrates how to add a PPID value to a DFP
@@ -91,7 +88,7 @@ public class DFPPPIDFragment extends Fragment {
         try {
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(username.getBytes());
-            byte bytes[] = digest.digest();
+      byte[] bytes = digest.digest();
 
             for (byte b : bytes) {
                 String hexed = Integer.toHexString(b & 0xFF);
