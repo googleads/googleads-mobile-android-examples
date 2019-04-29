@@ -12,6 +12,7 @@ import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val GAME_LENGTH_MILLISECONDS = 3000L
+const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,8 +30,18 @@ class MainActivity : AppCompatActivity() {
 
         // Create the InterstitialAd and set it up.
         mInterstitialAd = InterstitialAd(this).apply {
-            adUnitId = "ca-app-pub-3940256099942544/1033173712"
+            adUnitId = AD_UNIT_ID
             adListener = (object : AdListener() {
+                override fun onAdLoaded() {
+                    Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onAdFailedToLoad(errorCode: Int) {
+                    Toast.makeText(this@MainActivity,
+                            "onAdFailedToLoad() with error code: $errorCode",
+                            Toast.LENGTH_SHORT).show()
+                }
+
                 override fun onAdClosed() {
                     startGame()
                 }

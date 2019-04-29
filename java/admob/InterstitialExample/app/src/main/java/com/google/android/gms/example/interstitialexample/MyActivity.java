@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -34,6 +33,7 @@ import com.google.android.gms.ads.MobileAds;
 public class MyActivity extends AppCompatActivity {
 
     private static final long GAME_LENGTH_MILLISECONDS = 3000;
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544~3347511713";
 
     private InterstitialAd interstitialAd;
     private CountDownTimer countDownTimer;
@@ -47,7 +47,7 @@ public class MyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my);
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, AD_UNIT_ID);
 
         // Create the InterstitialAd and set the adUnitId.
         interstitialAd = new InterstitialAd(this);
@@ -55,6 +55,18 @@ public class MyActivity extends AppCompatActivity {
         interstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
 
         interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                Toast.makeText(MyActivity.this,
+                        "onAdFailedToLoad() with error code: " + errorCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+
             @Override
             public void onAdClosed() {
                 startGame();
