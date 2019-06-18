@@ -17,7 +17,7 @@
 package com.google.android.gms.example.customrenderingexample
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.*
 import com.google.android.gms.ads.AdListener
