@@ -2,9 +2,9 @@ package com.google.android.gms.example.rewardedvideoexample
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.reward.RewardItem
@@ -13,7 +13,6 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"
-const val APP_ID = "ca-app-pub-3940256099942544~3347511713"
 const val COUNTER_TIME = 10L
 const val GAME_OVER_REWARD = 1
 
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity(), RewardedVideoAdListener {
         setContentView(R.layout.activity_main)
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, APP_ID)
+        MobileAds.initialize(this) {}
 
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
         mRewardedVideoAd.rewardedVideoAdListener = this
@@ -151,8 +150,10 @@ class MainActivity : AppCompatActivity(), RewardedVideoAdListener {
     }
 
     override fun onRewarded(reward: RewardItem) {
-        Toast.makeText(this, "onRewarded! currency: ${reward.type} amount: ${reward.amount}",
-                Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this, "onRewarded! currency: ${reward.type} amount: ${reward.amount}",
+            Toast.LENGTH_SHORT
+        ).show()
         addCoins(reward.amount)
     }
 

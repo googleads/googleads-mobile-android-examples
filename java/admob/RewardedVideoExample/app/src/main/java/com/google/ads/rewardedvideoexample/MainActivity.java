@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
@@ -19,7 +20,6 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
  */
 public class MainActivity extends Activity implements RewardedVideoAdListener {
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-    private static final String APP_ID = "ca-app-pub-3940256099942544~3347511713";
     private static final long COUNTER_TIME = 10;
     private static final int GAME_OVER_REWARD = 1;
 
@@ -39,7 +39,10 @@ public class MainActivity extends Activity implements RewardedVideoAdListener {
         setContentView(R.layout.activity_main);
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, APP_ID);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
 
         rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         rewardedVideoAd.setRewardedVideoAdListener(this);

@@ -28,8 +28,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
-const val ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
-
 var currentNativeAd: UnifiedNativeAd? = null
 
 /**
@@ -42,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, ADMOB_APP_ID)
+        MobileAds.initialize(this) {}
 
         refresh_button.setOnClickListener { refreshAd() }
 
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity() {
      * [UnifiedNativeAd].
      *
      * @param nativeAd the object containing the ad's assets
-     * @param adView          the view to be populated
+     * @param adView the view to be populated
      */
     private fun populateUnifiedNativeAdView(nativeAd: UnifiedNativeAd, adView: UnifiedNativeAdView) {
         // You must call destroy on old ads when you are done with them,

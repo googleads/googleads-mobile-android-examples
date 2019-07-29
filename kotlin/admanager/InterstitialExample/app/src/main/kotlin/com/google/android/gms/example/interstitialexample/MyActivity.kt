@@ -17,10 +17,9 @@ package com.google.android.gms.example.interstitialexample
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd
@@ -61,9 +60,11 @@ class MyActivity : AppCompatActivity() {
 
             override fun onAdFailedToLoad(errorCode: Int) {
                 mAdIsLoading = false
-                Toast.makeText(this@MyActivity,
-                        "onAdFailedToLoad() with error code: $errorCode",
-                        Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MyActivity,
+                    "onAdFailedToLoad() with error code: $errorCode",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

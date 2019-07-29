@@ -26,6 +26,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 /**
  * Main Activity. Inflates main activity xml.
@@ -47,12 +49,15 @@ public class MyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my);
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, AD_UNIT_ID);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
 
         // Create the InterstitialAd and set the adUnitId.
         interstitialAd = new InterstitialAd(this);
         // Defined in res/values/strings.xml
-        interstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
+        interstitialAd.setAdUnitId(AD_UNIT_ID);
 
         interstitialAd.setAdListener(new AdListener() {
             @Override

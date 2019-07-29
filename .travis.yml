@@ -1,34 +1,39 @@
 if: branch = master
 
-language: android
+language: minimal
+os: linux
+dist: xenial
+group: edge
+sudo: required
 
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    # Android build cache (see https://developer.android.com/studio/build/build-cache.html)
-    - $HOME/.android/build-cache
-
-android:
-  components:
-    - tools
-    - platform-tools
-    - tools
-
-    # The BuildTools version used by your project
-    - build-tools-28.0.3
-
-    # The SDK version used to compile your project
-    - android-26
-
-licenses:
-    - 'android-sdk-license-.+'
+env:
+  global:
+  # for updates check developer.android.com/studio#downloads (current 26.1.1)
+  - ANDROID_SDK_TOOLS=sdk-tools-linux-4333796.zip
 
 before_install:
-  - yes | sdkmanager "platforms;android-28"
+  # set JAVA_HOME path
+  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+  # download and unzip Android SDK command line tools
+  - wget -nv https://dl.google.com/android/repository/$ANDROID_SDK_TOOLS
+  - unzip -q $ANDROID_SDK_TOOLS -d $HOME/sdk
+  # set SDK tools path variable and ANDROID_HOME
+  - export PATH=$PATH:$HOME/sdk/tools/bin
+  - export ANDROID_HOME=$HOME/sdk
+  # create empty cfg file to prevent sdkmanager warning message
+  - mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
+install:
+  # accept licenses for all available packages that have not already been accepted
+  - yes | sdkmanager --licenses >/dev/null
+before_script:
+  # set executable flag for gradle wrapper
+  - chmod +x "${PROJ_DIR}/gradlew"
+  # create dir for gradle settings
+  - mkdir -p "${PROJ_DIR}/.gradle"
+  # disable gradle daemon for current user
+  - echo "org.gradle.daemon=false" >> "${PROJ_DIR}/.gradle/gradle.properties"
+  # set gradle log format to plain
+  - echo "org.gradle.console=plain" >> "${PROJ_DIR}/.gradle/gradle.properties"
 
 matrix:
   include:
