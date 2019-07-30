@@ -54,9 +54,9 @@ documentation on using the Mobile Ads SDK.
 *   Rewarded Video:
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/RewardedVideoExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/RewardedVideoExample)
-*   Custom Rendering:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/CustomRenderingExample),
-    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/CustomRenderingExample)
+*   Native Ads:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/NativeAdsExample),
+    [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/NativeAdsExample)
 
 # Downloads
 
