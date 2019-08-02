@@ -84,6 +84,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
     adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
 
     (adView.headlineView as TextView).text = nativeAd.headline
+    adView.mediaView.setMediaContent(nativeAd.mediaContent)
 
     if (nativeAd.body == null) {
       adView.bodyView.visibility = View.INVISIBLE

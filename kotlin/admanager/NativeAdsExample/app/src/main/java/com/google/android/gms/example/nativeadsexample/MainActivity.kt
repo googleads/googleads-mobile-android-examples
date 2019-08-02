@@ -65,8 +65,7 @@ class MainActivity : AppCompatActivity() {
         currentNativeAd?.destroy()
         currentNativeAd = nativeAd
 
-        // Set the media view. Media content will be automatically populated in the media view once
-        // adView.setNativeAd() is called.
+        // Set the media view.
         adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
 
         // Set other ad assets.
@@ -79,8 +78,9 @@ class MainActivity : AppCompatActivity() {
         adView.storeView = adView.findViewById(R.id.ad_store)
         adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
 
-        // The headline is guaranteed to be in every UnifiedNativeAd.
+        // The headline and media content are guaranteed to be in every UnifiedNativeAd.
         (adView.headlineView as TextView).text = nativeAd.headline
+        adView.mediaView.setMediaContent(nativeAd.mediaContent)
 
         // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
         // check before trying to display them.
@@ -135,8 +135,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // This method tells the Google Mobile Ads SDK that you have finished populating your
-        // native ad view with this native ad. The SDK will populate the adView's MediaView
-        // with the media content from this native ad.
+        // native ad view with this native ad.
         adView.setNativeAd(nativeAd)
 
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't

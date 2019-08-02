@@ -37,7 +37,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MuteThisAdListener;
 import com.google.android.gms.ads.MuteThisAdReason;
 import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
@@ -98,8 +97,7 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
      * @param adView the view to be populated
      */
     private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
-        MediaView mediaView = adView.findViewById(R.id.ad_media);
-        adView.setMediaView(mediaView);
+        adView.setMediaView(adView.findViewById(R.id.ad_media));
 
         adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
         adView.setBodyView(adView.findViewById(R.id.ad_body));
@@ -111,6 +109,7 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
         adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
 
         ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
+        adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
 
         if (nativeAd.getBody() == null) {
             adView.getBodyView().setVisibility(View.INVISIBLE);
