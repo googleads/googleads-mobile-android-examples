@@ -12,11 +12,15 @@
     <string name="ad_attribution">Ad</string>
 
     <string name="targeting_location">Location</string>
-    <string name="targeting_birthday">Birth Date</string>
-    <string name="targeting_gender">Gender</string>
+    <string name="targeting_uac">Tag for Under Age of Consent</string>
     <string name="targeting_child">Use Child-Directed Treatment</string>
-    <string name="targeting_male">Male</string>
-    <string name="targeting_female">Female</string>
+    <string name="targeting_rating">Max Content Rating</string>
+    <string-array name="targeting_ratings">
+        <item>G</item>
+        <item>PG</item>
+        <item>T</item>
+        <item>MA</item>
+    </string-array>
     <string name="targeting_load">Load Targeted Ad</string>
     <string name="bannersizes_size">Size</string>
     <string name="bannersizes_loadad">Load New Ad</string>

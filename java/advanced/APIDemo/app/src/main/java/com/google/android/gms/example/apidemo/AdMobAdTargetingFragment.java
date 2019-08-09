@@ -22,35 +22,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G;
+import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_MA;
+import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_PG;
+import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_T;
+
 /**
  * The {@link AdMobAdTargetingFragment} class demonstrates how to use ad targeting with AdMob.
  */
-public class AdMobAdTargetingFragment extends Fragment
-        implements DatePickerDialog.OnDateSetListener {
+public class AdMobAdTargetingFragment extends Fragment {
 
     private AdView adView;
-    private Button datePickButton;
     private Button loadAdButton;
-    private EditText birthdayEdit;
-    private RadioButton maleRadio;
-    private RadioButton femaleRadio;
-    private RadioButton childRadio;
-    private RadioButton notChildRadio;
-    private RadioButton unspecifiedRadio;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy");
+    private RadioGroup childRadio;
+    private RadioGroup uacRadio;
 
     public AdMobAdTargetingFragment() {
     }
@@ -60,67 +64,102 @@ public class AdMobAdTargetingFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_admob_ad_targeting, container, false);
 
-        adView = rootView.findViewById(R.id.targeting_av_main);
+        adView = rootView.findViewById(R.id.targeting_ad_view);
         loadAdButton = rootView.findViewById(R.id.targeting_btn_loadad);
-        datePickButton = rootView.findViewById(R.id.targeting_btn_datepick);
-        birthdayEdit = rootView.findViewById(R.id.targeting_et_birthday);
-        maleRadio = rootView.findViewById(R.id.targeting_rb_male);
-        femaleRadio = rootView.findViewById(R.id.targeting_rb_female);
-        childRadio = rootView.findViewById(R.id.targeting_rb_child);
-        notChildRadio = rootView.findViewById(R.id.targeting_rb_notchild);
-        unspecifiedRadio = rootView.findViewById(R.id.targeting_rb_unspecified);
-
-        datePickButton.setOnClickListener(new View.OnClickListener() {
+        childRadio = rootView.findViewById(R.id.targeting_rg_child);
+        childRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                DatePickerFragment newFragment = new DatePickerFragment();
-                newFragment.setOnDateSetListener(AdMobAdTargetingFragment.this);
-                newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int setting = RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED;
+                switch (checkedId) {
+                    case R.id.targeting_rb_child:
+                        setting = RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
+                        break;
+                    case R.id.targeting_rb_notchild:
+                        setting = RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE;
+                        break;
+                    case R.id.targeting_rb_unspecified:
+                    default:
+                        break;
+                }
+                RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration().toBuilder()
+                            .setTagForChildDirectedTreatment(setting)
+                            .build();
+                MobileAds.setRequestConfiguration(requestConfiguration);
+            }
+        });
+        uacRadio = rootView.findViewById(R.id.targeting_rg_uac);
+        uacRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int setting = RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_UNSPECIFIED;
+                switch (checkedId) {
+                    case R.id.targeting_rb_uac:
+                        setting = RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE;
+                        break;
+                    case R.id.targeting_rb_notuac:
+                        setting = RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE;
+                        break;
+                    case R.id.targeting_rb_unspecified:
+                    default:
+                        break;
+                }
+                RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration().toBuilder()
+                    .setTagForUnderAgeOfConsent(setting)
+                    .build();
+                MobileAds.setRequestConfiguration(requestConfiguration);
+            }
+        });
+
+        final
+        String[] ratingsArray = getResources().getStringArray(R.array.targeting_ratings);
+
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+            getContext(),
+            android.R.layout.simple_spinner_dropdown_item, ratingsArray
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = rootView.findViewById(R.id.targeting_content_rating_spinner);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String rating;
+                switch (ratingsArray[position]) {
+                    case "G":
+                    default:
+                        rating = MAX_AD_CONTENT_RATING_G;
+                        break;
+                    case "PG":
+                        rating = MAX_AD_CONTENT_RATING_PG;
+                        break;
+                    case "T":
+                        rating = MAX_AD_CONTENT_RATING_T;
+                        break;
+                    case "MA":
+                        rating = MAX_AD_CONTENT_RATING_MA;
+                        break;
+                }
+                RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration().toBuilder()
+                    .setMaxAdContentRating(rating).build();
+                MobileAds.setRequestConfiguration(requestConfiguration);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
         loadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AdRequest.Builder builder = new AdRequest.Builder();
-
-                try {
-                    String birthdayString = birthdayEdit.getText().toString();
-                    Date birthday = dateFormat.parse(birthdayString);
-                    builder.setBirthday(birthday);
-                } catch (ParseException ex) {
-                    Log.d(MainActivity.LOG_TAG, "Failed to parse birthday");
-                }
-
-                if (maleRadio.isChecked()) {
-                    builder.setGender(AdRequest.GENDER_MALE);
-                } else if (femaleRadio.isChecked()) {
-                    builder.setGender(AdRequest.GENDER_FEMALE);
-                }
-
-                if (unspecifiedRadio.isChecked()) {
-                    // There's actually nothing to be done here. If you're unsure whether or not
-                    // the user should receive child-directed treatment, simply avoid calling the
-                    // tagForChildDirectedTreatment method. The ad request will not contain any
-                    // indication one way or the other.
-                } else if (childRadio.isChecked()) {
-                    builder.tagForChildDirectedTreatment(true);
-                } else if (notChildRadio.isChecked()) {
-                    builder.tagForChildDirectedTreatment(false);
-                }
-
-                AdRequest request = builder.build();
+                AdRequest request = new AdRequest.Builder().build();
                 adView.loadAd(request);
             }
         });
 
         return rootView;
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, monthOfYear, dayOfMonth);
-        birthdayEdit.setText(dateFormat.format(calendar.getTime()));
     }
 }
