@@ -31,6 +31,7 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
         // Set the media view.
-        adView.setMediaView(adView.findViewById(R.id.ad_media));
+        adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
 
         // Set other ad assets.
         adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
