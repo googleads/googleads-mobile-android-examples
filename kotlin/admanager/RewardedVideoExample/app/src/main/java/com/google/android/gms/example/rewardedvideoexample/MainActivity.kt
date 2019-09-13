@@ -5,160 +5,157 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import com.google.android.gms.ads.reward.RewardItem
-import com.google.android.gms.ads.reward.RewardedVideoAd
-import com.google.android.gms.ads.reward.RewardedVideoAdListener
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val AD_UNIT_ID = "/6499/example/rewarded-video"
 const val COUNTER_TIME = 10L
 const val GAME_OVER_REWARD = 1
 
-class MainActivity : AppCompatActivity(), RewardedVideoAdListener {
+class MainActivity : AppCompatActivity() {
 
-    private var mCoinCount: Int = 0
-    private var mCountDownTimer: CountDownTimer? = null
-    private var mGameOver = false
-    private var mGamePaused = false
-    private lateinit var mRewardedVideoAd: RewardedVideoAd
-    private var mTimeRemaining: Long = 0L
+  private var mCoinCount: Int = 0
+  private var mCountDownTimer: CountDownTimer? = null
+  private var mGameOver = false
+  private var mGamePaused = false
+  private var mIsLoading = false
+  private lateinit var mRewardedAd: RewardedAd
+  private var mTimeRemaining: Long = 0L
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+    MobileAds.initialize(this) {}
+    loadRewardedAd()
 
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
-        mRewardedVideoAd.rewardedVideoAdListener = this
-        loadRewardedVideoAd()
+    // Create the "retry" button, which tries to show a rewarded video ad between game plays.
+    retry_button.visibility = View.INVISIBLE
+    retry_button.setOnClickListener { startGame() }
 
-        // Create the "retry" button, which tries to show a rewarded video ad between game plays.
-        retry_button.visibility = View.INVISIBLE
-        retry_button.setOnClickListener { startGame() }
+    // Create the "show" button, which shows a rewarded video if one is loaded.
+    show_video_button.visibility = View.INVISIBLE
+    show_video_button.setOnClickListener { showRewardedVideo() }
 
-        // Create the "show" button, which shows a rewarded video if one is loaded.
-        show_video_button.visibility = View.INVISIBLE
-        show_video_button.setOnClickListener { showRewardedVideo() }
+    // Display current coin count to user.
+    coin_count_text.text = "Coins: $mCoinCount"
 
-        // Display current coin count to user.
-        coin_count_text.text = "Coins: $mCoinCount"
+    startGame()
+  }
 
-        startGame()
+  public override fun onPause() {
+    super.onPause()
+    pauseGame()
+  }
+
+  public override fun onResume() {
+    super.onResume()
+    if (!mGameOver && mGamePaused) {
+      resumeGame()
     }
+  }
 
-    public override fun onPause() {
-        super.onPause()
-        pauseGame()
-        mRewardedVideoAd.pause(this)
-    }
+  private fun pauseGame() {
+    mCountDownTimer?.cancel()
+    mGamePaused = true
+  }
 
-    public override fun onResume() {
-        super.onResume()
-        if (!mGameOver && mGamePaused) {
-            resumeGame()
+  private fun resumeGame() {
+    createTimer(mTimeRemaining)
+    mGamePaused = false
+  }
+
+  private fun loadRewardedAd() {
+    if (!(::mRewardedAd.isInitialized) || !mRewardedAd.isLoaded) {
+      mIsLoading = true
+      mRewardedAd = RewardedAd(this, AD_UNIT_ID)
+      mRewardedAd.loadAd(
+        PublisherAdRequest.Builder().build(),
+        object : RewardedAdLoadCallback() {
+          override fun onRewardedAdLoaded() {
+            mIsLoading = false
+            Toast.makeText(this@MainActivity, "onRewardedAdLoaded", Toast.LENGTH_LONG).show()
+          }
+
+          override fun onRewardedAdFailedToLoad(errorCode: Int) {
+            mIsLoading = false
+            Toast.makeText(this@MainActivity, "onRewardedAdFailedToLoad", Toast.LENGTH_LONG).show()
+          }
         }
-        mRewardedVideoAd.resume(this)
+      )
     }
+  }
 
-    private fun pauseGame() {
-        mCountDownTimer?.cancel()
-        mGamePaused = true
+  private fun addCoins(coins: Int) {
+    mCoinCount += coins
+    coin_count_text.text = "Coins: $mCoinCount"
+  }
+
+  private fun startGame() {
+    // Hide the retry button, load the ad, and start the timer.
+    retry_button.visibility = View.INVISIBLE
+    show_video_button.visibility = View.INVISIBLE
+    if (!mRewardedAd.isLoaded && !mIsLoading) {
+      loadRewardedAd()
     }
+    createTimer(COUNTER_TIME)
+    mGamePaused = false
+    mGameOver = false
+  }
 
-    private fun resumeGame() {
-        createTimer(mTimeRemaining)
-        mGamePaused = false
-    }
+  // Create the game timer, which counts down to the end of the level
+  // and shows the "retry" button.
+  private fun createTimer(time: Long) {
+    mCountDownTimer?.cancel()
 
-    private fun loadRewardedVideoAd() {
-        if (!mRewardedVideoAd.isLoaded) {
-            mRewardedVideoAd.loadAd(AD_UNIT_ID, PublisherAdRequest.Builder().build())
+    mCountDownTimer = object : CountDownTimer(time * 1000, 50) {
+      override fun onTick(millisUnitFinished: Long) {
+        mTimeRemaining = millisUnitFinished / 1000 + 1
+        timer.text = "seconds remaining: $mTimeRemaining"
+      }
+
+      override fun onFinish() {
+        if (mRewardedAd.isLoaded) {
+          show_video_button.visibility = View.VISIBLE
         }
+        timer.text = "The game has ended!"
+        addCoins(GAME_OVER_REWARD)
+        retry_button.visibility = View.VISIBLE
+        mGameOver = true
+      }
     }
 
-    private fun addCoins(coins: Int) {
-        mCoinCount += coins
-        coin_count_text.text = "Coins: $mCoinCount"
-    }
+    mCountDownTimer?.start()
+  }
 
-    private fun startGame() {
-        // Hide the retry button, load the ad, and start the timer.
-        retry_button.visibility = View.INVISIBLE
-        show_video_button.visibility = View.INVISIBLE
-        loadRewardedVideoAd()
-        createTimer(COUNTER_TIME)
-        mGamePaused = false
-        mGameOver = false
-    }
+  private fun showRewardedVideo() {
+    show_video_button.visibility = View.INVISIBLE
+    if (mRewardedAd.isLoaded) {
+      mRewardedAd.show(
+        this,
+        object : RewardedAdCallback() {
+          override fun onUserEarnedReward(rewardItem: RewardItem) {
+            Toast.makeText(this@MainActivity, "onUserEarnedReward", Toast.LENGTH_LONG).show()
+            addCoins(rewardItem.amount)
+          }
 
-    // Create the game timer, which counts down to the end of the level
-    // and shows the "retry" button.
-    private fun createTimer(time: Long) {
-        mCountDownTimer?.cancel()
+          override fun onRewardedAdClosed() {
+            Toast.makeText(this@MainActivity, "onRewardedAdClosed", Toast.LENGTH_LONG).show()
+            loadRewardedAd()
+          }
 
-        mCountDownTimer = object : CountDownTimer(time * 1000, 50) {
-            override fun onTick(millisUnitFinished: Long) {
-                mTimeRemaining = millisUnitFinished / 1000 + 1
-                timer.text = "seconds remaining: $mTimeRemaining"
-            }
+          override fun onRewardedAdFailedToShow(errorCode: Int) {
+            Toast.makeText(this@MainActivity, "onRewardedAdFailedToShow", Toast.LENGTH_LONG).show()
+          }
 
-            override fun onFinish() {
-                if (mRewardedVideoAd.isLoaded) {
-                    show_video_button.visibility = View.VISIBLE
-                }
-                timer.text = "The game has ended!"
-                addCoins(GAME_OVER_REWARD)
-                retry_button.visibility = View.VISIBLE
-                mGameOver = true
-            }
+          override fun onRewardedAdOpened() {
+            Toast.makeText(this@MainActivity, "onRewardedAdOpened", Toast.LENGTH_LONG).show()
+          }
         }
-
-        mCountDownTimer?.start()
+      )
     }
-
-    private fun showRewardedVideo() {
-        show_video_button.visibility = View.INVISIBLE
-        if (mRewardedVideoAd.isLoaded) {
-            mRewardedVideoAd.show()
-        }
-    }
-
-    override fun onRewardedVideoAdLeftApplication() {
-        Toast.makeText(this, "onRewardedVideoAdLeftApplication", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRewardedVideoAdClosed() {
-        // Preload the next video ad.
-        loadRewardedVideoAd()
-        Toast.makeText(this, "onRewardedVideoAdClosed", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRewardedVideoAdFailedToLoad(errorCode: Int) {
-        Toast.makeText(this, "onRewardedVideoAdFailedToLoad", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRewardedVideoAdLoaded() {
-        Toast.makeText(this, "onRewardedVideoAdLoaded", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRewardedVideoAdOpened() {
-        Toast.makeText(this, "onRewardedVideoAdOpened", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRewarded(reward: RewardItem) {
-        Toast.makeText(
-            this, "onRewarded! currency: ${reward.type} amount: ${reward.amount}",
-            Toast.LENGTH_SHORT
-        ).show()
-        addCoins(reward.amount)
-    }
-
-    override fun onRewardedVideoStarted() {
-        Toast.makeText(this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRewardedVideoCompleted() {
-        Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show()
-    }
+  }
 }
