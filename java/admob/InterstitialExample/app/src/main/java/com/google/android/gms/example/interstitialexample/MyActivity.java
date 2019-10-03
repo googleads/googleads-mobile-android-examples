@@ -35,7 +35,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 public class MyActivity extends AppCompatActivity {
 
     private static final long GAME_LENGTH_MILLISECONDS = 3000;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544~3347511713";
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
 
     private InterstitialAd interstitialAd;
     private CountDownTimer countDownTimer;
