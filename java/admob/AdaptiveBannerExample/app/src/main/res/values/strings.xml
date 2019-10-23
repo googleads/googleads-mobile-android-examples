@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App name 'AdMob Adaptive Banner Example'  [CHAR LIMIT=30] -->
+    <string name="app_name">AdMob Adaptive Banner Example</string>
+    <!-- Hello world string [CHAR LIMIT=30] -->
+    <string name="hello_world">Hello world!</string>
+    <!-- Label for 'Settings' option [CHAR LIMIT=30] -->
+    <string name="action_settings">Settings</string>
+
+</resources>
