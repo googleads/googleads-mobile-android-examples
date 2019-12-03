@@ -1,0 +1,15 @@
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+
+status:       PUBLISHED
+technologies: [Android, Google Play services, Google Mobile Ads]
+categories:   [Monetization]
+languages:    [Java]
+solutions:    [Mobile]
+github:       googleads/googleads-mobile-android-examples
+level:        BEGINNER
+icon:         icons/admob_icon.png
+license:      apache2
