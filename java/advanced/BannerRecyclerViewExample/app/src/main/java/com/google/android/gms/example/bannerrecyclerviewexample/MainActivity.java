@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
+                adView.setAdListener(null);
                 // The previous banner ad loaded successfully, call this method again to
                 // load the next ad in the items list.
                 loadBannerAd(index + ITEMS_PER_AD);
@@ -156,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
+                adView.setAdListener(null);
                 // The previous banner ad failed to load. Call this method again to load
                 // the next ad in the items list.
                 Log.e("MainActivity", "The previous banner ad failed to load. Attempting to"
