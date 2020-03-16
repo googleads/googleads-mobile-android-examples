@@ -1,0 +1,33 @@
+directories:
+  # Add the directories you want added as source here
+  java/com/google/android/libraries/admob/examples/java
+  java/com/google/android/libraries/admob/examples/prerelease/java
+
+# Automatically includes all relevant targets under the 'directories' above
+derive_targets_from_directories: true
+
+targets:
+  # If source code isn't resolving, add additional targets that compile it here
+  java/com/google/android/libraries/admob/examples/java/...
+  java/com/google/android/libraries/admob/examples/prerelease/java/...
+
+additional_languages:
+  # Uncomment any additional languages you want supported
+  # c
+  # dart
+  # kotlin
+  # python
+
+test_sources:
+  # Sources that are categorized as test code by the IDE
+  javatests/*
+
+build_flags:
+  --nostamp
+
+
+# Please uncomment an android-SDK platform. Available SDKs are:
+# android_sdk_platform: android-26
+# android_sdk_platform: android-27
+# android_sdk_platform: android-28
+android_sdk_platform: android-29
