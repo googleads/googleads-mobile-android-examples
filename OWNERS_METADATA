@@ -1,0 +1,18 @@
+# Text proto format: devtools_piper.OwnersMetadataFile (go/owners_metadata)
+# See go/silos-lite for details on how to use this file for read access control.
+silo_acl {
+  # This is required to remind Silos Lite users about
+  # go/silos-lite#content-restrictions.
+  silo_will_contain_privacy_sensitive_data: false
+
+  # This retains normal access for regular engineers and other accounts.
+  access_type: OPEN
+
+  # This is equivalent to above. Currently, default_ganpati_group is a
+  # mandatory field in SiloAcl. We plan to make it optional in case
+  # access_type is OPEN.
+  default_ganpati_group: "piper-group-default-access"
+
+  # This expands access to the TVC group.
+  allowed_ganpati_groups: "job-admobmediationadapterdevelopment-specialist"
+}
