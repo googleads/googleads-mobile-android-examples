@@ -17,7 +17,10 @@ package com.google.android.gms.example.bannerexample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
+import java.util.Arrays
 import kotlinx.android.synthetic.main.activity_my.*
 
 /**
@@ -29,9 +32,17 @@ class MyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my)
 
-        // Create an ad request. Check logcat output for the hashed device ID to
+        // Set your test devices. Check your logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+        // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        // to get test ads on this device."
+        MobileAds.setRequestConfiguration(
+          RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+            .build()
+        )
+
+        // Create an ad request.
         val adRequest = PublisherAdRequest.Builder().build()
 
         // Start loading the ad in the background.

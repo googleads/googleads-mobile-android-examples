@@ -23,11 +23,12 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import java.util.Arrays;
 
 /** Main Activity. Inflates main activity xml and child fragments. */
 public class MyActivity extends AppCompatActivity {
@@ -54,6 +55,13 @@ public class MyActivity extends AppCompatActivity {
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this);
+
+    // Set your test devices. Check your logcat output for the hashed device ID to
+    // get test ads on a physical device. e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device."
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345")).build());
 
     adContainerView = findViewById(R.id.ad_view_container);
 
@@ -99,9 +107,7 @@ public class MyActivity extends AppCompatActivity {
   }
 
   private void loadBanner(AdSize adSize) {
-    // Create an ad request. Check your logcat output for the hashed device ID to
-    // get test ads on a physical device. e.g.
-    // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+    // Create an ad request.
     adView = new PublisherAdView(this);
     adView.setAdUnitId(BACKFILL_IU);
     adView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
@@ -109,8 +115,7 @@ public class MyActivity extends AppCompatActivity {
     adContainerView.addView(adView);
     adView.setAdSizes(adSize);
 
-    PublisherAdRequest adRequest =
-        new PublisherAdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+    PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
 
     // Start loading the ad in the background.
     adView.loadAd(adRequest);

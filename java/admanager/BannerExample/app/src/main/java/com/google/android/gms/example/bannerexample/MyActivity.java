@@ -17,8 +17,11 @@ package com.google.android.gms.example.bannerexample;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import java.util.Arrays;
 
 /**
  * Main Activity. Inflates main activity xml and child fragments.
@@ -36,9 +39,15 @@ public class MyActivity extends AppCompatActivity {
         // values/strings.xml.
         adView = findViewById(R.id.ad_view);
 
-        // Create an ad request. Check logcat output for the hashed device ID to
+        // Set your test devices. Check your logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+        // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        // to get test ads on this device."
+        MobileAds.setRequestConfiguration(
+            new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+                                              .build());
+
+        // Create an ad request.
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
 
         // Start loading the ad in the background.

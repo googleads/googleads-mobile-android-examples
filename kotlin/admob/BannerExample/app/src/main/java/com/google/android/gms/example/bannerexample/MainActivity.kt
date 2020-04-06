@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import java.util.Arrays
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,12 +17,18 @@ class MainActivity : AppCompatActivity() {
         // Initialize the Mobile Ads SDK with an AdMob App ID.
         MobileAds.initialize(this) {}
 
-        // Create an ad request. If you're running this on a physical device, check your logcat to
-        // learn how to enable test ads for it. Look for a line like this one:
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        val adRequest = AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+        // Set your test devices. Check your logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        // to get test ads on this device."
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .setTestDeviceIds(Arrays.asList("ABCDEF012345"))
                 .build()
+        )
+
+        // Create an ad request.
+        val adRequest = AdRequest.Builder().build()
 
         // Start loading the ad in the background.
         ad_view.loadAd(adRequest)

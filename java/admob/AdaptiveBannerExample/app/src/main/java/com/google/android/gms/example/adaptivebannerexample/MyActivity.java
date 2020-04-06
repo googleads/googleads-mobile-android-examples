@@ -24,8 +24,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import java.util.Arrays;
 
 /** Main Activity. Inflates main activity xml and child fragments. */
 public class MyActivity extends AppCompatActivity {
@@ -45,6 +47,13 @@ public class MyActivity extends AppCompatActivity {
       @Override
       public void onInitializationComplete(InitializationStatus initializationStatus) {}
     });
+
+    // Set your test devices. Check your logcat output for the hashed device ID to
+    // get test ads on a physical device. e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device."
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345")).build());
 
     adContainerView = findViewById(R.id.ad_view_container);
 
@@ -86,9 +95,7 @@ public class MyActivity extends AppCompatActivity {
   }
 
   private void loadBanner() {
-    // Create an ad request. Check your logcat output for the hashed device ID to
-    // get test ads on a physical device. e.g.
-    // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+    // Create an ad request.
     adView = new AdView(this);
     adView.setAdUnitId(AD_UNIT_ID);
     adContainerView.removeAllViews();
@@ -97,8 +104,7 @@ public class MyActivity extends AppCompatActivity {
     AdSize adSize = getAdSize();
     adView.setAdSize(adSize);
 
-    AdRequest adRequest =
-        new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+    AdRequest adRequest = new AdRequest.Builder().build();
 
     // Start loading the ad in the background.
     adView.loadAd(adRequest);

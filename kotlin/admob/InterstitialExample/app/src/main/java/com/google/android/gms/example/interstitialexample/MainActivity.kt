@@ -9,6 +9,9 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+
+import java.util.Arrays
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val GAME_LENGTH_MILLISECONDS = 3000L
@@ -27,6 +30,16 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this) {}
+
+        // Set your test devices. Check your logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        // to get test ads on this device."
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+                .build()
+        )
 
         // Create the InterstitialAd and set it up.
         mInterstitialAd = InterstitialAd(this).apply {
@@ -88,12 +101,8 @@ class MainActivity : AppCompatActivity() {
     // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
     private fun startGame() {
         if (!mInterstitialAd.isLoading && !mInterstitialAd.isLoaded) {
-            // Create an ad request. If you're running this on a physical device, check your logcat
-            // to learn how to enable test ads for it. Look for a line like this one:
-            // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-            val adRequest = AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .build()
+            // Create an ad request.
+            val adRequest = AdRequest.Builder().build()
 
             mInterstitialAd.loadAd(adRequest)
         }

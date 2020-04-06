@@ -18,10 +18,11 @@ package com.google.android.gms.example.adaptivebannerexample
 import android.os.Bundle
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import java.util.Arrays
 import kotlinx.android.synthetic.main.activity_my.*
 
 /** Main Activity. Inflates main activity xml and child fragments.  */
@@ -54,6 +55,16 @@ class MyActivity : AppCompatActivity() {
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this) { }
+
+    // Set your test devices. Check your logcat output for the hashed device ID to
+    // get test ads on a physical device. e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device."
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder()
+        .setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        .build()
+    )
 
     adView = AdView(this)
     ad_view_container.addView(adView)
@@ -90,10 +101,8 @@ class MyActivity : AppCompatActivity() {
 
     adView.adSize = adSize
 
-    // Create an ad request. Check your logcat output for the hashed device ID to
-    // get test ads on a physical device. e.g.
-    // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-    val adRequest = AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build()
+    // Create an ad request.
+    val adRequest = AdRequest.Builder().build()
 
     // Start loading the ad in the background.
     adView.loadAd(adRequest)
