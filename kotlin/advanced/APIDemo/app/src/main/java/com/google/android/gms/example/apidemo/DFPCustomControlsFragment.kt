@@ -34,6 +34,10 @@ import kotlinx.android.synthetic.main.fragment_dfp_customcontrols.*
  */
 class DFPCustomControlsFragment : Fragment() {
 
+  var nativeCustomTemplateAd: NativeCustomTemplateAd? = null
+  var nativeAppInstallAd: NativeAppInstallAd? = null
+  var nativeContentAd: NativeContentAd? = null
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -48,6 +52,16 @@ class DFPCustomControlsFragment : Fragment() {
     btn_refresh.setOnClickListener { refreshAd() }
 
     refreshAd()
+  }
+
+  override fun onDestroy() {
+    nativeAppInstallAd?.destroy()
+    nativeAppInstallAd = null
+    nativeContentAd?.destroy()
+    nativeContentAd = null
+    nativeCustomTemplateAd?.destroy()
+    nativeCustomTemplateAd = null
+    super.onDestroy()
   }
 
   /**
@@ -248,6 +262,12 @@ class DFPCustomControlsFragment : Fragment() {
       builder.forCustomTemplateAd(
         activity!!.resources.getString(R.string.customcontrols_fragment_template_id),
         { ad ->
+          if (isDetached) {
+            ad.destroy()
+            return@forCustomTemplateAd
+          }
+          nativeCustomTemplateAd?.destroy()
+          nativeCustomTemplateAd = ad
           val frameLayout = view!!.findViewById<FrameLayout>(R.id.fl_adplaceholder)
           val adView = layoutInflater
             .inflate(R.layout.ad_simple_custom_template, null)
@@ -267,6 +287,12 @@ class DFPCustomControlsFragment : Fragment() {
 
     if (cb_appinstall.isChecked) {
       builder.forAppInstallAd { ad ->
+        if (isDetached) {
+          ad.destroy()
+          return@forAppInstallAd
+        }
+        nativeAppInstallAd?.destroy()
+        nativeAppInstallAd = ad
         val frameLayout = view!!.findViewById<FrameLayout>(R.id.fl_adplaceholder)
         val adView = layoutInflater
           .inflate(R.layout.ad_app_install, null) as NativeAppInstallAdView
@@ -278,6 +304,12 @@ class DFPCustomControlsFragment : Fragment() {
 
     if (cb_content.isChecked) {
       builder.forContentAd { ad ->
+        if (isDetached) {
+          ad.destroy()
+          return@forContentAd
+        }
+        nativeContentAd?.destroy()
+        nativeContentAd = ad
         val frameLayout = view!!.findViewById<FrameLayout>(R.id.fl_adplaceholder)
         val adView = layoutInflater
           .inflate(R.layout.ad_content, null) as NativeContentAdView

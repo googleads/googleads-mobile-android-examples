@@ -32,7 +32,8 @@ import java.util.*
 const val AD_MANAGER_AD_UNIT_ID = "/6499/example/native"
 const val SIMPLE_TEMPLATE_ID = "10104090"
 
-var currentNativeAd: UnifiedNativeAd? = null
+var currentUnifiedNativeAd: UnifiedNativeAd? = null
+var currentCustomTemplateAd: NativeCustomTemplateAd? = null
 
 /**
  * A simple activity class that displays native ad formats.
@@ -60,11 +61,6 @@ class MainActivity : AppCompatActivity() {
      * @param adView the view to be populated
      */
     private fun populateUnifiedNativeAdView(nativeAd: UnifiedNativeAd, adView: UnifiedNativeAdView) {
-        // You must call destroy on old ads when you are done with them,
-        // otherwise you will have a memory leak.
-        currentNativeAd?.destroy()
-        currentNativeAd = nativeAd
-
         // Set the media view.
         adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
 
@@ -248,6 +244,16 @@ class MainActivity : AppCompatActivity() {
 
         if (requestUnifiedNativeAds) {
             builder.forUnifiedNativeAd { unifiedNativeAd ->
+                // If this callback occurs after the activity is destroyed, you must call
+                // destroy and return or you may get a memory leak.
+                if (isDestroyed) {
+                    unifiedNativeAd.destroy()
+                    return@forUnifiedNativeAd
+                }
+                // You must call destroy on old ads when you are done with them,
+                // otherwise you will have a memory leak.
+                currentUnifiedNativeAd?.destroy()
+                currentUnifiedNativeAd = unifiedNativeAd
                 val adView = layoutInflater
                         .inflate(R.layout.ad_unified, null) as UnifiedNativeAdView
                 populateUnifiedNativeAdView(unifiedNativeAd, adView)
@@ -260,6 +266,16 @@ class MainActivity : AppCompatActivity() {
             builder.forCustomTemplateAd(SIMPLE_TEMPLATE_ID,
                     {
                         ad: NativeCustomTemplateAd ->
+                        // If this callback occurs after the activity is destroyed, you must call
+                        // destroy and return or you may get a memory leak.
+                        if (isDestroyed) {
+                            ad.destroy()
+                            return@forCustomTemplateAd
+                        }
+                        // You must call destroy on old ads when you are done with them,
+                        // otherwise you will have a memory leak.
+                        currentCustomTemplateAd?.destroy()
+                        currentCustomTemplateAd = ad
                         val frameLayout = findViewById<FrameLayout>(R.id.ad_frame)
                         val adView = layoutInflater
                                 .inflate(R.layout.ad_simple_custom_template, null)
@@ -299,7 +315,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        currentNativeAd?.destroy()
+        currentUnifiedNativeAd?.destroy()
+        currentCustomTemplateAd?.destroy()
         super.onDestroy()
     }
 }

@@ -59,6 +59,9 @@ public class DFPCustomControlsFragment extends Fragment {
     private CheckBox contentAdsCheckbox;
     private CheckBox customTemplateAdsCheckbox;
     private CustomControlsView customControlsView;
+    private NativeAppInstallAd nativeAppInstallAd;
+    private NativeContentAd nativeContentAd;
+    private NativeCustomTemplateAd nativeCustomTemplateAd;
 
     public DFPCustomControlsFragment() {
     }
@@ -89,6 +92,23 @@ public class DFPCustomControlsFragment extends Fragment {
         });
 
         refreshAd();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (nativeAppInstallAd != null) {
+            nativeAppInstallAd.destroy();
+            nativeAppInstallAd = null;
+        }
+        if (nativeContentAd != null) {
+            nativeContentAd.destroy();
+            nativeContentAd = null;
+        }
+        if (nativeCustomTemplateAd != null) {
+            nativeCustomTemplateAd.destroy();
+            nativeCustomTemplateAd = null;
+        }
+        super.onDestroy();
     }
 
     /**
@@ -298,6 +318,14 @@ public class DFPCustomControlsFragment extends Fragment {
                     new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
                         @Override
                         public void onCustomTemplateAdLoaded(NativeCustomTemplateAd ad) {
+                            if (isDetached()) {
+                                ad.destroy();
+                                return;
+                            }
+                            if (nativeCustomTemplateAd != null) {
+                                nativeCustomTemplateAd.destroy();
+                            }
+                            nativeCustomTemplateAd = ad;
                             FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
                             View adView = getLayoutInflater()
                                     .inflate(R.layout.ad_simple_custom_template, null);
@@ -320,6 +348,14 @@ public class DFPCustomControlsFragment extends Fragment {
             builder.forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
                 @Override
                 public void onAppInstallAdLoaded(NativeAppInstallAd ad) {
+                    if (isDetached()) {
+                        ad.destroy();
+                        return;
+                    }
+                    if (nativeAppInstallAd != null) {
+                        nativeAppInstallAd.destroy();
+                    }
+                    nativeAppInstallAd = ad;
                     FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
                     NativeAppInstallAdView adView = (NativeAppInstallAdView) getLayoutInflater()
                             .inflate(R.layout.ad_app_install, null);
@@ -334,6 +370,14 @@ public class DFPCustomControlsFragment extends Fragment {
             builder.forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
                 @Override
                 public void onContentAdLoaded(NativeContentAd ad) {
+                    if (isDetached()) {
+                        ad.destroy();
+                        return;
+                    }
+                    if (nativeContentAd != null) {
+                        nativeContentAd.destroy();
+                    }
+                    nativeContentAd = ad;
                     FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
                     NativeContentAdView adView = (NativeContentAdView) getLayoutInflater()
                             .inflate(R.layout.ad_content, null);
@@ -369,6 +413,7 @@ public class DFPCustomControlsFragment extends Fragment {
         customControlsView.reset();
     }
 }
+
 
 
 

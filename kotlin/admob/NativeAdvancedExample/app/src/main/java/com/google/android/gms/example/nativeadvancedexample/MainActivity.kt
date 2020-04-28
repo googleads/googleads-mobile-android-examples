@@ -55,10 +55,6 @@ class MainActivity : AppCompatActivity() {
      * @param adView the view to be populated
      */
     private fun populateUnifiedNativeAdView(nativeAd: UnifiedNativeAd, adView: UnifiedNativeAdView) {
-        // You must call destroy on old ads when you are done with them,
-        // otherwise you will have a memory leak.
-        currentNativeAd?.destroy()
-        currentNativeAd = nativeAd
         // Set the media view.
         adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
 
@@ -172,6 +168,16 @@ class MainActivity : AppCompatActivity() {
 
         builder.forUnifiedNativeAd { unifiedNativeAd ->
             // OnUnifiedNativeAdLoadedListener implementation.
+            // If this callback occurs after the activity is destroyed, you must call
+            // destroy and return or you may get a memory leak.
+            if (isDestroyed) {
+                unifiedNativeAd.destroy()
+                return@forUnifiedNativeAd
+            }
+            // You must call destroy on old ads when you are done with them,
+            // otherwise you will have a memory leak.
+            currentNativeAd?.destroy()
+            currentNativeAd = unifiedNativeAd
             val adView = layoutInflater
                     .inflate(R.layout.ad_unified, null) as UnifiedNativeAdView
             populateUnifiedNativeAdView(unifiedNativeAd, adView)

@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
   private static final String AD_MANAGER_AD_UNIT_ID = "/6499/example/native";
     private static final String SIMPLE_TEMPLATE_ID = "10104090";
 
-    private UnifiedNativeAd nativeAd;
+    private NativeCustomTemplateAd nativeCustomTemplateAd;
+    private UnifiedNativeAd unifiedNativeAd;
     private Button refresh;
     private CheckBox requestNativeAds;
     private CheckBox requestCustomTemplateAds;
@@ -261,18 +262,24 @@ public class MainActivity extends AppCompatActivity {
 
         refresh.setEnabled(false);
 
-    AdLoader.Builder builder = new AdLoader.Builder(this, AD_MANAGER_AD_UNIT_ID);
+        AdLoader.Builder builder = new AdLoader.Builder(this, AD_MANAGER_AD_UNIT_ID);
 
         if (requestUnifiedNativeAds) {
             builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                 @Override
                 public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                    // If this callback occurs after the activity is destroyed, you must call
+                    // destroy and return or you may get a memory leak.
+                    if (isDestroyed()) {
+                        unifiedNativeAd.destroy();
+                        return;
+                    }
                     // You must call destroy on old ads when you are done with them,
                     // otherwise you will have a memory leak.
-                    if (nativeAd != null) {
-                        nativeAd.destroy();
+                    if (unifiedNativeAd != null) {
+                        unifiedNativeAd.destroy();
                     }
-                    nativeAd = unifiedNativeAd;
+                    MainActivity.this.unifiedNativeAd = unifiedNativeAd;
                     FrameLayout frameLayout =
                             findViewById(R.id.fl_adplaceholder);
                     UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater()
@@ -287,25 +294,37 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCustomTemplateAds) {
             builder.forCustomTemplateAd(SIMPLE_TEMPLATE_ID,
-                    new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
-                        @Override
-                        public void onCustomTemplateAdLoaded(NativeCustomTemplateAd ad) {
-                            FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
-                            View adView = getLayoutInflater()
-                                    .inflate(R.layout.ad_simple_custom_template, null);
-                            populateSimpleTemplateAdView(ad, adView);
-                            frameLayout.removeAllViews();
-                            frameLayout.addView(adView);
+                new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
+                    @Override
+                    public void onCustomTemplateAdLoaded(NativeCustomTemplateAd ad) {
+                        // If this callback occurs after the activity is destroyed, you must call
+                        // destroy and return or you may get a memory leak.
+                        if (isDestroyed()) {
+                            ad.destroy();
+                            return;
                         }
-                    },
-                    new NativeCustomTemplateAd.OnCustomClickListener() {
-                        @Override
-                        public void onCustomClick(NativeCustomTemplateAd ad, String s) {
-                            Toast.makeText(MainActivity.this,
-                                    "A custom click has occurred in the simple template",
-                                    Toast.LENGTH_SHORT).show();
+                        // You must call destroy on old ads when you are done with them,
+                        // otherwise you will have a memory leak.
+                        if (nativeCustomTemplateAd != null) {
+                            nativeCustomTemplateAd.destroy();
                         }
-                    });
+                        nativeCustomTemplateAd = ad;
+                        FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
+                        View adView = getLayoutInflater()
+                            .inflate(R.layout.ad_simple_custom_template, null);
+                        populateSimpleTemplateAdView(ad, adView);
+                        frameLayout.removeAllViews();
+                        frameLayout.addView(adView);
+                    }
+                },
+                new NativeCustomTemplateAd.OnCustomClickListener() {
+                    @Override
+                    public void onCustomClick(NativeCustomTemplateAd ad, String s) {
+                        Toast.makeText(MainActivity.this,
+                            "A custom click has occurred in the simple template",
+                            Toast.LENGTH_SHORT).show();
+                    }
+                });
         }
 
         VideoOptions videoOptions = new VideoOptions.Builder()
@@ -334,8 +353,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (nativeAd != null) {
-            nativeAd.destroy();
+        if (unifiedNativeAd != null) {
+            unifiedNativeAd.destroy();
+        }
+        if (nativeCustomTemplateAd != null) {
+            nativeCustomTemplateAd.destroy();
         }
         super.onDestroy();
     }

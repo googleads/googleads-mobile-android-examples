@@ -202,6 +202,12 @@ public class MainActivity extends AppCompatActivity {
             // OnUnifiedNativeAdLoadedListener implementation.
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                // If this callback occurs after the activity is destroyed, you must call
+                // destroy and return or you may get a memory leak.
+                if (isDestroyed()) {
+                    unifiedNativeAd.destroy();
+                    return;
+                }
                 // You must call destroy on old ads when you are done with them,
                 // otherwise you will have a memory leak.
                 if (nativeAd != null) {
