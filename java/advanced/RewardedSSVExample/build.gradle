@@ -1,0 +1,31 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
+group = 'com.example.rewardedssv'
+version = '1.0.0'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.vaadin.external.google:android-json:0.0.20131108.vaadin1'
+    implementation 'com.google.crypto.tink:tink-android:1.4.0-rc1'
+    // tag::actuator[]
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // end::actuator[]
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // tag::tests[]
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    // end::tests[]
+}
+
+test {
+    useJUnitPlatform()
+}
