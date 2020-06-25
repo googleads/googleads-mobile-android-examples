@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  ssv:
+    image: ssv
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ssv
+    ports:
+    - 8080:8080
+        volumes:
+          - .:/var/www
+    command: ./gradlew bootRun
+    networks: ['stack']
+networks:
+  stack:
+    driver: bridge
