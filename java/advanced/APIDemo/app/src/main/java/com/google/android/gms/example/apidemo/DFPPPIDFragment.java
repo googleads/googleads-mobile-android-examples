@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.security.annotations.SuppressInsecureCipherModeCheckerNoReview;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -75,14 +76,15 @@ public class DFPPPIDFragment extends Fragment {
         });
     }
 
-    // This is a simple method to generate a hash of a sample username to use as a PPID. It's being
-    // used here as a convenient stand-in for a true Publisher-Provided Identifier. In your own
-    // apps, you can decide for yourself how to generate the PPID value, though there are some
-    // restrictions on what the values can be. For details, see:
-    //
-    // https://support.google.com/dfp_premium/answer/2880055
+  // This is a simple method to generate a hash of a sample username to use as a PPID. It's being
+  // used here as a convenient stand-in for a true Publisher-Provided Identifier. In your own
+  // apps, you can decide for yourself how to generate the PPID value, though there are some
+  // restrictions on what the values can be. For details, see:
+  //
+  // https://support.google.com/dfp_premium/answer/2880055
 
-    private String generatePPID(String username) {
+  @SuppressInsecureCipherModeCheckerNoReview
+  private String generatePPID(String username) {
         StringBuilder ppid = new StringBuilder();
 
         try {
