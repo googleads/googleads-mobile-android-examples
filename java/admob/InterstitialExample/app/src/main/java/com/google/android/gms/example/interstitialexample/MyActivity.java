@@ -29,136 +29,23 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-/**
- * Main Activity. Inflates main activity xml.
- */
-public class MyActivity extends AppCompatActivity {
+package ...
 
-    private static final long GAME_LENGTH_MILLISECONDS = 3000;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+import com.google.android.gms.ads.InterstitialAd;
 
-    private InterstitialAd interstitialAd;
-    private CountDownTimer countDownTimer;
-    private Button retryButton;
-    private boolean gameIsInProgress;
-    private long timerMilliseconds;
+public class MainActivity extends Activity {
+
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
-
-        // Initialize the Mobile Ads SDK.
+        setContentView(R.layout.activity_main);
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {}
         });
-
-        // Create the InterstitialAd and set the adUnitId.
-        interstitialAd = new InterstitialAd(this);
-        // Defined in res/values/strings.xml
-        interstitialAd.setAdUnitId(AD_UNIT_ID);
-
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                Toast.makeText(MyActivity.this,
-                        "onAdFailedToLoad() with error code: " + errorCode,
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdClosed() {
-                startGame();
-            }
-        });
-
-        // Create the "retry" button, which tries to show an interstitial between game plays.
-        retryButton = findViewById(R.id.retry_button);
-        retryButton.setVisibility(View.INVISIBLE);
-        retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showInterstitial();
-            }
-        });
-
-        startGame();
-    }
-
-    private void createTimer(final long milliseconds) {
-        // Create the game timer, which counts down to the end of the level
-        // and shows the "retry" button.
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-
-        final TextView textView = findViewById(R.id.timer);
-
-        countDownTimer = new CountDownTimer(milliseconds, 50) {
-            @Override
-            public void onTick(long millisUnitFinished) {
-                timerMilliseconds = millisUnitFinished;
-                textView.setText("seconds remaining: " + ((millisUnitFinished / 1000) + 1));
-            }
-
-            @Override
-            public void onFinish() {
-                gameIsInProgress = false;
-                textView.setText("done!");
-                retryButton.setVisibility(View.VISIBLE);
-            }
-        };
-    }
-
-    @Override
-    public void onResume() {
-        // Start or resume the game.
-        super.onResume();
-
-        if (gameIsInProgress) {
-            resumeGame(timerMilliseconds);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        // Cancel the timer if the game is paused.
-        countDownTimer.cancel();
-        super.onPause();
-    }
-
-    private void showInterstitial() {
-        // Show the ad if it's ready. Otherwise toast and restart the game.
-        if (interstitialAd != null && interstitialAd.isLoaded()) {
-            interstitialAd.show();
-        } else {
-            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
-            startGame();
-        }
-    }
-
-    private void startGame() {
-        // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
-        if (!interstitialAd.isLoading() && !interstitialAd.isLoaded()) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            interstitialAd.loadAd(adRequest);
-        }
-
-        retryButton.setVisibility(View.INVISIBLE);
-        resumeGame(GAME_LENGTH_MILLISECONDS);
-    }
-
-    private void resumeGame(long milliseconds) {
-        // Create a new timer for the correct length and start it.
-        gameIsInProgress = true;
-        timerMilliseconds = milliseconds;
-        createTimer(milliseconds);
-        countDownTimer.start();
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
     }
 }
