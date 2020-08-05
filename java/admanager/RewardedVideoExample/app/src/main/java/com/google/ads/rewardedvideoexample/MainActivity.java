@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -117,7 +118,7 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onRewardedAdFailedToLoad(int errorCode) {
+            public void onRewardedAdFailedToLoad(LoadAdError loadAdError) {
               // Ad failed to load.
               MainActivity.this.isLoading = false;
               Toast.makeText(MainActivity.this, "onRewardedAdFailedToLoad", Toast.LENGTH_SHORT)

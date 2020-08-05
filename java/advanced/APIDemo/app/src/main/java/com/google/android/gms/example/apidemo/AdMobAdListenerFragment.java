@@ -21,10 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 
 /**
  * The {@link AdMobAdListenerFragment} demonstrates the use of the
@@ -49,38 +49,43 @@ public class AdMobAdListenerFragment extends Fragment {
 
         adView = getView().findViewById(R.id.listener_av_main);
 
-        adView.setAdListener(new AdListener() {
-            private void showToast(String message) {
-                View view = getView();
-                if (view != null) {
-                    Toast.makeText(getView().getContext(), message, Toast.LENGTH_SHORT).show();
-                }
+    adView.setAdListener(
+        new AdListener() {
+          private void showToast(String message) {
+            View view = getView();
+            if (view != null) {
+              Toast.makeText(getView().getContext(), message, Toast.LENGTH_SHORT).show();
             }
+          }
 
-            @Override
-            public void onAdLoaded() {
-                showToast("Ad loaded.");
-            }
+          @Override
+          public void onAdLoaded() {
+            showToast("Ad loaded.");
+          }
 
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                showToast(String.format("Ad failed to load with error code %d.", errorCode));
-            }
+          @Override
+          public void onAdFailedToLoad(LoadAdError loadAdError) {
+            String error =
+                String.format(
+                    "domain: %s, code: %d, message: %s",
+                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+            showToast(String.format("Ad failed to load with error %s", error));
+          }
 
-            @Override
-            public void onAdOpened() {
-                showToast("Ad opened.");
-            }
+          @Override
+          public void onAdOpened() {
+            showToast("Ad opened.");
+          }
 
-            @Override
-            public void onAdClosed() {
-                showToast("Ad closed.");
-            }
+          @Override
+          public void onAdClosed() {
+            showToast("Ad closed.");
+          }
 
-            @Override
-            public void onAdLeftApplication() {
-                showToast("Ad left application.");
-            }
+          @Override
+          public void onAdLeftApplication() {
+            showToast("Ad left application.");
+          }
         });
 
         AdRequest adRequest = new AdRequest.Builder().build();

@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 
@@ -52,26 +53,30 @@ public class MyActivity extends AppCompatActivity {
         // Defined in res/values/strings.xml
         interstitialAd.setAdUnitId(AD_UNIT_ID);
 
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                startGame();
-            }
+    interstitialAd.setAdListener(
+        new AdListener() {
+          @Override
+          public void onAdClosed() {
+            startGame();
+          }
 
-            @Override
-            public void onAdLoaded() {
-                adIsLoading = false;
-                Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
+          @Override
+          public void onAdLoaded() {
+            adIsLoading = false;
+            Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
+          }
 
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                adIsLoading = false;
-                Toast.makeText(MyActivity.this,
-                        "onAdFailedToLoad() with error code: " + errorCode,
-                        Toast.LENGTH_SHORT).show();
-            }
+          @Override
+          public void onAdFailedToLoad(LoadAdError loadAdError) {
+            adIsLoading = false;
+            String error =
+                String.format(
+                    "domain: %s, code: %d, message: %s",
+                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+            Toast.makeText(
+                    MyActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
+                .show();
+          }
         });
 
         // Create the "retry" button, which tries to show an interstitial between game plays.

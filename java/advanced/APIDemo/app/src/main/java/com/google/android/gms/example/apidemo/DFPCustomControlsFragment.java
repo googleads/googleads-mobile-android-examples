@@ -28,9 +28,9 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
@@ -42,9 +42,7 @@ import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
-
 import java.util.List;
-
 
 /**
  * The {@link DFPCustomControlsFragment} class demonstrates how to use custom controls with DFP
@@ -399,14 +397,25 @@ public class DFPCustomControlsFragment extends Fragment {
 
         builder.withNativeAdOptions(adOptions);
 
-        AdLoader adLoader = builder.withAdListener(new AdListener() {
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                refresh.setEnabled(true);
-                Toast.makeText(getActivity(), "Failed to load native ad: "
-                        + errorCode, Toast.LENGTH_SHORT).show();
-            }
-        }).build();
+    AdLoader adLoader =
+        builder
+            .withAdListener(
+                new AdListener() {
+                  @Override
+                  public void onAdFailedToLoad(LoadAdError loadAdError) {
+                    refresh.setEnabled(true);
+                    String error =
+                        String.format(
+                            "domain: %s, code: %d, message: %s",
+                            loadAdError.getDomain(),
+                            loadAdError.getCode(),
+                            loadAdError.getMessage());
+                    Toast.makeText(
+                            getActivity(), "Failed to load native ad: " + error, Toast.LENGTH_SHORT)
+                        .show();
+                  }
+                })
+            .build();
 
         adLoader.loadAd(new PublisherAdRequest.Builder().build());
 

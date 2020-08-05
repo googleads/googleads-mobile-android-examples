@@ -5,19 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-
+import com.google.android.gms.ads.LoadAdError;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -143,25 +141,34 @@ public class MainActivity extends AppCompatActivity {
 
         final AdView adView = (AdView) item;
 
-        // Set an AdListener on the AdView to wait for the previous banner ad
-        // to finish loading before loading the next ad in the items list.
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                // The previous banner ad loaded successfully, call this method again to
-                // load the next ad in the items list.
-                loadBannerAd(index + ITEMS_PER_AD);
-            }
+    // Set an AdListener on the AdView to wait for the previous banner ad
+    // to finish loading before loading the next ad in the items list.
+    adView.setAdListener(
+        new AdListener() {
+          @Override
+          public void onAdLoaded() {
+            super.onAdLoaded();
+            // The previous banner ad loaded successfully, call this method again to
+            // load the next ad in the items list.
+            loadBannerAd(index + ITEMS_PER_AD);
+          }
 
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // The previous banner ad failed to load. Call this method again to load
-                // the next ad in the items list.
-                Log.e("MainActivity", "The previous banner ad failed to load. Attempting to"
-                        + " load the next banner ad in the items list.");
-                loadBannerAd(index + ITEMS_PER_AD);
-            }
+          @Override
+          public void onAdFailedToLoad(LoadAdError loadAdError) {
+            // The previous banner ad failed to load. Call this method again to load
+            // the next ad in the items list.
+            String error =
+                String.format(
+                    "domain: %s, code: %d, message: %s",
+                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+            Log.e(
+                "MainActivity",
+                "The previous banner ad failed to load with error: "
+                    + error
+                    + ". Attempting to"
+                    + " load the next banner ad in the items list.");
+            loadBannerAd(index + ITEMS_PER_AD);
+          }
         });
 
         // Load the banner ad.
