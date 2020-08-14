@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.fragment_admob_ad_listener.*
 
 /**
@@ -39,8 +40,10 @@ class AdMobAdListenerFragment : Fragment() {
         showToast("Ad loaded.")
       }
 
-      override fun onAdFailedToLoad(errorCode: Int) {
-        showToast(String.format("Ad failed to load with error code %d.", errorCode))
+      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
+          "message: ${loadAdError.message}"
+        showToast("Ad failed to load with error $error.")
       }
 
       override fun onAdOpened() {

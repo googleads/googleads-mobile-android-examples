@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MuteThisAdReason
 import com.google.android.gms.ads.VideoController
 import com.google.android.gms.ads.formats.MediaView
@@ -190,10 +191,12 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
     builder.withNativeAdOptions(adOptions)
 
     val adLoader = builder.withAdListener(object : AdListener() {
-      override fun onAdFailedToLoad(errorCode: Int) {
+      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
         btn_refresh.isEnabled = true
+        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
+          "message: ${loadAdError.message}"
         Toast.makeText(
-          activity, "Failed to load native ad: $errorCode", Toast.LENGTH_SHORT
+          activity, "Failed to load native ad with error $error", Toast.LENGTH_SHORT
         ).show()
       }
     }).build()

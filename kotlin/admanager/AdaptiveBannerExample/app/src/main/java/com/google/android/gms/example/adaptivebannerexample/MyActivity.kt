@@ -23,7 +23,6 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherAdView
-import java.util.Arrays
 import kotlinx.android.synthetic.main.activity_my.*
 
 /** Main Activity. Inflates main activity xml and child fragments.  */
@@ -65,7 +64,7 @@ class MyActivity : AppCompatActivity() {
     // to get test ads on this device."
     MobileAds.setRequestConfiguration(
       RequestConfiguration.Builder()
-        .setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        .setTestDeviceIds(listOf("ABCDEF012345"))
         .build()
     )
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, "onRewardedAdLoaded", Toast.LENGTH_LONG).show()
           }
 
-          override fun onRewardedAdFailedToLoad(errorCode: Int) {
+          override fun onRewardedAdFailedToLoad(loadAdError: LoadAdError) {
             mIsLoading = false
             Toast.makeText(this@MainActivity, "onRewardedAdFailedToLoad", Toast.LENGTH_LONG).show()
           }
@@ -150,7 +151,7 @@ class MainActivity : AppCompatActivity() {
             loadRewardedAd()
           }
 
-          override fun onRewardedAdFailedToShow(errorCode: Int) {
+          override fun onRewardedAdFailedToLoad(adError: adError) {
             Toast.makeText(this@MainActivity, "onRewardedAdFailedToShow", Toast.LENGTH_LONG).show()
           }
 

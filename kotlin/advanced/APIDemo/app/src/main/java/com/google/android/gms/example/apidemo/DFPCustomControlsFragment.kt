@@ -23,6 +23,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.formats.*
@@ -258,7 +259,6 @@ class DFPCustomControlsFragment : Fragment() {
     )
 
     if (cb_customtemplate.isChecked) {
-
       builder.forCustomTemplateAd(
         activity!!.resources.getString(R.string.customcontrols_fragment_template_id),
         { ad ->
@@ -331,9 +331,14 @@ class DFPCustomControlsFragment : Fragment() {
     builder.withNativeAdOptions(adOptions)
 
     val adLoader = builder.withAdListener(object : AdListener() {
-      override fun onAdFailedToLoad(errorCode: Int) {
+      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
         btn_refresh.isEnabled = true
-        Toast.makeText(activity, "Failed to load native ad: " + errorCode, Toast.LENGTH_SHORT).show()
+        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
+          "message: ${loadAdError.message}"
+        Toast.makeText(
+          activity, "Failed to load native ad with error $error",
+          Toast.LENGTH_SHORT
+        ).show()
       }
     }).build()
 
