@@ -16,6 +16,7 @@
 
 package com.google.example.gms.nativeadvancedexample;
 
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -205,7 +206,11 @@ public class MainActivity extends AppCompatActivity {
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
                 // If this callback occurs after the activity is destroyed, you must call
                 // destroy and return or you may get a memory leak.
-                if (isDestroyed()) {
+                boolean isDestroyed = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    isDestroyed = isDestroyed();
+                }
+                if (isDestroyed || isFinishing() || isChangingConfigurations()) {
                     unifiedNativeAd.destroy();
                     return;
                 }

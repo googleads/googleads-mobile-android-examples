@@ -5,7 +5,9 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -148,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             loadRewardedAd()
           }
 
-          override fun onRewardedAdFailedToLoad(adError: adError) {
+          override fun onRewardedAdFailedToShow(adError: AdError) {
             Toast.makeText(this@MainActivity, "onRewardedAdFailedToShow", Toast.LENGTH_LONG).show()
           }
 

@@ -16,6 +16,7 @@
 
 package com.google.android.gms.example.nativeadsexample
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -258,7 +259,11 @@ class MainActivity : AppCompatActivity() {
       builder.forUnifiedNativeAd { unifiedNativeAd ->
         // If this callback occurs after the activity is destroyed, you must call
         // destroy and return or you may get a memory leak.
-        if (isDestroyed) {
+        var activityDestroyed = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          activityDestroyed = isDestroyed
+        }
+        if (activityDestroyed || isFinishing || isChangingConfigurations) {
           unifiedNativeAd.destroy()
           return@forUnifiedNativeAd
         }
@@ -281,7 +286,11 @@ class MainActivity : AppCompatActivity() {
           ad: NativeCustomTemplateAd ->
           // If this callback occurs after the activity is destroyed, you must call
           // destroy and return or you may get a memory leak.
-          if (isDestroyed) {
+          var activityDestroyed = false
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            activityDestroyed = isDestroyed
+          }
+          if (activityDestroyed || isFinishing || isChangingConfigurations) {
             ad.destroy()
             return@forCustomTemplateAd
           }

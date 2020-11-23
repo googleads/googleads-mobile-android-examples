@@ -15,18 +15,32 @@
  */
 package com.google.android.gms.example.nativeadvancedexample
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.VideoController
+import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
-import java.util.*
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.ad_frame
+import kotlinx.android.synthetic.main.activity_main.refresh_button
+import kotlinx.android.synthetic.main.activity_main.start_muted_checkbox
+import kotlinx.android.synthetic.main.activity_main.videostatus_text
+import java.util.Locale
+
 
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
 var currentNativeAd: UnifiedNativeAd? = null
@@ -174,7 +188,11 @@ class MainActivity : AppCompatActivity() {
       // OnUnifiedNativeAdLoadedListener implementation.
       // If this callback occurs after the activity is destroyed, you must call
       // destroy and return or you may get a memory leak.
-      if (isDestroyed) {
+      var activityDestroyed = false
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        activityDestroyed = isDestroyed
+      }
+      if (activityDestroyed || isFinishing || isChangingConfigurations) {
         unifiedNativeAd.destroy()
         return@forUnifiedNativeAd
       }
