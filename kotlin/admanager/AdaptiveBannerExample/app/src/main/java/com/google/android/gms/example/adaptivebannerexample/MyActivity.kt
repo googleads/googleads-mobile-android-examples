@@ -55,8 +55,8 @@ class MyActivity : AppCompatActivity() {
     setContentView(R.layout.activity_my)
     load_button.setOnClickListener { loadBanner(adSize) }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this)
+    // Initialize the Mobile Ads SDK with an empty completion listener.
+    MobileAds.initialize(this) {}
 
     // Set your test devices. Check your logcat output for the hashed device ID to
     // get test ads on a physical device. e.g.
