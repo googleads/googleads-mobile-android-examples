@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd
 import kotlinx.android.synthetic.main.activity_my.*
@@ -43,6 +44,9 @@ class MyActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_my)
+
+    // Initialize the Mobile Ads SDK with an empty completion listener.
+    MobileAds.initialize(this) {}
 
     // Create the InterstitialAd and set the adUnitId.
     mInterstitialAd = PublisherInterstitialAd(this)

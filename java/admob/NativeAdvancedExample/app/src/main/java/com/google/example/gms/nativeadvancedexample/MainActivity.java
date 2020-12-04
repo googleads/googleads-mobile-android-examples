@@ -107,24 +107,24 @@ public class MainActivity extends AppCompatActivity {
         // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
         // check before trying to display them.
         if (nativeAd.getBody() == null) {
-          adView.getBodyView().setVisibility(View.INVISIBLE);
+            adView.getBodyView().setVisibility(View.INVISIBLE);
         } else {
-          adView.getBodyView().setVisibility(View.VISIBLE);
-          ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+            adView.getBodyView().setVisibility(View.VISIBLE);
+            ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
         }
 
         if (nativeAd.getCallToAction() == null) {
-          adView.getCallToActionView().setVisibility(View.INVISIBLE);
+            adView.getCallToActionView().setVisibility(View.INVISIBLE);
         } else {
-          adView.getCallToActionView().setVisibility(View.VISIBLE);
-          ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+            adView.getCallToActionView().setVisibility(View.VISIBLE);
+            ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
         }
 
         if (nativeAd.getIcon() == null) {
             adView.getIconView().setVisibility(View.GONE);
         } else {
             ((ImageView) adView.getIconView()).setImageDrawable(
-                    nativeAd.getIcon().getDrawable());
+                nativeAd.getIcon().getDrawable());
             adView.getIconView().setVisibility(View.VISIBLE);
         }
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             adView.getStarRatingView().setVisibility(View.INVISIBLE);
         } else {
             ((RatingBar) adView.getStarRatingView())
-                    .setRating(nativeAd.getStarRating().floatValue());
+                .setRating(nativeAd.getStarRating().floatValue());
             adView.getStarRatingView().setVisibility(View.VISIBLE);
         }
 
@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
         // Updates the UI to say whether or not this ad has a video asset.
         if (vc.hasVideoContent()) {
             videoStatus.setText(String.format(Locale.getDefault(),
-                    "Video status: Ad contains a %.2f:1 video asset.",
-                    vc.getAspectRatio()));
+                "Video status: Ad contains a %.2f:1 video asset.",
+                vc.getAspectRatio()));
 
             // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
             // VideoController will call methods on this object when events occur in the video
@@ -200,68 +200,66 @@ public class MainActivity extends AppCompatActivity {
 
         AdLoader.Builder builder = new AdLoader.Builder(this, ADMOB_AD_UNIT_ID);
 
-        builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-            // OnUnifiedNativeAdLoadedListener implementation.
-            @Override
-            public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                // If this callback occurs after the activity is destroyed, you must call
-                // destroy and return or you may get a memory leak.
-                boolean isDestroyed = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    isDestroyed = isDestroyed();
+        builder.forUnifiedNativeAd(
+            new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                // OnUnifiedNativeAdLoadedListener implementation.
+                @Override
+                public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                    // If this callback occurs after the activity is destroyed, you must call
+                    // destroy and return or you may get a memory leak.
+                    boolean isDestroyed = false;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        isDestroyed = isDestroyed();
+                    }
+                    if (isDestroyed || isFinishing() || isChangingConfigurations()) {
+                        unifiedNativeAd.destroy();
+                        return;
+                    }
+                    // You must call destroy on old ads when you are done with them,
+                    // otherwise you will have a memory leak.
+                    if (nativeAd != null) {
+                        nativeAd.destroy();
+                    }
+                    nativeAd = unifiedNativeAd;
+                    FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
+                    UnifiedNativeAdView adView =
+                        (UnifiedNativeAdView) getLayoutInflater()
+                            .inflate(R.layout.ad_unified, null);
+                    populateUnifiedNativeAdView(unifiedNativeAd, adView);
+                    frameLayout.removeAllViews();
+                    frameLayout.addView(adView);
                 }
-                if (isDestroyed || isFinishing() || isChangingConfigurations()) {
-                    unifiedNativeAd.destroy();
-                    return;
-                }
-                // You must call destroy on old ads when you are done with them,
-                // otherwise you will have a memory leak.
-                if (nativeAd != null) {
-                    nativeAd.destroy();
-                }
-                nativeAd = unifiedNativeAd;
-                FrameLayout frameLayout =
-                        findViewById(R.id.fl_adplaceholder);
-                UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater()
-                        .inflate(R.layout.ad_unified, null);
-                populateUnifiedNativeAdView(unifiedNativeAd, adView);
-                frameLayout.removeAllViews();
-                frameLayout.addView(adView);
-            }
+            });
 
-        });
+        VideoOptions videoOptions =
+            new VideoOptions.Builder().setStartMuted(startVideoAdsMuted.isChecked()).build();
 
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(startVideoAdsMuted.isChecked())
-                .build();
-
-        NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .build();
+        NativeAdOptions adOptions =
+            new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
 
         builder.withNativeAdOptions(adOptions);
 
-    AdLoader adLoader =
-        builder
-            .withAdListener(
-                new AdListener() {
-                  @Override
-                  public void onAdFailedToLoad(LoadAdError loadAdError) {
-                    refresh.setEnabled(true);
-                    String error =
-                        String.format(
-                            "domain: %s, code: %d, message: %s",
-                            loadAdError.getDomain(),
-                            loadAdError.getCode(),
-                            loadAdError.getMessage());
-                    Toast.makeText(
-                            MainActivity.this,
-                            "Failed to load native ad with error " + error,
-                            Toast.LENGTH_SHORT)
-                        .show();
-                  }
-                })
-            .build();
+        AdLoader adLoader =
+            builder
+                .withAdListener(
+                    new AdListener() {
+                        @Override
+                        public void onAdFailedToLoad(LoadAdError loadAdError) {
+                            refresh.setEnabled(true);
+                            String error =
+                                String.format(
+                                    "domain: %s, code: %d, message: %s",
+                                    loadAdError.getDomain(),
+                                    loadAdError.getCode(),
+                                    loadAdError.getMessage());
+                            Toast.makeText(
+                                MainActivity.this,
+                                "Failed to load native ad with error " + error,
+                                Toast.LENGTH_SHORT)
+                                .show();
+                        }
+                    })
+                .build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
 

@@ -81,7 +81,6 @@ public class DFPPPIDFragment extends Fragment {
   // restrictions on what the values can be. For details, see:
   //
   // https://support.google.com/dfp_premium/answer/2880055
-
   private String generatePPID(String username) {
         StringBuilder ppid = new StringBuilder();
 

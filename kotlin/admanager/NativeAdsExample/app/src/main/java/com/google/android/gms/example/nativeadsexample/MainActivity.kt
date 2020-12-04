@@ -18,12 +18,13 @@ package com.google.android.gms.example.nativeadsexample
 
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.VideoController
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Initialize the Mobile Ads SDK with an empty completion listener.
+    MobileAds.initialize(this) {}
 
     refresh_button.setOnClickListener {
       refreshAd(

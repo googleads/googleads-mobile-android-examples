@@ -2,9 +2,9 @@ package com.google.android.gms.example.rewardedvideoexample
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
@@ -32,7 +32,10 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Initialize the Mobile Ads SDK with an empty completion listener.
     MobileAds.initialize(this) {}
+
     loadRewardedAd()
 
     // Create the "retry" button, which tries to show a rewarded video ad between game plays.
