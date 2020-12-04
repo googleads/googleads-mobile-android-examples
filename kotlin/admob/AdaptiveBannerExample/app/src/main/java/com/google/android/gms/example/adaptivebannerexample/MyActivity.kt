@@ -16,8 +16,9 @@
 package com.google.android.gms.example.adaptivebannerexample
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
+import android.util.DisplayMetrics
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
