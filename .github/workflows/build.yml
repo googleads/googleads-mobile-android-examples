@@ -47,3 +47,4 @@ jobs:
         env:
           COMMIT_RANGE: ${{ env.COMMIT_RANGE }}
           REGEX: ${{ matrix.regex }}
+c
