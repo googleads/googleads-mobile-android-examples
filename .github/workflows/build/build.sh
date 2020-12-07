@@ -11,13 +11,15 @@ projects=()
 while IFS=' ' read -r -d $'\0'; do
   proj_dir=$(dirname "${REPLY}");
   (echo "${proj_dir}" | grep -E "(kotlin|java)" | grep -E "${REGEX}" )  \
-   && projects+=("${proj_dir}") && echo "Building ${proj_dir}"
+   && projects+=("${proj_dir#./}")
 done < <(find . -maxdepth 4 -mindepth 4 -name "build.gradle"  -print0)
+
+CHANGES="$(git --no-pager diff --name-only "${COMMIT_RANGE}")";
+echo "Commit range: ${COMMIT_RANGE}; \n Changes: ${CHANGES}";
 
 for PROJ_DIR in "${projects[@]}"
 do
-  CHANGES="$(git --no-pager diff --name-only "${COMMIT_RANGE}")";
-  echo "Commit range: ${COMMIT_RANGE}; Project dir: ${PROJ_DIR};\n Changes: ${CHANGES}";
+  echo "Checking ${PROJ_DIR}"
   if [[ -n "$(grep -E "(${PROJ_DIR}|\.github\/workflows)" <<< "${CHANGES}")" ]]; then
     echo "Building for ${PROJ_DIR}";
     pushd "$PROJ_DIR";
