@@ -27,6 +27,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.Arrays;
 
 /** Main Activity. Inflates main activity xml and child fragments. */
@@ -53,7 +55,12 @@ public class MyActivity extends AppCompatActivity {
         });
 
     // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this);
+    MobileAds.initialize(
+        this,
+        new OnInitializationCompleteListener() {
+          @Override
+          public void onInitializationComplete(InitializationStatus status) {}
+        });
 
     // Set your test devices. Check your logcat output for the hashed device ID to
     // get test ads on a physical device. e.g.

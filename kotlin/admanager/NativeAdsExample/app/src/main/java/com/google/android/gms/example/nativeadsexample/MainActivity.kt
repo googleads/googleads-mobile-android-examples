@@ -16,13 +16,15 @@
 
 package com.google.android.gms.example.nativeadsexample
 
+import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.VideoController
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
@@ -44,6 +46,9 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Initialize the Mobile Ads SDK with an empty completion listener.
+    MobileAds.initialize(this) {}
 
     refresh_button.setOnClickListener {
       refreshAd(
@@ -258,7 +263,11 @@ class MainActivity : AppCompatActivity() {
       builder.forUnifiedNativeAd { unifiedNativeAd ->
         // If this callback occurs after the activity is destroyed, you must call
         // destroy and return or you may get a memory leak.
-        if (isDestroyed) {
+        var activityDestroyed = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          activityDestroyed = isDestroyed
+        }
+        if (activityDestroyed || isFinishing || isChangingConfigurations) {
           unifiedNativeAd.destroy()
           return@forUnifiedNativeAd
         }
@@ -281,7 +290,11 @@ class MainActivity : AppCompatActivity() {
           ad: NativeCustomTemplateAd ->
           // If this callback occurs after the activity is destroyed, you must call
           // destroy and return or you may get a memory leak.
-          if (isDestroyed) {
+          var activityDestroyed = false
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            activityDestroyed = isDestroyed
+          }
+          if (activityDestroyed || isFinishing || isChangingConfigurations) {
             ad.destroy()
             return@forCustomTemplateAd
           }

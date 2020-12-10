@@ -21,6 +21,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.Arrays;
 
 /**
@@ -47,6 +49,13 @@ public class MyActivity extends AppCompatActivity {
             new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
                                               .build());
 
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(
+            this,
+            new OnInitializationCompleteListener() {
+              @Override
+              public void onInitializationComplete(InitializationStatus status) {}
+            });
         // Create an ad request.
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
 

@@ -16,7 +16,6 @@
 package com.google.android.gms.example.adaptivebannerexample
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.*
 import kotlinx.android.synthetic.main.activity_my.*
