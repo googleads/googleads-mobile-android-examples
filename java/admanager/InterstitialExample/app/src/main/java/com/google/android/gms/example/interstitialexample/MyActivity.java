@@ -24,11 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 /**
  * Main Activity. Inflates main activity xml.
@@ -51,13 +48,6 @@ public class MyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(
-            this,
-            new OnInitializationCompleteListener() {
-              @Override
-              public void onInitializationComplete(InitializationStatus status) {}
-            });
         // Create the InterstitialAd and set the adUnitId.
         interstitialAd = new PublisherInterstitialAd(this);
         // Defined in res/values/strings.xml

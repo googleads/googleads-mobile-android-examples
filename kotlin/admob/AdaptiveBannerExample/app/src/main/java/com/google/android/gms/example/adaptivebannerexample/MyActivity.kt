@@ -17,12 +17,7 @@ package com.google.android.gms.example.adaptivebannerexample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.util.DisplayMetrics
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.*
 import kotlinx.android.synthetic.main.activity_my.*
 
 /** Main Activity. Inflates main activity xml and child fragments.  */
@@ -34,19 +29,16 @@ class MyActivity : AppCompatActivity() {
   // If the ad hasn't been laid out, default to the full screen width.
   private val adSize: AdSize
     get() {
-      val display = windowManager.defaultDisplay
-      val outMetrics = DisplayMetrics()
-      display.getMetrics(outMetrics)
+      // The conversion of dp units to screen pixels is simple: px = dp * (dpi / 160).
+      // https://developer.android.com/training/multiscreen/screendensities#dips-pels
+      val density = resources.configuration.densityDpi / DisplayMetrics.DENSITY_DEFAULT.toFloat()
 
-      val density = outMetrics.density
-
-      var adWidthPixels = ad_view_container.width.toFloat()
-      if (adWidthPixels == 0f) {
-        adWidthPixels = outMetrics.widthPixels.toFloat()
+      var adWidth = (ad_view_container.width / density).toInt()
+      if (adWidth == 0) {
+        adWidth = resources.configuration.screenWidthDp
       }
 
-      val adWidth = (adWidthPixels / density).toInt()
-      return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth)
+      return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {

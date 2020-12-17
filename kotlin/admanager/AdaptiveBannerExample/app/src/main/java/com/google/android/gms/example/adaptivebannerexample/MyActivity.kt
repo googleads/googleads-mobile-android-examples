@@ -33,21 +33,18 @@ class MyActivity : AppCompatActivity() {
 
   // Determine the screen width (less decorations) to use for the ad width.
   // If the ad width isn't known, default to the full screen width.
-  val adSize: AdSize
+  private val adSize: AdSize
     get() {
-      val display = windowManager.defaultDisplay
-      val outMetrics = DisplayMetrics()
-      display.getMetrics(outMetrics)
+      // The conversion of dp units to screen pixels is simple: px = dp * (dpi / 160).
+      // https://developer.android.com/training/multiscreen/screendensities#dips-pels
+      val density = resources.configuration.densityDpi / DisplayMetrics.DENSITY_DEFAULT.toFloat()
 
-      val density = outMetrics.density
-
-      var adWidthPixels = ad_view_container.width.toFloat()
-      if (adWidthPixels == 0f) {
-        adWidthPixels = outMetrics.widthPixels.toFloat()
+      var adWidth = (ad_view_container.width / density).toInt()
+      if (adWidth == 0) {
+        adWidth = resources.configuration.screenWidthDp
       }
 
-      val adWidth = (adWidthPixels / density).toInt()
-      return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth)
+      return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +52,8 @@ class MyActivity : AppCompatActivity() {
     setContentView(R.layout.activity_my)
     load_button.setOnClickListener { loadBanner(adSize) }
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
+    // Initialize the Mobile Ads SDK.
+    MobileAds.initialize(this)
 
     // Set your test devices. Check your logcat output for the hashed device ID to
     // get test ads on a physical device. e.g.

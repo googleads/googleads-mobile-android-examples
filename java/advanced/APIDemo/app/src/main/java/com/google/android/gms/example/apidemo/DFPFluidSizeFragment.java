@@ -17,6 +17,8 @@ package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +73,7 @@ public class DFPFluidSizeFragment extends Fragment {
                 currentIndex += 1;
                 // Change the PublisherAdView's width.
                 ViewGroup.LayoutParams layoutParams = publisherAdView.getLayoutParams();
-                final float scale = getResources().getDisplayMetrics().density;
+                final float scale = getResources().getConfiguration().densityDpi / (float) DisplayMetrics.DENSITY_DEFAULT;
                 layoutParams.width = (int) (newWidth * scale + 0.5f);
                 publisherAdView.setLayoutParams(layoutParams);
                 // Update the TextView with the new width.

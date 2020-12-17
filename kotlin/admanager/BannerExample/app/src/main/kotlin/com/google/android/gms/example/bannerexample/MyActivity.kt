@@ -41,9 +41,6 @@ class MyActivity : AppCompatActivity() {
         .build()
     )
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
-
     // Create an ad request.
     val adRequest = PublisherAdRequest.Builder().build()
 

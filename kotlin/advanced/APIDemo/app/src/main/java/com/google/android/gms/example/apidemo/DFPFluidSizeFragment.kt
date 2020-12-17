@@ -1,6 +1,7 @@
 package com.google.android.gms.example.apidemo
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +43,7 @@ class DFPFluidSizeFragment : Fragment() {
 
       // Change the PublisherAdView's width.
       val layoutParams = fluid_av_main.layoutParams
-      val scale = resources.displayMetrics.density
+      val scale = resources.configuration.densityDpi / DisplayMetrics.DENSITY_DEFAULT.toFloat()
       layoutParams.width = (newWidth * scale + 0.5f).toInt()
       fluid_av_main.layoutParams = layoutParams
 
