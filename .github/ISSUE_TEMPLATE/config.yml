@@ -1,0 +1,13 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Google Mobile Ads SDK support
+    url: https://groups.google.com/forum/#!categories/google-admob-ads-sdk/android
+    about: Please file issues not related to the code in this repository,
+    such as SDK-, account- or project-specific issues at the official Google Mobile
+    Ads SDK developer support channel.
+  - name: AdMob Support
+    url: https://support.google.com/admob/?hl=en#topic=7383088
+    about: For assistance with your AdMob account setup and ads serving.
+  - name: Google Mobile Ads Android Documentation
+    url: https://developers.google.com/admob/android/quick-start
+    about: The place to get started with Google Mobile Ads SDK for Android.
