@@ -26,8 +26,8 @@ import android.widget.FrameLayout;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class MyActivity extends AppCompatActivity {
   static final String BACKFILL_IU = "/30497360/adaptive_banner_test_iu/backfill";
 
   private FrameLayout adContainerView;
-  private PublisherAdView adView;
+  private AdManagerAdView adView;
   private boolean initialLayoutComplete = false;
 
   @Override
@@ -115,14 +115,14 @@ public class MyActivity extends AppCompatActivity {
 
   private void loadBanner(AdSize adSize) {
     // Create an ad request.
-    adView = new PublisherAdView(this);
+    adView = new AdManagerAdView(this);
     adView.setAdUnitId(BACKFILL_IU);
     adView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
     adContainerView.removeAllViews();
     adContainerView.addView(adView);
     adView.setAdSizes(adSize);
 
-    PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+    AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
 
     // Start loading the ad in the background.
     adView.loadAd(adRequest);
@@ -144,6 +144,6 @@ public class MyActivity extends AppCompatActivity {
     }
 
     int adWidth = (int) (adWidthPixels / density);
-    return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth);
+    return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
   }
 }

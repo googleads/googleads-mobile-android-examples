@@ -19,8 +19,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import java.util.Arrays;
  */
 public class MyActivity extends AppCompatActivity {
 
-    private PublisherAdView adView;
+  private AdManagerAdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class MyActivity extends AppCompatActivity {
               @Override
               public void onInitializationComplete(InitializationStatus status) {}
             });
-        // Create an ad request.
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+    // Create an ad request.
+    AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest);

@@ -126,7 +126,6 @@ public class MyActivity extends AppCompatActivity {
     }
 
     int adWidth = (int) (adWidthPixels / density);
-
-    return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth);
+    return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
   }
 }
