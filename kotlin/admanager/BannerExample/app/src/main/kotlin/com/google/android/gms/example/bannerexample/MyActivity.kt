@@ -19,7 +19,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import kotlinx.android.synthetic.main.activity_my.*
 
 /**
@@ -45,7 +45,7 @@ class MyActivity : AppCompatActivity() {
     MobileAds.initialize(this) {}
 
     // Create an ad request.
-    val adRequest = PublisherAdRequest.Builder().build()
+    val adRequest = AdManagerAdRequest.Builder().build()
 
     // Start loading the ad in the background.
     ad_view.loadAd(adRequest)

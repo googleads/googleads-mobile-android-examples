@@ -17,13 +17,13 @@ package com.google.android.gms.example.nativeadvancedexample
 
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -31,18 +31,17 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.VideoController
 import com.google.android.gms.ads.VideoOptions
-import com.google.android.gms.ads.formats.MediaView
-import com.google.android.gms.ads.formats.NativeAdOptions
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
-import java.util.Locale
+import com.google.android.gms.ads.nativead.MediaView
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
 import kotlinx.android.synthetic.main.activity_main.ad_frame
 import kotlinx.android.synthetic.main.activity_main.refresh_button
 import kotlinx.android.synthetic.main.activity_main.start_muted_checkbox
 import kotlinx.android.synthetic.main.activity_main.videostatus_text
 
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
-var currentNativeAd: UnifiedNativeAd? = null
+var currentNativeAd: NativeAd? = null
 
 /**
  * A simple activity class that displays native ad formats.
@@ -62,13 +61,13 @@ class MainActivity : AppCompatActivity() {
   }
 
   /**
-   * Populates a [UnifiedNativeAdView] object with data from a given
-   * [UnifiedNativeAd].
+   * Populates a [NativeAdView] object with data from a given
+   * [NativeAd].
    *
    * @param nativeAd the object containing the ad's assets
    * @param adView the view to be populated
    */
-  private fun populateUnifiedNativeAdView(nativeAd: UnifiedNativeAd, adView: UnifiedNativeAdView) {
+  private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
     // Set the media view.
     adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
 
@@ -145,16 +144,10 @@ class MainActivity : AppCompatActivity() {
 
     // Get the video controller for the ad. One will always be provided, even if the ad doesn't
     // have a video asset.
-    val vc = nativeAd.videoController
+    val vc = nativeAd.mediaContent.videoController
 
     // Updates the UI to say whether or not this ad has a video asset.
     if (vc.hasVideoContent()) {
-      videostatus_text.text = String.format(
-        Locale.getDefault(),
-        "Video status: Ad contains a %.2f:1 video asset.",
-        vc.aspectRatio
-      )
-
       // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
       // VideoController will call methods on this object when events occur in the video
       // lifecycle.
@@ -183,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 
     val builder = AdLoader.Builder(this, ADMOB_AD_UNIT_ID)
 
-    builder.forUnifiedNativeAd { unifiedNativeAd ->
+    builder.forNativeAd { nativeAd ->
       // OnUnifiedNativeAdLoadedListener implementation.
       // If this callback occurs after the activity is destroyed, you must call
       // destroy and return or you may get a memory leak.
@@ -192,16 +185,16 @@ class MainActivity : AppCompatActivity() {
         activityDestroyed = isDestroyed
       }
       if (activityDestroyed || isFinishing || isChangingConfigurations) {
-        unifiedNativeAd.destroy()
-        return@forUnifiedNativeAd
+        nativeAd.destroy()
+        return@forNativeAd
       }
       // You must call destroy on old ads when you are done with them,
       // otherwise you will have a memory leak.
       currentNativeAd?.destroy()
-      currentNativeAd = unifiedNativeAd
+      currentNativeAd = nativeAd
       val adView = layoutInflater
-        .inflate(R.layout.ad_unified, null) as UnifiedNativeAdView
-      populateUnifiedNativeAdView(unifiedNativeAd, adView)
+        .inflate(R.layout.ad_unified, null) as NativeAdView
+      populateNativeAdView(nativeAd, adView)
       ad_frame.removeAllViews()
       ad_frame.addView(adView)
     }

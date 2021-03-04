@@ -2,22 +2,24 @@ package com.google.android.gms.example.rewardedvideoexample
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
+import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val AD_UNIT_ID = "/6499/example/rewarded-video"
 const val COUNTER_TIME = 10L
 const val GAME_OVER_REWARD = 1
+const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity() {
   private var mGameOver = false
   private var mGamePaused = false
   private var mIsLoading = false
-  private lateinit var mRewardedAd: RewardedAd
+  private var mRewardedAd: RewardedAd? = null
   private var mTimeRemaining: Long = 0L
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,20 +77,23 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun loadRewardedAd() {
-    if (!(::mRewardedAd.isInitialized) || !mRewardedAd.isLoaded) {
+    if (mRewardedAd == null) {
       mIsLoading = true
-      mRewardedAd = RewardedAd(this, AD_UNIT_ID)
-      mRewardedAd.loadAd(
-        PublisherAdRequest.Builder().build(),
+      var adRequest = AdManagerAdRequest.Builder().build()
+
+      RewardedAd.load(
+        this, AD_UNIT_ID, adRequest,
         object : RewardedAdLoadCallback() {
-          override fun onRewardedAdLoaded() {
+          override fun onAdFailedToLoad(adError: LoadAdError) {
+            Log.d(TAG, adError?.message)
             mIsLoading = false
-            Toast.makeText(this@MainActivity, "onRewardedAdLoaded", Toast.LENGTH_LONG).show()
+            mRewardedAd = null
           }
 
-          override fun onRewardedAdFailedToLoad(loadAdError: LoadAdError) {
+          override fun onAdLoaded(rewardedAd: RewardedAd) {
+            Log.d(TAG, "Ad was loaded.")
+            mRewardedAd = rewardedAd
             mIsLoading = false
-            Toast.makeText(this@MainActivity, "onRewardedAdFailedToLoad", Toast.LENGTH_LONG).show()
           }
         }
       )
@@ -104,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     // Hide the retry button, load the ad, and start the timer.
     retry_button.visibility = View.INVISIBLE
     show_video_button.visibility = View.INVISIBLE
-    if (!mRewardedAd.isLoaded && !mIsLoading) {
+    if (mRewardedAd == null && !mIsLoading) {
       loadRewardedAd()
     }
     createTimer(COUNTER_TIME)
@@ -124,9 +129,7 @@ class MainActivity : AppCompatActivity() {
       }
 
       override fun onFinish() {
-        if (mRewardedAd.isLoaded) {
-          show_video_button.visibility = View.VISIBLE
-        }
+        show_video_button.visibility = View.VISIBLE
         timer.text = "The game has ended!"
         addCoins(GAME_OVER_REWARD)
         retry_button.visibility = View.VISIBLE
@@ -139,26 +142,37 @@ class MainActivity : AppCompatActivity() {
 
   private fun showRewardedVideo() {
     show_video_button.visibility = View.INVISIBLE
-    if (mRewardedAd.isLoaded) {
-      mRewardedAd.show(
+    if (mRewardedAd != null) {
+      mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+        override fun onAdDismissedFullScreenContent() {
+          Log.d(TAG, "Ad was dismissed.")
+          loadRewardedAd()
+          // Don't forget to set the ad reference to null so you
+          // don't show the ad a second time.
+          mRewardedAd = null
+        }
+
+        override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+          Log.d(TAG, "Ad failed to show.")
+          // Don't forget to set the ad reference to null so you
+          // don't show the ad a second time.
+          mRewardedAd = null
+        }
+
+        override fun onAdShowedFullScreenContent() {
+          Log.d(TAG, "Ad showed fullscreen content.")
+          // Called when ad is dismissed.
+        }
+      }
+
+      mRewardedAd?.show(
         this,
-        object : RewardedAdCallback() {
-          override fun onUserEarnedReward(rewardItem: RewardItem) {
-            Toast.makeText(this@MainActivity, "onUserEarnedReward", Toast.LENGTH_LONG).show()
-            addCoins(rewardItem.amount)
-          }
-
-          override fun onRewardedAdClosed() {
-            Toast.makeText(this@MainActivity, "onRewardedAdClosed", Toast.LENGTH_LONG).show()
-            loadRewardedAd()
-          }
-
-          override fun onRewardedAdFailedToShow(adError: AdError) {
-            Toast.makeText(this@MainActivity, "onRewardedAdFailedToShow", Toast.LENGTH_LONG).show()
-          }
-
-          override fun onRewardedAdOpened() {
-            Toast.makeText(this@MainActivity, "onRewardedAdOpened", Toast.LENGTH_LONG).show()
+        OnUserEarnedRewardListener() {
+          fun onUserEarnedReward(rewardItem: RewardItem) {
+            var rewardAmount = rewardItem.amount
+            var rewardType = rewardItem.type
+            addCoins(rewardAmount)
+            Log.d("TAG", "User earned the reward.")
           }
         }
       )

@@ -17,14 +17,17 @@ package com.google.android.gms.example.interstitialexample
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback
 import kotlinx.android.synthetic.main.activity_my.*
 
 const val GAME_LENGTH_MILLISECONDS: Long = 3000
@@ -35,11 +38,12 @@ const val AD_UNIT_ID = "/6499/example/interstitial"
  */
 class MyActivity : AppCompatActivity() {
 
-  private lateinit var mInterstitialAd: PublisherInterstitialAd
+  private var mInterstitialAd: AdManagerInterstitialAd? = null
   private var mCountDownTimer: CountDownTimer? = null
   private var mGameIsInProgress: Boolean = false
   private var mAdIsLoading: Boolean = false
   private var mTimerMilliseconds: Long = 0
+  private var TAG = "MainActivity"
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -48,38 +52,42 @@ class MyActivity : AppCompatActivity() {
     // Initialize the Mobile Ads SDK with an empty completion listener.
     MobileAds.initialize(this) {}
 
-    // Create the InterstitialAd and set the adUnitId.
-    mInterstitialAd = PublisherInterstitialAd(this)
-    // Replace with your own ad unit id.
-    mInterstitialAd.adUnitId = AD_UNIT_ID
-
-    mInterstitialAd.adListener = object : AdListener() {
-      override fun onAdClosed() {
-        startGame()
-      }
-
-      override fun onAdLoaded() {
-        mAdIsLoading = false
-        Toast.makeText(this@MyActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
-      }
-
-      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-        mAdIsLoading = false
-        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
-          "message: ${loadAdError.message}"
-        Toast.makeText(
-          this@MyActivity,
-          "onAdFailedToLoad() with error $error",
-          Toast.LENGTH_SHORT
-        ).show()
-      }
-    }
+    loadAd()
 
     // Create the "retry" button, which tries to show an interstitial between game plays.
     retry_button.visibility = View.INVISIBLE
     retry_button.setOnClickListener { showInterstitial() }
 
     startGame()
+  }
+
+  private fun loadAd() {
+    var adRequest = AdManagerAdRequest.Builder().build()
+
+    AdManagerInterstitialAd.load(
+      this, AD_UNIT_ID, adRequest,
+      object : AdManagerInterstitialAdLoadCallback() {
+        override fun onAdFailedToLoad(adError: LoadAdError) {
+          Log.d(TAG, adError?.message)
+          mInterstitialAd = null
+          mAdIsLoading = false
+          val error = "domain: ${adError.domain}, code: ${adError.code}, " +
+            "message: ${adError.message}"
+          Toast.makeText(
+            this@MyActivity,
+            "onAdFailedToLoad() with error $error",
+            Toast.LENGTH_SHORT
+          ).show()
+        }
+
+        override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
+          Log.d(TAG, "Ad was loaded.")
+          mInterstitialAd = interstitialAd
+          mAdIsLoading = false
+          Toast.makeText(this@MyActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+        }
+      }
+    )
   }
 
   private fun createTimer(milliseconds: Long) {
@@ -118,8 +126,25 @@ class MyActivity : AppCompatActivity() {
 
   private fun showInterstitial() {
     // Show the ad if it's ready. Otherwise toast and restart the game.
-    if (mInterstitialAd.isLoaded) {
-      mInterstitialAd.show()
+    if (mInterstitialAd != null) {
+      mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+        override fun onAdDismissedFullScreenContent() {
+          mInterstitialAd = null
+          Log.d(TAG, "Ad was dismissed.")
+        }
+
+        override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+          mInterstitialAd = null
+          Log.d(TAG, "Ad failed to show.")
+        }
+
+        override fun onAdShowedFullScreenContent() {
+          Log.d(TAG, "Ad showed fullscreen content.")
+          startGame()
+        }
+      }
+
+      mInterstitialAd?.show(this)
     } else {
       Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show()
       startGame()
@@ -128,10 +153,9 @@ class MyActivity : AppCompatActivity() {
 
   private fun startGame() {
     // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
-    if (!mAdIsLoading && !mInterstitialAd.isLoaded) {
+    if (!mAdIsLoading && mInterstitialAd == null) {
       mAdIsLoading = true
-      val adRequest = PublisherAdRequest.Builder().build()
-      mInterstitialAd.loadAd(adRequest)
+      loadAd()
     }
 
     retry_button.visibility = View.INVISIBLE

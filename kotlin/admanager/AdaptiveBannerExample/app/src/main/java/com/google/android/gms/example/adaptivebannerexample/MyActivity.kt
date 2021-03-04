@@ -21,14 +21,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import com.google.android.gms.ads.doubleclick.PublisherAdView
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.admanager.AdManagerAdView
 import kotlinx.android.synthetic.main.activity_my.*
 
 /** Main Activity. Inflates main activity xml and child fragments.  */
 class MyActivity : AppCompatActivity() {
 
-  private lateinit var adView: PublisherAdView
+  private lateinit var adView: AdManagerAdView
   private var initialLayoutComplete = false
 
   // Determine the screen width (less decorations) to use for the ad width.
@@ -47,7 +47,7 @@ class MyActivity : AppCompatActivity() {
       }
 
       val adWidth = (adWidthPixels / density).toInt()
-      return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth)
+      return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class MyActivity : AppCompatActivity() {
         .build()
     )
 
-    adView = PublisherAdView(this)
+    adView = AdManagerAdView(this)
     ad_view_container.addView(adView)
     // Since we're loading the banner based on the adContainerView size, we need to wait until this
     // view is laid out before we can get the width.
@@ -103,7 +103,7 @@ class MyActivity : AppCompatActivity() {
     adView.setAdSizes(adSize)
 
     // Create an ad request.
-    val adRequest = PublisherAdRequest.Builder().build()
+    val adRequest = AdManagerAdRequest.Builder().build()
 
     // Start loading the ad in the background.
     adView.loadAd(adRequest)

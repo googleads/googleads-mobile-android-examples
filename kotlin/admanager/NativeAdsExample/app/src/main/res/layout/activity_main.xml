@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Request Custom Template Ads" />
-
         <CheckBox
             android:id="@+id/start_muted_checkbox"
             android:layout_width="wrap_content"
