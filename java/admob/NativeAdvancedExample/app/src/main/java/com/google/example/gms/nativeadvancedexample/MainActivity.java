@@ -214,8 +214,8 @@ public class MainActivity extends AppCompatActivity {
             }
             // You must call destroy on old ads when you are done with them,
             // otherwise you will have a memory leak.
-            if (nativeAd != null) {
-              nativeAd.destroy();
+            if (MainActivity.this.nativeAd != null) {
+              MainActivity.this.nativeAd.destroy();
             }
             MainActivity.this.nativeAd = nativeAd;
             FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
