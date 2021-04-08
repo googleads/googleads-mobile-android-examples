@@ -81,11 +81,6 @@ public class AdMobAdListenerFragment extends Fragment {
           public void onAdClosed() {
             showToast("Ad closed.");
           }
-
-          @Override
-          public void onAdLeftApplication() {
-            showToast("Ad left application.");
-          }
         });
 
         AdRequest adRequest = new AdRequest.Builder().build();

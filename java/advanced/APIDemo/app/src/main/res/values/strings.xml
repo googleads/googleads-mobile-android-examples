@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Mobile Ads API Demos</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="unspecified">Unspecified</string>
-    <string name="choose">Choose…</string>
+    <string name="app_name" translatable="false">Mobile Ads API Demos</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="yes" translatable="false">Yes</string>
+    <string name="no" translatable="false">No</string>
+    <string name="unspecified" translatable="false">Unspecified</string>
+    <string name="choose" translatable="false">Choose…</string>
 
-    <string name="ad_attribution">Ad</string>
+    <string name="ad_attribution" translatable="false">Ad</string>
 
-    <string name="targeting_location">Location</string>
-    <string name="targeting_birthday">Birth Date</string>
-    <string name="targeting_gender">Gender</string>
-    <string name="targeting_child">Use Child-Directed Treatment</string>
-    <string name="targeting_male">Male</string>
-    <string name="targeting_female">Female</string>
-    <string name="targeting_load">Load Targeted Ad</string>
-    <string name="bannersizes_size">Size</string>
-    <string name="bannersizes_loadad">Load New Ad</string>
+    <string name="targeting_child" translatable="false">Tag for child-directed treatment</string>
+    <string name="targeting_tfua" translatable="false">Tag for users under the age of consent in Europe</string>
+    <string name="targeting_rating" translatable="false">Max ad content rating</string>
+    <string name="targeting_load" translatable="false">Load Ad</string>
+    <string name="targeting_rating_g" translatable="false">G</string>
+    <string name="targeting_rating_pg" translatable="false">PG</string>
+    <string name="targeting_rating_t" translatable="false">T</string>
+    <string name="targeting_rating_ma" translatable="false">MA</string>
+    <string name="bannersizes_size" translatable="false">Size</string>
+    <string name="bannersizes_loadad" translatable="false">Load New Ad</string>
 
-    <string-array name="bannersizes_largesizes">
+    <string-array name="bannersizes_largesizes" translatable="false">
         <item>Banner</item>
         <item>Large Banner</item>
         <item>Smart Banner</item>
@@ -30,26 +31,26 @@
         <item>Leaderboard</item>
     </string-array>
 
-    <string-array name="bannersizes_smallsizes">
+    <string-array name="bannersizes_smallsizes" translatable="false">
         <item>Banner</item>
         <item>Large Banner</item>
         <item>Smart Banner</item>
     </string-array>
 
-    <string name="appevents_adunitid">/6499/example/APIDemo/AppEvents</string>
+    <string name="appevents_adunitid" translatable="false">/6499/example/APIDemo/AppEvents</string>
 
-    <string name="fluid_adunitid">/6499/example/APIDemo/Fluid</string>
-    <string name="fluid_btn_text">Change Ad Width</string>
-    <string name="fluid_tv_current_width_text">320 dp</string>
-    <string name="fluid_above">(this TextView is above the ad)</string>
-    <string name="fluid_below">(this TextView is below the ad)</string>
+    <string name="fluid_adunitid" translatable="false">/6499/example/APIDemo/Fluid</string>
+    <string name="fluid_btn_text" translatable="false">Change Ad Width</string>
+    <string name="fluid_tv_current_width_text" translatable="false">320 dp</string>
+    <string name="fluid_above" translatable="false">(this TextView is above the ad)</string>
+    <string name="fluid_below" translatable="false">(this TextView is below the ad)</string>
 
-    <string name="customtargeting_adunitid">/6499/example/APIDemo/CustomTargeting</string>
-    <string name="customtargeting_sport">Favorite Sport</string>
-    <string name="customtargeting_loadad">Load New Ad</string>
-    <string name="customtargeting_key">sportpref</string>
+    <string name="customtargeting_adunitid" translatable="false">/6499/example/APIDemo/CustomTargeting</string>
+    <string name="customtargeting_sport" translatable="false">Favorite Sport</string>
+    <string name="customtargeting_loadad" translatable="false">Load New Ad</string>
+    <string name="customtargeting_key" translatable="false">sportpref</string>
 
-    <string-array name="customtargeting_sports">
+    <string-array name="customtargeting_sports" translatable="false">
         <item>Baseball</item>
         <item>Basketball</item>
         <item>Bobsled</item>
@@ -61,23 +62,23 @@
         <item>Softball</item>
     </string-array>
 
-    <string name="categoryexclusion_adunitid">/6499/example/APIDemo/CategoryExclusion</string>
-    <string name="categoryexclusion_catscategoryname">apidemo_exclude_cats</string>
-    <string name="categoryexclusion_dogscategoryname">apidemo_exclude_dogs</string>
-    <string name="categoryexclusion_noexclusions">Banner (no exclusions - cats or dogs)</string>
-    <string name="categoryexclusion_catsexcluded">Banner (excluding cats)</string>
-    <string name="categoryexclusion_dogsexcluded">Banner (excluding dogs)</string>
+    <string name="categoryexclusion_adunitid" translatable="false">/6499/example/APIDemo/CategoryExclusion</string>
+    <string name="categoryexclusion_catscategoryname" translatable="false">apidemo_exclude_cats</string>
+    <string name="categoryexclusion_dogscategoryname" translatable="false">apidemo_exclude_dogs</string>
+    <string name="categoryexclusion_noexclusions" translatable="false">Banner (no exclusions - cats or dogs)</string>
+    <string name="categoryexclusion_catsexcluded" translatable="false">Banner (excluding cats)</string>
+    <string name="categoryexclusion_dogsexcluded" translatable="false">Banner (excluding dogs)</string>
 
-    <string name="ppid_adunitid">/6499/example/APIDemo/PPID</string>
-    <string name="ppid_username">Example Username</string>
-    <string name="ppid_username_hint">e.g. "user123"</string>
-    <string name="ppid_loadad">Load New Ad</string>
+    <string name="ppid_adunitid"  translatable="false">/6499/example/APIDemo/PPID</string>
+    <string name="ppid_username" translatable="false">Example Username</string>
+    <string name="ppid_username_hint" translatable="false">e.g. "user123"</string>
+    <string name="ppid_loadad" translatable="false">Load New Ad</string>
 
-    <string name="adsizes_adunitid">/6499/example/APIDemo/AdSizes</string>
-    <string name="adsizes_size">Available sizes</string>
-    <string name="adsizes_loadad">Load New Ad</string>
+    <string name="adsizes_adunitid" translatable="false">/6499/example/APIDemo/AdSizes</string>
+    <string name="adsizes_size" translatable="false">Available sizes</string>
+    <string name="adsizes_loadad" translatable="false">Load New Ad</string>
 
-    <string-array name="fragment_names">
+    <string-array name="fragment_names" translatable="false">
         <item>AdMob - Ad Listener</item>
         <item>AdMob - Ad Targeting</item>
         <item>AdMob - Banner Sizes</item>
@@ -91,34 +92,34 @@
         <item>DFP - Custom Video Controls</item>
     </string-array>
 
-    <string name="admob_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="admob_customevent_ad_unit_id">ca-app-pub-3940256099942544/3325725716</string>
+    <string name="admob_banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_customevent_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/3325725716</string>
 
-    <string name="custommute_fragment_ad_unit_id">ca-app-pub-3940256099942544/2247696110</string>
-    <string name="custommute_fragment_mute">Mute Ad</string>
-    <string name="custommute_fragment_refresh">Refresh Ad</string>
+    <string name="custommute_fragment_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="custommute_fragment_mute" translatable="false">Mute Ad</string>
+    <string name="custommute_fragment_refresh" translatable="false">Refresh Ad</string>
 
-    <string name="listener_fragment_title">AdMob Ad Listener</string>
-    <string name="targeting_fragment_title">AdMob Ad Targeting</string>
-    <string name="bannersizes_fragment_title">AdMob Banner Sizes</string>
-    <string name="fluid_fragment_title">DFP Fluid Ad Size</string>
-    <string name="appevents_fragment_title">DFP App Events</string>
-    <string name="categoryexclusion_fragment_title">DFP Category Exclusion</string>
-    <string name="customtargeting_fragment_title">DFP Custom Targeting</string>
-    <string name="adsizes_fragment_title">DFP Multiple Ad Sizes</string>
-    <string name="ppid_fragment_title">DFP PPID</string>
+    <string name="listener_fragment_title" translatable="false">AdMob Ad Listener</string>
+    <string name="targeting_fragment_title" translatable="false">AdMob Ad Targeting</string>
+    <string name="bannersizes_fragment_title" translatable="false">AdMob Banner Sizes</string>
+    <string name="fluid_fragment_title" translatable="false">DFP Fluid Ad Size</string>
+    <string name="appevents_fragment_title" translatable="false">DFP App Events</string>
+    <string name="categoryexclusion_fragment_title" translatable="false">DFP Category Exclusion</string>
+    <string name="customtargeting_fragment_title" translatable="false">DFP Custom Targeting</string>
+    <string name="adsizes_fragment_title" translatable="false">DFP Multiple Ad Sizes</string>
+    <string name="ppid_fragment_title" translatable="false">DFP PPID</string>
 
-    <string name="customcontrols_fragment_ad_unit_id">/6499/example/native-video</string>
-    <string name="customcontrols_fragment_template_id">10104090</string>
-    <string name="customcontrols_fragment_request_appinstall">Request App Install Ads</string>
-    <string name="customcontrols_fragment_request_content">Request Content Ads</string>
-    <string name="customcontrols_fragment_request_customtemplate">Request Custom Template Ads</string>
-    <string name="customcontrols_fragment_start_muted">Start video ads muted</string>
-    <string name="customcontrols_fragment_request_custom_controls">Request Custom Video Controls</string>
-    <string name="customcontrols_fragment_refresh">Refresh Ad</string>
+    <string name="customcontrols_fragment_ad_unit_id" translatable="false">/6499/example/native-video</string>
+    <string name="customcontrols_fragment_template_id" translatable="false">10104090</string>
+    <string name="customcontrols_fragment_request_appinstall" translatable="false">Request App Install Ads</string>
+    <string name="customcontrols_fragment_request_content" translatable="false">Request Content Ads</string>
+    <string name="customcontrols_fragment_request_customtemplate" translatable="false">Request Custom Template Ads</string>
+    <string name="customcontrols_fragment_start_muted" translatable="false">Start video ads muted</string>
+    <string name="customcontrols_fragment_request_custom_controls" translatable="false">Request Custom Video Controls</string>
+    <string name="customcontrols_fragment_refresh" translatable="false">Refresh Ad</string>
 
-    <string name="customcontrols_view_mute">Mute</string>
-    <string name="customcontrols_view_play">Play</string>
-    <string name="customcontrols_view_video_status">Video Status: </string>
+    <string name="customcontrols_view_mute" translatable="false">Mute</string>
+    <string name="customcontrols_view_play" translatable="false">Play</string>
+    <string name="customcontrols_view_video_status" translatable="false">Video Status: </string>
 
 </resources>

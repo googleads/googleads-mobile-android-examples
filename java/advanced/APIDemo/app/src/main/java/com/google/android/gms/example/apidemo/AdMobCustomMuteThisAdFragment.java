@@ -34,14 +34,14 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.MuteThisAdListener;
 import com.google.android.gms.ads.MuteThisAdReason;
 import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.formats.MediaView;
-import com.google.android.gms.ads.formats.NativeAdOptions;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
-import com.google.android.gms.ads.formats.UnifiedNativeAdView;
-
+import com.google.android.gms.ads.nativead.MediaView;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
+import com.google.android.gms.ads.nativead.NativeAdView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
 
     private Button refresh;
     private Button muteButton;
-    private UnifiedNativeAd nativeAd;
+    private NativeAd nativeAd;
     private FrameLayout adContainer;
 
     public AdMobCustomMuteThisAdFragment() {
@@ -91,13 +91,13 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
     }
 
     /**
-     * Populates a {@link UnifiedNativeAdView} object with data from a given
-     * {@link UnifiedNativeAd}.
+     * Populates a {@link NativeAdView} object with data from a given
+     * {@link NativeAd}.
      *
      * @param nativeAd the object containing the ad's assets
      * @param adView the view to be populated
      */
-    private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
+    private void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
         adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
 
         adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
@@ -165,15 +165,15 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
 
         adView.setNativeAd(nativeAd);
 
-        VideoController vc = nativeAd.getVideoController();
-
-        if (vc.hasVideoContent()) {
-            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-                @Override
-                public void onVideoEnd() {
-                    refresh.setEnabled(true);
-                    super.onVideoEnd();
-                }
+        MediaContent mediaContent = nativeAd.getMediaContent();
+        if (mediaContent != null && mediaContent.hasVideoContent()) {
+            mediaContent.getVideoController().setVideoLifecycleCallbacks(
+                    new VideoController.VideoLifecycleCallbacks() {
+                        @Override
+                        public void onVideoEnd() {
+                            refresh.setEnabled(true);
+                            super.onVideoEnd();
+                        }
             });
         } else {
             refresh.setEnabled(true);
@@ -181,8 +181,8 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
     }
 
     /**
-     * Creates a request for a new unified native ad based on the boolean parameters and calls the
-     * "populateUnifiedNativeAdView" method when one is successfully returned.
+     * Creates a request for a new native ad based on the boolean parameters and calls the
+     * "populateNativeAdView" method when one is successfully returned.
      */
     private void refreshAd() {
         refresh.setEnabled(false);
@@ -192,12 +192,12 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
         AdLoader.Builder builder = new AdLoader.Builder(getActivity(),
                 resources.getString(R.string.custommute_fragment_ad_unit_id));
 
-        builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-            // OnUnifiedNativeAdLoadedListener implementation.
+        builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+            // OnNativeAdLoadedListener implementation.
             @Override
-            public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                AdMobCustomMuteThisAdFragment.this.nativeAd = unifiedNativeAd;
-                muteButton.setEnabled(unifiedNativeAd.isCustomMuteThisAdEnabled());
+            public void onNativeAdLoaded(NativeAd nativeAd) {
+                AdMobCustomMuteThisAdFragment.this.nativeAd = nativeAd;
+                muteButton.setEnabled(nativeAd.isCustomMuteThisAdEnabled());
                 nativeAd.setMuteThisAdListener(new MuteThisAdListener() {
                     @Override
                     public void onAdMuted() {
@@ -206,9 +206,9 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
                     }
                 });
 
-                UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater()
-                    .inflate(R.layout.ad_unified, null);
-                populateUnifiedNativeAdView(unifiedNativeAd, adView);
+                NativeAdView adView = (NativeAdView) getLayoutInflater()
+                    .inflate(R.layout.native_ad, null);
+                populateNativeAdView(nativeAd, adView);
                 adContainer.removeAllViews();
                 adContainer.addView(adView);
             }
