@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AdMob Rewarded Video Example</string>
+    <string name="action_settings">Settings</string>
+    <string name="impossible_game">Impossible Game</string>
+    <string name="retry_button_text">Retry</string>
+    <string name="default_coin_text">Coins: 0</string>
+    <!-- Indicate the reward from watching a video ad [CHAR_LIMIT=NONE]-->
+    <string name="more_coins_text">Watch a video and receive 10 more coins.</string>
+    <!-- Shows the remaining time in seconds until when the video ad is shown. [CHAR_LIMIT=NONE]-->
+    <string name="video_starting_in_text">Video starting in %d…</string>
+</resources>
