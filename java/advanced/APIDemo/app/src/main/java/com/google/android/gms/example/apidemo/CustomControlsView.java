@@ -7,10 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.ads.VideoController;
-
-import java.util.Locale;
 
 /**
  * This view represents the status of a video controller and also displays custom controls for the
@@ -64,6 +61,7 @@ public class CustomControlsView extends LinearLayout {
     public void setVideoController(VideoController videoController) {
         controlsView.setVisibility(View.GONE);
         if (videoController.hasVideoContent()) {
+            videoStatusText.setText("Video status: Ad contains a video asset.");
             configureVideoContent(videoController);
         } else {
             videoStatusText.setText("Video status: Ad does not contain a video asset.");
@@ -75,10 +73,6 @@ public class CustomControlsView extends LinearLayout {
     }
 
     private void configureVideoContent(final VideoController videoController) {
-
-        videoStatusText.setText(String.format(Locale.getDefault(),
-                "Video status: Ad contains a %.2f:1 video asset.",
-                videoController.getAspectRatio()));
         if (videoController.isCustomControlsEnabled()) {
             muteButton.setText(videoController.isMuted() ? "Unmute" : "Mute");
             controlsView.setVisibility(View.VISIBLE);

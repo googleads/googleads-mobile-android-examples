@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.google.android.gms.example.apidemo.DFPCustomControlsFragment">
+    tools:context="com.google.android.gms.example.apidemo.AdManagerCustomControlsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,26 +23,19 @@
         </com.google.android.gms.example.apidemo.CustomControlsView>
 
         <CheckBox
-            android:id="@+id/cb_appinstall"
+            android:id="@+id/cb_native"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:checked="true"
-            android:text="@string/customcontrols_fragment_request_appinstall" />
+            android:text="@string/customcontrols_fragment_request_native" />
 
         <CheckBox
-            android:id="@+id/cb_content"
+            android:id="@+id/cb_custom_format"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/customcontrols_fragment_request_content" />
-
-        <CheckBox
-            android:id="@+id/cb_customtemplate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/customcontrols_fragment_request_customtemplate"/>
+            android:text="@string/customcontrols_fragment_request_custom_format"/>
 
         <CheckBox
             android:id="@+id/cb_start_muted"

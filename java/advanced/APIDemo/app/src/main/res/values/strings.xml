@@ -83,13 +83,13 @@
         <item>AdMob - Ad Targeting</item>
         <item>AdMob - Banner Sizes</item>
         <item>AdMob - Custom Mute This Ad</item>
-        <item>DFP - Fluid Size</item>
-        <item>DFP - PPID</item>
-        <item>DFP - Custom Targeting</item>
-        <item>DFP - Category Exclusions</item>
-        <item>DFP - Ad Sizes</item>
-        <item>DFP - App Events</item>
-        <item>DFP - Custom Video Controls</item>
+        <item>Ad Manager - Fluid Size</item>
+        <item>Ad Manager - PPID</item>
+        <item>Ad Manager - Custom Targeting</item>
+        <item>Ad Manager - Category Exclusions</item>
+        <item>Ad Manager - Ad Sizes</item>
+        <item>Ad Manager - App Events</item>
+        <item>Ad Manager - Custom Video Controls</item>
     </string-array>
 
     <string name="admob_banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
@@ -111,9 +111,8 @@
 
     <string name="customcontrols_fragment_ad_unit_id" translatable="false">/6499/example/native-video</string>
     <string name="customcontrols_fragment_template_id" translatable="false">10104090</string>
-    <string name="customcontrols_fragment_request_appinstall" translatable="false">Request App Install Ads</string>
-    <string name="customcontrols_fragment_request_content" translatable="false">Request Content Ads</string>
-    <string name="customcontrols_fragment_request_customtemplate" translatable="false">Request Custom Template Ads</string>
+    <string name="customcontrols_fragment_request_native" translatable="false">Request Native Ads</string>
+    <string name="customcontrols_fragment_request_custom_format" translatable="false">Request Custom Native Ad Formats</string>
     <string name="customcontrols_fragment_start_muted" translatable="false">Start video ads muted</string>
     <string name="customcontrols_fragment_request_custom_controls" translatable="false">Request Custom Video Controls</string>
     <string name="customcontrols_fragment_refresh" translatable="false">Refresh Ad</string>

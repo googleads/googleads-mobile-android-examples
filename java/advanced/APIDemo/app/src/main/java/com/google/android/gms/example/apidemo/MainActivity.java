@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
             case 7: trans.replace(R.id.container, new DFPCategoryExclusionFragment()); break;
             case 8: trans.replace(R.id.container, new DFPMultipleAdSizesFragment()); break;
             case 9: trans.replace(R.id.container, new DFPAppEventsFragment()); break;
-            case 10: trans.replace(R.id.container, new DFPCustomControlsFragment()); break;
+            case 10: trans.replace(R.id.container, new AdManagerCustomControlsFragment()); break;
         }
 
         trans.commit();
