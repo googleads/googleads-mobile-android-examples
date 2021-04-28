@@ -102,12 +102,12 @@
     <string name="listener_fragment_title" translatable="false">AdMob Ad Listener</string>
     <string name="targeting_fragment_title" translatable="false">AdMob Ad Targeting</string>
     <string name="bannersizes_fragment_title" translatable="false">AdMob Banner Sizes</string>
-    <string name="fluid_fragment_title" translatable="false">DFP Fluid Ad Size</string>
-    <string name="appevents_fragment_title" translatable="false">DFP App Events</string>
-    <string name="categoryexclusion_fragment_title" translatable="false">DFP Category Exclusion</string>
-    <string name="customtargeting_fragment_title" translatable="false">DFP Custom Targeting</string>
-    <string name="adsizes_fragment_title" translatable="false">DFP Multiple Ad Sizes</string>
-    <string name="ppid_fragment_title" translatable="false">DFP PPID</string>
+    <string name="fluid_fragment_title" translatable="false">Ad Manager Fluid Ad Size</string>
+    <string name="appevents_fragment_title" translatable="false">Ad Manager App Events</string>
+    <string name="categoryexclusion_fragment_title" translatable="false">Ad Manager Category Exclusion</string>
+    <string name="customtargeting_fragment_title" translatable="false">Ad Manager Custom Targeting</string>
+    <string name="adsizes_fragment_title" translatable="false">Ad Manager Multiple Ad Sizes</string>
+    <string name="ppid_fragment_title" translatable="false">Ad Manager PPID</string>
 
     <string name="customcontrols_fragment_ad_unit_id" translatable="false">/6499/example/native-video</string>
     <string name="customcontrols_fragment_template_id" translatable="false">10104090</string>

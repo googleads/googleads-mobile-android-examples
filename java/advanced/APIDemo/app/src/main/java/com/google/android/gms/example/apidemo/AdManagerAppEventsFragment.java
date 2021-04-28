@@ -17,31 +17,30 @@ package com.google.android.gms.example.apidemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.ads.doubleclick.AppEventListener;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
+import com.google.android.gms.ads.admanager.AppEventListener;
 
 /**
- * The {@link DFPAppEventsFragment} class demonstrates how to receive App Events from a DFP
- * creative.
+ * The {@link AdManagerAppEventsFragment} class demonstrates how to receive App Events from an
+ * Ad Manager creative.
  */
-public class DFPAppEventsFragment extends Fragment {
+public class AdManagerAppEventsFragment extends Fragment {
 
-    private PublisherAdView adView;
+    private AdManagerAdView adView;
     private View rootView;
 
-    public DFPAppEventsFragment() {
+    public AdManagerAppEventsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_dfp_app_events, container, false);
+        rootView = inflater.inflate(R.layout.fragment_gam_app_events, container, false);
         return rootView;
     }
 
@@ -55,7 +54,7 @@ public class DFPAppEventsFragment extends Fragment {
             @Override
             public void onAppEvent(String name, String data) {
 
-                // The DFP ad that this fragment loads contains JavaScript code that sends App
+                // The Ad Manager ad this fragment loads contains JavaScript code that sends App
                 // Events to the host application. This AppEventListener receives those events,
                 // and sets the background of the fragment to match the data that comes in.
                 // The ad will send "red" when it loads, "blue" five seconds later, and "green"
@@ -80,7 +79,7 @@ public class DFPAppEventsFragment extends Fragment {
             }
         });
 
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
 }

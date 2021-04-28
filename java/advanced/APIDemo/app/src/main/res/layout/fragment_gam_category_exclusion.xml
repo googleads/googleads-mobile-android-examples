@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.google.android.gms.example.apidemo.DFPCategoryExclusionFragment">
+    tools:context="com.google.android.gms.example.apidemo.AdManagerCategoryExclusionFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
         android:text="@string/categoryexclusion_noexclusions"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/no_exclusions_av"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:text="@string/categoryexclusion_dogsexcluded"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/exclusions_av_dogsexcluded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:text="@string/categoryexclusion_catsexcluded"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/exclusions_av_catsexcluded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

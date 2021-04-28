@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".DFPCustomTargetingFragment">
+    tools:context=".AdManagerCustomTargetingFragment">
 
     <TextView
         android:id="@+id/customtargeting_tv_title"
@@ -49,7 +49,7 @@
             android:text="@string/customtargeting_loadad" />
     </LinearLayout>
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/customtargeting_av_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

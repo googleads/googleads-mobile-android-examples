@@ -15,36 +15,34 @@
  */
 package com.google.android.gms.example.apidemo;
 
-import android.app.Activity;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 
 /**
- * the {@link DFPCustomTargetingFragment} class demonstrates how to add custom targeting
+ * The {@link AdManagerCustomTargetingFragment} class demonstrates how to add custom targeting
  * information to a request.
  */
-public class DFPCustomTargetingFragment extends Fragment {
+public class AdManagerCustomTargetingFragment extends Fragment {
 
     private Spinner sportsSpinner;
     private Button loadButton;
-    private PublisherAdView adView;
+    private AdManagerAdView adView;
 
-    public DFPCustomTargetingFragment() {
+    public AdManagerCustomTargetingFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dfp_custom_targeting, container, false);
+        return inflater.inflate(R.layout.fragment_gam_custom_targeting, container, false);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class DFPCustomTargetingFragment extends Fragment {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
+                AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder()
                         .addCustomTargeting(getString(R.string.customtargeting_key),
                                 (String) sportsSpinner.getSelectedItem())
                         .build();
@@ -71,10 +69,5 @@ public class DFPCustomTargetingFragment extends Fragment {
                 adView.loadAd(adRequest);
             }
         });
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
     }
 }

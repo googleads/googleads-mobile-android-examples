@@ -16,49 +16,45 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 
 /**
- * The {@link DFPCategoryExclusionFragment} class demonstrates how to use category exclusions with
- * DFP requests
+ * The {@link AdManagerCategoryExclusionFragment} class demonstrates how to use category exclusions
+ * with Ad Manager requests.
  */
-public class DFPCategoryExclusionFragment extends Fragment {
+public class AdManagerCategoryExclusionFragment extends Fragment {
 
-    private PublisherAdView noExclusionsAdView;
-    private PublisherAdView dogsExcludedAdView;
-    private PublisherAdView catsExcludedAdView;
+    private AdManagerAdView noExclusionsAdView;
+    private AdManagerAdView dogsExcludedAdView;
+    private AdManagerAdView catsExcludedAdView;
 
-    public DFPCategoryExclusionFragment() {
+    public AdManagerCategoryExclusionFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dfp_category_exclusion, container, false);
+        return inflater.inflate(R.layout.fragment_gam_category_exclusion, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        noExclusionsAdView =
-                getView().findViewById(R.id.no_exclusions_av);
-        dogsExcludedAdView =
-                getView().findViewById(R.id.exclusions_av_dogsexcluded);
-        catsExcludedAdView =
-                getView().findViewById(R.id.exclusions_av_catsexcluded);
+        noExclusionsAdView = getView().findViewById(R.id.no_exclusions_av);
+        dogsExcludedAdView = getView().findViewById(R.id.exclusions_av_dogsexcluded);
+        catsExcludedAdView = getView().findViewById(R.id.exclusions_av_catsexcluded);
 
-        PublisherAdRequest noExclusionsRequest = new PublisherAdRequest.Builder().build();
-        PublisherAdRequest dogsExcludedRequest = new PublisherAdRequest.Builder()
+        AdManagerAdRequest noExclusionsRequest = new AdManagerAdRequest.Builder().build();
+        AdManagerAdRequest dogsExcludedRequest = new AdManagerAdRequest.Builder()
                 .addCategoryExclusion(getString(R.string.categoryexclusion_dogscategoryname))
                 .build();
-        PublisherAdRequest catsExcludedRequest = new PublisherAdRequest.Builder()
+        AdManagerAdRequest catsExcludedRequest = new AdManagerAdRequest.Builder()
                 .addCategoryExclusion(getString(R.string.categoryexclusion_catscategoryname))
                 .build();
 
