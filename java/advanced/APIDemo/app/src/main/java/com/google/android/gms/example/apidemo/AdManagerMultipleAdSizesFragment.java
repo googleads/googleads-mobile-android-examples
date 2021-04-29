@@ -16,42 +16,40 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
+import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
-
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@link DFPMultipleAdSizesFragment} class demonstrates how to set specific ad sizes for a
- * request.
+ * The {@link AdManagerMultipleAdSizesFragment} class demonstrates how to set specific ad sizes for
+ * a request.
  */
-public class DFPMultipleAdSizesFragment extends Fragment {
+public class AdManagerMultipleAdSizesFragment extends Fragment {
 
     private Button loadButton;
-    private PublisherAdView publisherAdView;
+    private AdManagerAdView adView;
     private CheckBox cb320x50;
     private CheckBox cb300x250;
     private CheckBox cb120x20;
 
-    public DFPMultipleAdSizesFragment() {
+    public AdManagerMultipleAdSizesFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dfp_multiple_ad_sizes, container, false);
+        return inflater.inflate(R.layout.fragment_gam_multiple_ad_sizes, container, false);
     }
 
     @Override
@@ -62,22 +60,20 @@ public class DFPMultipleAdSizesFragment extends Fragment {
         cb120x20 = getView().findViewById(R.id.adsizes_cb_120x20);
         cb320x50 = getView().findViewById(R.id.adsizes_cb_320x50);
         cb300x250 = getView().findViewById(R.id.adsizes_cb_300x250);
-        publisherAdView = getView().findViewById(R.id.adsizes_pav_main);
+        adView = getView().findViewById(R.id.adsizes_pav_main);
 
-        publisherAdView.setAdListener(new AdListener() {
+        adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                publisherAdView.setVisibility(View.VISIBLE);
+                adView.setVisibility(View.VISIBLE);
             }
         });
 
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!cb120x20.isChecked()
-                        && !cb320x50.isChecked()
-                        && !cb300x250.isChecked()) {
-                    Toast.makeText(DFPMultipleAdSizesFragment.this.getActivity(),
+                if (!cb120x20.isChecked() && !cb320x50.isChecked() && !cb300x250.isChecked()) {
+                    Toast.makeText(AdManagerMultipleAdSizesFragment.this.getActivity(),
                             "At least one size is required.", Toast.LENGTH_SHORT).show();
                 } else {
                     List<AdSize> sizeList = new ArrayList<>();
@@ -94,9 +90,9 @@ public class DFPMultipleAdSizesFragment extends Fragment {
                         sizeList.add(AdSize.MEDIUM_RECTANGLE);
                     }
 
-                    publisherAdView.setVisibility(View.INVISIBLE);
-                    publisherAdView.setAdSizes(sizeList.toArray(new AdSize[sizeList.size()]));
-                    publisherAdView.loadAd(new PublisherAdRequest.Builder().build());
+                    adView.setVisibility(View.INVISIBLE);
+                    adView.setAdSizes(sizeList.toArray(new AdSize[sizeList.size()]));
+                    adView.loadAd(new AdManagerAdRequest.Builder().build());
                 }
             }
         });

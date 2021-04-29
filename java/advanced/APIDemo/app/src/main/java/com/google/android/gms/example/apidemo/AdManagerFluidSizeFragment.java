@@ -16,52 +16,50 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
-
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 import java.util.Locale;
 
 /**
- * The {@link DFPFluidSizeFragment} demonstrates the use of the {@code AdSize.FLUID} ad size.
+ * The {@link AdManagerFluidSizeFragment} demonstrates the use of the {@code AdSize.FLUID} ad size.
  */
-public class DFPFluidSizeFragment extends Fragment {
+public class AdManagerFluidSizeFragment extends Fragment {
 
-    private PublisherAdView publisherAdView;
+    private AdManagerAdView adView;
     private Button changeAdViewWidthButton;
     private TextView currentWidthTextView;
     private final int[] adViewWidths = new int[]{200, 250, 320};
     private int currentIndex = 0;
 
-    public DFPFluidSizeFragment() {
+    public AdManagerFluidSizeFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dfp_fluid_size, container, false);
+        return inflater.inflate(R.layout.fragment_gam_fluid_size, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // The size for this PublisherAdView is defined in the XML layout as AdSize.FLUID. It could
-        // also be set here by calling publisherAdView.setAdSizes(AdSize.FLUID).
+        // The size for this AdManagerAdView is defined in the XML layout as AdSize.FLUID. It could
+        // also be set here by calling adView.setAdSizes(AdSize.FLUID).
         //
         // An ad with fluid size will automatically stretch or shrink to fit the height of its
         // content, which can help layout designers cut down on excess whitespace.
-        publisherAdView = getView().findViewById(R.id.fluid_av_main);
+        adView = getView().findViewById(R.id.fluid_av_main);
 
-        PublisherAdRequest publisherAdRequest = new PublisherAdRequest.Builder().build();
-        publisherAdView.loadAd(publisherAdRequest);
+        AdManagerAdRequest request = new AdManagerAdRequest.Builder().build();
+        adView.loadAd(request);
 
         changeAdViewWidthButton = getView().findViewById(R.id.fluid_btn_change_width);
         changeAdViewWidthButton.setOnClickListener(new View.OnClickListener() {
@@ -69,11 +67,11 @@ public class DFPFluidSizeFragment extends Fragment {
             public void onClick(View view) {
                 int newWidth = adViewWidths[currentIndex % adViewWidths.length];
                 currentIndex += 1;
-                // Change the PublisherAdView's width.
-                ViewGroup.LayoutParams layoutParams = publisherAdView.getLayoutParams();
+                // Change the AdManagerAdView's width.
+                ViewGroup.LayoutParams layoutParams = adView.getLayoutParams();
                 final float scale = getResources().getDisplayMetrics().density;
                 layoutParams.width = (int) (newWidth * scale + 0.5f);
-                publisherAdView.setLayoutParams(layoutParams);
+                adView.setLayoutParams(layoutParams);
                 // Update the TextView with the new width.
                 currentWidthTextView = getView().findViewById(R.id.fluid_tv_current_width);
                 currentWidthTextView.setText(

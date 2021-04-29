@@ -16,7 +16,6 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,28 +23,29 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerAdView;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * The {@link DFPPPIDFragment} class demonstrates how to add a PPID value to a DFP
- * PublisherAdRequest.
+ * The {@link AdManagerPPIDFragment} class demonstrates how to add a PPID value to an
+ * AdManagerAdRequest.
  */
-public class DFPPPIDFragment extends Fragment {
+public class AdManagerPPIDFragment extends Fragment {
 
     private Button loadAdButton;
-    private PublisherAdView publisherAdView;
+    private AdManagerAdView adView;
     private EditText usernameEditText;
 
-    public DFPPPIDFragment() {
+    public AdManagerPPIDFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dfp_ppid, container, false);
+        return inflater.inflate(R.layout.fragment_gam_ppid, container, false);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DFPPPIDFragment extends Fragment {
 
         usernameEditText = getView().findViewById(R.id.ppid_et_username);
         loadAdButton = getView().findViewById(R.id.ppid_btn_loadad);
-        publisherAdView = getView().findViewById(R.id.ppid_pav_main);
+        adView = getView().findViewById(R.id.ppid_pav_main);
 
         loadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,14 +62,14 @@ public class DFPPPIDFragment extends Fragment {
                 String username = usernameEditText.getText().toString();
 
                 if (username.length() == 0) {
-                    Toast.makeText(DFPPPIDFragment.this.getActivity(),
+                    Toast.makeText(AdManagerPPIDFragment.this.getActivity(),
                             "The username cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
                     String ppid = generatePPID(username);
-                    PublisherAdRequest request = new PublisherAdRequest.Builder()
+                    AdManagerAdRequest request = new AdManagerAdRequest.Builder()
                             .setPublisherProvidedId(ppid)
                             .build();
-                    publisherAdView.loadAd(request);
+                    adView.loadAd(request);
                 }
             }
         });
@@ -87,7 +87,7 @@ public class DFPPPIDFragment extends Fragment {
         try {
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(username.getBytes());
-      byte[] bytes = digest.digest();
+            byte[] bytes = digest.digest();
 
             for (byte b : bytes) {
                 String hexed = Integer.toHexString(b & 0xFF);

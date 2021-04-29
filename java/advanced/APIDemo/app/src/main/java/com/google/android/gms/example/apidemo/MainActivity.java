@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+        // Update the main content by replacing fragments.
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction trans = fragmentManager.beginTransaction();
 
@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity
             case 1: trans.replace(R.id.container, new AdMobAdTargetingFragment()); break;
             case 2: trans.replace(R.id.container, new AdMobBannerSizesFragment()); break;
             case 3: trans.replace(R.id.container, new AdMobCustomMuteThisAdFragment()); break;
-            case 4: trans.replace(R.id.container, new DFPFluidSizeFragment()); break;
-            case 5: trans.replace(R.id.container, new DFPPPIDFragment()); break;
+            case 4: trans.replace(R.id.container, new AdManagerFluidSizeFragment()); break;
+            case 5: trans.replace(R.id.container, new AdManagerPPIDFragment()); break;
             case 6: trans.replace(R.id.container, new AdManagerCustomTargetingFragment()); break;
             case 7: trans.replace(R.id.container, new AdManagerCategoryExclusionFragment()); break;
-            case 8: trans.replace(R.id.container, new DFPMultipleAdSizesFragment()); break;
+            case 8: trans.replace(R.id.container, new AdManagerMultipleAdSizesFragment()); break;
             case 9: trans.replace(R.id.container, new AdManagerAppEventsFragment()); break;
             case 10: trans.replace(R.id.container, new AdManagerCustomControlsFragment()); break;
         }

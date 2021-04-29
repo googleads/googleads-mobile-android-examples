@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.google.android.gms.example.apidemo.DFPFluidSizeFragment">
+    tools:context="com.google.android.gms.example.apidemo.AdManagerFluidSizeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:text="@string/fluid_above"
             android:textAppearance="@android:style/TextAppearance.Medium" />
 
-        <com.google.android.gms.ads.doubleclick.PublisherAdView
+        <com.google.android.gms.ads.admanager.AdManagerAdView
             android:id="@+id/fluid_av_main"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
