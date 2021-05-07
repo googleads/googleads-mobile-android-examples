@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">AdMob Rewarded Video Example</string>
+    <string name="app_name" translatable="false">AdMob Rewarded Interstitial Example</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="impossible_game" translatable="false">Impossible Game</string>
     <string name="retry_button_text" translatable="false">Retry</string>
