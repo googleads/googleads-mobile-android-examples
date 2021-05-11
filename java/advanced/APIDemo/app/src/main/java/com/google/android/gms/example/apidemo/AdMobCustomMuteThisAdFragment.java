@@ -18,8 +18,6 @@ package com.google.android.gms.example.apidemo;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +28,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.MuteThisAdListener;
 import com.google.android.gms.ads.MuteThisAdReason;
@@ -223,10 +223,10 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
 
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
-            public void onAdFailedToLoad(int errorCode) {
+            public void onAdFailedToLoad(LoadAdError error) {
                 refresh.setEnabled(true);
-                Toast.makeText(getActivity(), "Failed to load native ad: "
-                        + errorCode, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to load native ad: " + error,
+                        Toast.LENGTH_SHORT).show();
             }
         }).build();
 
