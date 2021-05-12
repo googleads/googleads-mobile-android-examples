@@ -16,38 +16,38 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 
 /**
- * The {@link AdMobAdListenerFragment} demonstrates the use of the
- * {@link com.google.android.gms.ads.AdListener} class.
+ * The {@link AdMobAdListenerFragment} demonstrates the use of the {@link
+ * com.google.android.gms.ads.AdListener} class.
  */
 public class AdMobAdListenerFragment extends Fragment {
 
-    private AdView adView;
+  private AdView adView;
 
-    public AdMobAdListenerFragment() {
-    }
+  public AdMobAdListenerFragment() {
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admob_ad_listener, container, false);
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_admob_ad_listener, container, false);
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
 
-        adView = getView().findViewById(R.id.listener_av_main);
+    adView = getView().findViewById(R.id.listener_av_main);
 
     adView.setAdListener(
         new AdListener() {
@@ -83,7 +83,7 @@ public class AdMobAdListenerFragment extends Fragment {
           }
         });
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }
+    AdRequest adRequest = new AdRequest.Builder().build();
+    adView.loadAd(adRequest);
+  }
 }

@@ -44,271 +44,270 @@ import com.google.android.gms.ads.nativead.NativeCustomFormatAd.OnCustomClickLis
 import com.google.android.gms.ads.nativead.NativeCustomFormatAd.OnCustomFormatAdLoadedListener;
 
 /**
- * The {@link AdManagerCustomControlsFragment} class demonstrates how to use custom controls with
- * Ad Manager custom ad format video ads.
+ * The {@link AdManagerCustomControlsFragment} class demonstrates how to use custom controls with Ad
+ * Manager custom ad format video ads.
  */
 public class AdManagerCustomControlsFragment extends Fragment {
 
-    private Button refresh;
-    private CheckBox startVideoAdsMuted;
-    private CheckBox customControlsCheckbox;
-    private CheckBox nativeAdsCheckbox;
-    private CheckBox customFormatAdsCheckbox;
-    private CustomControlsView customControlsView;
-    private NativeAd nativeAd;
-    private NativeCustomFormatAd nativeCustomFormatAd;
+  private Button refresh;
+  private CheckBox startVideoAdsMuted;
+  private CheckBox customControlsCheckbox;
+  private CheckBox nativeAdsCheckbox;
+  private CheckBox customFormatAdsCheckbox;
+  private CustomControlsView customControlsView;
+  private NativeAd nativeAd;
+  private NativeCustomFormatAd nativeCustomFormatAd;
 
-    public AdManagerCustomControlsFragment() {
-    }
+  public AdManagerCustomControlsFragment() {
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_gam_customcontrols, container, false);
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_gam_customcontrols, container, false);
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
 
-        refresh = getView().findViewById(R.id.btn_refresh);
-        startVideoAdsMuted = getView().findViewById(R.id.cb_start_muted);
-        customControlsCheckbox = getView().findViewById(R.id.cb_custom_controls);
-        nativeAdsCheckbox = getView().findViewById(R.id.cb_native);
-        customFormatAdsCheckbox = getView().findViewById(R.id.cb_custom_format);
-        customControlsView = getView().findViewById(R.id.custom_controls);
+    refresh = getView().findViewById(R.id.btn_refresh);
+    startVideoAdsMuted = getView().findViewById(R.id.cb_start_muted);
+    customControlsCheckbox = getView().findViewById(R.id.cb_custom_controls);
+    nativeAdsCheckbox = getView().findViewById(R.id.cb_native);
+    customFormatAdsCheckbox = getView().findViewById(R.id.cb_custom_format);
+    customControlsView = getView().findViewById(R.id.custom_controls);
 
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View unusedView) {
-                refreshAd();
-            }
-        });
-
+    refresh.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View unusedView) {
         refreshAd();
+      }
+    });
+
+    refreshAd();
+  }
+
+  @Override
+  public void onDestroy() {
+    if (nativeAd != null) {
+      nativeAd.destroy();
+      nativeAd = null;
+    }
+    if (nativeCustomFormatAd != null) {
+      nativeCustomFormatAd.destroy();
+      nativeCustomFormatAd = null;
+    }
+    super.onDestroy();
+  }
+
+  /**
+   * Populates a {@link NativeAdView} object with data from a given {@link NativeAd}.
+   *
+   * @param nativeAd the object containing the ad's assets
+   * @param adView the view to be populated
+   */
+  private void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
+    adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
+    adView.setBodyView(adView.findViewById(R.id.ad_body));
+    adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
+    adView.setIconView(adView.findViewById(R.id.ad_app_icon));
+    adView.setPriceView(adView.findViewById(R.id.ad_price));
+    adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
+    adView.setStoreView(adView.findViewById(R.id.ad_store));
+
+    // Some assets are guaranteed to be in every NativeAd.
+    ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
+    ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+    ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+    ((ImageView) adView.getIconView()).setImageDrawable(nativeAd.getIcon().getDrawable());
+    MediaView mediaView = adView.findViewById(R.id.ad_media);
+
+    // These assets aren't guaranteed to be in every NativeAd, so it's important to check
+    // before trying to display them.
+    if (nativeAd.getPrice() == null) {
+      adView.getPriceView().setVisibility(View.INVISIBLE);
+    } else {
+      adView.getPriceView().setVisibility(View.VISIBLE);
+      ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
     }
 
-    @Override
-    public void onDestroy() {
-        if (nativeAd != null) {
-            nativeAd.destroy();
-            nativeAd = null;
-        }
-        if (nativeCustomFormatAd != null) {
-            nativeCustomFormatAd.destroy();
-            nativeCustomFormatAd = null;
-        }
-        super.onDestroy();
+    if (nativeAd.getStore() == null) {
+      adView.getStoreView().setVisibility(View.INVISIBLE);
+    } else {
+      adView.getStoreView().setVisibility(View.VISIBLE);
+      ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
     }
 
-    /**
-     * Populates a {@link NativeAdView} object with data from a given
-     * {@link NativeAd}.
-     *
-     * @param nativeAd the object containing the ad's assets
-     * @param adView   the view to be populated
-     */
-    private void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
-        adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
-        adView.setBodyView(adView.findViewById(R.id.ad_body));
-        adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
-        adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-        adView.setPriceView(adView.findViewById(R.id.ad_price));
-        adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
-        adView.setStoreView(adView.findViewById(R.id.ad_store));
-
-        // Some assets are guaranteed to be in every NativeAd.
-        ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
-        ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
-        ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
-        ((ImageView) adView.getIconView()).setImageDrawable(nativeAd.getIcon().getDrawable());
-        MediaView mediaView = adView.findViewById(R.id.ad_media);
-
-        // These assets aren't guaranteed to be in every NativeAd, so it's important to check
-        // before trying to display them.
-        if (nativeAd.getPrice() == null) {
-            adView.getPriceView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getPriceView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
-        }
-
-        if (nativeAd.getStore() == null) {
-            adView.getStoreView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getStoreView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
-        }
-
-        if (nativeAd.getStarRating() == null) {
-            adView.getStarRatingView().setVisibility(View.INVISIBLE);
-        } else {
-            ((RatingBar) adView.getStarRatingView())
-                    .setRating(nativeAd.getStarRating().floatValue());
-            adView.getStarRatingView().setVisibility(View.VISIBLE);
-        }
-
-        // Assign native ad object to the native view.
-        adView.setNativeAd(nativeAd);
-
-        // Set up the custom video controls functionality.
-        MediaContent mediaContent = nativeAd.getMediaContent();
-        if (mediaContent != null) {
-            customControlsView.setVideoController(mediaContent.getVideoController());
-        }
-
-        refresh.setEnabled(true);
+    if (nativeAd.getStarRating() == null) {
+      adView.getStarRatingView().setVisibility(View.INVISIBLE);
+    } else {
+      ((RatingBar) adView.getStarRatingView())
+          .setRating(nativeAd.getStarRating().floatValue());
+      adView.getStarRatingView().setVisibility(View.VISIBLE);
     }
 
-    /**
-     * Populates a {@link View} object with data from a {@link NativeCustomFormatAd}. This method
-     * handles a particular "simple" custom native ad format.
-     *
-     * @param nativeCustomFormatAd the object containing the ad's assets
-     * @param adView               the view to be populated
-     */
-    private void populateSimpleTemplateAdView(final NativeCustomFormatAd nativeCustomFormatAd,
-                                              View adView) {
-        TextView headline = adView.findViewById(R.id.simplecustom_headline);
-        TextView caption = adView.findViewById(R.id.simplecustom_caption);
+    // Assign native ad object to the native view.
+    adView.setNativeAd(nativeAd);
 
-        headline.setText(nativeCustomFormatAd.getText("Headline"));
-        caption.setText(nativeCustomFormatAd.getText("Caption"));
+    // Set up the custom video controls functionality.
+    MediaContent mediaContent = nativeAd.getMediaContent();
+    if (mediaContent != null) {
+      customControlsView.setVideoController(mediaContent.getVideoController());
+    }
 
-        headline.setOnClickListener(new View.OnClickListener() {
+    refresh.setEnabled(true);
+  }
+
+  /**
+   * Populates a {@link View} object with data from a {@link NativeCustomFormatAd}. This method
+   * handles a particular "simple" custom native ad format.
+   *
+   * @param nativeCustomFormatAd the object containing the ad's assets
+   * @param adView the view to be populated
+   */
+  private void populateSimpleTemplateAdView(final NativeCustomFormatAd nativeCustomFormatAd,
+      View adView) {
+    TextView headline = adView.findViewById(R.id.simplecustom_headline);
+    TextView caption = adView.findViewById(R.id.simplecustom_caption);
+
+    headline.setText(nativeCustomFormatAd.getText("Headline"));
+    caption.setText(nativeCustomFormatAd.getText("Caption"));
+
+    headline.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View unusedView) {
+        nativeCustomFormatAd.performClick("Headline");
+      }
+    });
+
+    FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
+
+    // Get the video controller for the ad. One will always be provided, even if the ad doesn't
+    // have a video asset.
+    VideoController vc = nativeCustomFormatAd.getVideoController();
+
+    // Apps can check the VideoController's hasVideoContent property to determine if the
+    // NativeCustomTemplateAd has a video asset.
+    if (vc.hasVideoContent()) {
+      mediaPlaceholder.addView(nativeCustomFormatAd.getVideoMediaView());
+    } else {
+      ImageView mainImage = new ImageView(getActivity());
+      mainImage.setAdjustViewBounds(true);
+      mainImage.setImageDrawable(nativeCustomFormatAd.getImage("MainImage").getDrawable());
+
+      mainImage.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View unusedView) {
+          nativeCustomFormatAd.performClick("MainImage");
+        }
+      });
+      mediaPlaceholder.addView(mainImage);
+    }
+    customControlsView.setVideoController(vc);
+
+    refresh.setEnabled(true);
+  }
+
+
+  /**
+   * Creates a request for a new native ad based on the boolean parameters and calls the
+   * corresponding "populate" method when one is successfully returned.
+   */
+  private void refreshAd() {
+    refresh.setEnabled(false);
+
+    Resources resources = getActivity().getResources();
+    AdLoader.Builder builder = new AdLoader.Builder(getActivity(),
+        resources.getString(R.string.customcontrols_fragment_ad_unit_id));
+
+    if (customFormatAdsCheckbox.isChecked()) {
+      builder.forCustomFormatAd(
+          resources.getString(R.string.customcontrols_fragment_template_id),
+          new OnCustomFormatAdLoadedListener() {
             @Override
-            public void onClick(View unusedView) {
-                nativeCustomFormatAd.performClick("Headline");
+            public void onCustomFormatAdLoaded(NativeCustomFormatAd ad) {
+              if (isDetached()) {
+                ad.destroy();
+                return;
+              }
+              if (nativeCustomFormatAd != null) {
+                nativeCustomFormatAd.destroy();
+              }
+              nativeCustomFormatAd = ad;
+              FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
+              View adView = getLayoutInflater()
+                  .inflate(R.layout.ad_simple_custom_template, null);
+              populateSimpleTemplateAdView(ad, adView);
+              frameLayout.removeAllViews();
+              frameLayout.addView(adView);
             }
-        });
+          },
+          new OnCustomClickListener() {
+            @Override
+            public void onCustomClick(NativeCustomFormatAd ad, String assetName) {
+              Toast.makeText(getActivity(),
+                  "A custom click has occurred on asset: " + assetName,
+                  Toast.LENGTH_SHORT).show();
+            }
+          });
+    }
 
-        FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
-
-        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-        // have a video asset.
-        VideoController vc = nativeCustomFormatAd.getVideoController();
-
-        // Apps can check the VideoController's hasVideoContent property to determine if the
-        // NativeCustomTemplateAd has a video asset.
-        if (vc.hasVideoContent()) {
-            mediaPlaceholder.addView(nativeCustomFormatAd.getVideoMediaView());
-        } else {
-            ImageView mainImage = new ImageView(getActivity());
-            mainImage.setAdjustViewBounds(true);
-            mainImage.setImageDrawable(nativeCustomFormatAd.getImage("MainImage").getDrawable());
-
-            mainImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View unusedView) {
-                    nativeCustomFormatAd.performClick("MainImage");
-                }
-            });
-            mediaPlaceholder.addView(mainImage);
+    if (nativeAdsCheckbox.isChecked()) {
+      builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+        @Override
+        public void onNativeAdLoaded(NativeAd ad) {
+          if (isDetached()) {
+            ad.destroy();
+            return;
+          }
+          if (nativeAd != null) {
+            nativeAd.destroy();
+          }
+          nativeAd = ad;
+          FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
+          NativeAdView adView = (NativeAdView) getLayoutInflater()
+              .inflate(R.layout.native_ad, null);
+          populateNativeAdView(ad, adView);
+          frameLayout.removeAllViews();
+          frameLayout.addView(adView);
         }
-        customControlsView.setVideoController(vc);
+      });
+    }
 
+    VideoOptions videoOptions = new VideoOptions.Builder()
+        .setStartMuted(startVideoAdsMuted.isChecked())
+        .setCustomControlsRequested(customControlsCheckbox.isChecked())
+        .build();
+
+    NativeAdOptions adOptions = new NativeAdOptions.Builder()
+        .setVideoOptions(videoOptions)
+        .build();
+
+    builder.withNativeAdOptions(adOptions);
+
+    AdLoader adLoader = builder.withAdListener(new AdListener() {
+      @Override
+      public void onAdFailedToLoad(LoadAdError loadAdError) {
         refresh.setEnabled(true);
-    }
+        String error =
+            String.format(
+                "domain: %s, code: %d, message: %s",
+                loadAdError.getDomain(),
+                loadAdError.getCode(),
+                loadAdError.getMessage());
+        Toast.makeText(
+            getActivity(),
+            "Failed to load native ad: " + error,
+            Toast.LENGTH_SHORT)
+            .show();
+      }
+    })
+        .build();
+    adLoader.loadAd(new AdManagerAdRequest.Builder().build());
 
-
-    /**
-     * Creates a request for a new native ad based on the boolean parameters and calls the
-     * corresponding "populate" method when one is successfully returned.
-     */
-    private void refreshAd() {
-        refresh.setEnabled(false);
-
-        Resources resources = getActivity().getResources();
-        AdLoader.Builder builder = new AdLoader.Builder(getActivity(),
-                resources.getString(R.string.customcontrols_fragment_ad_unit_id));
-
-        if (customFormatAdsCheckbox.isChecked()) {
-            builder.forCustomFormatAd(
-                    resources.getString(R.string.customcontrols_fragment_template_id),
-                    new OnCustomFormatAdLoadedListener() {
-                        @Override
-                        public void onCustomFormatAdLoaded(NativeCustomFormatAd ad) {
-                            if (isDetached()) {
-                                ad.destroy();
-                                return;
-                            }
-                            if (nativeCustomFormatAd != null) {
-                                nativeCustomFormatAd.destroy();
-                            }
-                            nativeCustomFormatAd = ad;
-                            FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
-                            View adView = getLayoutInflater()
-                                    .inflate(R.layout.ad_simple_custom_template, null);
-                            populateSimpleTemplateAdView(ad, adView);
-                            frameLayout.removeAllViews();
-                            frameLayout.addView(adView);
-                        }
-                    },
-                    new OnCustomClickListener() {
-                        @Override
-                        public void onCustomClick(NativeCustomFormatAd ad, String assetName) {
-                            Toast.makeText(getActivity(),
-                                    "A custom click has occurred on asset: " + assetName,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-
-        if (nativeAdsCheckbox.isChecked()) {
-            builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-                @Override
-                public void onNativeAdLoaded(NativeAd ad) {
-                    if (isDetached()) {
-                        ad.destroy();
-                        return;
-                    }
-                    if (nativeAd != null) {
-                        nativeAd.destroy();
-                    }
-                    nativeAd = ad;
-                    FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
-                    NativeAdView adView = (NativeAdView) getLayoutInflater()
-                            .inflate(R.layout.native_ad, null);
-                    populateNativeAdView(ad, adView);
-                    frameLayout.removeAllViews();
-                    frameLayout.addView(adView);
-                }
-            });
-        }
-
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(startVideoAdsMuted.isChecked())
-                .setCustomControlsRequested(customControlsCheckbox.isChecked())
-                .build();
-
-        NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .build();
-
-        builder.withNativeAdOptions(adOptions);
-
-        AdLoader adLoader = builder.withAdListener(new AdListener() {
-                @Override
-                public void onAdFailedToLoad(LoadAdError loadAdError) {
-                    refresh.setEnabled(true);
-                    String error =
-                        String.format(
-                            "domain: %s, code: %d, message: %s",
-                            loadAdError.getDomain(),
-                            loadAdError.getCode(),
-                            loadAdError.getMessage());
-                    Toast.makeText(
-                            getActivity(),
-                            "Failed to load native ad: " + error,
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-            })
-            .build();
-        adLoader.loadAd(new AdManagerAdRequest.Builder().build());
-
-        customControlsView.reset();
-    }
+    customControlsView.reset();
+  }
 }
 
 

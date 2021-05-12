@@ -16,89 +16,111 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
- * {@link MainActivity} is the single activity for the application.  It contains a single
- * {@link NavigationDrawerFragment} in its drawer, and swaps demo fragments in and out of its
- * {@link android.widget.FrameLayout} as appropriate.
+ * {@link MainActivity} is the single activity for the application.  It contains a single {@link
+ * NavigationDrawerFragment} in its drawer, and swaps demo fragments in and out of its {@link
+ * android.widget.FrameLayout} as appropriate.
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    public static final String LOG_TAG = "APIDemos";
+  public static final String LOG_TAG = "APIDemos";
 
-    private NavigationDrawerFragment navigationDrawerFragment;
+  private NavigationDrawerFragment navigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence title;
+  /**
+   * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+   */
+  private CharSequence title;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
-        navigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        title = getTitle();
+    navigationDrawerFragment = (NavigationDrawerFragment)
+        getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+    title = getTitle();
 
-        // Set up the drawer.
-        navigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+    // Set up the drawer.
+    navigationDrawerFragment.setUp(
+        R.id.navigation_drawer,
+        (DrawerLayout) findViewById(R.id.drawer_layout));
+  }
+
+  @Override
+  public void onNavigationDrawerItemSelected(int position) {
+    // Update the main content by replacing fragments.
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction trans = fragmentManager.beginTransaction();
+
+    switch (position) {
+      case 0:
+        trans.replace(R.id.container, new AdMobAdListenerFragment());
+        break;
+      case 1:
+        trans.replace(R.id.container, new AdMobAdTargetingFragment());
+        break;
+      case 2:
+        trans.replace(R.id.container, new AdMobBannerSizesFragment());
+        break;
+      case 3:
+        trans.replace(R.id.container, new AdMobCustomMuteThisAdFragment());
+        break;
+      case 4:
+        trans.replace(R.id.container, new AdManagerFluidSizeFragment());
+        break;
+      case 5:
+        trans.replace(R.id.container, new AdManagerPPIDFragment());
+        break;
+      case 6:
+        trans.replace(R.id.container, new AdManagerCustomTargetingFragment());
+        break;
+      case 7:
+        trans.replace(R.id.container, new AdManagerCategoryExclusionFragment());
+        break;
+      case 8:
+        trans.replace(R.id.container, new AdManagerMultipleAdSizesFragment());
+        break;
+      case 9:
+        trans.replace(R.id.container, new AdManagerAppEventsFragment());
+        break;
+      case 10:
+        trans.replace(R.id.container, new AdManagerCustomControlsFragment());
+        break;
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // Update the main content by replacing fragments.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction trans = fragmentManager.beginTransaction();
+    trans.commit();
+  }
 
-        switch (position) {
-            case 0: trans.replace(R.id.container, new AdMobAdListenerFragment()); break;
-            case 1: trans.replace(R.id.container, new AdMobAdTargetingFragment()); break;
-            case 2: trans.replace(R.id.container, new AdMobBannerSizesFragment()); break;
-            case 3: trans.replace(R.id.container, new AdMobCustomMuteThisAdFragment()); break;
-            case 4: trans.replace(R.id.container, new AdManagerFluidSizeFragment()); break;
-            case 5: trans.replace(R.id.container, new AdManagerPPIDFragment()); break;
-            case 6: trans.replace(R.id.container, new AdManagerCustomTargetingFragment()); break;
-            case 7: trans.replace(R.id.container, new AdManagerCategoryExclusionFragment()); break;
-            case 8: trans.replace(R.id.container, new AdManagerMultipleAdSizesFragment()); break;
-            case 9: trans.replace(R.id.container, new AdManagerAppEventsFragment()); break;
-            case 10: trans.replace(R.id.container, new AdManagerCustomControlsFragment()); break;
-        }
+  public void restoreActionBar() {
+    ActionBar actionBar = getSupportActionBar();
+    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+    actionBar.setDisplayShowTitleEnabled(true);
+    actionBar.setTitle(title);
+  }
 
-        trans.commit();
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    if (!navigationDrawerFragment.isDrawerOpen()) {
+      getMenuInflater().inflate(R.menu.main, menu);
+      restoreActionBar();
+      return true;
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(title);
-    }
+    return super.onCreateOptionsMenu(menu);
+  }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!navigationDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    return super.onOptionsItemSelected(item);
+  }
 }

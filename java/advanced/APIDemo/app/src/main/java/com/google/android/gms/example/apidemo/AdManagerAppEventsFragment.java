@@ -26,60 +26,60 @@ import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.google.android.gms.ads.admanager.AppEventListener;
 
 /**
- * The {@link AdManagerAppEventsFragment} class demonstrates how to receive App Events from an
- * Ad Manager creative.
+ * The {@link AdManagerAppEventsFragment} class demonstrates how to receive App Events from an Ad
+ * Manager creative.
  */
 public class AdManagerAppEventsFragment extends Fragment {
 
-    private AdManagerAdView adView;
-    private View rootView;
+  private AdManagerAdView adView;
+  private View rootView;
 
-    public AdManagerAppEventsFragment() {
-    }
+  public AdManagerAppEventsFragment() {
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_gam_app_events, container, false);
-        return rootView;
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    rootView = inflater.inflate(R.layout.fragment_gam_app_events, container, false);
+    return rootView;
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
 
-        adView = getView().findViewById(R.id.appevents_av_main);
+    adView = getView().findViewById(R.id.appevents_av_main);
 
-        adView.setAppEventListener(new AppEventListener() {
-            @Override
-            public void onAppEvent(String name, String data) {
+    adView.setAppEventListener(new AppEventListener() {
+      @Override
+      public void onAppEvent(String name, String data) {
 
-                // The Ad Manager ad this fragment loads contains JavaScript code that sends App
-                // Events to the host application. This AppEventListener receives those events,
-                // and sets the background of the fragment to match the data that comes in.
-                // The ad will send "red" when it loads, "blue" five seconds later, and "green"
-                // if the user taps the ad.
+        // The Ad Manager ad this fragment loads contains JavaScript code that sends App
+        // Events to the host application. This AppEventListener receives those events,
+        // and sets the background of the fragment to match the data that comes in.
+        // The ad will send "red" when it loads, "blue" five seconds later, and "green"
+        // if the user taps the ad.
 
-                // This is just a demonstration, of course. Your apps can do much more interesting
-                // things with App Events.
+        // This is just a demonstration, of course. Your apps can do much more interesting
+        // things with App Events.
 
-                if (name.equals("color")) {
-                    switch (data) {
-                        case "blue":
-                            rootView.setBackgroundColor(Color.rgb(0xD0, 0xD0, 0xFF));
-                            break;
-                        case "red":
-                            rootView.setBackgroundColor(Color.rgb(0xFF, 0xD0, 0xD0));
-                            break;
-                        case "green":
-                            rootView.setBackgroundColor(Color.rgb(0xD0, 0xFF, 0xD0));
-                            break;
-                    }
-                }
-            }
-        });
+        if (name.equals("color")) {
+          switch (data) {
+            case "blue":
+              rootView.setBackgroundColor(Color.rgb(0xD0, 0xD0, 0xFF));
+              break;
+            case "red":
+              rootView.setBackgroundColor(Color.rgb(0xFF, 0xD0, 0xD0));
+              break;
+            case "green":
+              rootView.setBackgroundColor(Color.rgb(0xD0, 0xFF, 0xD0));
+              break;
+          }
+        }
+      }
+    });
 
-        AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }
+    AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
+    adView.loadAd(adRequest);
+  }
 }

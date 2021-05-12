@@ -29,37 +29,37 @@ import com.google.android.gms.ads.admanager.AdManagerAdView;
  */
 public class AdManagerCategoryExclusionFragment extends Fragment {
 
-    private AdManagerAdView noExclusionsAdView;
-    private AdManagerAdView dogsExcludedAdView;
-    private AdManagerAdView catsExcludedAdView;
+  private AdManagerAdView noExclusionsAdView;
+  private AdManagerAdView dogsExcludedAdView;
+  private AdManagerAdView catsExcludedAdView;
 
-    public AdManagerCategoryExclusionFragment() {
-    }
+  public AdManagerCategoryExclusionFragment() {
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_gam_category_exclusion, container, false);
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_gam_category_exclusion, container, false);
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
 
-        noExclusionsAdView = getView().findViewById(R.id.no_exclusions_av);
-        dogsExcludedAdView = getView().findViewById(R.id.exclusions_av_dogsexcluded);
-        catsExcludedAdView = getView().findViewById(R.id.exclusions_av_catsexcluded);
+    noExclusionsAdView = getView().findViewById(R.id.no_exclusions_av);
+    dogsExcludedAdView = getView().findViewById(R.id.exclusions_av_dogsexcluded);
+    catsExcludedAdView = getView().findViewById(R.id.exclusions_av_catsexcluded);
 
-        AdManagerAdRequest noExclusionsRequest = new AdManagerAdRequest.Builder().build();
-        AdManagerAdRequest dogsExcludedRequest = new AdManagerAdRequest.Builder()
-                .addCategoryExclusion(getString(R.string.categoryexclusion_dogscategoryname))
-                .build();
-        AdManagerAdRequest catsExcludedRequest = new AdManagerAdRequest.Builder()
-                .addCategoryExclusion(getString(R.string.categoryexclusion_catscategoryname))
-                .build();
+    AdManagerAdRequest noExclusionsRequest = new AdManagerAdRequest.Builder().build();
+    AdManagerAdRequest dogsExcludedRequest = new AdManagerAdRequest.Builder()
+        .addCategoryExclusion(getString(R.string.categoryexclusion_dogscategoryname))
+        .build();
+    AdManagerAdRequest catsExcludedRequest = new AdManagerAdRequest.Builder()
+        .addCategoryExclusion(getString(R.string.categoryexclusion_catscategoryname))
+        .build();
 
-        noExclusionsAdView.loadAd(noExclusionsRequest);
-        dogsExcludedAdView.loadAd(dogsExcludedRequest);
-        catsExcludedAdView.loadAd(catsExcludedRequest);
-    }
+    noExclusionsAdView.loadAd(noExclusionsRequest);
+    dogsExcludedAdView.loadAd(dogsExcludedRequest);
+    catsExcludedAdView.loadAd(catsExcludedRequest);
+  }
 }
