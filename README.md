@@ -52,6 +52,8 @@ documentation on using the Mobile Ads SDK.
 *   Interstitial:
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/InterstitialExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/InterstitialExample)
+*   Rewarded Interstitial:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/RewardedInterstitialExample)
 *   Rewarded Video:
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/RewardedVideoExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/RewardedVideoExample)
