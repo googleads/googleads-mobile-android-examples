@@ -11,13 +11,14 @@
 
     <string name="ad_attribution">Ad</string>
 
-    <string name="targeting_location">Location</string>
-    <string name="targeting_birthday">Birth Date</string>
-    <string name="targeting_gender">Gender</string>
     <string name="targeting_child">Use Child-Directed Treatment</string>
-    <string name="targeting_male">Male</string>
-    <string name="targeting_female">Female</string>
+    <string name="targeting_tfua" translatable="false">Tag for users under the age of consent in Europe</string>
     <string name="targeting_load">Load Targeted Ad</string>
+    <string name="targeting_rating" translatable="false">Max ad content rating</string>
+    <string name="targeting_rating_g" translatable="false">G</string>
+    <string name="targeting_rating_pg" translatable="false">PG</string>
+    <string name="targeting_rating_t" translatable="false">T</string>
+    <string name="targeting_rating_ma" translatable="false">MA</string>
     <string name="bannersizes_size">Size</string>
     <string name="bannersizes_loadad">Load New Ad</string>
 

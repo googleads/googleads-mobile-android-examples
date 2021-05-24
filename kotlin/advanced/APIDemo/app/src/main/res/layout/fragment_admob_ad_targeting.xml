@@ -31,63 +31,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/targeting_tv_birthday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/targeting_birthday"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/targeting_et_birthday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="date" />
-
-                <Button
-                    android:id="@+id/targeting_btn_datepick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="@string/choose" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/targeting_tv_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/targeting_gender"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <RadioGroup
-                android:id="@+id/targeting_rg_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/targeting_rb_male"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/targeting_male" />
-
-                <RadioButton
-                    android:id="@+id/targeting_rb_female"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/targeting_female" />
-            </RadioGroup>
-
-            <TextView
                 android:id="@+id/targeting_tv_child"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,22 +45,94 @@
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/targeting_rb_child"
+                    android:id="@+id/targeting_rb_tfcd_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/yes" />
 
                 <RadioButton
-                    android:id="@+id/targeting_rb_notchild"
+                    android:id="@+id/targeting_rb_tfcd_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no" />
 
                 <RadioButton
-                    android:id="@+id/targeting_rb_unspecified"
+                    android:id="@+id/targeting_rb_tfcd_unspecified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/unspecified" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/targeting_tv_tfua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/targeting_tfua"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <RadioGroup
+                android:id="@+id/targeting_rg_tfua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_tfua_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_tfua_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_tfua_unspecified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/unspecified" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/targeting_tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/targeting_rating"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <RadioGroup
+                android:id="@+id/targeting_rg_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_rating_g"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/targeting_rating_g" />
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_rating_pg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/targeting_rating_pg" />
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_rating_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/targeting_rating_t" />
+
+                <RadioButton
+                    android:id="@+id/targeting_rb_rating_ma"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/targeting_rating_ma" />
             </RadioGroup>
 
 

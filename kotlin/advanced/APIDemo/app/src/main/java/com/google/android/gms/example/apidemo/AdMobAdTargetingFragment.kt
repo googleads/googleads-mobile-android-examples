@@ -1,25 +1,30 @@
 package com.google.android.gms.example.apidemo
 
-import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdRequest
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.*
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_ad_view
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_btn_loadad
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_g
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_ma
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_pg
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_t
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfcd_no
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfcd_unspecified
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfcd_yes
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfua_no
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfua_unspecified
+import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfua_yes
 
 /**
  * The [AdMobAdTargetingFragment] class demonstrates how to use ad targeting with AdMob.
  */
-class AdMobAdTargetingFragment : Fragment(), DatePickerDialog.OnDateSetListener {
-
-  private val mDateFormat = SimpleDateFormat("M/d/yyyy", Locale.getDefault())
+class AdMobAdTargetingFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -32,48 +37,59 @@ class AdMobAdTargetingFragment : Fragment(), DatePickerDialog.OnDateSetListener 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    targeting_btn_datepick.setOnClickListener {
-      val newFragment = DatePickerFragment()
-      newFragment.setOnDateSetListener(this)
-      newFragment.show(activity!!.supportFragmentManager, "datePicker")
-    }
-
     targeting_btn_loadad.setOnClickListener {
-      val builder = AdRequest.Builder()
+      val builder = MobileAds.getRequestConfiguration().toBuilder()
 
-      try {
-        val birthdayString = targeting_et_birthday.text.toString()
-        val birthday = mDateFormat.parse(birthdayString)
-        builder.setBirthday(birthday)
-      } catch (ex: ParseException) {
-        Log.d(MainActivity.LOG_TAG, "Failed to parse birthday")
+      when {
+        targeting_rb_tfcd_unspecified.isChecked -> {
+          builder.setTagForChildDirectedTreatment(
+            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED)
+        }
+        targeting_rb_tfcd_yes.isChecked -> {
+          builder.setTagForChildDirectedTreatment(
+            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE)
+        }
+        targeting_rb_tfcd_no.isChecked -> {
+          builder.setTagForChildDirectedTreatment(
+            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE)
+        }
       }
 
-      if (targeting_rb_male.isChecked) {
-        builder.setGender(AdRequest.GENDER_MALE)
-      } else if (targeting_rb_female.isChecked) {
-        builder.setGender(AdRequest.GENDER_FEMALE)
+      when {
+        targeting_rb_tfua_unspecified.isChecked -> {
+          builder.setTagForUnderAgeOfConsent(
+            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_UNSPECIFIED)
+        }
+        targeting_rb_tfua_yes.isChecked -> {
+          builder.setTagForUnderAgeOfConsent(
+            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE)
+        }
+        targeting_rb_tfua_no.isChecked -> {
+          builder.setTagForUnderAgeOfConsent(
+            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE)
+        }
       }
 
-      if (targeting_rb_unspecified.isChecked) {
-        // There's actually nothing to be done here. If you're unsure whether or not
-        // the user should receive child-directed treatment, simply avoid calling the
-        // tagForChildDirectedTreatment method. The ad request will not contain any
-        // indication one way or the other.
-      } else if (targeting_rb_child.isChecked) {
-        builder.tagForChildDirectedTreatment(true)
-      } else if (targeting_rb_notchild.isChecked) {
-        builder.tagForChildDirectedTreatment(false)
+      when {
+        targeting_rb_rating_g.isChecked -> {
+          builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_G)
+        }
+        targeting_rb_rating_pg.isChecked -> {
+          builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_PG)
+        }
+        targeting_rb_rating_t.isChecked -> {
+          builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_T)
+        }
+        targeting_rb_rating_ma.isChecked -> {
+          builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_MA)
+        }
       }
 
-      val request = builder.build()
-      targeting_ad_view.loadAd(request)
+      // Update the request configuration.
+      MobileAds.setRequestConfiguration(builder.build())
+
+      // Load an ad.
+      targeting_ad_view.loadAd(AdRequest.Builder().build())
     }
-  }
-
-  override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    val calendar = Calendar.getInstance()
-    calendar.set(year, monthOfYear, dayOfMonth)
-    targeting_et_birthday.setText(mDateFormat.format(calendar.time))
   }
 }
