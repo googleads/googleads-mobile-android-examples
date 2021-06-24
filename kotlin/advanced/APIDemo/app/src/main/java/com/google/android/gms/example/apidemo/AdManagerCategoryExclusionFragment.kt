@@ -5,31 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import kotlinx.android.synthetic.main.fragment_dfp_category_exclusion.*
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import kotlinx.android.synthetic.main.fragment_gam_category_exclusion.exclusions_av_catsexcluded
+import kotlinx.android.synthetic.main.fragment_gam_category_exclusion.exclusions_av_dogsexcluded
+import kotlinx.android.synthetic.main.fragment_gam_category_exclusion.exclusions_av_none
 
 /**
- * The [DFPCategoryExclusionFragment] class demonstrates how to use category exclusions with
- * DFP requests
+ * The [AdManagerCategoryExclusionFragment] class demonstrates how to use category exclusions with
+ * Ad Manager requests
  */
-class DFPCategoryExclusionFragment : Fragment() {
+class AdManagerCategoryExclusionFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_dfp_category_exclusion, container, false)
+    return inflater.inflate(R.layout.fragment_gam_category_exclusion, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    val noExclusionsRequest = PublisherAdRequest.Builder().build()
-    val dogsExcludedRequest = PublisherAdRequest.Builder()
+    val noExclusionsRequest = AdManagerAdRequest.Builder().build()
+    val dogsExcludedRequest = AdManagerAdRequest.Builder()
       .addCategoryExclusion(getString(R.string.categoryexclusion_dogscategoryname))
       .build()
-    val catsExcludedRequest = PublisherAdRequest.Builder()
+    val catsExcludedRequest = AdManagerAdRequest.Builder()
       .addCategoryExclusion(getString(R.string.categoryexclusion_catscategoryname))
       .build()
 

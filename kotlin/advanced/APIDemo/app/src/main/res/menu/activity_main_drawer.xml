@@ -20,28 +20,28 @@
         </menu>
     </item>
 
-    <item android:title="DFP">
+    <item android:title="Ad Manager">
         <menu>
             <item
-                android:id="@+id/nav_dfp_adsizes"
+                android:id="@+id/nav_gam_adsizes"
                 android:title="Ad sizes" />
             <item
-                android:id="@+id/nav_dfp_appevents"
+                android:id="@+id/nav_gam_appevents"
                 android:title="App events" />
             <item
-                android:id="@+id/nav_dfp_categoryexclusion"
+                android:id="@+id/nav_gam_categoryexclusion"
                 android:title="Category exclusion" />
             <item
-                android:id="@+id/nav_dfp_customtargeting"
+                android:id="@+id/nav_gam_customtargeting"
                 android:title="Custom targeting" />
             <item
-                android:id="@+id/nav_dfp_fluid"
+                android:id="@+id/nav_gam_fluid"
                 android:title="Fluid size" />
             <item
-                android:id="@+id/nav_dfp_ppid"
+                android:id="@+id/nav_gam_ppid"
                 android:title="PPID" />
             <item
-                android:id="@+id/nav_dfp_customcontrols"
+                android:id="@+id/nav_gam_customcontrols"
                 android:title="Custom Video Controls" />
         </menu>
     </item>

@@ -162,7 +162,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
     btn_refresh.isEnabled = false
     btn_mute_ad.isEnabled = false
 
-    val resources = activity!!.resources
+    val resources = requireActivity().resources
     val builder = AdLoader.Builder(
       activity,
       resources.getString(R.string.custommute_fragment_ad_unit_id)
@@ -211,7 +211,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
       }
     }
 
-    val builder = AlertDialog.Builder(activity!!.applicationContext)
+    val builder = AlertDialog.Builder(requireActivity())
     builder.setTitle("Select a reason")
     val reasons = nativeAd?.muteThisAdReasons
 
@@ -219,7 +219,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
 
     builder.setAdapter(
       ArrayAdapter<MuteThisAdReasonWrapper>(
-        activity!!,
+        requireActivity(),
         android.R.layout.simple_list_item_1, wrappedReasons
       )
     ) { dialog, which ->

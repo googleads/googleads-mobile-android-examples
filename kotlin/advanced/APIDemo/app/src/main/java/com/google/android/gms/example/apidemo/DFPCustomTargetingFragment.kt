@@ -27,7 +27,7 @@ class DFPCustomTargetingFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
 
     val adapter = ArrayAdapter.createFromResource(
-      view!!.context,
+      requireView().context,
       R.array.customtargeting_sports, android.R.layout.simple_spinner_item
     )
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

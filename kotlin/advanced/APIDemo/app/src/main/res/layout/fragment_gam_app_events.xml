@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DFPAppEventsFragment">
+    tools:context=".AdManagerAppEventsFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +14,7 @@
         android:text="@string/appevents_fragment_title"
         android:textAppearance="@android:style/TextAppearance.Large" />
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/appevents_av_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

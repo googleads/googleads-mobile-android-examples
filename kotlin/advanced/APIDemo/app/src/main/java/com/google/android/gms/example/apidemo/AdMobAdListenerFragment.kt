@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
-import kotlinx.android.synthetic.main.fragment_admob_ad_listener.*
+import kotlinx.android.synthetic.main.fragment_admob_ad_listener.listener_ad_view
 
 /**
  * The [AdMobAdListenerFragment] demonstrates the use of the [com.google.android.gms.ads.AdListener]
@@ -52,10 +52,6 @@ class AdMobAdListenerFragment : Fragment() {
 
       override fun onAdClosed() {
         showToast("Ad closed.")
-      }
-
-      override fun onAdLeftApplication() {
-        showToast("Ad left application.")
       }
     }
 

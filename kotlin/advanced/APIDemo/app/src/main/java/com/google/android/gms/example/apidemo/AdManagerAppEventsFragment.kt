@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.doubleclick.AppEventListener
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import kotlinx.android.synthetic.main.fragment_dfp_app_events.*
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.admanager.AppEventListener
+import kotlinx.android.synthetic.main.fragment_gam_app_events.appevents_av_main
 
 /**
- * The [DFPAppEventsFragment] class demonstrates how to receive App Events from a DFP creative.
+ * The [AdManagerAppEventsFragment] class demonstrates how to receive App Events from an AdManager
+ * creative.
  */
-class DFPAppEventsFragment : Fragment() {
+class AdManagerAppEventsFragment : Fragment() {
 
   private lateinit var mRootView: View
 
@@ -22,7 +23,7 @@ class DFPAppEventsFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    mRootView = inflater.inflate(R.layout.fragment_dfp_app_events, container, false)
+    mRootView = inflater.inflate(R.layout.fragment_gam_app_events, container, false)
     return mRootView
   }
 
@@ -30,7 +31,7 @@ class DFPAppEventsFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
 
     appevents_av_main.appEventListener = AppEventListener { name, data ->
-      // The DFP ad that this fragment loads contains JavaScript code that sends App
+      // The Ad Manager ad that this fragment loads contains JavaScript code that sends App
       // Events to the host application. This AppEventListener receives those events,
       // and sets the background of the fragment to match the data that comes in.
       // The ad will send "red" when it loads, "blue" five seconds later, and "green"
@@ -50,7 +51,7 @@ class DFPAppEventsFragment : Fragment() {
       }
     }
 
-    val adRequest = PublisherAdRequest.Builder().build()
+    val adRequest = AdManagerAdRequest.Builder().build()
     appevents_av_main.loadAd(adRequest)
   }
 }

@@ -254,13 +254,13 @@ class DFPCustomControlsFragment : Fragment() {
     btn_refresh.isEnabled = false
 
     val builder = AdLoader.Builder(
-      activity!!,
-      activity!!.resources.getString(R.string.customcontrols_fragment_ad_unit_id)
+      requireActivity(),
+      requireActivity().resources.getString(R.string.customcontrols_fragment_ad_unit_id)
     )
 
     if (cb_customtemplate.isChecked) {
       builder.forCustomTemplateAd(
-        activity!!.resources.getString(R.string.customcontrols_fragment_template_id),
+        requireActivity().resources.getString(R.string.customcontrols_fragment_template_id),
         { ad ->
           if (isDetached) {
             ad.destroy()
@@ -268,7 +268,7 @@ class DFPCustomControlsFragment : Fragment() {
           }
           nativeCustomTemplateAd?.destroy()
           nativeCustomTemplateAd = ad
-          val frameLayout = view!!.findViewById<FrameLayout>(R.id.fl_adplaceholder)
+          val frameLayout = requireView().findViewById<FrameLayout>(R.id.fl_adplaceholder)
           val adView = layoutInflater
             .inflate(R.layout.ad_simple_custom_template, null)
           populateSimpleTemplateAdView(ad, adView)
@@ -293,7 +293,7 @@ class DFPCustomControlsFragment : Fragment() {
         }
         nativeAppInstallAd?.destroy()
         nativeAppInstallAd = ad
-        val frameLayout = view!!.findViewById<FrameLayout>(R.id.fl_adplaceholder)
+        val frameLayout = requireView().findViewById<FrameLayout>(R.id.fl_adplaceholder)
         val adView = layoutInflater
           .inflate(R.layout.ad_app_install, null) as NativeAppInstallAdView
         populateAppInstallAdView(ad, adView)
@@ -310,7 +310,7 @@ class DFPCustomControlsFragment : Fragment() {
         }
         nativeContentAd?.destroy()
         nativeContentAd = ad
-        val frameLayout = view!!.findViewById<FrameLayout>(R.id.fl_adplaceholder)
+        val frameLayout = requireView().findViewById<FrameLayout>(R.id.fl_adplaceholder)
         val adView = layoutInflater
           .inflate(R.layout.ad_content, null) as NativeContentAdView
         populateContentAdView(ad, adView)
