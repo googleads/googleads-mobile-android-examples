@@ -52,10 +52,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
       R.id.nav_gam_adsizes -> DFPMultipleAdSizesFragment()
       R.id.nav_gam_appevents -> AdManagerAppEventsFragment()
-      R.id.nav_gam_customtargeting -> DFPCustomTargetingFragment()
+      R.id.nav_gam_customtargeting -> AdManagerCustomTargetingFragment()
       R.id.nav_gam_fluid -> DFPFluidSizeFragment()
       R.id.nav_gam_ppid -> DFPPPIDFragment()
-      R.id.nav_gam_customcontrols -> DFPCustomControlsFragment()
+      R.id.nav_gam_customcontrols -> AdManagerCustomControlsFragment()
       else -> AdManagerCategoryExclusionFragment()
     }
 

@@ -111,9 +111,8 @@
 
     <string name="customcontrols_fragment_ad_unit_id" translatable="false">/6499/example/native-video</string>
     <string name="customcontrols_fragment_template_id" translatable="false">10104090</string>
-    <string name="customcontrols_fragment_request_appinstall" translatable="false">Request App Install Ads</string>
-    <string name="customcontrols_fragment_request_content" translatable="false">Request Content Ads</string>
-    <string name="customcontrols_fragment_request_customtemplate" translatable="false">Request Custom Template Ads</string>
+    <string name="customcontrols_fragment_request_native" translatable="false">Request Native Ads</string>
+    <string name="customcontrols_fragment_request_custom_format" translatable="false">Request Custom Native Ad Formats</string>
     <string name="customcontrols_fragment_start_muted" translatable="false">Start video ads muted</string>
     <string name="customcontrols_fragment_request_custom_controls" translatable="false">Request Custom Video Controls</string>
     <string name="customcontrols_fragment_refresh" translatable="false">Refresh Ad</string>
@@ -121,6 +120,4 @@
     <string name="customcontrols_view_mute" translatable="false">Mute</string>
     <string name="customcontrols_view_play" translatable="false">Play</string>
     <string name="customcontrols_view_video_status" translatable="false">Video Status: </string>
-
-
 </resources>
