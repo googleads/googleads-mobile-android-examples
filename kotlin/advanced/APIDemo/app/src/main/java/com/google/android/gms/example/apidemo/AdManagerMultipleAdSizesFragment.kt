@@ -8,21 +8,25 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import kotlinx.android.synthetic.main.fragment_dfp_multiple_ad_sizes.*
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import kotlinx.android.synthetic.main.fragment_gam_multiple_ad_sizes.adsizes_btn_loadad
+import kotlinx.android.synthetic.main.fragment_gam_multiple_ad_sizes.adsizes_cb_120x20
+import kotlinx.android.synthetic.main.fragment_gam_multiple_ad_sizes.adsizes_cb_300x250
+import kotlinx.android.synthetic.main.fragment_gam_multiple_ad_sizes.adsizes_cb_320x50
+import kotlinx.android.synthetic.main.fragment_gam_multiple_ad_sizes.adsizes_pav_main
 
 /**
- * The [DFPMultipleAdSizesFragment] class demonstrates how to set specific ad sizes for a
+ * The [AdManagerMultipleAdSizesFragment] class demonstrates how to set specific ad sizes for a
  * request.
  */
-class DFPMultipleAdSizesFragment : Fragment() {
+class AdManagerMultipleAdSizesFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_dfp_multiple_ad_sizes, container, false)
+    return inflater.inflate(R.layout.fragment_gam_multiple_ad_sizes, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -60,7 +64,7 @@ class DFPMultipleAdSizesFragment : Fragment() {
 
         adsizes_pav_main.visibility = View.INVISIBLE
         adsizes_pav_main.setAdSizes(*sizeList.toTypedArray())
-        adsizes_pav_main.loadAd(PublisherAdRequest.Builder().build())
+        adsizes_pav_main.loadAd(AdManagerAdRequest.Builder().build())
       }
     }
   }

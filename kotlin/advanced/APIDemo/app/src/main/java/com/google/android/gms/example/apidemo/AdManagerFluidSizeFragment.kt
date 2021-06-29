@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
-import kotlinx.android.synthetic.main.fragment_dfp_fluid_size.*
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import kotlinx.android.synthetic.main.fragment_gam_fluid_size.fluid_av_main
+import kotlinx.android.synthetic.main.fragment_gam_fluid_size.fluid_btn_change_width
+import kotlinx.android.synthetic.main.fragment_gam_fluid_size.fluid_tv_current_width
 
 /**
- * The [DFPFluidSizeFragment] demonstrates the use of the `AdSize.FLUID` ad size.
+ * The [AdManagerFluidSizeFragment] demonstrates the use of the `AdSize.FLUID` ad size.
  */
-class DFPFluidSizeFragment : Fragment() {
+class AdManagerFluidSizeFragment : Fragment() {
 
   private val mAdViewWidths = intArrayOf(200, 250, 320)
   private var mCurrentIndex = 0
@@ -21,7 +23,7 @@ class DFPFluidSizeFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_dfp_fluid_size, container, false)
+    return inflater.inflate(R.layout.fragment_gam_fluid_size, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,7 +35,7 @@ class DFPFluidSizeFragment : Fragment() {
     // An ad with fluid size will automatically stretch or shrink to fit the height of its
     // content, which can help layout designers cut down on excess whitespace.
 
-    val publisherAdRequest = PublisherAdRequest.Builder().build()
+    val publisherAdRequest = AdManagerAdRequest.Builder().build()
     fluid_av_main.loadAd(publisherAdRequest)
 
     fluid_btn_change_width.setOnClickListener {
@@ -47,7 +49,7 @@ class DFPFluidSizeFragment : Fragment() {
       fluid_av_main.layoutParams = layoutParams
 
       // Update the TextView with the new width.
-      fluid_tv_current_width.setText("$newWidth dp")
+      fluid_tv_current_width.text = "$newWidth dp"
     }
   }
 }

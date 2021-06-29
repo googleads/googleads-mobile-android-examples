@@ -7,22 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import java.security.NoSuchAlgorithmException
-import kotlinx.android.synthetic.main.fragment_dfp_ppid.*
+import kotlinx.android.synthetic.main.fragment_gam_ppid.ppid_btn_loadad
+import kotlinx.android.synthetic.main.fragment_gam_ppid.ppid_et_username
+import kotlinx.android.synthetic.main.fragment_gam_ppid.ppid_pav_main
 
 /**
- * The [DFPPPIDFragment] class demonstrates how to add a PPID value to a DFP
- * PublisherAdRequest.
+ * The [AdManagerPPIDFragment] class demonstrates how to add a PPID value to an AdManagerAdRequest.
  */
-class DFPPPIDFragment : Fragment() {
+class AdManagerPPIDFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_dfp_ppid, container, false)
+    return inflater.inflate(R.layout.fragment_gam_ppid, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -38,7 +39,7 @@ class DFPPPIDFragment : Fragment() {
         ).show()
       } else {
         val ppid = generatePPID(username)
-        val request = PublisherAdRequest.Builder()
+        val request = AdManagerAdRequest.Builder()
           .setPublisherProvidedId(ppid)
           .build()
         ppid_pav_main.loadAd(request)

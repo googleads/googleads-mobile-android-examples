@@ -4,7 +4,7 @@
     android:id="@+id/ppid_rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.google.android.gms.example.apidemo.DFPPPIDFragment">
+    tools:context=".AdManagerPPIDFragment">
 
     <TextView
         android:id="@+id/ppid_tv_title"
@@ -51,7 +51,7 @@
             android:text="@string/ppid_loadad" />
     </LinearLayout>
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/ppid_pav_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
