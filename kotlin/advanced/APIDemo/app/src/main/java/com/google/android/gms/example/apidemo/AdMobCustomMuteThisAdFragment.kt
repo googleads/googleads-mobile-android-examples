@@ -26,13 +26,16 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MediaContent
 import com.google.android.gms.ads.MuteThisAdReason
 import com.google.android.gms.ads.VideoController
-import com.google.android.gms.ads.formats.MediaView
-import com.google.android.gms.ads.formats.NativeAdOptions
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
-import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.*
+import com.google.android.gms.ads.nativead.MediaView
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
+import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.ad_container
+import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.btn_mute_ad
+import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.btn_refresh
 
 /**
  * The [AdMobCustomMuteThisAdFragment] class demonstrates how to use custom mute
@@ -40,7 +43,7 @@ import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.*
  */
 class AdMobCustomMuteThisAdFragment : Fragment() {
 
-  private var nativeAd: UnifiedNativeAd? = null
+  private var nativeAd: NativeAd? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -62,15 +65,15 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
   }
 
   /**
-   * Populates a [UnifiedNativeAdView] object with data from a given
-   * [UnifiedNativeAd].
+   * Populates a [NativeAdView] object with data from a given
+   * [NativeAd].
    *
    * @param nativeAd the object containing the ad's assets
    * @param adView the view to be populated
    */
-  private fun populateUnifiedNativeAdView(
-    nativeAd: UnifiedNativeAd,
-    adView: UnifiedNativeAdView
+  private fun populateNativeAdView(
+    nativeAd: NativeAd,
+    adView: NativeAdView
   ) {
     adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
 
@@ -140,11 +143,12 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
 
     adView.setNativeAd(nativeAd)
 
-    val vc = nativeAd.videoController
+    val mediaContent: MediaContent = nativeAd.mediaContent
 
-    if (vc.hasVideoContent()) {
-      vc.videoLifecycleCallbacks = object : VideoController.VideoLifecycleCallbacks() {
-        override fun onVideoEnd() {
+    if (mediaContent.hasVideoContent()) {
+      mediaContent.videoController.videoLifecycleCallbacks =
+        object : VideoController.VideoLifecycleCallbacks() {
+          override fun onVideoEnd() {
           btn_refresh.isEnabled = true
           super.onVideoEnd()
         }
@@ -155,31 +159,31 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
   }
 
   /**
-   * Creates a request for a new unified native ad based on the boolean parameters and calls the
-   * "populateUnifiedNativeAdView" method when one is successfully returned.
+   * Creates a request for a new native ad based on the boolean parameters and calls the
+   * "populateNativeAdView" method when one is successfully returned.
    */
   private fun refreshAd() {
     btn_refresh.isEnabled = false
     btn_mute_ad.isEnabled = false
 
-    val resources = activity!!.resources
+    val resources = requireActivity().resources
     val builder = AdLoader.Builder(
       activity,
       resources.getString(R.string.custommute_fragment_ad_unit_id)
     )
 
-    builder.forUnifiedNativeAd { unifiedNativeAd ->
-      // OnUnifiedNativeAdLoadedListener implementation.
-      this@AdMobCustomMuteThisAdFragment.nativeAd = unifiedNativeAd
-      btn_mute_ad.isEnabled = unifiedNativeAd.isCustomMuteThisAdEnabled
+    builder.forNativeAd { nativeAd ->
+      // OnNativeAdLoadedListener implementation.
+      this@AdMobCustomMuteThisAdFragment.nativeAd = nativeAd
+      btn_mute_ad.isEnabled = nativeAd.isCustomMuteThisAdEnabled
       nativeAd?.setMuteThisAdListener {
         muteAd()
         Toast.makeText(activity, "Ad muted", Toast.LENGTH_SHORT).show()
       }
 
       val adView = layoutInflater
-        .inflate(R.layout.ad_unified, null) as UnifiedNativeAdView
-      populateUnifiedNativeAdView(unifiedNativeAd, adView)
+        .inflate(R.layout.native_ad, null) as NativeAdView
+      populateNativeAdView(nativeAd, adView)
       ad_container.removeAllViews()
       ad_container.addView(adView)
     }
@@ -211,7 +215,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
       }
     }
 
-    val builder = AlertDialog.Builder(activity!!.applicationContext)
+    val builder = AlertDialog.Builder(requireActivity())
     builder.setTitle("Select a reason")
     val reasons = nativeAd?.muteThisAdReasons
 
@@ -219,7 +223,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
 
     builder.setAdapter(
       ArrayAdapter<MuteThisAdReasonWrapper>(
-        activity!!,
+        requireActivity(),
         android.R.layout.simple_list_item_1, wrappedReasons
       )
     ) { dialog, which ->

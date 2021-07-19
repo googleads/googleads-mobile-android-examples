@@ -46,7 +46,7 @@ class MyActivity : AppCompatActivity() {
       }
 
       val adWidth = (adWidthPixels / density).toInt()
-      return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth)
+      return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {

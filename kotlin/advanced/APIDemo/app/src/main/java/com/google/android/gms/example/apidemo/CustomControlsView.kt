@@ -10,8 +10,6 @@ import android.widget.TextView
 
 import com.google.android.gms.ads.VideoController
 
-import java.util.Locale
-
 /**
  * This view represents the status of a video controller and also displays custom controls for the
  * video controller when appropriate.
@@ -68,10 +66,6 @@ class CustomControlsView : LinearLayout {
     }
 
     private fun configureVideoContent(videoController: VideoController) {
-
-        videoStatusText!!.text = String.format(Locale.getDefault(),
-                "Video status: Ad contains a %.2f:1 video asset.",
-                videoController.aspectRatio)
         if (videoController.isCustomControlsEnabled) {
             muteButton!!.text = if (videoController.isMuted) "Unmute" else "Mute"
             controlsView!!.visibility = View.VISIBLE

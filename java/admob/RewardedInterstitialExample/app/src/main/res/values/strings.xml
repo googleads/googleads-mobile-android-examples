@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name" translatable="false">AdMob Rewarded Interstitial Example</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="impossible_game" translatable="false">Impossible Game</string>
+    <string name="retry_button_text" translatable="false">Retry</string>
+    <string name="default_coin_text" translatable="false">Coins: 0</string>
+    <string name="more_coins_text" translatable="false">Watch an ad for %d more %s.</string>
+    <string name="video_starting_in_text" translatable="false">Video starting in %d…</string>
+    <string name="negative_button_text" translatable="false">No, thanks</string>
+</resources>

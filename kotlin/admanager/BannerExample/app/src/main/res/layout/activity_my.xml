@@ -15,7 +15,7 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:text="@string/hello_world" />
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
+    <com.google.android.gms.ads.admanager.AdManagerAdView
         android:id="@+id/ad_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

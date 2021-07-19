@@ -18,15 +18,19 @@ package com.google.android.gms.example.interstitialexample;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.ads.AdListener;
+import androidx.annotation.NonNull;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAd;
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
@@ -37,8 +41,9 @@ public class MyActivity extends AppCompatActivity {
 
     private static final long GAME_LENGTH_MILLISECONDS = 3000;
     private static final String AD_UNIT_ID = "/6499/example/interstitial";
+  private static final String TAG = "MyActivity";
 
-    private PublisherInterstitialAd interstitialAd;
+  private AdManagerInterstitialAd interstitialAd;
     private CountDownTimer countDownTimer;
     private Button retryButton;
     private boolean gameIsInProgress;
@@ -58,36 +63,8 @@ public class MyActivity extends AppCompatActivity {
               @Override
               public void onInitializationComplete(InitializationStatus status) {}
             });
-        // Create the InterstitialAd and set the adUnitId.
-        interstitialAd = new PublisherInterstitialAd(this);
-        // Defined in res/values/strings.xml
-        interstitialAd.setAdUnitId(AD_UNIT_ID);
 
-    interstitialAd.setAdListener(
-        new AdListener() {
-          @Override
-          public void onAdClosed() {
-            startGame();
-          }
-
-          @Override
-          public void onAdLoaded() {
-            adIsLoading = false;
-            Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
-          }
-
-          @Override
-          public void onAdFailedToLoad(LoadAdError loadAdError) {
-            adIsLoading = false;
-            String error =
-                String.format(
-                    "domain: %s, code: %d, message: %s",
-                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
-            Toast.makeText(
-                    MyActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
-                .show();
-          }
-        });
+    loadAd();
 
         // Create the "retry" button, which tries to show an interstitial between game plays.
         retryButton = findViewById(R.id.retry_button);
@@ -144,10 +121,70 @@ public class MyActivity extends AppCompatActivity {
         super.onPause();
     }
 
+  public void loadAd() {
+    AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
+    AdManagerInterstitialAd.load(
+        this,
+        AD_UNIT_ID,
+        adRequest,
+        new AdManagerInterstitialAdLoadCallback() {
+          @Override
+          public void onAdLoaded(@NonNull AdManagerInterstitialAd interstitialAd) {
+            // The mInterstitialAd reference will be null until
+            // an ad is loaded.
+            MyActivity.this.interstitialAd = interstitialAd;
+            Log.i(TAG, "onAdLoaded");
+            Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
+            interstitialAd.setFullScreenContentCallback(
+                new FullScreenContentCallback() {
+                  @Override
+                  public void onAdDismissedFullScreenContent() {
+                    // Called when fullscreen content is dismissed.
+                    Log.d("TAG", "The ad was dismissed.");
+                    // Make sure to set your reference to null so you don't
+                    // show it a second time.
+                    MyActivity.this.interstitialAd = null;
+                  }
+
+                  @Override
+                  public void onAdFailedToShowFullScreenContent(AdError adError) {
+                    // Called when fullscreen content failed to show.
+                    Log.d("TAG", "The ad failed to show.");
+                    // Make sure to set your reference to null so you don't
+                    // show it a second time.
+                    MyActivity.this.interstitialAd = null;
+                  }
+
+                  @Override
+                  public void onAdShowedFullScreenContent() {
+                    // Called when fullscreen content is shown.
+                    Log.d("TAG", "The ad was shown.");
+                  }
+                });
+          }
+
+          @Override
+          public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            // Handle the error
+            Log.i(TAG, loadAdError.getMessage());
+            interstitialAd = null;
+            adIsLoading = false;
+            String error =
+                String.format(
+                    "domain: %s, code: %d, message: %s",
+                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+            Toast.makeText(
+                    MyActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
+                .show();
+          }
+        });
+  }
+
     private void showInterstitial() {
-        // Show the ad if it's ready. Otherwise toast and restart the game.
-        if (interstitialAd != null && interstitialAd.isLoaded()) {
-            interstitialAd.show();
+    // Show the ad if it's ready. Otherwise toast and restart the game.
+    if (interstitialAd != null) {
+      interstitialAd.show(this);
+
         } else {
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
             startGame();
@@ -155,11 +192,10 @@ public class MyActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-        // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
-        if (!adIsLoading && !interstitialAd.isLoaded()) {
+    // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
+    if (!adIsLoading) {
             adIsLoading = true;
-            PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-            interstitialAd.loadAd(adRequest);
+      loadAd();
         }
 
         retryButton.setVisibility(View.INVISIBLE);

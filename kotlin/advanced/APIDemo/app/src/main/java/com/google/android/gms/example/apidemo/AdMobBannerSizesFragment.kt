@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import kotlinx.android.synthetic.main.fragment_admob_banner_sizes.*
+import kotlinx.android.synthetic.main.fragment_admob_banner_sizes.bannersizes_btn_loadad
+import kotlinx.android.synthetic.main.fragment_admob_banner_sizes.bannersizes_fl_adframe
+import kotlinx.android.synthetic.main.fragment_admob_banner_sizes.bannersizes_spn_size
 
 /**
  * The [AdMobBannerSizesFragment] class demonstrates how to set a desired banner size prior to
@@ -53,7 +55,7 @@ class AdMobBannerSizesFragment : Fragment() {
     }
 
     val adapter = ArrayAdapter<CharSequence>(
-      this.context!!,
+      this.requireContext(),
       android.R.layout.simple_spinner_dropdown_item, sizesArray
     )
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

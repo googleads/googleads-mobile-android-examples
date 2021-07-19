@@ -1,4 +1,4 @@
-<com.google.android.gms.ads.formats.UnifiedNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -85,7 +85,7 @@
                     android:layout_marginEnd="20dp"
                     android:textSize="12sp" />
 
-                <com.google.android.gms.ads.formats.MediaView
+                <com.google.android.gms.ads.nativead.MediaView
                     android:id="@+id/ad_media"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="250dp"
@@ -130,4 +130,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</com.google.android.gms.ads.formats.UnifiedNativeAdView>
+</com.google.android.gms.ads.nativead.NativeAdView>

@@ -17,7 +17,6 @@ package com.google.android.gms.example.apidemo;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,95 +24,95 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
-
+import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 /**
- * The {@link AdMobBannerSizesFragment} class demonstrates how to set a desired banner size
- * prior to loading an ad.
+ * The {@link AdMobBannerSizesFragment} class demonstrates how to set a desired banner size prior to
+ * loading an ad.
  */
 public class AdMobBannerSizesFragment extends Fragment {
 
-    private AdView adView;
-    private Button loadButton;
-    private FrameLayout adFrameLayout;
-    private Spinner sizesSpinner;
+  private AdView adView;
+  private Button loadButton;
+  private FrameLayout adFrameLayout;
+  private Spinner sizesSpinner;
 
-    public AdMobBannerSizesFragment() {
+  public AdMobBannerSizesFragment() {
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.fragment_admob_banner_sizes, container, false);
+
+    sizesSpinner = rootView.findViewById(R.id.bannersizes_spn_size);
+    loadButton = rootView.findViewById(R.id.bannersizes_btn_loadad);
+    adFrameLayout = rootView.findViewById(R.id.bannersizes_fl_adframe);
+
+    String[] sizesArray;
+
+    // It is a Mobile Ads SDK policy that only the banner, large banner, and smart banner ad
+    // sizes are shown on phones, and that the full banner, leaderboard, and medium rectangle
+    // sizes are reserved for use on tablets.  The conditional below checks the screen size
+    // and retrieves the correct list.
+
+    int screenSize = getResources().getConfiguration().screenLayout
+        & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+    if ((screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE)
+        || (screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE)) {
+      sizesArray = getResources().getStringArray(R.array.bannersizes_largesizes);
+    } else {
+      sizesArray = getResources().getStringArray(R.array.bannersizes_smallsizes);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_admob_banner_sizes, container, false);
+    ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(rootView.getContext(),
+        android.R.layout.simple_spinner_dropdown_item, sizesArray);
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    sizesSpinner.setAdapter(adapter);
 
-        sizesSpinner = rootView.findViewById(R.id.bannersizes_spn_size);
-        loadButton = rootView.findViewById(R.id.bannersizes_btn_loadad);
-        adFrameLayout = rootView.findViewById(R.id.bannersizes_fl_adframe);
-
-        String[] sizesArray;
-
-        // It is a Mobile Ads SDK policy that only the banner, large banner, and smart banner ad
-        // sizes are shown on phones, and that the full banner, leaderboard, and medium rectangle
-        // sizes are reserved for use on tablets.  The conditional below checks the screen size
-        // and retrieves the correct list.
-
-        int screenSize = getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK;
-
-        if ((screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE)
-                || (screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE)) {
-            sizesArray = getResources().getStringArray(R.array.bannersizes_largesizes);
-        } else {
-            sizesArray = getResources().getStringArray(R.array.bannersizes_smallsizes);
+    loadButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (adView != null) {
+          adFrameLayout.removeView(adView);
+          adView.destroy();
         }
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(rootView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, sizesArray);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sizesSpinner.setAdapter(adapter);
+        adView = new AdView(getActivity());
+        adView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
+        adFrameLayout.addView(adView);
 
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (adView != null) {
-                    adFrameLayout.removeView(adView);
-                    adView.destroy();
-                }
+        switch (sizesSpinner.getSelectedItemPosition()) {
+          case 0:
+            adView.setAdSize(AdSize.BANNER);
+            break;
+          case 1:
+            adView.setAdSize(AdSize.LARGE_BANNER);
+            break;
+          case 2:
+            adView.setAdSize(AdSize.SMART_BANNER);
+            break;
+          case 3:
+            adView.setAdSize(AdSize.FULL_BANNER);
+            break;
+          case 4:
+            adView.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            break;
+          case 5:
+            adView.setAdSize(AdSize.LEADERBOARD);
+            break;
+          default:
+            // fall through.
+        }
 
-                adView = new AdView(getActivity());
-                adView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
-                adFrameLayout.addView(adView);
+        adView.loadAd(new AdRequest.Builder().build());
+      }
+    });
 
-                switch (sizesSpinner.getSelectedItemPosition()) {
-                    case 0:
-                        adView.setAdSize(AdSize.BANNER);
-                        break;
-                    case 1:
-                        adView.setAdSize(AdSize.LARGE_BANNER);
-                        break;
-                    case 2:
-                        adView.setAdSize(AdSize.SMART_BANNER);
-                        break;
-                    case 3:
-                        adView.setAdSize(AdSize.FULL_BANNER);
-                        break;
-                    case 4:
-                        adView.setAdSize(AdSize.MEDIUM_RECTANGLE);
-                        break;
-                    case 5:
-                        adView.setAdSize(AdSize.LEADERBOARD);
-                        break;
-                    default:
-                        // fall through.
-                }
-
-                adView.loadAd(new AdRequest.Builder().build());
-            }
-        });
-
-        return rootView;
-    }
+    return rootView;
+  }
 }
