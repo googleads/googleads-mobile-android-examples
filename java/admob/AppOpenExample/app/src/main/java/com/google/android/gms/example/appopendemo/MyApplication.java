@@ -128,6 +128,7 @@ public class MyApplication extends Application
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/3419835294";
 
     private AppOpenAd appOpenAd = null;
+    private boolean isLoadingAd = false;
     private boolean isShowingAd = false;
 
     /** Keep track of the time an app open ad is loaded to ensure you don't show an expired ad. */
@@ -142,11 +143,12 @@ public class MyApplication extends Application
      * @param context the context of the activity that loads the ad
      */
     private void loadAd(Context context) {
-      // Have unused ad, no need to fetch another.
-      if (isAdAvailable()) {
+      // Do not load ad if there is an unused ad or one is already loading.
+      if (isLoadingAd || isAdAvailable()) {
         return;
       }
 
+      isLoadingAd = true;
       AdRequest request = new AdRequest.Builder().build();
       AppOpenAd.load(
           context,
@@ -162,6 +164,7 @@ public class MyApplication extends Application
             @Override
             public void onAdLoaded(AppOpenAd ad) {
               appOpenAd = ad;
+              isLoadingAd = false;
               loadTime = (new Date()).getTime();
 
               Log.d(LOG_TAG, "onAdLoaded.");
@@ -175,6 +178,7 @@ public class MyApplication extends Application
              */
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
+              isLoadingAd = false;
               Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
               Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
             }
@@ -197,8 +201,7 @@ public class MyApplication extends Application
     }
 
     /**
-     * Show the ad if one isn't already showing. Call this method if you want to go back to the
-     * activity that shows the ad upon its completion.
+     * Show the ad if one isn't already showing.
      *
      * @param activity the activity that shows the app open ad
      */
