@@ -47,6 +47,8 @@ documentation on using the Mobile Ads SDK.
 
 ## Ad Manager
 
+*   App Open:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/AppOpenExample)
 *   Banner:
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admanager/BannerExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/master/kotlin/admanager/BannerExample)
