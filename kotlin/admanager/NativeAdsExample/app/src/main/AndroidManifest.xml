@@ -13,6 +13,7 @@
              android:value="ca-app-pub-9939518381636264~1092563270"/>
 
         <activity
+            android:exported="true"
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
