@@ -171,6 +171,7 @@ class MainActivity : AppCompatActivity() {
             addCoins(rewardAmount)
             Log.d("TAG", "User earned the reward.")
           }
+          onUserEarnedReward(it)
         }
       )
     }
