@@ -34,9 +34,7 @@ class MyActivity : AppCompatActivity() {
   // If the ad hasn't been laid out, default to the full screen width.
   private val adSize: AdSize
     get() {
-      val display = windowManager.defaultDisplay
-      val outMetrics = DisplayMetrics()
-      display.getMetrics(outMetrics)
+      val outMetrics = resources.displayMetrics
 
       val density = outMetrics.density
 
