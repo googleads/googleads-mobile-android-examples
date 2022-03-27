@@ -110,6 +110,6 @@ class MyActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
-    private val AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741"
+    private val AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
   }
 }
