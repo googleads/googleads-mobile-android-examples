@@ -167,13 +167,12 @@ class MainActivity : AppCompatActivity() {
 
       mRewardedAd?.show(
         this,
-        OnUserEarnedRewardListener() {
-          fun onUserEarnedReward(rewardItem: RewardItem) {
-            var rewardAmount = rewardItem.amount
-            var rewardType = rewardItem.type
-            addCoins(rewardAmount)
-            Log.d("TAG", "User earned the reward.")
-          }
+        OnUserEarnedRewardListener() { rewardItem ->
+          // Called to give a reward when the user watches the video completely.
+          var rewardAmount = rewardItem.amount
+          var rewardType = rewardItem.type
+          addCoins(rewardAmount)
+          Log.d("TAG", "User earned the reward.")
         }
       )
     }
