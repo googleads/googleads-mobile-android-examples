@@ -8,79 +8,73 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_ad_view
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_btn_loadad
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_g
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_ma
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_pg
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_rating_t
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfcd_no
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfcd_unspecified
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfcd_yes
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfua_no
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfua_unspecified
-import kotlinx.android.synthetic.main.fragment_admob_ad_targeting.targeting_rb_tfua_yes
+import com.google.android.gms.example.apidemo.databinding.FragmentAdmobAdTargetingBinding
 
-/**
- * The [AdMobAdTargetingFragment] class demonstrates how to use ad targeting with AdMob.
- */
+/** The [AdMobAdTargetingFragment] class demonstrates how to use ad targeting with AdMob. */
 class AdMobAdTargetingFragment : Fragment() {
+
+  private lateinit var fragmentBinding: FragmentAdmobAdTargetingBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_admob_ad_targeting, container, false)
+    fragmentBinding = FragmentAdmobAdTargetingBinding.inflate(inflater)
+    return fragmentBinding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    targeting_btn_loadad.setOnClickListener {
+    fragmentBinding.targetingBtnLoadad.setOnClickListener {
       val builder = MobileAds.getRequestConfiguration().toBuilder()
 
       when {
-        targeting_rb_tfcd_unspecified.isChecked -> {
+        fragmentBinding.targetingRbTfcdUnspecified.isChecked -> {
           builder.setTagForChildDirectedTreatment(
-            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED)
+            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED
+          )
         }
-        targeting_rb_tfcd_yes.isChecked -> {
+        fragmentBinding.targetingRbTfcdYes.isChecked -> {
           builder.setTagForChildDirectedTreatment(
-            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE)
+            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE
+          )
         }
-        targeting_rb_tfcd_no.isChecked -> {
+        fragmentBinding.targetingRbTfcdNo.isChecked -> {
           builder.setTagForChildDirectedTreatment(
-            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE)
+            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE
+          )
         }
       }
 
       when {
-        targeting_rb_tfua_unspecified.isChecked -> {
+        fragmentBinding.targetingRbTfuaUnspecified.isChecked -> {
           builder.setTagForUnderAgeOfConsent(
-            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_UNSPECIFIED)
+            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_UNSPECIFIED
+          )
         }
-        targeting_rb_tfua_yes.isChecked -> {
-          builder.setTagForUnderAgeOfConsent(
-            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE)
+        fragmentBinding.targetingRbTfuaYes.isChecked -> {
+          builder.setTagForUnderAgeOfConsent(RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE)
         }
-        targeting_rb_tfua_no.isChecked -> {
+        fragmentBinding.targetingRbTfuaNo.isChecked -> {
           builder.setTagForUnderAgeOfConsent(
-            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE)
+            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE
+          )
         }
       }
 
       when {
-        targeting_rb_rating_g.isChecked -> {
+        fragmentBinding.targetingRbRatingG.isChecked -> {
           builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_G)
         }
-        targeting_rb_rating_pg.isChecked -> {
+        fragmentBinding.targetingRbRatingPg.isChecked -> {
           builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_PG)
         }
-        targeting_rb_rating_t.isChecked -> {
+        fragmentBinding.targetingRbRatingT.isChecked -> {
           builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_T)
         }
-        targeting_rb_rating_ma.isChecked -> {
+        fragmentBinding.targetingRbRatingMa.isChecked -> {
           builder.setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_MA)
         }
       }
@@ -89,7 +83,7 @@ class AdMobAdTargetingFragment : Fragment() {
       MobileAds.setRequestConfiguration(builder.build())
 
       // Load an ad.
-      targeting_ad_view.loadAd(AdRequest.Builder().build())
+      fragmentBinding.targetingAdView.loadAd(AdRequest.Builder().build())
     }
   }
 }

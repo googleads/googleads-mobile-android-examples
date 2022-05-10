@@ -29,19 +29,19 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MediaContent
 import com.google.android.gms.ads.MuteThisAdReason
 import com.google.android.gms.ads.VideoController
-import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
-import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.ad_container
-import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.btn_mute_ad
-import kotlinx.android.synthetic.main.fragment_admob_custom_mute_this_ad.btn_refresh
+import com.google.android.gms.example.apidemo.databinding.FragmentAdmobCustomMuteThisAdBinding
+import com.google.android.gms.example.apidemo.databinding.NativeAdBinding
 
 /**
- * The [AdMobCustomMuteThisAdFragment] class demonstrates how to use custom mute
- * with AdMob native ads.
+ * The [AdMobCustomMuteThisAdFragment] class demonstrates how to use custom mute with AdMob native
+ * ads.
  */
 class AdMobCustomMuteThisAdFragment : Fragment() {
+
+  private lateinit var fragmentBinding: FragmentAdmobCustomMuteThisAdBinding
 
   private var nativeAd: NativeAd? = null
 
@@ -50,111 +50,109 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(
-      R.layout.fragment_admob_custom_mute_this_ad, container, false
-    )
+    fragmentBinding = FragmentAdmobCustomMuteThisAdBinding.inflate(inflater)
+    return fragmentBinding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    btn_refresh.setOnClickListener { refreshAd() }
-    btn_mute_ad.setOnClickListener { showMuteReasonsDialog() }
+    fragmentBinding.btnRefresh.setOnClickListener { refreshAd() }
+    fragmentBinding.btnMuteAd.setOnClickListener { showMuteReasonsDialog() }
 
     refreshAd()
   }
 
   /**
-   * Populates a [NativeAdView] object with data from a given
-   * [NativeAd].
+   * Populates a [NativeAdView] object with data from a given [NativeAd].
    *
    * @param nativeAd the object containing the ad's assets
-   * @param adView the view to be populated
+   * @param nativeAdBinding the binding object of the layout that has NativeAdView as the root view
    */
-  private fun populateNativeAdView(
-    nativeAd: NativeAd,
-    adView: NativeAdView
-  ) {
-    adView.mediaView = adView.findViewById<MediaView>(R.id.ad_media)
+  private fun populateNativeAdView(nativeAd: NativeAd, nativeAdBinding: NativeAdBinding) {
+    val nativeAdView = nativeAdBinding.root
+
+    // Set the media view.
+    nativeAdView.mediaView = nativeAdBinding.adMedia
 
     // Set other ad assets.
-    adView.headlineView = adView.findViewById(R.id.ad_headline)
-    adView.bodyView = adView.findViewById(R.id.ad_body)
-    adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
-    adView.iconView = adView.findViewById(R.id.ad_app_icon)
-    adView.priceView = adView.findViewById(R.id.ad_price)
-    adView.starRatingView = adView.findViewById(R.id.ad_stars)
-    adView.storeView = adView.findViewById(R.id.ad_store)
-    adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+    nativeAdView.headlineView = nativeAdBinding.adHeadline
+    nativeAdView.bodyView = nativeAdBinding.adBody
+    nativeAdView.callToActionView = nativeAdBinding.adCallToAction
+    nativeAdView.iconView = nativeAdBinding.adAppIcon
+    nativeAdView.priceView = nativeAdBinding.adPrice
+    nativeAdView.starRatingView = nativeAdBinding.adStars
+    nativeAdView.storeView = nativeAdBinding.adStore
+    nativeAdView.advertiserView = nativeAdBinding.adAdvertiser
 
-    (adView.headlineView as TextView).text = nativeAd.headline
-    adView.mediaView.setMediaContent(nativeAd.mediaContent)
+    nativeAdBinding.adHeadline.text = nativeAd.headline
+    nativeAd.mediaContent?.let { nativeAdBinding.adMedia.setMediaContent(it) }
 
     if (nativeAd.body == null) {
-      adView.bodyView.visibility = View.INVISIBLE
+      nativeAdBinding.adBody.visibility = View.INVISIBLE
     } else {
-      (adView.bodyView as TextView).text = nativeAd.body
-      adView.bodyView.visibility = View.VISIBLE
+      nativeAdBinding.adBody.text = nativeAd.body
+      nativeAdBinding.adBody.visibility = View.VISIBLE
     }
 
     if (nativeAd.callToAction == null) {
-      adView.callToActionView.visibility = View.INVISIBLE
+      nativeAdBinding.adCallToAction.visibility = View.INVISIBLE
     } else {
-      (adView.callToActionView as Button).text = nativeAd.callToAction
-      adView.callToActionView.visibility = View.VISIBLE
+      nativeAdBinding.adCallToAction.text = nativeAd.callToAction
+      nativeAdBinding.adCallToAction.visibility = View.VISIBLE
     }
 
     if (nativeAd.icon == null) {
-      adView.iconView.visibility = View.GONE
+      nativeAdBinding.adAppIcon.visibility = View.GONE
     } else {
-      (adView.iconView as ImageView).setImageDrawable(
-        nativeAd.icon.drawable
-      )
-      adView.iconView.visibility = View.VISIBLE
+      nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+      nativeAdBinding.adAppIcon.visibility = View.VISIBLE
     }
 
     if (nativeAd.price == null) {
-      adView.priceView.visibility = View.INVISIBLE
+      nativeAdBinding.adPrice.visibility = View.INVISIBLE
     } else {
-      (adView.priceView as TextView).text = nativeAd.price
-      adView.priceView.visibility = View.VISIBLE
+      nativeAdBinding.adPrice.text = nativeAd.price
+      nativeAdBinding.adPrice.visibility = View.VISIBLE
     }
 
     if (nativeAd.store == null) {
-      adView.storeView.visibility = View.INVISIBLE
+      nativeAdBinding.adStore.visibility = View.INVISIBLE
     } else {
-      (adView.storeView as TextView).text = nativeAd.store
-      adView.storeView.visibility = View.VISIBLE
+      nativeAdBinding.adStore.text = nativeAd.store
+      nativeAdBinding.adStore.visibility = View.VISIBLE
     }
 
     if (nativeAd.starRating == null) {
-      adView.starRatingView.visibility = View.INVISIBLE
+      nativeAdBinding.adStars.visibility = View.INVISIBLE
     } else {
-      (adView.starRatingView as RatingBar).rating = nativeAd.starRating!!.toFloat()
-      adView.starRatingView.visibility = View.VISIBLE
+      nativeAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
+      nativeAdBinding.adStars.visibility = View.VISIBLE
     }
 
     if (nativeAd.advertiser == null) {
-      adView.advertiserView.visibility = View.INVISIBLE
+      nativeAdBinding.adAdvertiser.visibility = View.INVISIBLE
     } else {
-      (adView.advertiserView as TextView).text = nativeAd.advertiser
-      adView.advertiserView.visibility = View.VISIBLE
+      nativeAdBinding.adAdvertiser.text = nativeAd.advertiser
+      nativeAdBinding.adAdvertiser.visibility = View.VISIBLE
     }
 
-    adView.setNativeAd(nativeAd)
+    nativeAdView.setNativeAd(nativeAd)
 
-    val mediaContent: MediaContent = nativeAd.mediaContent
+    val mediaContent: MediaContent? = nativeAd.mediaContent
 
-    if (mediaContent.hasVideoContent()) {
-      mediaContent.videoController.videoLifecycleCallbacks =
-        object : VideoController.VideoLifecycleCallbacks() {
-          override fun onVideoEnd() {
-          btn_refresh.isEnabled = true
-          super.onVideoEnd()
-        }
+    if (mediaContent != null) {
+      if (mediaContent.hasVideoContent()) {
+        mediaContent.videoController.videoLifecycleCallbacks =
+          object : VideoController.VideoLifecycleCallbacks() {
+            override fun onVideoEnd() {
+              fragmentBinding.btnRefresh.isEnabled = true
+              super.onVideoEnd()
+            }
+          }
+      } else {
+        fragmentBinding.btnRefresh.isEnabled = true
       }
-    } else {
-      btn_refresh.isEnabled = true
     }
   }
 
@@ -163,48 +161,54 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
    * "populateNativeAdView" method when one is successfully returned.
    */
   private fun refreshAd() {
-    btn_refresh.isEnabled = false
-    btn_mute_ad.isEnabled = false
+    fragmentBinding.btnRefresh.isEnabled = false
+    fragmentBinding.btnMuteAd.isEnabled = false
 
     val resources = requireActivity().resources
-    val builder = AdLoader.Builder(
-      activity,
-      resources.getString(R.string.custommute_fragment_ad_unit_id)
-    )
+    val builder =
+      requireActivity().let {
+        AdLoader.Builder(it, resources.getString(R.string.custommute_fragment_ad_unit_id))
+      }
 
-    builder.forNativeAd { nativeAd ->
+    builder?.forNativeAd { nativeAd ->
       // OnNativeAdLoadedListener implementation.
       this@AdMobCustomMuteThisAdFragment.nativeAd = nativeAd
-      btn_mute_ad.isEnabled = nativeAd.isCustomMuteThisAdEnabled
+      fragmentBinding.btnMuteAd.isEnabled = nativeAd.isCustomMuteThisAdEnabled
       nativeAd?.setMuteThisAdListener {
         muteAd()
         Toast.makeText(activity, "Ad muted", Toast.LENGTH_SHORT).show()
       }
 
-      val adView = layoutInflater
-        .inflate(R.layout.native_ad, null) as NativeAdView
-      populateNativeAdView(nativeAd, adView)
-      ad_container.removeAllViews()
-      ad_container.addView(adView)
+      val nativeAdBinding = NativeAdBinding.inflate(layoutInflater)
+      populateNativeAdView(nativeAd, nativeAdBinding)
+      fragmentBinding.adContainer.removeAllViews()
+      fragmentBinding.adContainer.addView(nativeAdBinding.root)
     }
 
-    val adOptions = NativeAdOptions.Builder()
-      .setRequestCustomMuteThisAd(true)
-      .build()
+    val adOptions = NativeAdOptions.Builder().setRequestCustomMuteThisAd(true).build()
 
-    builder.withNativeAdOptions(adOptions)
+    builder?.withNativeAdOptions(adOptions)
 
-    val adLoader = builder.withAdListener(object : AdListener() {
-      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-        btn_refresh.isEnabled = true
-        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
-          "message: ${loadAdError.message}"
-        Toast.makeText(
-          activity, "Failed to load native ad with error $error", Toast.LENGTH_SHORT
-        ).show()
-      }
-    }).build()
-    adLoader.loadAd(AdRequest.Builder().build())
+    val adLoader =
+      builder
+        ?.withAdListener(
+          object : AdListener() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+              fragmentBinding.btnRefresh.isEnabled = true
+              val error =
+                "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
+                  "message: ${loadAdError.message}"
+              Toast.makeText(
+                  activity,
+                  "Failed to load native ad with error $error",
+                  Toast.LENGTH_SHORT
+                )
+                .show()
+            }
+          }
+        )
+        ?.build()
+    adLoader?.loadAd(AdRequest.Builder().build())
   }
 
   private fun showMuteReasonsDialog() {
@@ -224,7 +228,8 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
     builder.setAdapter(
       ArrayAdapter<MuteThisAdReasonWrapper>(
         requireActivity(),
-        android.R.layout.simple_list_item_1, wrappedReasons
+        android.R.layout.simple_list_item_1,
+        wrappedReasons
       )
     ) { dialog, which ->
       dialog.dismiss()
@@ -242,7 +247,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
 
   private fun muteAd() {
     // Disable mute button, remove ad.
-    btn_mute_ad.isEnabled = false
-    ad_container.removeAllViews()
+    fragmentBinding.btnMuteAd.isEnabled = false
+    fragmentBinding.adContainer.removeAllViews()
   }
 }

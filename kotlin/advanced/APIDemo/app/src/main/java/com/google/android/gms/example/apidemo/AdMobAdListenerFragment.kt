@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
-import kotlinx.android.synthetic.main.fragment_admob_ad_listener.listener_ad_view
+import com.google.android.gms.example.apidemo.databinding.FragmentAdmobAdListenerBinding
 
 /**
  * The [AdMobAdListenerFragment] demonstrates the use of the [com.google.android.gms.ads.AdListener]
@@ -17,45 +17,50 @@ import kotlinx.android.synthetic.main.fragment_admob_ad_listener.listener_ad_vie
  */
 class AdMobAdListenerFragment : Fragment() {
 
+  private lateinit var fragmentBinding: FragmentAdmobAdListenerBinding
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_admob_ad_listener, container, false)
+    fragmentBinding = FragmentAdmobAdListenerBinding.inflate(inflater)
+    return fragmentBinding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    listener_ad_view.adListener = object : AdListener() {
-      private fun showToast(message: String) {
-        val context = this@AdMobAdListenerFragment.view?.context
-        if (context != null) {
-          Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    fragmentBinding.listenerAdView.adListener =
+      object : AdListener() {
+        private fun showToast(message: String) {
+          val context = this@AdMobAdListenerFragment.view?.context
+          if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          }
+        }
+
+        override fun onAdLoaded() {
+          showToast("Ad loaded.")
+        }
+
+        override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+          val error =
+            "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
+              "message: ${loadAdError.message}"
+          showToast("Ad failed to load with error $error.")
+        }
+
+        override fun onAdOpened() {
+          showToast("Ad opened.")
+        }
+
+        override fun onAdClosed() {
+          showToast("Ad closed.")
         }
       }
 
-      override fun onAdLoaded() {
-        showToast("Ad loaded.")
-      }
-
-      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
-          "message: ${loadAdError.message}"
-        showToast("Ad failed to load with error $error.")
-      }
-
-      override fun onAdOpened() {
-        showToast("Ad opened.")
-      }
-
-      override fun onAdClosed() {
-        showToast("Ad closed.")
-      }
-    }
-
     val adRequest = AdRequest.Builder().build()
-    listener_ad_view.loadAd(adRequest)
+    fragmentBinding.listenerAdView.loadAd(adRequest)
   }
 }
