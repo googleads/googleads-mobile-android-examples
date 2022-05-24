@@ -47,10 +47,14 @@ var currentNativeAd: NativeAd? = null
  * A simple activity class that displays native ad formats.
  */
 class MainActivity : AppCompatActivity() {
+  private var TAG = "MainActivity"
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "GMA SDK VERSION: " + MobileAds.getVersion())
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this) {}

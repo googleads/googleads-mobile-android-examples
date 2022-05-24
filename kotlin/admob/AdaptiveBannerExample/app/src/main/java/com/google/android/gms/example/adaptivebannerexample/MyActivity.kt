@@ -25,6 +25,8 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import kotlinx.android.synthetic.main.activity_my.*
 
+private const val TAG = "MyActivity"
+
 /** Main Activity. Inflates main activity xml and child fragments.  */
 class MyActivity : AppCompatActivity() {
   private lateinit var adView: AdView
@@ -52,6 +54,9 @@ class MyActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_my)
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "GMA SDK VERSION: " + MobileAds.getVersion())
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this) { }

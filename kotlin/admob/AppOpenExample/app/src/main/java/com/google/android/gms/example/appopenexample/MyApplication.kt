@@ -31,6 +31,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
   override fun onCreate() {
     super.onCreate()
     registerActivityLifecycleCallbacks(this)
+
+    // Log the Mobile Ads SDK version.
+    Log.d(LOG_TAG, "GMA SDK VERSION: " + MobileAds.getVersion())
+
     MobileAds.initialize(this) {}
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     appOpenAdManager = AppOpenAdManager()
