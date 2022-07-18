@@ -31,18 +31,16 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.ads.nativead.NativeCustomFormatAd
-import kotlinx.android.synthetic.main.fragment_gam_customcontrols.btn_refresh
-import kotlinx.android.synthetic.main.fragment_gam_customcontrols.cb_custom_controls
-import kotlinx.android.synthetic.main.fragment_gam_customcontrols.cb_custom_format
-import kotlinx.android.synthetic.main.fragment_gam_customcontrols.cb_native
-import kotlinx.android.synthetic.main.fragment_gam_customcontrols.cb_start_muted
-import kotlinx.android.synthetic.main.fragment_gam_customcontrols.custom_controls
+import com.google.android.gms.example.apidemo.databinding.FragmentGamCustomcontrolsBinding
+import com.google.android.gms.example.apidemo.databinding.NativeAdBinding
 
 /**
  * The [AdManagerCustomControlsFragment] class demonstrates how to use custom controls with Ad
  * Manager custom native video ads.
  */
 class AdManagerCustomControlsFragment : Fragment() {
+
+  private lateinit var fragmentBinding: FragmentGamCustomcontrolsBinding
 
   var nativeCustomFormatAd: NativeCustomFormatAd? = null
   var nativeAd: NativeAd? = null
@@ -52,13 +50,14 @@ class AdManagerCustomControlsFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_gam_customcontrols, container, false)
+    fragmentBinding = FragmentGamCustomcontrolsBinding.inflate(inflater)
+    return fragmentBinding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    btn_refresh.setOnClickListener { refreshAd() }
+    fragmentBinding.btnRefresh.setOnClickListener { refreshAd() }
 
     refreshAd()
   }
@@ -72,65 +71,67 @@ class AdManagerCustomControlsFragment : Fragment() {
   }
 
   /**
-   * Populates a [NativeAdView] object with data from a given
-   * [NativeAd].
+   * Populates a [NativeAdView] object with data from a given [NativeAd].
    *
    * @param nativeAd the object containing the ad's assets
-   * @param adView the view to be populated
+   * @param nativeAdBinding the binding object of the layout that has NativeAdView as the root view
    */
-  private fun populateNativeAdView(
-    nativeAd: NativeAd,
-    adView: NativeAdView
-  ) {
-    adView.headlineView = adView.findViewById(R.id.ad_headline)
-    adView.bodyView = adView.findViewById(R.id.ad_body)
-    adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
-    adView.iconView = adView.findViewById(R.id.ad_app_icon)
-    adView.priceView = adView.findViewById(R.id.ad_price)
-    adView.starRatingView = adView.findViewById(R.id.ad_stars)
-    adView.storeView = adView.findViewById(R.id.ad_store)
+  private fun populateNativeAdView(nativeAd: NativeAd, nativeAdBinding: NativeAdBinding) {
+    val nativeAdView = nativeAdBinding.root
+
+    // Set the ad assets.
+    nativeAdView.mediaView = nativeAdBinding.adMedia
+    nativeAdView.headlineView = nativeAdBinding.adHeadline
+    nativeAdView.bodyView = nativeAdBinding.adBody
+    nativeAdView.callToActionView = nativeAdBinding.adCallToAction
+    nativeAdView.iconView = nativeAdBinding.adAppIcon
+    nativeAdView.priceView = nativeAdBinding.adPrice
+    nativeAdView.starRatingView = nativeAdBinding.adStars
+    nativeAdView.storeView = nativeAdBinding.adStore
 
     // Some assets are guaranteed to be in every NativeAd.
-    (adView.headlineView as TextView).text = nativeAd.headline
-    (adView.bodyView as TextView).text = nativeAd.body
-    (adView.callToActionView as Button).text = nativeAd.callToAction
-    (adView.iconView as ImageView).setImageDrawable(nativeAd.icon.drawable)
+    nativeAdBinding.adHeadline.text = nativeAd.headline
+    nativeAdBinding.adBody.text = nativeAd.body
+    nativeAdBinding.adCallToAction.text = nativeAd.callToAction
+    nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+
+    nativeAd.mediaContent?.let { nativeAdBinding.adMedia.setMediaContent(it) }
 
     // These assets aren't guaranteed to be in every NativeAd, so it's important to
     // check before trying to display them.
     if (nativeAd.price == null) {
-      adView.priceView.visibility = View.INVISIBLE
+      nativeAdBinding.adPrice.visibility = View.INVISIBLE
     } else {
-      adView.priceView.visibility = View.VISIBLE
-      (adView.priceView as TextView).text = nativeAd.price
+      nativeAdBinding.adPrice.visibility = View.VISIBLE
+      nativeAdBinding.adPrice.text = nativeAd.price
     }
 
     if (nativeAd.store == null) {
-      adView.storeView.visibility = View.INVISIBLE
+      nativeAdBinding.adStore.visibility = View.INVISIBLE
     } else {
-      adView.storeView.visibility = View.VISIBLE
-      (adView.storeView as TextView).text = nativeAd.store
+      nativeAdBinding.adStore.visibility = View.VISIBLE
+      nativeAdBinding.adStore.text = nativeAd.store
     }
 
     if (nativeAd.starRating == null) {
-      adView.starRatingView.visibility = View.INVISIBLE
+      nativeAdBinding.adStars.visibility = View.INVISIBLE
     } else {
-      (adView.starRatingView as RatingBar).rating = nativeAd.starRating!!.toFloat()
-      adView.starRatingView.visibility = View.VISIBLE
+      nativeAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
+      nativeAdBinding.adStars.visibility = View.VISIBLE
     }
 
     // Assign native ad object to the native view.
-    adView.setNativeAd(nativeAd)
+    nativeAdView.setNativeAd(nativeAd)
 
-    val mediaContent: MediaContent = nativeAd.mediaContent
-    custom_controls.setVideoController(mediaContent.videoController)
+    val mediaContent: MediaContent? = nativeAd.mediaContent
+    mediaContent?.videoController?.let { fragmentBinding.customControls.setVideoController(it) }
 
-    btn_refresh.isEnabled = true
+    fragmentBinding.btnRefresh.isEnabled = true
   }
 
   /**
-   * Populates a [View] object with data from a [NativeCustomFormatAd]. This method
-   * handles a particular "simple" custom native ad format.
+   * Populates a [View] object with data from a [NativeCustomFormatAd]. This method handles a
+   * particular "simple" custom native ad format.
    *
    * @param nativeCustomFormatAd the object containing the ad's assets
    * @param adView the view to be populated
@@ -160,14 +161,14 @@ class AdManagerCustomControlsFragment : Fragment() {
     } else {
       val mainImage = ImageView(activity)
       mainImage.adjustViewBounds = true
-      mainImage.setImageDrawable(nativeCustomFormatAd.getImage("MainImage").drawable)
+      mainImage.setImageDrawable(nativeCustomFormatAd.getImage("MainImage")?.drawable)
 
       mainImage.setOnClickListener { nativeCustomFormatAd.performClick("MainImage") }
       mediaPlaceholder.addView(mainImage)
     }
-    custom_controls.setVideoController(vc)
+    fragmentBinding.customControls.setVideoController(vc)
 
-    btn_refresh.isEnabled = true
+    fragmentBinding.btnRefresh.isEnabled = true
   }
 
   /**
@@ -175,14 +176,15 @@ class AdManagerCustomControlsFragment : Fragment() {
    * corresponding "populate" method when one is successfully returned.
    */
   private fun refreshAd() {
-    btn_refresh.isEnabled = false
+    fragmentBinding.btnRefresh.isEnabled = false
 
-    val builder = AdLoader.Builder(
-      requireActivity(),
-      requireActivity().resources.getString(R.string.customcontrols_fragment_ad_unit_id)
-    )
+    val builder =
+      AdLoader.Builder(
+        requireActivity(),
+        requireActivity().resources.getString(R.string.customcontrols_fragment_ad_unit_id)
+      )
 
-    if (cb_custom_format.isChecked) {
+    if (fragmentBinding.cbCustomFormat.isChecked) {
       builder.forCustomFormatAd(
         requireActivity().resources.getString(R.string.customcontrols_fragment_template_id),
         { ad ->
@@ -193,23 +195,23 @@ class AdManagerCustomControlsFragment : Fragment() {
           nativeCustomFormatAd?.destroy()
           nativeCustomFormatAd = ad
           val frameLayout = requireView().findViewById<FrameLayout>(R.id.fl_adplaceholder)
-          val adView = layoutInflater
-            .inflate(R.layout.ad_simple_custom_template, null)
+          val adView = layoutInflater.inflate(R.layout.ad_simple_custom_template, null)
           populateSimpleTemplateAdView(ad, adView)
           frameLayout.removeAllViews()
           frameLayout.addView(adView)
         },
         { _, _ ->
           Toast.makeText(
-            activity,
-            "A custom click has occurred in the simple template",
-            Toast.LENGTH_SHORT
-          ).show()
+              activity,
+              "A custom click has occurred in the simple template",
+              Toast.LENGTH_SHORT
+            )
+            .show()
         }
       )
     }
 
-    if (cb_native.isChecked) {
+    if (fragmentBinding.cbNative.isChecked) {
       builder.forNativeAd { ad ->
         if (isDetached) {
           ad.destroy()
@@ -217,40 +219,45 @@ class AdManagerCustomControlsFragment : Fragment() {
         }
         nativeAd?.destroy()
         nativeAd = ad
-        val frameLayout = requireView().findViewById<FrameLayout>(R.id.fl_adplaceholder)
-        val adView = layoutInflater
-          .inflate(R.layout.native_ad, null) as NativeAdView
-        populateNativeAdView(ad, adView)
-        frameLayout.removeAllViews()
-        frameLayout.addView(adView)
+        val nativeAdBinding = NativeAdBinding.inflate(layoutInflater)
+        populateNativeAdView(ad, nativeAdBinding)
+        fragmentBinding.flAdplaceholder.removeAllViews()
+        fragmentBinding.flAdplaceholder.addView(nativeAdBinding.root)
       }
     }
 
-    val videoOptions = VideoOptions.Builder()
-      .setStartMuted(cb_start_muted.isChecked)
-      .setCustomControlsRequested(cb_custom_controls.isChecked)
-      .build()
+    val videoOptions =
+      VideoOptions.Builder()
+        .setStartMuted(fragmentBinding.cbStartMuted.isChecked)
+        .setCustomControlsRequested(fragmentBinding.cbCustomControls.isChecked)
+        .build()
 
-    val adOptions = NativeAdOptions.Builder()
-      .setVideoOptions(videoOptions)
-      .build()
+    val adOptions = NativeAdOptions.Builder().setVideoOptions(videoOptions).build()
 
     builder.withNativeAdOptions(adOptions)
 
-    val adLoader = builder.withAdListener(object : AdListener() {
-      override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-        btn_refresh.isEnabled = true
-        val error = "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
-          "message: ${loadAdError.message}"
-        Toast.makeText(
-          activity, "Failed to load native ad with error $error",
-          Toast.LENGTH_SHORT
-        ).show()
-      }
-    }).build()
+    val adLoader =
+      builder
+        .withAdListener(
+          object : AdListener() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+              fragmentBinding.btnRefresh.isEnabled = true
+              val error =
+                "domain: ${loadAdError.domain}, code: ${loadAdError.code}, " +
+                  "message: ${loadAdError.message}"
+              Toast.makeText(
+                  activity,
+                  "Failed to load native ad with error $error",
+                  Toast.LENGTH_SHORT
+                )
+                .show()
+            }
+          }
+        )
+        .build()
 
     adLoader.loadAd(AdManagerAdRequest.Builder().build())
 
-    custom_controls.reset()
+    fragmentBinding.customControls.reset()
   }
 }

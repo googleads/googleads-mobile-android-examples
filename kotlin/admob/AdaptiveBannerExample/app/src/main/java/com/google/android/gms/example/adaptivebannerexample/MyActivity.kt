@@ -25,7 +25,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import kotlinx.android.synthetic.main.activity_my.*
 
-/** Main Activity. Inflates main activity xml and child fragments.  */
+/** Main Activity. Inflates main activity xml and child fragments. */
 class MyActivity : AppCompatActivity() {
   private lateinit var adView: AdView
 
@@ -54,16 +54,14 @@ class MyActivity : AppCompatActivity() {
     setContentView(R.layout.activity_my)
 
     // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this) { }
+    MobileAds.initialize(this) {}
 
     // Set your test devices. Check your logcat output for the hashed device ID to
     // get test ads on a physical device. e.g.
     // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
     // to get test ads on this device."
     MobileAds.setRequestConfiguration(
-      RequestConfiguration.Builder()
-        .setTestDeviceIds(listOf("ABCDEF012345"))
-        .build()
+      RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
     )
 
     adView = AdView(this)
@@ -78,19 +76,19 @@ class MyActivity : AppCompatActivity() {
     }
   }
 
-  /** Called when leaving the activity  */
+  /** Called when leaving the activity */
   public override fun onPause() {
     adView.pause()
     super.onPause()
   }
 
-  /** Called when returning to the activity  */
+  /** Called when returning to the activity */
   public override fun onResume() {
     super.onResume()
     adView.resume()
   }
 
-  /** Called before the activity is destroyed  */
+  /** Called before the activity is destroyed */
   public override fun onDestroy() {
     adView.destroy()
     super.onDestroy()
@@ -99,7 +97,7 @@ class MyActivity : AppCompatActivity() {
   private fun loadBanner() {
     adView.adUnitId = AD_UNIT_ID
 
-    adView.adSize = adSize
+    adView.setAdSize(adSize)
 
     // Create an ad request.
     val adRequest = AdRequest.Builder().build()

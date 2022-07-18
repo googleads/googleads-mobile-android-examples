@@ -82,7 +82,9 @@ class MainActivity : AppCompatActivity() {
       var adRequest = AdManagerAdRequest.Builder().build()
 
       RewardedAd.load(
-        this, AD_UNIT_ID, adRequest,
+        this,
+        AD_UNIT_ID,
+        adRequest,
         object : RewardedAdLoadCallback() {
           override fun onAdFailedToLoad(adError: LoadAdError) {
             Log.d(TAG, adError?.message)
@@ -122,20 +124,21 @@ class MainActivity : AppCompatActivity() {
   private fun createTimer(time: Long) {
     mCountDownTimer?.cancel()
 
-    mCountDownTimer = object : CountDownTimer(time * 1000, 50) {
-      override fun onTick(millisUnitFinished: Long) {
-        mTimeRemaining = millisUnitFinished / 1000 + 1
-        timer.text = "seconds remaining: $mTimeRemaining"
-      }
+    mCountDownTimer =
+      object : CountDownTimer(time * 1000, 50) {
+        override fun onTick(millisUnitFinished: Long) {
+          mTimeRemaining = millisUnitFinished / 1000 + 1
+          timer.text = "seconds remaining: $mTimeRemaining"
+        }
 
-      override fun onFinish() {
-        show_video_button.visibility = View.VISIBLE
-        timer.text = "The game has ended!"
-        addCoins(GAME_OVER_REWARD)
-        retry_button.visibility = View.VISIBLE
-        mGameOver = true
+        override fun onFinish() {
+          show_video_button.visibility = View.VISIBLE
+          timer.text = "The game has ended!"
+          addCoins(GAME_OVER_REWARD)
+          retry_button.visibility = View.VISIBLE
+          mGameOver = true
+        }
       }
-    }
 
     mCountDownTimer?.start()
   }
@@ -143,27 +146,28 @@ class MainActivity : AppCompatActivity() {
   private fun showRewardedVideo() {
     show_video_button.visibility = View.INVISIBLE
     if (mRewardedAd != null) {
-      mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-        override fun onAdDismissedFullScreenContent() {
-          Log.d(TAG, "Ad was dismissed.")
-          loadRewardedAd()
-          // Don't forget to set the ad reference to null so you
-          // don't show the ad a second time.
-          mRewardedAd = null
-        }
+      mRewardedAd?.fullScreenContentCallback =
+        object : FullScreenContentCallback() {
+          override fun onAdDismissedFullScreenContent() {
+            Log.d(TAG, "Ad was dismissed.")
+            loadRewardedAd()
+            // Don't forget to set the ad reference to null so you
+            // don't show the ad a second time.
+            mRewardedAd = null
+          }
 
-        override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-          Log.d(TAG, "Ad failed to show.")
-          // Don't forget to set the ad reference to null so you
-          // don't show the ad a second time.
-          mRewardedAd = null
-        }
+          override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+            Log.d(TAG, "Ad failed to show.")
+            // Don't forget to set the ad reference to null so you
+            // don't show the ad a second time.
+            mRewardedAd = null
+          }
 
-        override fun onAdShowedFullScreenContent() {
-          Log.d(TAG, "Ad showed fullscreen content.")
-          // Called when ad is dismissed.
+          override fun onAdShowedFullScreenContent() {
+            Log.d(TAG, "Ad showed fullscreen content.")
+            // Called when ad is dismissed.
+          }
         }
-      }
 
       mRewardedAd?.show(
         this,

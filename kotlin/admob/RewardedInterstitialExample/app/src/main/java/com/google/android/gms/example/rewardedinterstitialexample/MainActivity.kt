@@ -76,7 +76,10 @@ class MainActivity : AppCompatActivity() {
 
       // Load an ad.
       RewardedInterstitialAd.load(
-        this, AD_UNIT_ID, adRequest, object : RewardedInterstitialAdLoadCallback() {
+        this,
+        AD_UNIT_ID,
+        adRequest,
+        object : RewardedInterstitialAdLoadCallback() {
           override fun onAdFailedToLoad(adError: LoadAdError) {
             super.onAdFailedToLoad(adError)
             Log.d(MAIN_ACTIVITY_TAG, "onAdFailedToLoad: ${adError.message}")
@@ -91,7 +94,8 @@ class MainActivity : AppCompatActivity() {
             rewardedInterstitialAd = rewardedAd
             isLoadingAds = false
           }
-        })
+        }
+      )
     }
   }
 
@@ -116,48 +120,51 @@ class MainActivity : AppCompatActivity() {
   private fun createTimer(time: Long) {
     countDownTimer?.cancel()
 
-    countDownTimer = object : CountDownTimer(time * 1000, 50) {
-      override fun onTick(millisUnitFinished: Long) {
-        timeRemaining = millisUnitFinished / 1000 + 1
-        timer.text = "seconds remaining: $timeRemaining"
-      }
-
-      override fun onFinish() {
-        timer.text = "The game has ended!"
-        addCoins(GAME_OVER_REWARD)
-        retry_button.visibility = View.VISIBLE
-        gameOver = true
-
-        if (rewardedInterstitialAd == null) {
-          Log.d(
-            MAIN_ACTIVITY_TAG,
-            "The game is over but the rewarded interstitial ad wasn't ready yet."
-          )
-          return
+    countDownTimer =
+      object : CountDownTimer(time * 1000, 50) {
+        override fun onTick(millisUnitFinished: Long) {
+          timeRemaining = millisUnitFinished / 1000 + 1
+          timer.text = "seconds remaining: $timeRemaining"
         }
 
-        Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad is ready.")
-        val rewardAmount = rewardedInterstitialAd!!.rewardItem.amount
-        val rewardType = rewardedInterstitialAd!!.rewardItem.type
-        introduceVideoAd(rewardAmount, rewardType)
+        override fun onFinish() {
+          timer.text = "The game has ended!"
+          addCoins(GAME_OVER_REWARD)
+          retry_button.visibility = View.VISIBLE
+          gameOver = true
+
+          if (rewardedInterstitialAd == null) {
+            Log.d(
+              MAIN_ACTIVITY_TAG,
+              "The game is over but the rewarded interstitial ad wasn't ready yet."
+            )
+            return
+          }
+
+          Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad is ready.")
+          val rewardAmount = rewardedInterstitialAd!!.rewardItem.amount
+          val rewardType = rewardedInterstitialAd!!.rewardItem.type
+          introduceVideoAd(rewardAmount, rewardType)
+        }
       }
-    }
 
     countDownTimer?.start()
   }
 
   private fun introduceVideoAd(rewardAmount: Int, rewardType: String) {
     val dialog = AdDialogFragment.newInstance(rewardAmount, rewardType)
-    dialog.setAdDialogInteractionListener(object : AdDialogFragment.AdDialogInteractionListener {
-      override fun onShowAd() {
-        Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad is starting.")
-        showRewardedVideo()
-      }
+    dialog.setAdDialogInteractionListener(
+      object : AdDialogFragment.AdDialogInteractionListener {
+        override fun onShowAd() {
+          Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad is starting.")
+          showRewardedVideo()
+        }
 
-      override fun onCancelAd() {
-        Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad was skipped before it starts.")
+        override fun onCancelAd() {
+          Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad was skipped before it starts.")
+        }
       }
-    })
+    )
     dialog.show(supportFragmentManager, "AdDialogFragment")
   }
 
@@ -167,34 +174,33 @@ class MainActivity : AppCompatActivity() {
       return
     }
 
-    rewardedInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
-      override fun onAdDismissedFullScreenContent() {
-        Log.d(MAIN_ACTIVITY_TAG, "Ad was dismissed.")
+    rewardedInterstitialAd!!.fullScreenContentCallback =
+      object : FullScreenContentCallback() {
+        override fun onAdDismissedFullScreenContent() {
+          Log.d(MAIN_ACTIVITY_TAG, "Ad was dismissed.")
 
-        // Don't forget to set the ad reference to null so you
-        // don't show the ad a second time.
-        rewardedInterstitialAd = null
+          // Don't forget to set the ad reference to null so you
+          // don't show the ad a second time.
+          rewardedInterstitialAd = null
 
-        // Preload the next rewarded interstitial ad.
-        loadRewardedInterstitialAd()
+          // Preload the next rewarded interstitial ad.
+          loadRewardedInterstitialAd()
+        }
+
+        override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+          Log.d(MAIN_ACTIVITY_TAG, "Ad failed to show.")
+
+          // Don't forget to set the ad reference to null so you
+          // don't show the ad a second time.
+          rewardedInterstitialAd = null
+        }
+
+        override fun onAdShowedFullScreenContent() {
+          Log.d(MAIN_ACTIVITY_TAG, "Ad showed fullscreen content.")
+        }
       }
 
-      override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-        Log.d(MAIN_ACTIVITY_TAG, "Ad failed to show.")
-
-        // Don't forget to set the ad reference to null so you
-        // don't show the ad a second time.
-        rewardedInterstitialAd = null
-      }
-
-      override fun onAdShowedFullScreenContent() {
-        Log.d(MAIN_ACTIVITY_TAG, "Ad showed fullscreen content.")
-      }
-    }
-
-    rewardedInterstitialAd?.show(
-      this
-    ) { rewardItem ->
+    rewardedInterstitialAd?.show(this) { rewardItem ->
       addCoins(rewardItem.amount)
       Log.d("TAG", "User earned the reward.")
     }

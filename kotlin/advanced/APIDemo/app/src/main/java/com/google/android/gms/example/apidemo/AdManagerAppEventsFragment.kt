@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AppEventListener
-import kotlinx.android.synthetic.main.fragment_gam_app_events.appevents_av_main
+import com.google.android.gms.example.apidemo.databinding.FragmentGamAppEventsBinding
 
 /**
  * The [AdManagerAppEventsFragment] class demonstrates how to receive App Events from an AdManager
@@ -16,21 +16,21 @@ import kotlinx.android.synthetic.main.fragment_gam_app_events.appevents_av_main
  */
 class AdManagerAppEventsFragment : Fragment() {
 
-  private lateinit var mRootView: View
+  private lateinit var fragmentBinding: FragmentGamAppEventsBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    mRootView = inflater.inflate(R.layout.fragment_gam_app_events, container, false)
-    return mRootView
+    fragmentBinding = FragmentGamAppEventsBinding.inflate(layoutInflater)
+    return fragmentBinding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    appevents_av_main.appEventListener = AppEventListener { name, data ->
+    fragmentBinding.appeventsAvMain.appEventListener = AppEventListener { name, data ->
       // The Ad Manager ad that this fragment loads contains JavaScript code that sends App
       // Events to the host application. This AppEventListener receives those events,
       // and sets the background of the fragment to match the data that comes in.
@@ -41,17 +41,18 @@ class AdManagerAppEventsFragment : Fragment() {
       // things with App Events.
 
       if (name == "color") {
-        val color = when (data) {
-          "blue" -> Color.rgb(0xD0, 0xD0, 0xFF)
-          "red" -> Color.rgb(0xFF, 0xD0, 0xD0)
-          else -> Color.rgb(0xD0, 0xFF, 0xD0) // Green.
-        }
+        val color =
+          when (data) {
+            "blue" -> Color.rgb(0xD0, 0xD0, 0xFF)
+            "red" -> Color.rgb(0xFF, 0xD0, 0xD0)
+            else -> Color.rgb(0xD0, 0xFF, 0xD0) // Green.
+          }
 
-        mRootView.setBackgroundColor(color)
+        fragmentBinding.root.setBackgroundColor(color)
       }
     }
 
     val adRequest = AdManagerAdRequest.Builder().build()
-    appevents_av_main.loadAd(adRequest)
+    fragmentBinding.appeventsAvMain.loadAd(adRequest)
   }
 }

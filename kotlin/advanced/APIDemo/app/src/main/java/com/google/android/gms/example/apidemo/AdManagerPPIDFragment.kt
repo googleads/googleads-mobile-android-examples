@@ -8,41 +8,37 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.example.apidemo.databinding.FragmentGamPpidBinding
 import java.security.NoSuchAlgorithmException
-import kotlinx.android.synthetic.main.fragment_gam_ppid.ppid_btn_loadad
-import kotlinx.android.synthetic.main.fragment_gam_ppid.ppid_et_username
-import kotlinx.android.synthetic.main.fragment_gam_ppid.ppid_pav_main
 
 /**
  * The [AdManagerPPIDFragment] class demonstrates how to add a PPID value to an AdManagerAdRequest.
  */
 class AdManagerPPIDFragment : Fragment() {
 
+  private lateinit var fragmentBinding: FragmentGamPpidBinding
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_gam_ppid, container, false)
+    fragmentBinding = FragmentGamPpidBinding.inflate(inflater)
+    return fragmentBinding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
 
-    ppid_btn_loadad.setOnClickListener {
-      val username = ppid_et_username.text.toString()
+    fragmentBinding.ppidBtnLoadad.setOnClickListener {
+      val username = fragmentBinding.ppidEtUsername.text.toString()
 
       if (username.isEmpty()) {
-        Toast.makeText(
-          this.activity, "The username cannot be empty",
-          Toast.LENGTH_SHORT
-        ).show()
+        Toast.makeText(this.activity, "The username cannot be empty", Toast.LENGTH_SHORT).show()
       } else {
         val ppid = generatePPID(username)
-        val request = AdManagerAdRequest.Builder()
-          .setPublisherProvidedId(ppid)
-          .build()
-        ppid_pav_main.loadAd(request)
+        val request = AdManagerAdRequest.Builder().setPublisherProvidedId(ppid).build()
+        fragmentBinding.ppidPavMain.loadAd(request)
       }
     }
   }
