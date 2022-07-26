@@ -1,5 +1,6 @@
 package com.google.ads.rewardedvideoexample;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,11 +23,12 @@ import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 /** Main Activity. Inflates main activity xml. */
+@SuppressLint("SetTextI18n")
 public class MainActivity extends Activity {
   private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
   private static final long COUNTER_TIME = 10;
   private static final int GAME_OVER_REWARD = 1;
-  private static final String TAG = "MyActivity";
+  private static final String TAG = "MainActivity";
 
   private int coinCount;
   private TextView coinCountText;
@@ -44,6 +46,10 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+      // Log the Mobile Ads SDK version.
+      Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
+
     MobileAds.initialize(this, new OnInitializationCompleteListener() {
       @Override
       public void onInitializationComplete(InitializationStatus initializationStatus) {

@@ -20,7 +20,7 @@ import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import java.util.Date
 
 private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/3419835294"
-private const val LOG_TAG = "AppOpenAdManager"
+private const val LOG_TAG = "MyApplication"
 
 /** Application class that initializes, loads and show ads when activities change states. */
 class MyApplication : Application(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
@@ -31,6 +31,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
   override fun onCreate() {
     super.onCreate()
     registerActivityLifecycleCallbacks(this)
+
+    // Log the Mobile Ads SDK version.
+    Log.d(LOG_TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+
     MobileAds.initialize(this) {}
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     appOpenAdManager = AppOpenAdManager()
@@ -40,9 +44,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
   @OnLifecycleEvent(Lifecycle.Event.ON_START)
   fun onMoveToForeground() {
     // Show the ad (if available) when the app moves to foreground.
-    currentActivity?.let {
-      appOpenAdManager.showAdIfAvailable(it)
-    }
+    currentActivity?.let { appOpenAdManager.showAdIfAvailable(it) }
   }
 
   /** ActivityLifecycleCallback methods. */
@@ -74,18 +76,15 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
    * @param activity the activity that shows the app open ad
    * @param onShowAdCompleteListener the listener to be notified when an app open ad is complete
    */
-  fun showAdIfAvailable(
-    activity: Activity,
-    onShowAdCompleteListener: OnShowAdCompleteListener
-  ) {
+  fun showAdIfAvailable(activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener) {
     // We wrap the showAdIfAvailable to enforce that other classes only interact with MyApplication
     // class.
     appOpenAdManager.showAdIfAvailable(activity, onShowAdCompleteListener)
   }
 
   /**
-   * Interface definition for a callback to be invoked when an app open ad is complete
-   * (i.e. dismissed or fails to show).
+   * Interface definition for a callback to be invoked when an app open ad is complete (i.e.
+   * dismissed or fails to show).
    */
   interface OnShowAdCompleteListener {
     fun onShowAdComplete()
@@ -143,7 +142,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
             Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.message)
             Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show()
           }
-        })
+        }
+      )
     }
 
     /** Check if ad was loaded more than n hours ago. */
@@ -173,7 +173,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
           override fun onShowAdComplete() {
             // Empty because the user will go back to the activity that shows the ad.
           }
-        })
+        }
+      )
     }
 
     /**
@@ -182,10 +183,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
      * @param activity the activity that shows the app open ad
      * @param onShowAdCompleteListener the listener to be notified when an app open ad is complete
      */
-    fun showAdIfAvailable(
-      activity: Activity,
-      onShowAdCompleteListener: OnShowAdCompleteListener
-    ) {
+    fun showAdIfAvailable(activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener) {
       // If the app open ad is already showing, do not show the ad again.
       if (isShowingAd) {
         Log.d(LOG_TAG, "The app open ad is already showing.")
@@ -232,7 +230,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
             Log.d(LOG_TAG, "onAdShowedFullScreenContent.")
             Toast.makeText(activity, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT).show()
           }
-        })
+        }
+      )
       isShowingAd = true
       appOpenAd!!.show(activity)
     }

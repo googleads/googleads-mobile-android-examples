@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     val view = binding.root
     setContentView(view)
 
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this) {}
 

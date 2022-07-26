@@ -17,6 +17,7 @@ package com.google.android.gms.example.nativeadvancedexample
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,7 @@ import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.example.nativeadvancedexample.databinding.ActivityMainBinding
 import com.google.android.gms.example.nativeadvancedexample.databinding.AdUnifiedBinding
 
+private const val TAG = "MainActivity"
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
 var currentNativeAd: NativeAd? = null
 
@@ -45,6 +47,9 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(mainActivityBinding.root)
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this) {}

@@ -18,6 +18,7 @@ package com.google.android.gms.example.adaptivebannerexample;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.widget.FrameLayout;
 import com.google.android.gms.ads.AdRequest;
@@ -34,6 +35,7 @@ public class MyActivity extends AppCompatActivity {
 
   // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
   private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
+  private static final String TAG = "MyActivity";
   private FrameLayout adContainerView;
   private AdView adView;
 
@@ -41,6 +43,9 @@ public class MyActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_my);
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(this, new OnInitializationCompleteListener() {
