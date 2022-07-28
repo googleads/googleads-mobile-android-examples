@@ -18,6 +18,7 @@ package com.google.android.gms.example.adaptivebannerexample;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -40,6 +41,7 @@ public class MyActivity extends AppCompatActivity {
   private FrameLayout adContainerView;
   private AdManagerAdView adView;
   private boolean initialLayoutComplete = false;
+  private static final String TAG = "MyActivity";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,9 @@ public class MyActivity extends AppCompatActivity {
             loadBanner(getAdSize());
           }
         });
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(

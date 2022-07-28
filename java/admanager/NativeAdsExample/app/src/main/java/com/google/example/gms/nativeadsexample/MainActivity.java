@@ -16,9 +16,11 @@
 
 package com.google.example.gms.nativeadsexample;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,13 +48,15 @@ import java.util.Locale;
 /**
  * A simple activity class that displays native ad formats.
  */
+@SuppressLint("SetTextI18n")
 public class MainActivity extends AppCompatActivity {
 
     private static final String AD_MANAGER_AD_UNIT_ID = "/6499/example/native";
     private static final String SIMPLE_TEMPLATE_ID = "10104090";
+    private static final String TAG = "MainActivity";
 
-  private NativeCustomFormatAd nativeCustomFormatAd;
-  private NativeAd nativeAd;
+    private NativeCustomFormatAd nativeCustomFormatAd;
+    private NativeAd nativeAd;
     private Button refresh;
     private CheckBox requestNativeAds;
     private CheckBox requestCustomTemplateAds;
@@ -63,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
     // Initialize the Mobile Ads SDK.
     MobileAds.initialize(

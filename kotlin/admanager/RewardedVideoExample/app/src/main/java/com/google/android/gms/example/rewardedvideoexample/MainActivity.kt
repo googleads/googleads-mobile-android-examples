@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+
     // Initialize the Mobile Ads SDK with an empty completion listener.
     MobileAds.initialize(this) {}
 
