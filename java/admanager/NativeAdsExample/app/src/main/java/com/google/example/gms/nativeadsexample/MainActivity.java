@@ -228,18 +228,20 @@ public class MainActivity extends AppCompatActivity {
               Locale.getDefault(),
               "Video status: Ad contains a %.2f:1 video asset.",
               nativeAd.getMediaContent().getAspectRatio()));
-            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
-            // VideoController will call methods on this object when events occur in the video
-            // lifecycle.
-            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-                public void onVideoEnd() {
-                    // Publishers should allow native ads to complete video playback before
-                    // refreshing or replacing them with another ad in the same UI location.
-                    refresh.setEnabled(true);
-                    videoStatus.setText("Video status: Video playback has ended.");
-                    super.onVideoEnd();
-                }
-            });
+      // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+      // VideoController will call methods on this object when events occur in the video
+      // lifecycle.
+      vc.setVideoLifecycleCallbacks(
+          new VideoController.VideoLifecycleCallbacks() {
+            @Override
+            public void onVideoEnd() {
+              // Publishers should allow native ads to complete video playback before
+              // refreshing or replacing them with another ad in the same UI location.
+              refresh.setEnabled(true);
+              videoStatus.setText("Video status: Video playback has ended.");
+              super.onVideoEnd();
+            }
+          });
         } else {
             ImageView mainImage = new ImageView(this);
             mainImage.setAdjustViewBounds(true);
