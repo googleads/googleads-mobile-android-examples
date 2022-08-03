@@ -15,6 +15,7 @@
  */
 package com.google.android.gms.example.interstitialexample;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,13 +38,14 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 /**
  * Main Activity. Inflates main activity xml.
  */
+@SuppressLint("SetTextI18n")
 public class MyActivity extends AppCompatActivity {
 
     private static final long GAME_LENGTH_MILLISECONDS = 3000;
     private static final String AD_UNIT_ID = "/6499/example/interstitial";
-  private static final String TAG = "MyActivity";
+    private static final String TAG = "MyActivity";
 
-  private AdManagerInterstitialAd interstitialAd;
+    private AdManagerInterstitialAd interstitialAd;
     private CountDownTimer countDownTimer;
     private Button retryButton;
     private boolean gameIsInProgress;
@@ -55,6 +57,9 @@ public class MyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+
+        // Log the Mobile Ads SDK version.
+        Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(

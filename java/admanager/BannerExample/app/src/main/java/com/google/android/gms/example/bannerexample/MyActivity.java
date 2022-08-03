@@ -17,6 +17,7 @@ package com.google.android.gms.example.bannerexample;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 public class MyActivity extends AppCompatActivity {
 
   private AdManagerAdView adView;
+  private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class MyActivity extends AppCompatActivity {
         MobileAds.setRequestConfiguration(
             new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
                                               .build());
+
+        // Log the Mobile Ads SDK version.
+        Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(

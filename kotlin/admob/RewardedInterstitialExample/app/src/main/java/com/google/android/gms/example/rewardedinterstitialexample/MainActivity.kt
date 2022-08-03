@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    // Log the Mobile Ads SDK version.
+    Log.d(MAIN_ACTIVITY_TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+
     MobileAds.initialize(this) { initializationStatus -> loadRewardedInterstitialAd() }
 
     // Create the "retry" button, which tries to show a rewarded video ad between game plays.

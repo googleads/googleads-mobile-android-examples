@@ -45,11 +45,16 @@ public class MyApplication extends Application
 
   private AppOpenAdManager appOpenAdManager;
   private Activity currentActivity;
+  private static final String TAG = "MyApplication";
 
   @Override
   public void onCreate() {
     super.onCreate();
     this.registerActivityLifecycleCallbacks(this);
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
+
     MobileAds.initialize(
         this,
         new OnInitializationCompleteListener() {

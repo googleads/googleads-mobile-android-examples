@@ -42,13 +42,16 @@ class MyActivity : AppCompatActivity() {
   private var mGameIsInProgress: Boolean = false
   private var mAdIsLoading: Boolean = false
   private var mTimerMilliseconds: Long = 0
-  private var TAG = "MainActivity"
+  private var TAG = "MyActivity"
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     binding = ActivityMyBinding.inflate(layoutInflater)
     val view = binding.root
     setContentView(view)
+
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
     // Initialize the Mobile Ads SDK with an empty completion listener.
     MobileAds.initialize(this) {}
