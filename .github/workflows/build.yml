@@ -1,13 +1,13 @@
 name: Build Status
 
-# Step 1: Build on pull-requests or pushes to master
+# Step 1: Build on pull-requests or pushes to main
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   # Step 2: Build the samples
@@ -33,8 +33,8 @@ jobs:
       - name: Clone Repo
         uses: actions/checkout@v1
 
-      - name: Set commit range (push to the master branch, e.g. merge)
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - name: Set commit range (push to the main branch, e.g. merge)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: echo "COMMIT_RANGE="${{ github.event.before }}.."" >> $GITHUB_ENV
 
       - name: Set commit range (pull request)

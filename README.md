@@ -27,22 +27,22 @@ documentation on using the Mobile Ads SDK.
 ## AdMob
 
 *   App Open:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/AppOpenExample),
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admob/AppOpenExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admob/AppOpenExample)
 *   Banner:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/BannerExample),
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admob/BannerExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admob/BannerExample)
 *   Interstitial:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/InterstitialExample),
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admob/InterstitialExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admob/InterstitialExample)
 *   Rewarded Interstitial:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/RewardedInterstitialExample),
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admob/RewardedInterstitialExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admob/RewardedInterstitialExample)
 *   Rewarded Video:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/RewardedVideoExample),
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admob/RewardedVideoExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admob/RewardedVideoExample)
 *   Native Advanced:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/master/java/admob/NativeAdvancedExample),
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admob/NativeAdvancedExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admob/NativeAdvancedExample)
 
 ## Advanced
