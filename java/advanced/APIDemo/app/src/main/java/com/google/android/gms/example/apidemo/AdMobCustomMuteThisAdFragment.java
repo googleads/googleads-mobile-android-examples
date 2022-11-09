@@ -18,6 +18,8 @@ package com.google.android.gms.example.apidemo;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +30,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -44,7 +44,6 @@ import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * The {@link AdMobCustomMuteThisAdFragment} class demonstrates how to use custom mute with AdMob
@@ -191,28 +190,29 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
     AdLoader.Builder builder = new AdLoader.Builder(getActivity(),
         resources.getString(R.string.custommute_fragment_ad_unit_id));
 
-    builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-      // OnNativeAdLoadedListener implementation.
-      @Override
-      public void onNativeAdLoaded(NativeAd nativeAd) {
-        AdMobCustomMuteThisAdFragment.this.nativeAd = nativeAd;
-        muteButton.setEnabled(nativeAd.isCustomMuteThisAdEnabled());
-        nativeAd.setMuteThisAdListener(new MuteThisAdListener() {
+    builder.forNativeAd(
+        new NativeAd.OnNativeAdLoadedListener() {
+          // OnNativeAdLoadedListener implementation.
           @Override
-          public void onAdMuted() {
-            muteAd();
-            Toast.makeText(getActivity(), "Ad muted", Toast.LENGTH_SHORT).show();
+          public void onNativeAdLoaded(NativeAd nativeAd) {
+            AdMobCustomMuteThisAdFragment.this.nativeAd = nativeAd;
+            muteButton.setEnabled(nativeAd.isCustomMuteThisAdEnabled());
+            nativeAd.setMuteThisAdListener(
+                new MuteThisAdListener() {
+                  @Override
+                  public void onAdMuted() {
+                    muteAd();
+                    Toast.makeText(getActivity(), "Ad muted", Toast.LENGTH_SHORT).show();
+                  }
+                });
+
+            NativeAdView adView =
+                (NativeAdView) getLayoutInflater().inflate(R.layout.native_ad, adContainer, false);
+            populateNativeAdView(nativeAd, adView);
+            adContainer.removeAllViews();
+            adContainer.addView(adView);
           }
         });
-
-        NativeAdView adView = (NativeAdView) getLayoutInflater()
-            .inflate(R.layout.native_ad, null);
-        populateNativeAdView(nativeAd, adView);
-        adContainer.removeAllViews();
-        adContainer.addView(adView);
-      }
-
-    });
 
     NativeAdOptions adOptions = new NativeAdOptions.Builder()
         .setRequestCustomMuteThisAd(true)

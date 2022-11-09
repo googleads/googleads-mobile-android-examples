@@ -142,10 +142,11 @@ class MainActivity : AppCompatActivity() {
 
     // Get the video controller for the ad. One will always be provided, even if the ad doesn't
     // have a video asset.
-    val vc = nativeAd.mediaContent?.videoController
+    val mediaContent = nativeAd.mediaContent
+    val vc = mediaContent?.videoController
 
     // Updates the UI to say whether or not this ad has a video asset.
-    if (vc != null && vc.hasVideoContent()) {
+    if (vc != null && mediaContent.hasVideoContent()) {
       // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
       // VideoController will call methods on this object when events occur in the video
       // lifecycle.

@@ -175,12 +175,9 @@ public class MainActivity extends AppCompatActivity {
         // native ad view with this native ad.
         adView.setNativeAd(nativeAd);
 
-    // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-    // have a video asset.
-    VideoController vc = nativeAd.getMediaContent().getVideoController();
-
-        // Updates the UI to say whether or not this ad has a video asset.
-        if (vc.hasVideoContent()) {
+    // Updates the UI to say whether or not this ad has a video asset.
+    if (nativeAd.getMediaContent() != null && nativeAd.getMediaContent().hasVideoContent()) {
+      VideoController vc = nativeAd.getMediaContent().getVideoController();
       videoStatus.setText(
           String.format(
               Locale.getDefault(),
@@ -222,14 +219,13 @@ public class MainActivity extends AppCompatActivity {
 
         FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
 
-    // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-    // have a video asset.
-    VideoController vc = nativeCustomFormatAd.getVideoController();
-
-    // Apps can check the VideoController's hasVideoContent property to determine if the
+    // Apps can check the MediaContent's hasVideoContent property to determine if the
     // NativeCustomFormatAd has a video asset.
-    if (vc.hasVideoContent()) {
-      mediaPlaceholder.addView(nativeCustomFormatAd.getVideoMediaView());
+    if (nativeCustomFormatAd.getMediaContent() != null
+        && nativeCustomFormatAd.getMediaContent().hasVideoContent()) {
+      MediaView mediaView = new MediaView(adView.getContext());
+      mediaView.setMediaContent(nativeCustomFormatAd.getMediaContent());
+      mediaPlaceholder.addView(mediaView);
       videoStatus.setText(
           String.format(
               Locale.getDefault(),
@@ -238,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
       // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
       // VideoController will call methods on this object when events occur in the video
       // lifecycle.
+      VideoController vc = nativeCustomFormatAd.getMediaContent().getVideoController();
       vc.setVideoLifecycleCallbacks(
           new VideoController.VideoLifecycleCallbacks() {
             @Override
@@ -309,7 +306,8 @@ public class MainActivity extends AppCompatActivity {
               MainActivity.this.nativeAd = nativeAd;
               FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
               NativeAdView adView =
-                  (NativeAdView) getLayoutInflater().inflate(R.layout.ad_unified, null);
+                  (NativeAdView)
+                      getLayoutInflater().inflate(R.layout.ad_unified, frameLayout, false);
               populateNativeAdView(nativeAd, adView);
               frameLayout.removeAllViews();
               frameLayout.addView(adView);
@@ -340,7 +338,9 @@ public class MainActivity extends AppCompatActivity {
               }
               nativeCustomFormatAd = ad;
               FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
-              View adView = getLayoutInflater().inflate(R.layout.ad_simple_custom_template, null);
+              View adView =
+                  getLayoutInflater()
+                      .inflate(R.layout.ad_simple_custom_template, frameLayout, false);
               populateSimpleTemplateAdView(ad, adView);
               frameLayout.removeAllViews();
               frameLayout.addView(adView);
@@ -374,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
                     refresh.setEnabled(true);
                     String error =
                         String.format(
+                            Locale.getDefault(),
                             "domain: %s, code: %d, message: %s",
                             loadAdError.getDomain(),
                             loadAdError.getCode(),

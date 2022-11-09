@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.multidex.MultiDexApplication
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -23,7 +24,8 @@ private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/3419835294"
 private const val LOG_TAG = "MyApplication"
 
 /** Application class that initializes, loads and show ads when activities change states. */
-class MyApplication : Application(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
+class MyApplication :
+  MultiDexApplication(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
 
   private lateinit var appOpenAdManager: AppOpenAdManager
   private var currentActivity: Activity? = null

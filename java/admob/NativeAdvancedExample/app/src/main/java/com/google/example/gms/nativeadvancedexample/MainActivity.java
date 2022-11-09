@@ -42,6 +42,7 @@ import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
+import java.util.Locale;
 
 /**
  * A simple activity class that displays native ad formats.
@@ -170,9 +171,8 @@ public class MainActivity extends AppCompatActivity {
     // have a video asset.
     VideoController vc = nativeAd.getMediaContent().getVideoController();
 
-        // Updates the UI to say whether or not this ad has a video asset.
-        if (vc.hasVideoContent()) {
-
+    // Updates the UI to say whether or not this ad has a video asset.
+    if (nativeAd.getMediaContent() != null && nativeAd.getMediaContent().hasVideoContent()) {
 
             // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
             // VideoController will call methods on this object when events occur in the video
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.nativeAd = nativeAd;
             FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
             NativeAdView adView =
-                (NativeAdView) getLayoutInflater().inflate(R.layout.ad_unified, null);
+                (NativeAdView) getLayoutInflater().inflate(R.layout.ad_unified, frameLayout, false);
             populateNativeAdView(nativeAd, adView);
             frameLayout.removeAllViews();
             frameLayout.addView(adView);
@@ -242,27 +242,28 @@ public class MainActivity extends AppCompatActivity {
 
         builder.withNativeAdOptions(adOptions);
 
-        AdLoader adLoader =
-            builder
-                .withAdListener(
-                    new AdListener() {
-                        @Override
-                        public void onAdFailedToLoad(LoadAdError loadAdError) {
-                            refresh.setEnabled(true);
-                            String error =
-                                String.format(
-                                    "domain: %s, code: %d, message: %s",
-                                    loadAdError.getDomain(),
-                                    loadAdError.getCode(),
-                                    loadAdError.getMessage());
-                            Toast.makeText(
-                                MainActivity.this,
-                                "Failed to load native ad with error " + error,
-                                Toast.LENGTH_SHORT)
-                                .show();
-                        }
-                    })
-                .build();
+    AdLoader adLoader =
+        builder
+            .withAdListener(
+                new AdListener() {
+                  @Override
+                  public void onAdFailedToLoad(LoadAdError loadAdError) {
+                    refresh.setEnabled(true);
+                    String error =
+                        String.format(
+                            Locale.getDefault(),
+                            "domain: %s, code: %d, message: %s",
+                            loadAdError.getDomain(),
+                            loadAdError.getCode(),
+                            loadAdError.getMessage());
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Failed to load native ad with error " + error,
+                            Toast.LENGTH_SHORT)
+                        .show();
+                  }
+                })
+            .build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
 

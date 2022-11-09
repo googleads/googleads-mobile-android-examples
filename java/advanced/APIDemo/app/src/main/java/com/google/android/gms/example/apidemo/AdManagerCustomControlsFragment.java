@@ -17,6 +17,7 @@ package com.google.android.gms.example.apidemo;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +28,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MediaContent;
-import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.nativead.MediaView;
@@ -42,6 +41,7 @@ import com.google.android.gms.ads.nativead.NativeAdView;
 import com.google.android.gms.ads.nativead.NativeCustomFormatAd;
 import com.google.android.gms.ads.nativead.NativeCustomFormatAd.OnCustomClickListener;
 import com.google.android.gms.ads.nativead.NativeCustomFormatAd.OnCustomFormatAdLoadedListener;
+import java.util.Locale;
 
 /**
  * The {@link AdManagerCustomControlsFragment} class demonstrates how to use custom controls with Ad
@@ -121,7 +121,6 @@ public class AdManagerCustomControlsFragment extends Fragment {
     ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
     ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
     ((ImageView) adView.getIconView()).setImageDrawable(nativeAd.getIcon().getDrawable());
-    MediaView mediaView = adView.findViewById(R.id.ad_media);
 
     // These assets aren't guaranteed to be in every NativeAd, so it's important to check
     // before trying to display them.
@@ -153,7 +152,7 @@ public class AdManagerCustomControlsFragment extends Fragment {
     // Set up the custom video controls functionality.
     MediaContent mediaContent = nativeAd.getMediaContent();
     if (mediaContent != null) {
-      customControlsView.setVideoController(mediaContent.getVideoController());
+      customControlsView.setMediaContent(mediaContent);
     }
 
     refresh.setEnabled(true);
@@ -183,14 +182,13 @@ public class AdManagerCustomControlsFragment extends Fragment {
 
     FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
 
-    // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-    // have a video asset.
-    VideoController vc = nativeCustomFormatAd.getVideoController();
-
-    // Apps can check the VideoController's hasVideoContent property to determine if the
+    // Apps can check the MediaContent's hasVideoContent property to determine if the
     // NativeCustomTemplateAd has a video asset.
-    if (vc.hasVideoContent()) {
-      mediaPlaceholder.addView(nativeCustomFormatAd.getVideoMediaView());
+    if (nativeCustomFormatAd.getMediaContent() != null
+        && nativeCustomFormatAd.getMediaContent().hasVideoContent()) {
+      MediaView mediaView = new MediaView(getActivity());
+      mediaView.setMediaContent(nativeCustomFormatAd.getMediaContent());
+      mediaPlaceholder.addView(mediaView);
     } else {
       ImageView mainImage = new ImageView(getActivity());
       mainImage.setAdjustViewBounds(true);
@@ -204,7 +202,7 @@ public class AdManagerCustomControlsFragment extends Fragment {
       });
       mediaPlaceholder.addView(mainImage);
     }
-    customControlsView.setVideoController(vc);
+    customControlsView.setMediaContent(nativeCustomFormatAd.getMediaContent());
 
     refresh.setEnabled(true);
   }
@@ -236,8 +234,9 @@ public class AdManagerCustomControlsFragment extends Fragment {
               }
               nativeCustomFormatAd = ad;
               FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
-              View adView = getLayoutInflater()
-                  .inflate(R.layout.ad_simple_custom_template, null);
+              View adView =
+                  getLayoutInflater()
+                      .inflate(R.layout.ad_simple_custom_template, frameLayout, false);
               populateSimpleTemplateAdView(ad, adView);
               frameLayout.removeAllViews();
               frameLayout.addView(adView);
@@ -246,33 +245,37 @@ public class AdManagerCustomControlsFragment extends Fragment {
           new OnCustomClickListener() {
             @Override
             public void onCustomClick(NativeCustomFormatAd ad, String assetName) {
-              Toast.makeText(getActivity(),
-                  "A custom click has occurred on asset: " + assetName,
-                  Toast.LENGTH_SHORT).show();
+              Toast.makeText(
+                      getActivity(),
+                      "A custom click has occurred on asset: " + assetName,
+                      Toast.LENGTH_SHORT)
+                  .show();
             }
           });
     }
 
     if (nativeAdsCheckbox.isChecked()) {
-      builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-        @Override
-        public void onNativeAdLoaded(NativeAd ad) {
-          if (isDetached()) {
-            ad.destroy();
-            return;
-          }
-          if (nativeAd != null) {
-            nativeAd.destroy();
-          }
-          nativeAd = ad;
-          FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
-          NativeAdView adView = (NativeAdView) getLayoutInflater()
-              .inflate(R.layout.native_ad, null);
-          populateNativeAdView(ad, adView);
-          frameLayout.removeAllViews();
-          frameLayout.addView(adView);
-        }
-      });
+      builder.forNativeAd(
+          new NativeAd.OnNativeAdLoadedListener() {
+            @Override
+            public void onNativeAdLoaded(NativeAd ad) {
+              if (isDetached()) {
+                ad.destroy();
+                return;
+              }
+              if (nativeAd != null) {
+                nativeAd.destroy();
+              }
+              nativeAd = ad;
+              FrameLayout frameLayout = getView().findViewById(R.id.fl_adplaceholder);
+              NativeAdView adView =
+                  (NativeAdView)
+                      getLayoutInflater().inflate(R.layout.native_ad, frameLayout, false);
+              populateNativeAdView(ad, adView);
+              frameLayout.removeAllViews();
+              frameLayout.addView(adView);
+            }
+          });
     }
 
     VideoOptions videoOptions = new VideoOptions.Builder()
@@ -286,24 +289,26 @@ public class AdManagerCustomControlsFragment extends Fragment {
 
     builder.withNativeAdOptions(adOptions);
 
-    AdLoader adLoader = builder.withAdListener(new AdListener() {
-      @Override
-      public void onAdFailedToLoad(LoadAdError loadAdError) {
-        refresh.setEnabled(true);
-        String error =
-            String.format(
-                "domain: %s, code: %d, message: %s",
-                loadAdError.getDomain(),
-                loadAdError.getCode(),
-                loadAdError.getMessage());
-        Toast.makeText(
-            getActivity(),
-            "Failed to load native ad: " + error,
-            Toast.LENGTH_SHORT)
-            .show();
-      }
-    })
-        .build();
+    AdLoader adLoader =
+        builder
+            .withAdListener(
+                new AdListener() {
+                  @Override
+                  public void onAdFailedToLoad(LoadAdError loadAdError) {
+                    refresh.setEnabled(true);
+                    String error =
+                        String.format(
+                            Locale.getDefault(),
+                            "domain: %s, code: %d, message: %s",
+                            loadAdError.getDomain(),
+                            loadAdError.getCode(),
+                            loadAdError.getMessage());
+                    Toast.makeText(
+                            getActivity(), "Failed to load native ad: " + error, Toast.LENGTH_SHORT)
+                        .show();
+                  }
+                })
+            .build();
     adLoader.loadAd(new AdManagerAdRequest.Builder().build());
 
     customControlsView.reset();

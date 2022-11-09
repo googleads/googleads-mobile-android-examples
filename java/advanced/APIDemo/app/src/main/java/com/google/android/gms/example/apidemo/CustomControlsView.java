@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 
 /**
@@ -59,11 +60,11 @@ public class CustomControlsView extends LinearLayout {
   /*
    * Sets up the custom controls view with the provided VideoController.
    */
-  public void setVideoController(VideoController videoController) {
+  public void setMediaContent(MediaContent mediaContent) {
     controlsView.setVisibility(View.GONE);
-    if (videoController.hasVideoContent()) {
+    if (mediaContent.hasVideoContent()) {
       videoStatusText.setText("Video status: Ad contains a video asset.");
-      configureVideoContent(videoController);
+      configureVideoContent(mediaContent.getVideoController());
     } else {
       videoStatusText.setText("Video status: Ad does not contain a video asset.");
     }
@@ -100,47 +101,48 @@ public class CustomControlsView extends LinearLayout {
     // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
     // VideoController will call methods on this object when events occur in the video
     // lifecycle.
-    videoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+    videoController.setVideoLifecycleCallbacks(
+        new VideoController.VideoLifecycleCallbacks() {
 
-      @Override
-      public void onVideoMute(final boolean muted) {
-        videoStatusText.setText(("Video status: " + (muted ? "Video did mute"
-            : "Video did un-mute")));
-        muteButton.setText(muted ? "Unmute" : "Mute");
-        super.onVideoMute(muted);
-      }
+          @Override
+          public void onVideoMute(final boolean muted) {
+            videoStatusText.setText(
+                ("Video status: " + (muted ? "Video did mute" : "Video did un-mute")));
+            muteButton.setText(muted ? "Unmute" : "Mute");
+            super.onVideoMute(muted);
+          }
 
-      @Override
-      public void onVideoPause() {
-        videoStatusText.setText("Video status: Video did pause.");
-        playButton.setText("Play");
-        isVideoPlaying = false;
-        super.onVideoPause();
-      }
+          @Override
+          public void onVideoPause() {
+            videoStatusText.setText("Video status: Video did pause.");
+            playButton.setText("Play");
+            isVideoPlaying = false;
+            super.onVideoPause();
+          }
 
-      @Override
-      public void onVideoPlay() {
-        videoStatusText.setText("Video status: Video did play.");
-        playButton.setText("Pause");
-        isVideoPlaying = true;
-        super.onVideoPlay();
-      }
+          @Override
+          public void onVideoPlay() {
+            videoStatusText.setText("Video status: Video did play.");
+            playButton.setText("Pause");
+            isVideoPlaying = true;
+            super.onVideoPlay();
+          }
 
-      @Override
-      public void onVideoStart() {
-        videoStatusText.setText("Video status: Video did start.");
-        playButton.setText("Pause");
-        isVideoPlaying = true;
-        super.onVideoStart();
-      }
+          @Override
+          public void onVideoStart() {
+            videoStatusText.setText("Video status: Video did start.");
+            playButton.setText("Pause");
+            isVideoPlaying = true;
+            super.onVideoStart();
+          }
 
-      @Override
-      public void onVideoEnd() {
-        videoStatusText.setText("Video status: Video playback has ended.");
-        playButton.setText("Play");
-        isVideoPlaying = false;
-        super.onVideoEnd();
-      }
-    });
+          @Override
+          public void onVideoEnd() {
+            videoStatusText.setText("Video status: Video playback has ended.");
+            playButton.setText("Play");
+            isVideoPlaying = false;
+            super.onVideoEnd();
+          }
+        });
   }
 }
