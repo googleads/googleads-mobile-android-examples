@@ -36,12 +36,12 @@ import com.google.android.gms.example.nativeadvancedexample.databinding.AdUnifie
 
 private const val TAG = "MainActivity"
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
-var currentNativeAd: NativeAd? = null
 
 /** A simple activity class that displays native ad formats. */
 class MainActivity : AppCompatActivity() {
 
   private lateinit var mainActivityBinding: ActivityMainBinding
+  private var currentNativeAd: NativeAd? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

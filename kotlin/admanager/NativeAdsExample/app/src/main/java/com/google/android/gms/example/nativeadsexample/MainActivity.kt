@@ -43,14 +43,13 @@ private const val TAG = "MainActivity"
 const val AD_MANAGER_AD_UNIT_ID = "/6499/example/native"
 const val SIMPLE_TEMPLATE_ID = "10104090"
 
-var currentNativeAd: NativeAd? = null
-var currentCustomFormatAd: NativeCustomFormatAd? = null
-
 /** A simple activity class that displays native ad formats. */
 class MainActivity : AppCompatActivity() {
 
   private lateinit var customTemplateBinding: AdSimpleCustomTemplateBinding
   private lateinit var mainActivityBinding: ActivityMainBinding
+  private var currentNativeAd: NativeAd? = null
+  private var currentCustomFormatAd: NativeCustomFormatAd? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
