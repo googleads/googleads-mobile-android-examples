@@ -17,11 +17,11 @@ const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
 class MainActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMainBinding
-  private var mInterstitialAd: InterstitialAd? = null
-  private var mCountDownTimer: CountDownTimer? = null
-  private var mGameIsInProgress = false
-  private var mAdIsLoading: Boolean = false
-  private var mTimerMilliseconds = 0L
+  private var interstitialAd: InterstitialAd? = null
+  private var countdownTimer: CountDownTimer? = null
+  private var gameIsInProgress = false
+  private var adIsLoading: Boolean = false
+  private var timerMilliseconds = 0L
   private var TAG = "MainActivity"
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +62,8 @@ class MainActivity : AppCompatActivity() {
       object : InterstitialAdLoadCallback() {
         override fun onAdFailedToLoad(adError: LoadAdError) {
           Log.d(TAG, adError?.message)
-          mInterstitialAd = null
-          mAdIsLoading = false
+          interstitialAd = null
+          adIsLoading = false
           val error =
             "domain: ${adError.domain}, code: ${adError.code}, " + "message: ${adError.message}"
           Toast.makeText(
@@ -74,10 +74,10 @@ class MainActivity : AppCompatActivity() {
             .show()
         }
 
-        override fun onAdLoaded(interstitialAd: InterstitialAd) {
+        override fun onAdLoaded(ad: InterstitialAd) {
           Log.d(TAG, "Ad was loaded.")
-          mInterstitialAd = interstitialAd
-          mAdIsLoading = false
+          interstitialAd = ad
+          adIsLoading = false
           Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
         }
       }
@@ -87,17 +87,17 @@ class MainActivity : AppCompatActivity() {
   // Create the game timer, which counts down to the end of the level
   // and shows the "retry" button.
   private fun createTimer(milliseconds: Long) {
-    mCountDownTimer?.cancel()
+    countdownTimer?.cancel()
 
-    mCountDownTimer =
+    countdownTimer =
       object : CountDownTimer(milliseconds, 50) {
         override fun onTick(millisUntilFinished: Long) {
-          mTimerMilliseconds = millisUntilFinished
+          timerMilliseconds = millisUntilFinished
           binding.timer.text = "seconds remaining: ${ millisUntilFinished / 1000 + 1 }"
         }
 
         override fun onFinish() {
-          mGameIsInProgress = false
+          gameIsInProgress = false
           binding.timer.text = "done!"
           binding.retryButton.visibility = View.VISIBLE
         }
@@ -106,14 +106,14 @@ class MainActivity : AppCompatActivity() {
 
   // Show the ad if it's ready. Otherwise toast and restart the game.
   private fun showInterstitial() {
-    if (mInterstitialAd != null) {
-      mInterstitialAd?.fullScreenContentCallback =
+    if (interstitialAd != null) {
+      interstitialAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
             Log.d(TAG, "Ad was dismissed.")
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
-            mInterstitialAd = null
+            interstitialAd = null
             loadAd()
           }
 
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Ad failed to show.")
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
-            mInterstitialAd = null
+            interstitialAd = null
           }
 
           override fun onAdShowedFullScreenContent() {
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
             // Called when ad is dismissed.
           }
         }
-      mInterstitialAd?.show(this)
+      interstitialAd?.show(this)
     } else {
       Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
       startGame()
@@ -138,8 +138,8 @@ class MainActivity : AppCompatActivity() {
 
   // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
   private fun startGame() {
-    if (!mAdIsLoading && mInterstitialAd == null) {
-      mAdIsLoading = true
+    if (!adIsLoading && interstitialAd == null) {
+      adIsLoading = true
       loadAd()
     }
 
@@ -149,24 +149,24 @@ class MainActivity : AppCompatActivity() {
 
   private fun resumeGame(milliseconds: Long) {
     // Create a new timer for the correct length and start it.
-    mGameIsInProgress = true
-    mTimerMilliseconds = milliseconds
+    gameIsInProgress = true
+    timerMilliseconds = milliseconds
     createTimer(milliseconds)
-    mCountDownTimer?.start()
+    countdownTimer?.start()
   }
 
   // Resume the game if it's in progress.
   public override fun onResume() {
     super.onResume()
 
-    if (mGameIsInProgress) {
-      resumeGame(mTimerMilliseconds)
+    if (gameIsInProgress) {
+      resumeGame(timerMilliseconds)
     }
   }
 
   // Cancel the timer if the game is paused.
   public override fun onPause() {
-    mCountDownTimer?.cancel()
+    countdownTimer?.cancel()
     super.onPause()
   }
 }
