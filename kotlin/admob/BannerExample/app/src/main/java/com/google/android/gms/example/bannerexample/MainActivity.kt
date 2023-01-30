@@ -6,15 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.gms.example.bannerexample.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var binding: ActivityMainBinding
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -34,24 +37,24 @@ class MainActivity : AppCompatActivity() {
     val adRequest = AdRequest.Builder().build()
 
     // Start loading the ad in the background.
-    ad_view.loadAd(adRequest)
+    binding.adView.loadAd(adRequest)
   }
 
   // Called when leaving the activity
   public override fun onPause() {
-    ad_view.pause()
+    binding.adView.pause()
     super.onPause()
   }
 
   // Called when returning to the activity
   public override fun onResume() {
     super.onResume()
-    ad_view.resume()
+    binding.adView.resume()
   }
 
   // Called before the activity is destroyed
   public override fun onDestroy() {
-    ad_view.destroy()
+    binding.adView.destroy()
     super.onDestroy()
   }
 }

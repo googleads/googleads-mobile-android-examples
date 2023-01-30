@@ -14,7 +14,7 @@ import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.gms.example.rewardedvideoexample.databinding.ActivityMainBinding
 
 const val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"
 const val COUNTER_TIME = 10L
@@ -23,6 +23,7 @@ const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var binding: ActivityMainBinding
   private var coinCount: Int = 0
   private var countdownTimer: CountDownTimer? = null
   private var gameOver = false
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -42,15 +44,15 @@ class MainActivity : AppCompatActivity() {
     loadRewardedAd()
 
     // Create the "retry" button, which tries to show a rewarded video ad between game plays.
-    retry_button.visibility = View.INVISIBLE
-    retry_button.setOnClickListener { startGame() }
+    binding.retryButton.visibility = View.INVISIBLE
+    binding.retryButton.setOnClickListener { startGame() }
 
     // Create the "show" button, which shows a rewarded video if one is loaded.
-    show_video_button.visibility = View.INVISIBLE
-    show_video_button.setOnClickListener { showRewardedVideo() }
+    binding.showVideoButton.visibility = View.INVISIBLE
+    binding.showVideoButton.setOnClickListener { showRewardedVideo() }
 
     // Display current coin count to user.
-    coin_count_text.text = "Coins: $coinCount"
+    binding.coinCountText.text = "Coins: $coinCount"
 
     startGame()
   }
@@ -105,13 +107,13 @@ class MainActivity : AppCompatActivity() {
 
   private fun addCoins(coins: Int) {
     coinCount += coins
-    coin_count_text.text = "Coins: $coinCount"
+    binding.coinCountText.text = "Coins: $coinCount"
   }
 
   private fun startGame() {
     // Hide the retry button, load the ad, and start the timer.
-    retry_button.visibility = View.INVISIBLE
-    show_video_button.visibility = View.INVISIBLE
+    binding.retryButton.visibility = View.INVISIBLE
+    binding.showVideoButton.visibility = View.INVISIBLE
     if (rewardedAd == null && !isLoading) {
       loadRewardedAd()
     }
@@ -129,14 +131,14 @@ class MainActivity : AppCompatActivity() {
       object : CountDownTimer(time * 1000, 50) {
         override fun onTick(millisUnitFinished: Long) {
           timeRemaining = millisUnitFinished / 1000 + 1
-          timer.text = "seconds remaining: $timeRemaining"
+          binding.timer.text = "seconds remaining: $timeRemaining"
         }
 
         override fun onFinish() {
-          show_video_button.visibility = View.VISIBLE
-          timer.text = "The game has ended!"
+          binding.showVideoButton.visibility = View.VISIBLE
+          binding.timer.text = "The game has ended!"
           addCoins(GAME_OVER_REWARD)
-          retry_button.visibility = View.VISIBLE
+          binding.retryButton.visibility = View.VISIBLE
           gameOver = true
         }
       }
@@ -145,7 +147,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun showRewardedVideo() {
-    show_video_button.visibility = View.INVISIBLE
+    binding.showVideoButton.visibility = View.INVISIBLE
     if (rewardedAd != null) {
       rewardedAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {

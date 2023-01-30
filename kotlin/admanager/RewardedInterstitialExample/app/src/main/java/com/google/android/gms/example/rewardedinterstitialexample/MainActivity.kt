@@ -12,9 +12,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
-import kotlinx.android.synthetic.main.activity_main.coin_count_text
-import kotlinx.android.synthetic.main.activity_main.retry_button
-import kotlinx.android.synthetic.main.activity_main.timer
+import com.google.android.gms.example.rewardedinterstitialexample.databinding.ActivityMainBinding
 
 private const val AD_UNIT_ID = "/21775744923/example/rewarded_interstitial"
 private const val GAME_COUNTER_TIME = 10L
@@ -23,6 +21,7 @@ private const val MAIN_ACTIVITY_TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var binding: ActivityMainBinding
   private var coinCount: Int = 0
   private var countDownTimer: CountDownTimer? = null
   private var gameOver = false
@@ -33,7 +32,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     // Log the Mobile Ads SDK version.
     Log.d(MAIN_ACTIVITY_TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -41,11 +41,11 @@ class MainActivity : AppCompatActivity() {
     MobileAds.initialize(this) { initializationStatus -> loadRewardedInterstitialAd() }
 
     // Create the "retry" button, which tries to show a rewarded video ad between game plays.
-    retry_button.visibility = View.INVISIBLE
-    retry_button.setOnClickListener { startGame() }
+    binding.retryButton.visibility = View.INVISIBLE
+    binding.retryButton.setOnClickListener { startGame() }
 
     // Display current coin count to user.
-    coin_count_text.text = "Coins: $coinCount"
+    binding.coinCountText.text = "Coins: $coinCount"
 
     startGame()
   }
@@ -104,12 +104,12 @@ class MainActivity : AppCompatActivity() {
 
   private fun addCoins(coins: Int) {
     coinCount += coins
-    coin_count_text.text = "Coins: $coinCount"
+    binding.coinCountText.text = "Coins: $coinCount"
   }
 
   private fun startGame() {
     // Hide the retry button, load the ad, and start the timer.
-    retry_button.visibility = View.INVISIBLE
+    binding.retryButton.visibility = View.INVISIBLE
     if (rewardedInterstitialAd == null && !isLoadingAds) {
       loadRewardedInterstitialAd()
     }
@@ -127,13 +127,13 @@ class MainActivity : AppCompatActivity() {
       object : CountDownTimer(time * 1000, 50) {
         override fun onTick(millisUnitFinished: Long) {
           timeRemaining = millisUnitFinished / 1000 + 1
-          timer.text = "seconds remaining: $timeRemaining"
+          binding.timer.text = "seconds remaining: $timeRemaining"
         }
 
         override fun onFinish() {
-          timer.text = "The game has ended!"
+          binding.timer.text = "The game has ended!"
           addCoins(GAME_OVER_REWARD)
-          retry_button.visibility = View.VISIBLE
+          binding.retryButton.visibility = View.VISIBLE
           gameOver = true
 
           if (rewardedInterstitialAd == null) {

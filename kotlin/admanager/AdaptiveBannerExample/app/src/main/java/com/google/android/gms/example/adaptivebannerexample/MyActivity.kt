@@ -24,13 +24,14 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerAdView
-import kotlinx.android.synthetic.main.activity_my.*
+import com.google.android.gms.example.adaptivebannerexample.databinding.ActivityMyBinding
 
 private const val TAG = "MyActivity"
 
 /** Main Activity. Inflates main activity xml and child fragments. */
 class MyActivity : AppCompatActivity() {
 
+  private lateinit var binding: ActivityMyBinding
   private lateinit var adView: AdManagerAdView
   private var initialLayoutComplete = false
 
@@ -44,7 +45,7 @@ class MyActivity : AppCompatActivity() {
 
       val density = outMetrics.density
 
-      var adWidthPixels = ad_view_container.width.toFloat()
+      var adWidthPixels = binding.adViewContainer.width.toFloat()
       if (adWidthPixels == 0f) {
         adWidthPixels = outMetrics.widthPixels.toFloat()
       }
@@ -55,8 +56,9 @@ class MyActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_my)
-    load_button.setOnClickListener { loadBanner(adSize) }
+    binding = ActivityMyBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    binding.loadButton.setOnClickListener { loadBanner(adSize) }
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -73,10 +75,10 @@ class MyActivity : AppCompatActivity() {
     )
 
     adView = AdManagerAdView(this)
-    ad_view_container.addView(adView)
+    binding.adViewContainer.addView(adView)
     // Since we're loading the banner based on the adContainerView size, we need to wait until this
     // view is laid out before we can get the width.
-    ad_view_container.viewTreeObserver.addOnGlobalLayoutListener {
+    binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
       if (!initialLayoutComplete) {
         initialLayoutComplete = true
         loadBanner(adSize)
