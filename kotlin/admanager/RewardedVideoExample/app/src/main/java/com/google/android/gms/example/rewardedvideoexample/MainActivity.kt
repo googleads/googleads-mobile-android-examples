@@ -24,13 +24,13 @@ const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMainBinding
-  private var mCoinCount: Int = 0
-  private var mCountDownTimer: CountDownTimer? = null
-  private var mGameOver = false
-  private var mGamePaused = false
-  private var mIsLoading = false
-  private var mRewardedAd: RewardedAd? = null
-  private var mTimeRemaining: Long = 0L
+  private var coinCount: Int = 0
+  private var countdownTimer: CountDownTimer? = null
+  private var gameOver = false
+  private var gamePaused = false
+  private var isLoading = false
+  private var rewardedAd: RewardedAd? = null
+  private var timeRemaining: Long = 0L
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     binding.showVideoButton.setOnClickListener { showRewardedVideo() }
 
     // Display current coin count to user.
-    binding.coinCountText.text = "Coins: $mCoinCount"
+    binding.coinCountText.text = "Coins: $coinCount"
 
     startGame()
   }
@@ -66,24 +66,24 @@ class MainActivity : AppCompatActivity() {
 
   public override fun onResume() {
     super.onResume()
-    if (!mGameOver && mGamePaused) {
+    if (!gameOver && gamePaused) {
       resumeGame()
     }
   }
 
   private fun pauseGame() {
-    mCountDownTimer?.cancel()
-    mGamePaused = true
+    countdownTimer?.cancel()
+    gamePaused = true
   }
 
   private fun resumeGame() {
-    createTimer(mTimeRemaining)
-    mGamePaused = false
+    createTimer(timeRemaining)
+    gamePaused = false
   }
 
   private fun loadRewardedAd() {
-    if (mRewardedAd == null) {
-      mIsLoading = true
+    if (rewardedAd == null) {
+      isLoading = true
       var adRequest = AdManagerAdRequest.Builder().build()
 
       RewardedAd.load(
@@ -93,14 +93,14 @@ class MainActivity : AppCompatActivity() {
         object : RewardedAdLoadCallback() {
           override fun onAdFailedToLoad(adError: LoadAdError) {
             Log.d(TAG, adError?.message)
-            mIsLoading = false
-            mRewardedAd = null
+            isLoading = false
+            rewardedAd = null
           }
 
-          override fun onAdLoaded(rewardedAd: RewardedAd) {
+          override fun onAdLoaded(ad: RewardedAd) {
             Log.d(TAG, "Ad was loaded.")
-            mRewardedAd = rewardedAd
-            mIsLoading = false
+            rewardedAd = ad
+            isLoading = false
           }
         }
       )
@@ -108,32 +108,32 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun addCoins(coins: Int) {
-    mCoinCount += coins
-    binding.coinCountText.text = "Coins: $mCoinCount"
+    coinCount += coins
+    binding.coinCountText.text = "Coins: $coinCount"
   }
 
   private fun startGame() {
     // Hide the retry button, load the ad, and start the timer.
     binding.retryButton.visibility = View.INVISIBLE
     binding.showVideoButton.visibility = View.INVISIBLE
-    if (mRewardedAd == null && !mIsLoading) {
+    if (rewardedAd == null && !isLoading) {
       loadRewardedAd()
     }
     createTimer(COUNTER_TIME)
-    mGamePaused = false
-    mGameOver = false
+    gamePaused = false
+    gameOver = false
   }
 
   // Create the game timer, which counts down to the end of the level
   // and shows the "retry" button.
   private fun createTimer(time: Long) {
-    mCountDownTimer?.cancel()
+    countdownTimer?.cancel()
 
-    mCountDownTimer =
+    countdownTimer =
       object : CountDownTimer(time * 1000, 50) {
         override fun onTick(millisUnitFinished: Long) {
-          mTimeRemaining = millisUnitFinished / 1000 + 1
-          binding.timer.text = "seconds remaining: $mTimeRemaining"
+          timeRemaining = millisUnitFinished / 1000 + 1
+          binding.timer.text = "seconds remaining: $timeRemaining"
         }
 
         override fun onFinish() {
@@ -141,31 +141,31 @@ class MainActivity : AppCompatActivity() {
           binding.timer.text = "The game has ended!"
           addCoins(GAME_OVER_REWARD)
           binding.retryButton.visibility = View.VISIBLE
-          mGameOver = true
+          gameOver = true
         }
       }
 
-    mCountDownTimer?.start()
+    countdownTimer?.start()
   }
 
   private fun showRewardedVideo() {
     binding.showVideoButton.visibility = View.INVISIBLE
-    if (mRewardedAd != null) {
-      mRewardedAd?.fullScreenContentCallback =
+    if (rewardedAd != null) {
+      rewardedAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
             Log.d(TAG, "Ad was dismissed.")
             loadRewardedAd()
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
-            mRewardedAd = null
+            rewardedAd = null
           }
 
           override fun onAdFailedToShowFullScreenContent(adError: AdError) {
             Log.d(TAG, "Ad failed to show.")
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
-            mRewardedAd = null
+            rewardedAd = null
           }
 
           override fun onAdShowedFullScreenContent() {
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
           }
         }
 
-      mRewardedAd?.show(
+      rewardedAd?.show(
         this,
         OnUserEarnedRewardListener() {
           fun onUserEarnedReward(rewardItem: RewardItem) {
