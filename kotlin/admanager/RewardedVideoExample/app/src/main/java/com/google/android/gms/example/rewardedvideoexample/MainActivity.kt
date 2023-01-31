@@ -11,7 +11,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
-import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.example.rewardedvideoexample.databinding.ActivityMainBinding
@@ -176,13 +175,12 @@ class MainActivity : AppCompatActivity() {
 
       rewardedAd?.show(
         this,
-        OnUserEarnedRewardListener() {
-          fun onUserEarnedReward(rewardItem: RewardItem) {
-            var rewardAmount = rewardItem.amount
-            var rewardType = rewardItem.type
-            addCoins(rewardAmount)
-            Log.d("TAG", "User earned the reward.")
-          }
+        OnUserEarnedRewardListener { rewardItem ->
+          // Handle the reward.
+          val rewardAmount = rewardItem.amount
+          val rewardType = rewardItem.type
+          addCoins(rewardAmount)
+          Log.d("TAG", "User earned the reward.")
         }
       )
     }
