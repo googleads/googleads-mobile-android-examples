@@ -159,7 +159,6 @@ public class MyApplication extends Application
           context,
           AD_UNIT_ID,
           request,
-          AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
           new AppOpenAdLoadCallback() {
             /**
              * Called when an app open ad has loaded.
