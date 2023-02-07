@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.android.gms.example.appopendemo">
+    package="com.google.android.gms.example.appopenexample">
 
     <application
-        android:name="com.google.android.gms.example.appopendemo.MyApplication"
+        android:name="com.google.android.gms.example.appopenexample.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

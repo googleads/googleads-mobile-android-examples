@@ -4,7 +4,7 @@ android {
     compileSdkVersion 33
     buildToolsVersion '30.0.3'
     defaultConfig {
-        applicationId "com.google.android.gms.example.appopendemo"
+        applicationId "com.google.android.gms.example.appopenexample"
         minSdkVersion 19
         targetSdkVersion 33
         versionCode 1
@@ -25,8 +25,8 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-ads:21.5.0'
 
-    def lifecycle_version = '2.3.1'
-    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
+    implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.5.1"
 }

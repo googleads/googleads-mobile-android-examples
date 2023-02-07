@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gms.example.appopendemo;
+package com.google.android.gms.example.appopenexample;
 
 import android.app.Application;
 import android.content.Intent;
@@ -22,7 +22,7 @@ import android.os.CountDownTimer;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import com.google.android.gms.example.appopendemo.MyApplication.OnShowAdCompleteListener;
+import com.google.android.gms.example.appopenexample.MyApplication.OnShowAdCompleteListener;
 
 /** Splash Activity that inflates splash activity xml. */
 public class SplashActivity extends AppCompatActivity {
