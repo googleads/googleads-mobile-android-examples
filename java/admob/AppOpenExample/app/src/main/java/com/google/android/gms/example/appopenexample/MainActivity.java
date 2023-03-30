@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
   /** Override the default implementation when the user presses the back key. */
   @Override
-  public void onBackPressed() {
+  @SuppressWarnings("MissingSuperCall")
+	public void onBackPressed() {
     // Move the task containing the MainActivity to the back of the activity stack, instead of
     // destroying it. Therefore, MainActivity will be shown when the user switches back to the app.
     moveTaskToBack(true);
