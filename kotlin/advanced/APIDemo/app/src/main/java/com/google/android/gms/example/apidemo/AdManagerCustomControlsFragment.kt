@@ -27,6 +27,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MediaContent
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
@@ -124,7 +125,7 @@ class AdManagerCustomControlsFragment : Fragment() {
     nativeAdView.setNativeAd(nativeAd)
 
     val mediaContent: MediaContent? = nativeAd.mediaContent
-    mediaContent?.videoController?.let { fragmentBinding.customControls.setVideoController(it) }
+    mediaContent?.let { fragmentBinding.customControls.setMediaContent(it) }
 
     fragmentBinding.btnRefresh.isEnabled = true
   }
@@ -150,14 +151,14 @@ class AdManagerCustomControlsFragment : Fragment() {
 
     val mediaPlaceholder = adView.findViewById<FrameLayout>(R.id.simplecustom_media_placeholder)
 
-    // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-    // have a video asset.
-    val vc = nativeCustomFormatAd.videoController
+    // Get the media content for the ad.
+    val mediaContent = nativeCustomFormatAd.mediaContent
 
-    // Apps can check the VideoController's hasVideoContent property to determine if the
-    // NativeCustomFormatAd has a video asset.
-    if (vc.hasVideoContent()) {
-      mediaPlaceholder.addView(nativeCustomFormatAd.videoMediaView)
+    // Apps can check the MediaContent's hasVideoContent property to
+    // determine if the NativeCustomFormatAd has a video asset.
+    if (mediaContent != null && mediaContent.hasVideoContent()) {
+      val mediaView = MediaView(mediaPlaceholder.getContext())
+      mediaView.mediaContent = mediaContent
     } else {
       val mainImage = ImageView(activity)
       mainImage.adjustViewBounds = true
@@ -166,7 +167,7 @@ class AdManagerCustomControlsFragment : Fragment() {
       mainImage.setOnClickListener { nativeCustomFormatAd.performClick("MainImage") }
       mediaPlaceholder.addView(mainImage)
     }
-    fragmentBinding.customControls.setVideoController(vc)
+    mediaContent?.let { fragmentBinding.customControls.setMediaContent(it) }
 
     fragmentBinding.btnRefresh.isEnabled = true
   }

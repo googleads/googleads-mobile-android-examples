@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 33
-    buildToolsVersion '30.0.3'
+    buildToolsVersion '33.0.1'
     defaultConfig {
         applicationId "com.google.android.gms.example.interstitialexample"
         minSdkVersion 19
@@ -20,5 +20,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.gms:play-services-ads:21.5.0'
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
 }
