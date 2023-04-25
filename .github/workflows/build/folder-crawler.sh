@@ -21,7 +21,7 @@ configured for GitHub actions."
 if [[ ${projects} != "$expected_projects_count" ]]; then
   echo "Project count does not match the expected project count. Make sure all
   samples are building through GitHub actions. See
-  https://g3doc.corp.google.com/company/teams/ads-devrel/enable-github-actions-on-new-android-samples.md
+  https://g3doc.corp.google.com/company/teams/ads-devrel/mobile-ads/enable-github-actions-on-new-android-samples.md
   for more details"
   exit 1
 else
