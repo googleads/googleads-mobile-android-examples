@@ -25,6 +25,7 @@ jobs:
         - "java/admob/AdaptiveBannerExample"
         - "java/admob/AppOpenExample"
         - "java/admob/BannerExample"
+        - "java/admob/FullScreenNativeExample"
         - "java/admob/InterstitialExample"
         - "java/admob/NativeAdvancedExample"
         - "java/admob/RewardedInterstitialExample"
