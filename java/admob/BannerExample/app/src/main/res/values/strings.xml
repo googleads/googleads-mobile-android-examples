@@ -3,7 +3,8 @@
 
     <string name="app_name">AdMob Banner Example</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
 
     <!-- This is an ad unit ID for a test ad. Replace with your own banner ad unit id. -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
