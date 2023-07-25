@@ -1,16 +1,12 @@
 package com.google.android.gms.example.bannerexample
 
 import android.app.Activity
-import android.util.Log
 import com.google.android.ump.ConsentDebugSettings
-import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentForm.OnConsentFormDismissedListener
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.FormError
 import com.google.android.ump.UserMessagingPlatform
-
-private const val TAG = "MobileAdsConsentManager"
 
 /**
  * The Google Mobile Ads SDK provides the User Messaging Platform (Google's IAB Certified consent
@@ -21,9 +17,6 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
   private val consentInformation: ConsentInformation =
     UserMessagingPlatform.getConsentInformation(activity)
 
-  // The UMP SDK consent form.
-  private var consentForm: ConsentForm? = null
-
   /** Interface definition for a callback to be invoked when consent gathering is complete. */
   fun interface OnConsentGatheringCompleteListener {
     fun consentGatheringComplete(error: FormError?)
@@ -31,16 +24,16 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
 
   /** Helper variable to determine if the app can request ads. */
   val canRequestAds: Boolean
-    get() =
-      consentInformation.consentStatus == ConsentInformation.ConsentStatus.OBTAINED ||
-        consentInformation.consentStatus == ConsentInformation.ConsentStatus.NOT_REQUIRED
+    get() = consentInformation.canRequestAds()
 
-  /** Helper variable to determine if the consent form is available. */
-  val isFormAvailable: Boolean
-    get() = consentInformation.isConsentFormAvailable
+  /** Helper variable to determine if the privacy options form is required. */
+  val isPrivacyOptionsRequired: Boolean
+    get() =
+      consentInformation.privacyOptionsRequirementStatus ==
+        ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
 
   /**
-   * Helper method to call the UMP SDK methods to request consent information and load/present a
+   * Helper method to call the UMP SDK methods to request consent information and load/show a
    * consent form if necessary.
    */
   fun gatherConsent(onConsentGatheringCompleteListener: OnConsentGatheringCompleteListener) {
@@ -51,6 +44,7 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
         // Check your logcat output for the hashed device ID e.g.
         // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345")" to use
         // the debug functionality.
+        .addTestDeviceHashedId("TEST-DEVICE-HASHED-ID")
         .build()
 
     val params = ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build()
@@ -60,13 +54,9 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
       activity,
       params,
       {
-        loadAndPresentConsentFormIfRequired(activity) { formError -> // Consent has been gathered.
+        UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
+          // Consent has been gathered.
           onConsentGatheringCompleteListener.consentGatheringComplete(formError)
-
-          // Your app needs to allow the user to change their consent status at any time. Load
-          // another form and store it so it's ready to be displayed immediately after the user
-          // clicks your app's privacy settings button.
-          loadPrivacyOptionsFormIfRequired()
         }
       },
       { requestConsentError ->
@@ -75,65 +65,11 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
     )
   }
 
-  private fun loadAndPresentConsentFormIfRequired(
+  /** Helper method to call the UMP SDK method to show the privacy options form. */
+  fun showPrivacyOptionsForm(
     activity: Activity,
     onConsentFormDismissedListener: OnConsentFormDismissedListener
   ) {
-    // Determine the consent-related action to take based on the ConsentStatus.
-    if (
-      consentInformation.consentStatus == ConsentInformation.ConsentStatus.OBTAINED ||
-        consentInformation.consentStatus == ConsentInformation.ConsentStatus.NOT_REQUIRED
-    ) {
-      // Consent has already been gathered or not required.
-      return onConsentFormDismissedListener.onConsentFormDismissed(null)
-    }
-
-    UserMessagingPlatform.loadConsentForm(
-      activity,
-      { form -> form.show(activity, onConsentFormDismissedListener) },
-      { loadError -> onConsentFormDismissedListener.onConsentFormDismissed(loadError) }
-    )
-  }
-
-  private fun loadPrivacyOptionsFormIfRequired() {
-    // No privacy options form needed if consent form is not available.
-    if (consentInformation.isConsentFormAvailable) {
-      UserMessagingPlatform.loadConsentForm(
-        activity,
-        { form -> this.consentForm = form },
-        { error ->
-          // See FormError for more info.
-          Log.d(TAG, "${error.errorCode}: ${error.message}")
-        }
-      )
-    }
-  }
-
-  /** Helper method to call the UMP SDK method to present the privacy options form. */
-  fun presentPrivacyOptionsForm(
-    activity: Activity,
-    onConsentFormDismissedListener: OnConsentFormDismissedListener
-  ) {
-    if (consentForm == null) {
-      onConsentFormDismissedListener.onConsentFormDismissed(
-        FormError(0, "No form available. Please try again later.")
-      )
-
-      // Your app needs to allow the user to change their consent status at any time. Load
-      // another form and store it so it's ready to be displayed immediately after the user
-      // clicks your app's privacy settings button.
-      loadPrivacyOptionsFormIfRequired()
-      return
-    }
-
-    consentForm?.show(activity) {
-      onConsentFormDismissedListener.onConsentFormDismissed(it)
-      consentForm = null
-
-      // Your app needs to allow the user to change their consent status at any time. Load
-      // another form and store it so it's ready to be displayed immediately after the user
-      // clicks your app's privacy settings button.
-      loadPrivacyOptionsFormIfRequired()
-    }
+    UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener)
   }
 }
