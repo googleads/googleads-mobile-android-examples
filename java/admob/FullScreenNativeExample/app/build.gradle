@@ -1,13 +1,14 @@
 apply plugin: "com.android.application"
 
 android {
+    namespace "com.google.example.gms.fullscreennativeexample"
     compileSdkVersion 33
-    buildToolsVersion ''
+    buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId "com.google.android.gms.example.fullscreennativeexample"
         minSdkVersion 19
         multiDexEnabled = true
-        targetSdkVersion 33
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
