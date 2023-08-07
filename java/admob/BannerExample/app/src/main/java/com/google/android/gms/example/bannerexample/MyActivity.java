@@ -65,8 +65,7 @@ public class MyActivity extends AppCompatActivity {
     googleMobileAdsConsentManager.gatherConsent(
         consentError -> {
           if (consentError != null) {
-            // Consent not obtained in current session. This sample loads ads using
-            // consent obtained in the previous session.
+            // Consent not obtained in current session.
             Log.w(
                 TAG,
                 String.format(
@@ -79,13 +78,14 @@ public class MyActivity extends AppCompatActivity {
             initializeMobileAdsSdk();
           }
 
-          if (googleMobileAdsConsentManager.isFormAvailable()) {
+          if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
             // Regenerate the options menu to include a privacy setting.
             invalidateOptionsMenu();
           }
         }
     );
 
+    // This sample attempts to load ads using consent obtained in the previous session.
     if (googleMobileAdsConsentManager.canRequestAds()) {
       initializeMobileAdsSdk();
     }
@@ -95,7 +95,7 @@ public class MyActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
     MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(googleMobileAdsConsentManager.isFormAvailable());
+    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -109,7 +109,7 @@ public class MyActivity extends AppCompatActivity {
         popupMenuItem -> {
           if (popupMenuItem.getItemId() == R.id.privacy_settings) {
             // Handle changes to user consent.
-            googleMobileAdsConsentManager.presentPrivacyOptionsFormIfRequired(
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(
                 this,
                 formError -> {
                   if (formError != null) {

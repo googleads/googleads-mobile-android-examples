@@ -42,8 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     googleMobileAdsConsentManager.gatherConsent { error ->
       error?.let {
-        // Consent not obtained in current session. This sample loads ads using
-        // consent obtained in the previous session.
+        // Consent not obtained in current session.
         Log.d(TAG, "${it.errorCode}: ${it.message}")
       }
 
@@ -51,12 +50,13 @@ class MainActivity : AppCompatActivity() {
         initializeMobileAdsSdk()
       }
 
-      if (googleMobileAdsConsentManager.isFormAvailable) {
+      if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
         // Regenerate the options menu to include a privacy setting.
         invalidateOptionsMenu()
       }
     }
 
+    // This sample attempts to load ads using consent obtained in the previous session.
     if (googleMobileAdsConsentManager.canRequestAds) {
       initializeMobileAdsSdk()
     }
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
     val moreMenu = menu?.findItem(R.id.action_more)
-    moreMenu?.isVisible = googleMobileAdsConsentManager.isFormAvailable
+    moreMenu?.isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
       when (popupMenuItem.itemId) {
         R.id.privacy_settings -> {
           // Handle changes to user consent.
-          googleMobileAdsConsentManager.presentPrivacyOptionsForm(this) { formError ->
+          googleMobileAdsConsentManager.showPrivacyOptionsForm(this) { formError ->
             formError?.let {
               Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
             }
