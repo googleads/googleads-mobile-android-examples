@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">Ad Manager Native Ads Example</string>
-    <string name="ad_attribution">Ad</string>
+    <string name="ad_attribution" translatable="false">Ad</string>
+    <string name="app_name" translatable="false">Ad Manager Native Advanced</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
 </resources>

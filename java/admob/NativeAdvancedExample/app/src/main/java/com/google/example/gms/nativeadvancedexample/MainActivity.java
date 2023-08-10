@@ -21,11 +21,14 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +46,7 @@ import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A simple activity class that displays native ad formats.
@@ -52,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
     private static final String TAG = "MainActivity";
+    private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
 
+    private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
     private Button refresh;
     private CheckBox startVideoAdsMuted;
     private TextView videoStatus;
@@ -66,11 +72,32 @@ public class MainActivity extends AppCompatActivity {
         // Log the Mobile Ads SDK version.
         Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {}
-        });
+        googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
+
+        googleMobileAdsConsentManager.gatherConsent(
+            consentError -> {
+              if (consentError != null) {
+                // Consent not obtained in current session.
+                Log.w(
+                    TAG,
+                    String.format(
+                        "%s: %s", consentError.getErrorCode(), consentError.getMessage()));
+              }
+
+              if (googleMobileAdsConsentManager.canRequestAds()) {
+                initializeMobileAdsSdk();
+              }
+
+              if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
+                // Regenerate the options menu to include a privacy setting.
+                invalidateOptionsMenu();
+              }
+            });
+
+        // This sample attempts to load ads using consent obtained in the previous session.
+        if (googleMobileAdsConsentManager.canRequestAds()) {
+          initializeMobileAdsSdk();
+        }
 
         refresh = findViewById(R.id.btn_refresh);
         startVideoAdsMuted = findViewById(R.id.cb_start_muted);
@@ -79,11 +106,41 @@ public class MainActivity extends AppCompatActivity {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View unusedView) {
-                refreshAd();
+              refreshAd();
             }
         });
+    }
 
-        refreshAd();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+      getMenuInflater().inflate(R.menu.action_menu, menu);
+      MenuItem moreMenu = menu.findItem(R.id.action_more);
+      moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
+      return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      View menuItemView = findViewById(item.getItemId());
+      PopupMenu popup = new PopupMenu(this, menuItemView);
+      popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+      popup.show();
+      popup.setOnMenuItemClickListener(
+          popupMenuItem -> {
+            if (popupMenuItem.getItemId() == R.id.privacy_settings) {
+              // Handle changes to user consent.
+              googleMobileAdsConsentManager.showPrivacyOptionsForm(
+                  this,
+                  formError -> {
+                    if (formError != null) {
+                      Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                  });
+              return true;
+            }
+            return false;
+          });
+      return super.onOptionsItemSelected(item);
     }
 
   /**
@@ -182,14 +239,14 @@ public class MainActivity extends AppCompatActivity {
                 public void onVideoEnd() {
                     // Publishers should allow native ads to complete video playback before
                     // refreshing or replacing them with another ad in the same UI location.
-                    refresh.setEnabled(true);
+                    refresh.setEnabled(googleMobileAdsConsentManager.canRequestAds());
                     videoStatus.setText("Video status: Video playback has ended.");
                     super.onVideoEnd();
                 }
             });
         } else {
             videoStatus.setText("Video status: Ad does not contain a video asset.");
-            refresh.setEnabled(true);
+            refresh.setEnabled(googleMobileAdsConsentManager.canRequestAds());
         }
     }
 
@@ -211,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             // If this callback occurs after the activity is destroyed, you must call
             // destroy and return or you may get a memory leak.
             boolean isDestroyed = false;
-            refresh.setEnabled(true);
+            refresh.setEnabled(googleMobileAdsConsentManager.canRequestAds());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
               isDestroyed = isDestroyed();
             }
@@ -248,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdListener() {
                   @Override
                   public void onAdFailedToLoad(LoadAdError loadAdError) {
-                    refresh.setEnabled(true);
+                    refresh.setEnabled(googleMobileAdsConsentManager.canRequestAds());
                     String error =
                         String.format(
                             Locale.getDefault(),
@@ -268,6 +325,21 @@ public class MainActivity extends AppCompatActivity {
         adLoader.loadAd(new AdRequest.Builder().build());
 
         videoStatus.setText("");
+    }
+
+    private void initializeMobileAdsSdk() {
+      if (isMobileAdsInitializeCalled.getAndSet(true)) {
+        return;
+      }
+
+      // Initialize the Mobile Ads SDK.
+      MobileAds.initialize(this, new OnInitializationCompleteListener() {
+        @Override
+        public void onInitializationComplete(InitializationStatus initializationStatus) {}
+      });
+
+      // Load an ad.
+      refreshAd();
     }
 
     @Override
