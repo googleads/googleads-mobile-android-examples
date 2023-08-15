@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AdMob Banner Example</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
 </resources>
