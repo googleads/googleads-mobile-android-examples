@@ -9,9 +9,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import java.util.concurrent.TimeUnit
 
-/** Number of seconds to count down before showing ads. */
-private const val AD_COUNTER_TIME = 5L
+/** Number of milliseconds to count down before showing ads. */
+private const val AD_COUNTER_TIME_IN_MILLISECONDS = 5000L
 
 /** A string that represents this class in the logcat. */
 private const val AD_DIALOG_TAG = "AdDialogFragment"
@@ -51,50 +52,46 @@ class AdDialogFragment : DialogFragment() {
 
     val args = arguments
     var rewardAmount = -1
-    var rewardType: String? = null
     if (args != null) {
       rewardAmount = args.getInt(REWARD_AMOUNT)
-      rewardType = args.getString(REWARD_TYPE)
     }
-    if (rewardAmount > 0 && rewardType != null) {
-      builder.setTitle(getString(R.string.more_coins_text, rewardAmount, rewardType))
+    if (rewardAmount > 0) {
+      builder.setTitle(
+        resources.getQuantityString(R.plurals.more_coins_text, rewardAmount, rewardAmount)
+      )
     }
 
-    builder.setNegativeButton(
-        getString(R.string.negative_button_text)
-      ) { _, _ -> dialog?.cancel() }
+    builder.setNegativeButton(getString(R.string.negative_button_text)) { _, _ -> dialog?.cancel() }
     val dialog: Dialog = builder.create()
-    createTimer(AD_COUNTER_TIME, view)
+    createTimer(AD_COUNTER_TIME_IN_MILLISECONDS, view)
     return dialog
   }
 
   /**
    * Creates the a timer to count down until the rewarded interstitial ad.
    *
-   * @param time Number of seconds to count down.
+   * @param time Number of milliseconds to count down.
    * @param dialogView The view of this dialog for updating the remaining seconds count.
    */
   private fun createTimer(time: Long, dialogView: View) {
     val textView: TextView = dialogView.findViewById(R.id.timer)
-    countDownTimer = object : CountDownTimer(time * 1000, 50) {
-      override fun onTick(millisUnitFinished: Long) {
-        timeRemaining = millisUnitFinished / 1000 + 1
-        textView.text =
-          String.format(getString(R.string.video_starting_in_text), timeRemaining)
-      }
+    countDownTimer =
+      object : CountDownTimer(time, 50) {
+        override fun onTick(millisUnitFinished: Long) {
+          timeRemaining = TimeUnit.MILLISECONDS.toSeconds(millisUnitFinished) + 1
+          textView.text = String.format(getString(R.string.video_starting_in_text), timeRemaining)
+        }
 
-      /**
-       * Called when the count down finishes and the user hasn't cancelled the dialog.
-       */
-      override fun onFinish() {
-        dialog?.dismiss()
+        // Called when the count down finishes and the user hasn't cancelled the dialog.
+        override fun onFinish() {
+          dialog?.dismiss()
 
-        if (listener != null) {
-          Log.d(AD_DIALOG_TAG, "onFinish: Calling onShowAd().")
-          listener!!.onShowAd()
+          if (listener != null) {
+            Log.d(AD_DIALOG_TAG, "onFinish: Calling onShowAd().")
+            listener?.onShowAd()
+          }
         }
       }
-    }
     countDownTimer?.start()
   }
 
@@ -104,7 +101,7 @@ class AdDialogFragment : DialogFragment() {
 
     if (listener != null) {
       Log.d(AD_DIALOG_TAG, "onCancel: Calling onCancelAd().")
-      listener!!.onCancelAd()
+      listener?.onCancelAd()
     }
   }
 
