@@ -3,7 +3,11 @@ package com.google.android.gms.example.rewardedvideoexample
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -14,6 +18,7 @@ import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.example.rewardedvideoexample.databinding.ActivityMainBinding
+import java.util.concurrent.atomic.AtomicBoolean
 
 const val AD_UNIT_ID = "/6499/example/rewarded-video"
 const val COUNTER_TIME = 10L
@@ -23,6 +28,8 @@ const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMainBinding
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+  private var isMobileAdsInitializeCalled = AtomicBoolean(false)
   private var coinCount: Int = 0
   private var countdownTimer: CountDownTimer? = null
   private var gameOver = false
@@ -39,14 +46,39 @@ class MainActivity : AppCompatActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
 
-    loadRewardedAd()
+    googleMobileAdsConsentManager.gatherConsent { error ->
+      if (error != null) {
+        // Consent not obtained in current session.
+        Log.d(TAG, "${error.errorCode}: ${error.message}")
+      }
+
+      startGame()
+
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        initializeMobileAdsSdk()
+      }
+
+      if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+        // Regenerate the options menu to include a privacy setting.
+        invalidateOptionsMenu()
+      }
+    }
+
+    // This sample attempts to load ads using consent obtained in the previous session.
+    if (googleMobileAdsConsentManager.canRequestAds) {
+      initializeMobileAdsSdk()
+    }
 
     // Create the "retry" button, which tries to show a rewarded video ad between game plays.
     binding.retryButton.visibility = View.INVISIBLE
-    binding.retryButton.setOnClickListener { startGame() }
+    binding.retryButton.setOnClickListener {
+      startGame()
+      if (rewardedAd == null && !isLoading && googleMobileAdsConsentManager.canRequestAds) {
+        loadRewardedAd()
+      }
+    }
 
     // Create the "show" button, which shows a rewarded video if one is loaded.
     binding.showVideoButton.visibility = View.INVISIBLE
@@ -54,8 +86,6 @@ class MainActivity : AppCompatActivity() {
 
     // Display current coin count to user.
     binding.coinCountText.text = "Coins: $coinCount"
-
-    startGame()
   }
 
   public override fun onPause() {
@@ -68,6 +98,37 @@ class MainActivity : AppCompatActivity() {
     if (!gameOver && gamePaused) {
       resumeGame()
     }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.action_menu, menu)
+    val moreMenu = menu?.findItem(R.id.action_more)
+    moreMenu?.isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
+    return super.onCreateOptionsMenu(menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val menuItemView = findViewById<View>(item.itemId)
+    val popup = PopupMenu(this, menuItemView)
+    popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+    popup.show()
+    popup.setOnMenuItemClickListener { popupMenuItem ->
+      when (popupMenuItem.itemId) {
+        R.id.privacy_settings -> {
+          pauseGame()
+          // Handle changes to user consent.
+          googleMobileAdsConsentManager.showPrivacyOptionsForm(this) { formError ->
+            if (formError != null) {
+              Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+            }
+            resumeGame()
+          }
+          true
+        }
+        else -> false
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   private fun pauseGame() {
@@ -115,9 +176,6 @@ class MainActivity : AppCompatActivity() {
     // Hide the retry button, load the ad, and start the timer.
     binding.retryButton.visibility = View.INVISIBLE
     binding.showVideoButton.visibility = View.INVISIBLE
-    if (rewardedAd == null && !isLoading) {
-      loadRewardedAd()
-    }
     createTimer(COUNTER_TIME)
     gamePaused = false
     gameOver = false
@@ -154,7 +212,9 @@ class MainActivity : AppCompatActivity() {
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
             Log.d(TAG, "Ad was dismissed.")
-            loadRewardedAd()
+            if (googleMobileAdsConsentManager.canRequestAds) {
+              loadRewardedAd()
+            }
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
             rewardedAd = null
@@ -184,5 +244,16 @@ class MainActivity : AppCompatActivity() {
         }
       )
     }
+  }
+
+  private fun initializeMobileAdsSdk() {
+    if (isMobileAdsInitializeCalled.getAndSet(true)) {
+      return
+    }
+
+    // Initialize the Mobile Ads SDK.
+    MobileAds.initialize(this) {}
+    // Load an ad.
+    loadRewardedAd()
   }
 }
