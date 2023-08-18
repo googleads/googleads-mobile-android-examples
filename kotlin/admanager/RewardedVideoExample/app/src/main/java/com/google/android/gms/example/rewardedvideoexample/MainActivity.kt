@@ -95,9 +95,7 @@ class MainActivity : AppCompatActivity() {
 
   public override fun onResume() {
     super.onResume()
-    if (!gameOver && gamePaused) {
-      resumeGame()
-    }
+    resumeGame()
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -132,11 +130,17 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun pauseGame() {
+    if (gameOver || gamePaused) {
+      return
+    }
     countdownTimer?.cancel()
     gamePaused = true
   }
 
   private fun resumeGame() {
+    if (gameOver || !gamePaused) {
+      return
+    }
     createTimer(timeRemaining)
     gamePaused = false
   }

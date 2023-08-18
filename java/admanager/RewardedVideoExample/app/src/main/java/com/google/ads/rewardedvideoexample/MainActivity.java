@@ -131,9 +131,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public void onResume() {
     super.onResume();
-    if (!gameOver && gamePaused) {
-      resumeGame();
-    }
+    resumeGame();
   }
 
   @Override
@@ -171,11 +169,17 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void pauseGame() {
+    if (gameOver || gamePaused) {
+      return;
+    }
     countDownTimer.cancel();
     gamePaused = true;
   }
 
   private void resumeGame() {
+    if (gameOver || !gamePaused) {
+      return;
+    }
     createTimer(timeRemaining);
     gamePaused = false;
   }
