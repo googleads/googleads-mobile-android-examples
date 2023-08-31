@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">AdMob Interstitial Example</string>
-    <string name="impossible_game">Impossible Game</string>
-    <string name="retry_button_text">Retry</string>
+    <string name="app_name" translatable="false">AdMob Interstitial</string>
+    <string name="impossible_game" translatable="false">Impossible Game</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="retry_button_text" translatable="false">Retry</string>
 </resources>

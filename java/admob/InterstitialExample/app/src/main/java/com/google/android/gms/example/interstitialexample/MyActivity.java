@@ -20,8 +20,11 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -34,6 +37,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Main Activity. Inflates main activity xml.
@@ -45,10 +49,14 @@ public class MyActivity extends AppCompatActivity {
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
     private static final String TAG = "MyActivity";
 
+    private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+    private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
     private InterstitialAd interstitialAd;
     private CountDownTimer countDownTimer;
     private Button retryButton;
-    private boolean gameIsInProgress;
+    private boolean gamePaused;
+    private boolean gameOver;
+    private boolean adIsLoading;
     private long timerMilliseconds;
 
     @Override
@@ -65,7 +73,35 @@ public class MyActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {}
         });
 
-    loadAd();
+        googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
+        googleMobileAdsConsentManager.gatherConsent(
+            consentError -> {
+                if (consentError != null) {
+                    // Consent not obtained in current session.
+                    Log.w(
+                        TAG,
+                        String.format(
+                            "%s: %s",
+                            consentError.getErrorCode(),
+                            consentError.getMessage()));
+                }
+
+                startGame();
+
+                if (googleMobileAdsConsentManager.canRequestAds()) {
+                    initializeMobileAdsSdk();
+                }
+
+                if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
+                    // Regenerate the options menu to include a privacy setting.
+                    invalidateOptionsMenu();
+                }
+            });
+
+        // This sample attempts to load ads using consent obtained in the previous session.
+        if (googleMobileAdsConsentManager.canRequestAds()) {
+            initializeMobileAdsSdk();
+        }
 
         // Create the "retry" button, which tries to show an interstitial between game plays.
         retryButton = findViewById(R.id.retry_button);
@@ -76,11 +112,14 @@ public class MyActivity extends AppCompatActivity {
                 showInterstitial();
             }
         });
-
-        startGame();
     }
 
   public void loadAd() {
+    // Request a new ad if one isn't already loaded.
+    if (adIsLoading || interstitialAd != null) {
+      return;
+    }
+    adIsLoading = true;
     AdRequest adRequest = new AdRequest.Builder().build();
     InterstitialAd.load(
         this,
@@ -92,6 +131,7 @@ public class MyActivity extends AppCompatActivity {
             // The mInterstitialAd reference will be null until
             // an ad is loaded.
             MyActivity.this.interstitialAd = interstitialAd;
+            adIsLoading = false;
             Log.i(TAG, "onAdLoaded");
             Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
             interstitialAd.setFullScreenContentCallback(
@@ -127,6 +167,7 @@ public class MyActivity extends AppCompatActivity {
             // Handle the error
             Log.i(TAG, loadAdError.getMessage());
             interstitialAd = null;
+            adIsLoading = false;
 
             String error =
                 String.format(
@@ -157,55 +198,116 @@ public class MyActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                gameIsInProgress = false;
+                gameOver = true;
                 textView.setText("done!");
                 retryButton.setVisibility(View.VISIBLE);
             }
         };
+
+        countDownTimer.start();
     }
 
     @Override
     public void onResume() {
         // Start or resume the game.
         super.onResume();
-
-        if (gameIsInProgress) {
-            resumeGame(timerMilliseconds);
-        }
+        resumeGame();
     }
 
     @Override
     public void onPause() {
-        // Cancel the timer if the game is paused.
-        countDownTimer.cancel();
         super.onPause();
+        pauseGame();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+        MenuItem moreMenu = menu.findItem(R.id.action_more);
+        moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        View menuItemView = findViewById(item.getItemId());
+        PopupMenu popup = new PopupMenu(this, menuItemView);
+        popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+        popup.show();
+        popup.setOnMenuItemClickListener(
+            popupMenuItem -> {
+                if (popupMenuItem.getItemId() == R.id.privacy_settings) {
+                    pauseGame();
+                    // Handle changes to user consent.
+                    googleMobileAdsConsentManager.showPrivacyOptionsForm(
+                          this,
+                          formError -> {
+                              if (formError != null) {
+                                  Toast.makeText(
+                                      this,
+                                      formError.getMessage(),
+                                      Toast.LENGTH_SHORT).show();
+                              }
+                              resumeGame();
+                          });
+                    return true;
+                }
+                return false;
+            });
+        return super.onOptionsItemSelected(item);
     }
 
     private void showInterstitial() {
-    // Show the ad if it's ready. Otherwise toast and restart the game.
-    if (interstitialAd != null) {
-      interstitialAd.show(this);
+        // Show the ad if it's ready. Otherwise restart the game.
+        if (interstitialAd != null) {
+            interstitialAd.show(this);
         } else {
-            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
             startGame();
+            if (googleMobileAdsConsentManager.canRequestAds()) {
+                loadAd();
+            }
         }
     }
 
     private void startGame() {
-    // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
-    if (interstitialAd == null) {
-      loadAd();
-        }
-
+        // Hide the button, and kick off the timer.
         retryButton.setVisibility(View.INVISIBLE);
-        resumeGame(GAME_LENGTH_MILLISECONDS);
+        createTimer(GAME_LENGTH_MILLISECONDS);
+        gamePaused = false;
+        gameOver = false;
     }
 
-    private void resumeGame(long milliseconds) {
-        // Create a new timer for the correct length and start it.
-        gameIsInProgress = true;
-        timerMilliseconds = milliseconds;
-        createTimer(milliseconds);
-        countDownTimer.start();
+    private void resumeGame() {
+        if (gameOver || !gamePaused) {
+          return;
+        }
+        // Create a new timer for the correct length.
+        gamePaused = false;
+        createTimer(timerMilliseconds);
+    }
+
+    private void pauseGame() {
+        if (gameOver || gamePaused) {
+          return;
+        }
+        countDownTimer.cancel();
+        gamePaused = true;
+    }
+
+    private void initializeMobileAdsSdk() {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+          return;
+        }
+
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(
+              this,
+              new OnInitializationCompleteListener() {
+                  @Override
+                  public void onInitializationComplete(InitializationStatus initializationStatus) {
+                      // Load an ad.
+                      loadAd();
+                  }
+              });
     }
 }

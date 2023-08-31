@@ -18,7 +18,10 @@ package com.google.android.gms.example.interstitialexample
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
@@ -29,6 +32,7 @@ import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback
 import com.google.android.gms.example.interstitialexample.databinding.ActivityMyBinding
+import java.util.concurrent.atomic.AtomicBoolean
 
 const val GAME_LENGTH_MILLISECONDS: Long = 3000
 const val AD_UNIT_ID = "/6499/example/interstitial"
@@ -37,12 +41,14 @@ const val AD_UNIT_ID = "/6499/example/interstitial"
 class MyActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMyBinding
-  private var mInterstitialAd: AdManagerInterstitialAd? = null
-  private var mCountDownTimer: CountDownTimer? = null
-  private var mGameIsInProgress: Boolean = false
-  private var mAdIsLoading: Boolean = false
-  private var mTimerMilliseconds: Long = 0
-  private var TAG = "MyActivity"
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+  private var isMobileAdsInitializeCalled = AtomicBoolean(false)
+  private var interstitialAd: AdManagerInterstitialAd? = null
+  private var countDownTimer: CountDownTimer? = null
+  private var gamePaused: Boolean = false
+  private var gameOver: Boolean = false
+  private var adIsLoading: Boolean = false
+  private var timerMilliseconds: Long = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -53,20 +59,76 @@ class MyActivity : AppCompatActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
+    googleMobileAdsConsentManager.gatherConsent { consentError ->
+      if (consentError != null) {
+        // Consent not obtained in current session.
+        Log.w(TAG, "${consentError.errorCode}: ${consentError.message}")
+      }
 
-    loadAd()
+      startGame()
+
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        initializeMobileAdsSdk()
+      }
+      if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+        // Regenerate the options menu to include a privacy setting.
+        invalidateOptionsMenu()
+      }
+    }
+
+    // This sample attempts to load ads using consent obtained in the previous session.
+    if (googleMobileAdsConsentManager.canRequestAds) {
+      initializeMobileAdsSdk()
+    }
 
     // Create the "retry" button, which tries to show an interstitial between game plays.
     binding.retryButton.visibility = View.INVISIBLE
     binding.retryButton.setOnClickListener { showInterstitial() }
+  }
 
-    startGame()
+  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.action_menu, menu)
+    menu?.findItem(R.id.action_more)?.apply {
+      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
+    }
+    return super.onCreateOptionsMenu(menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val menuItemView = findViewById<View>(item.itemId)
+    val activity = this
+    PopupMenu(this, menuItemView).apply {
+      menuInflater.inflate(R.menu.popup_menu, menu)
+      show()
+      setOnMenuItemClickListener { popupMenuItem ->
+        when (popupMenuItem.itemId) {
+          R.id.privacy_settings -> {
+            pauseGame()
+            // Handle changes to user consent.
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
+              if (formError != null) {
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
+              }
+              resumeGame()
+            }
+            true
+          }
+          // Handle other branches here.
+          else -> false
+        }
+      }
+      return super.onOptionsItemSelected(item)
+    }
   }
 
   private fun loadAd() {
-    var adRequest = AdManagerAdRequest.Builder().build()
+    // Request a new ad if one isn't already loaded.
+    if (adIsLoading || interstitialAd != null) {
+      return
+    }
+    adIsLoading = true
+    val adRequest = AdManagerAdRequest.Builder().build()
 
     AdManagerInterstitialAd.load(
       this,
@@ -74,9 +136,9 @@ class MyActivity : AppCompatActivity() {
       adRequest,
       object : AdManagerInterstitialAdLoadCallback() {
         override fun onAdFailedToLoad(adError: LoadAdError) {
-          Log.d(TAG, adError?.message)
-          mInterstitialAd = null
-          mAdIsLoading = false
+          Log.d(TAG, adError.message)
+          interstitialAd = null
+          adIsLoading = false
           val error =
             "domain: ${adError.domain}, code: ${adError.code}, " + "message: ${adError.message}"
           Toast.makeText(
@@ -89,8 +151,8 @@ class MyActivity : AppCompatActivity() {
 
         override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
           Log.d(TAG, "Ad was loaded.")
-          mInterstitialAd = interstitialAd
-          mAdIsLoading = false
+          this@MyActivity.interstitialAd = interstitialAd
+          adIsLoading = false
           Toast.makeText(this@MyActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
         }
       }
@@ -100,83 +162,104 @@ class MyActivity : AppCompatActivity() {
   private fun createTimer(milliseconds: Long) {
     // Create the game timer, which counts down to the end of the level
     // and shows the "retry" button.
-    mCountDownTimer?.cancel()
+    countDownTimer?.cancel()
 
-    mCountDownTimer =
+    countDownTimer =
       object : CountDownTimer(milliseconds, 50) {
         override fun onTick(millisUntilFinished: Long) {
-          mTimerMilliseconds = millisUntilFinished
+          timerMilliseconds = millisUntilFinished
           binding.timer.text =
             getString(R.string.seconds_remaining, (millisUntilFinished / 1000 + 1))
         }
 
         override fun onFinish() {
-          mGameIsInProgress = false
+          gameOver = true
           binding.timer.setText(R.string.done)
           binding.retryButton.visibility = View.VISIBLE
         }
       }
+
+    countDownTimer?.start()
   }
 
   public override fun onResume() {
     // Start or resume the game.
     super.onResume()
-
-    if (mGameIsInProgress) {
-      resumeGame(mTimerMilliseconds)
-    }
+    resumeGame()
   }
 
   public override fun onPause() {
-    // Cancel the timer if the game is paused.
-    mCountDownTimer?.cancel()
     super.onPause()
+    pauseGame()
   }
 
   private fun showInterstitial() {
-    // Show the ad if it's ready. Otherwise toast and restart the game.
-    if (mInterstitialAd != null) {
-      mInterstitialAd?.fullScreenContentCallback =
+    // Show the ad if it's ready. Otherwise restart the game.
+    if (interstitialAd != null) {
+      interstitialAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
-            mInterstitialAd = null
+            interstitialAd = null
             Log.d(TAG, "Ad was dismissed.")
           }
 
           override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-            mInterstitialAd = null
+            interstitialAd = null
             Log.d(TAG, "Ad failed to show.")
           }
 
           override fun onAdShowedFullScreenContent() {
             Log.d(TAG, "Ad showed fullscreen content.")
-            startGame()
           }
         }
 
-      mInterstitialAd?.show(this)
+      interstitialAd?.show(this)
     } else {
-      Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show()
       startGame()
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        loadAd()
+      }
     }
   }
 
+  // Hide the button, and kick off the timer.
   private fun startGame() {
-    // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
-    if (!mAdIsLoading && mInterstitialAd == null) {
-      mAdIsLoading = true
+    binding.retryButton.visibility = View.INVISIBLE
+    createTimer(GAME_LENGTH_MILLISECONDS)
+    gamePaused = false
+    gameOver = false
+  }
+
+  private fun resumeGame() {
+    if (gameOver || !gamePaused) {
+      return
+    }
+    // Create a new timer for the correct length.
+    gamePaused = false
+    createTimer(timerMilliseconds)
+  }
+
+  private fun pauseGame() {
+    if (gameOver || gamePaused) {
+      return
+    }
+    countDownTimer?.cancel()
+    gamePaused = true
+  }
+
+  private fun initializeMobileAdsSdk() {
+    if (isMobileAdsInitializeCalled.getAndSet(true)) {
+      return
+    }
+
+    // Initialize the Mobile Ads SDK.
+    MobileAds.initialize(this) { initializationStatus ->
+      // Load an ad.
       loadAd()
     }
-
-    binding.retryButton.visibility = View.INVISIBLE
-    resumeGame(GAME_LENGTH_MILLISECONDS)
   }
 
-  private fun resumeGame(milliseconds: Long) {
-    // Create a new timer for the correct length and start it.
-    mGameIsInProgress = true
-    mTimerMilliseconds = milliseconds
-    createTimer(milliseconds)
-    mCountDownTimer?.start()
+  private companion object {
+    const val TAG = "MyActivity"
   }
 }

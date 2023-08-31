@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">InterstitialExample</string>
-    <string name="impossible_game">Impossible Game</string>
-    <string name="seconds_remaining">seconds remaining: %d</string>
-    <string name="done">done!</string>
-
+    <string name="app_name" translatable="false">Ad Manager Interstitial</string>
+    <string name="done" translatable="false">done!</string>
+    <string name="impossible_game" translatable="false">Impossible Game</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="seconds_remaining" translatable="false">seconds remaining: %d</string>
+    <string name="retry_button_text" translatable="false">Retry</string>
 </resources>
