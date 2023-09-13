@@ -20,7 +20,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -29,6 +34,7 @@ import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Main Activity. Inflates main activity xml and child fragments. */
 public class MyActivity extends AppCompatActivity {
@@ -36,22 +42,57 @@ public class MyActivity extends AppCompatActivity {
   // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
   private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
   private static final String TAG = "MyActivity";
+  private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
   private FrameLayout adContainerView;
   private AdView adView;
+  private AtomicBoolean initialLayoutComplete = new AtomicBoolean(false);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_my);
+    adContainerView = findViewById(R.id.ad_view_container);
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this, new OnInitializationCompleteListener() {
-      @Override
-      public void onInitializationComplete(InitializationStatus initializationStatus) {}
-    });
+    googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
+    googleMobileAdsConsentManager.gatherConsent(
+        consentError -> {
+          if (consentError != null) {
+            // Consent not obtained in current session.
+            Log.w(
+                TAG,
+                String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
+          }
+
+          if (googleMobileAdsConsentManager.canRequestAds()) {
+            initializeMobileAdsSdk();
+          }
+
+          if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
+            // Regenerate the options menu to include a privacy setting.
+            invalidateOptionsMenu();
+          }
+        });
+
+    // This sample attempts to load ads using consent obtained in the previous session.
+    if (googleMobileAdsConsentManager.canRequestAds()) {
+      initializeMobileAdsSdk();
+    }
+
+    // Since we're loading the banner based on the adContainerView size, we need to wait until this
+    // view is laid out before we can get the width.
+    adContainerView
+        .getViewTreeObserver()
+        .addOnGlobalLayoutListener(
+            () -> {
+              if (!initialLayoutComplete.getAndSet(true)
+                  && googleMobileAdsConsentManager.canRequestAds()) {
+                loadBanner();
+              }
+            });
 
     // Set your test devices. Check your logcat output for the hashed device ID to
     // get test ads on a physical device. e.g.
@@ -59,17 +100,6 @@ public class MyActivity extends AppCompatActivity {
     // to get test ads on this device."
     MobileAds.setRequestConfiguration(
         new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345")).build());
-
-    adContainerView = findViewById(R.id.ad_view_container);
-
-    // Since we're loading the banner based on the adContainerView size, we need to wait until this
-    // view is laid out before we can get the width.
-    adContainerView.post(new Runnable() {
-      @Override
-      public void run() {
-       loadBanner();
-      }
-    });
   }
 
   /** Called when leaving the activity */
@@ -99,6 +129,38 @@ public class MyActivity extends AppCompatActivity {
     super.onDestroy();
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.action_menu, menu);
+    MenuItem moreMenu = menu.findItem(R.id.action_more);
+    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    View menuItemView = findViewById(item.getItemId());
+    PopupMenu popup = new PopupMenu(this, menuItemView);
+    popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup.show();
+    popup.setOnMenuItemClickListener(
+        popupMenuItem -> {
+          if (popupMenuItem.getItemId() == R.id.privacy_settings) {
+            // Handle changes to user consent.
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(
+                this,
+                formError -> {
+                  if (formError != null) {
+                    Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
+            return true;
+          }
+          return false;
+        });
+    return super.onOptionsItemSelected(item);
+  }
+
   private void loadBanner() {
     // Create an ad request.
     adView = new AdView(this);
@@ -113,6 +175,25 @@ public class MyActivity extends AppCompatActivity {
 
     // Start loading the ad in the background.
     adView.loadAd(adRequest);
+  }
+
+  private void initializeMobileAdsSdk() {
+    if (isMobileAdsInitializeCalled.getAndSet(true)) {
+      return;
+    }
+
+    // Initialize the Mobile Ads SDK.
+    MobileAds.initialize(
+        this,
+        new OnInitializationCompleteListener() {
+          @Override
+          public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+
+    // Load an ad.
+    if (initialLayoutComplete.get()) {
+      loadBanner();
+    }
   }
 
   private AdSize getAdSize() {
