@@ -14,7 +14,6 @@ import androidx.multidex.MultiDexApplication
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
@@ -34,10 +33,6 @@ class MyApplication :
     super.onCreate()
     registerActivityLifecycleCallbacks(this)
 
-    // Log the Mobile Ads SDK version.
-    Log.d(LOG_TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
-
-    MobileAds.initialize(this) {}
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     appOpenAdManager = AppOpenAdManager()
   }
@@ -82,6 +77,17 @@ class MyApplication :
     // We wrap the showAdIfAvailable to enforce that other classes only interact with MyApplication
     // class.
     appOpenAdManager.showAdIfAvailable(activity, onShowAdCompleteListener)
+  }
+
+  /**
+   * Load an app open ad.
+   *
+   * @param activity the activity that shows the app open ad
+   */
+  fun loadAd(activity: Activity) {
+    // We wrap the loadAd to enforce that other classes only interact with MyApplication
+    // class.
+    appOpenAdManager.loadAd(activity)
   }
 
   /**
@@ -192,17 +198,19 @@ class MyApplication :
         return
       }
 
-      // If the app open ad is not available yet, invoke the callback then load the ad.
+      // If the app open ad is not available yet, invoke the callback.
       if (!isAdAvailable()) {
         Log.d(LOG_TAG, "The app open ad is not ready yet.")
         onShowAdCompleteListener.onShowAdComplete()
-        loadAd(activity)
+        if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds) {
+          loadAd(activity)
+        }
         return
       }
 
       Log.d(LOG_TAG, "Will show ad.")
 
-      appOpenAd!!.setFullScreenContentCallback(
+      appOpenAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           /** Called when full screen content is dismissed. */
           override fun onAdDismissedFullScreenContent() {
@@ -213,7 +221,9 @@ class MyApplication :
             Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show()
 
             onShowAdCompleteListener.onShowAdComplete()
-            loadAd(activity)
+            if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds) {
+              loadAd(activity)
+            }
           }
 
           /** Called when fullscreen content failed to show. */
@@ -224,7 +234,9 @@ class MyApplication :
             Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT).show()
 
             onShowAdCompleteListener.onShowAdComplete()
-            loadAd(activity)
+            if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds) {
+              loadAd(activity)
+            }
           }
 
           /** Called when fullscreen content is shown. */
@@ -233,9 +245,8 @@ class MyApplication :
             Toast.makeText(activity, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT).show()
           }
         }
-      )
       isShowingAd = true
-      appOpenAd!!.show(activity)
+      appOpenAd?.show(activity)
     }
   }
 }

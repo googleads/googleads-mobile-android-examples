@@ -17,6 +17,11 @@ package com.google.android.gms.example.appopenexample;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 /** Main activity in the app. */
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +30,39 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.action_menu, menu);
+    MenuItem moreMenu = menu.findItem(R.id.action_more);
+    moreMenu.setVisible(GoogleMobileAdsConsentManager.getInstance(this).isPrivacyOptionsRequired());
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    View menuItemView = findViewById(item.getItemId());
+    PopupMenu popup = new PopupMenu(this, menuItemView);
+    popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup.show();
+    popup.setOnMenuItemClickListener(
+        popupMenuItem -> {
+          if (popupMenuItem.getItemId() == R.id.privacy_settings) {
+            // Handle changes to user consent.
+            GoogleMobileAdsConsentManager.getInstance(this)
+                .showPrivacyOptionsForm(
+                    this,
+                    formError -> {
+                      if (formError != null) {
+                        Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                      }
+                    });
+            return true;
+          }
+          return false;
+        });
+    return super.onOptionsItemSelected(item);
   }
 
   /** Override the default implementation when the user presses the back key. */

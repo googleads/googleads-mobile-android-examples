@@ -4,6 +4,8 @@
     <string name="main_activity_text" translatable="false">
         Leave and switch back to the app to see the ad.
     </string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="splash_activity_image_text" translatable="false">Splash Activity Image</string>
     <string name="splash_activity_text" translatable="false">AdMob App Open Example</string>
 </resources>

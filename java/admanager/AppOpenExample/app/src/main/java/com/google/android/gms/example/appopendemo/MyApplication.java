@@ -18,25 +18,22 @@ package com.google.android.gms.example.appopendemo;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
-import androidx.lifecycle.Lifecycle.Event;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle.Event;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.Date;
 
 /** Application class that initializes, loads and show ads when activities change states. */
@@ -51,17 +48,6 @@ public class MyApplication extends Application
   public void onCreate() {
     super.onCreate();
     this.registerActivityLifecycleCallbacks(this);
-
-    // Log the Mobile Ads SDK version.
-    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
-
-    MobileAds.initialize(
-        this,
-        new OnInitializationCompleteListener() {
-          @Override
-          public void onInitializationComplete(
-              @NonNull InitializationStatus initializationStatus) {}
-        });
 
     ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     appOpenAdManager = new AppOpenAdManager();
@@ -105,14 +91,24 @@ public class MyApplication extends Application
   public void onActivityDestroyed(@NonNull Activity activity) {}
 
   /**
+   * Load an app open ad.
+   *
+   * @param activity the activity that shows the app open ad
+   */
+  public void loadAd(@NonNull Activity activity) {
+    // We wrap the loadAd to enforce that other classes only interact with MyApplication
+    // class.
+    appOpenAdManager.loadAd(activity);
+  }
+
+  /**
    * Shows an app open ad.
    *
    * @param activity the activity that shows the app open ad
    * @param onShowAdCompleteListener the listener to be notified when an app open ad is complete
    */
   public void showAdIfAvailable(
-      @NonNull Activity activity,
-      @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
+      @NonNull Activity activity, @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
     // We wrap the showAdIfAvailable to enforce that other classes only interact with MyApplication
     // class.
     appOpenAdManager.showAdIfAvailable(activity, onShowAdCompleteListener);
@@ -239,7 +235,9 @@ public class MyApplication extends Application
       if (!isAdAvailable()) {
         Log.d(LOG_TAG, "The app open ad is not ready yet.");
         onShowAdCompleteListener.onShowAdComplete();
-        loadAd(activity);
+        if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds()) {
+          loadAd(activity);
+        }
         return;
       }
 
@@ -258,7 +256,9 @@ public class MyApplication extends Application
               Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show();
 
               onShowAdCompleteListener.onShowAdComplete();
-              loadAd(activity);
+              if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds()) {
+                loadAd(activity);
+              }
             }
 
             /** Called when fullscreen content failed to show. */
@@ -272,7 +272,9 @@ public class MyApplication extends Application
                   .show();
 
               onShowAdCompleteListener.onShowAdComplete();
-              loadAd(activity);
+              if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds()) {
+                loadAd(activity);
+              }
             }
 
             /** Called when fullscreen content is shown. */
