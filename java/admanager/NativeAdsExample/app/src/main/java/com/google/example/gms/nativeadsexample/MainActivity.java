@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
           String.format(
               Locale.getDefault(),
               "Video status: Ad contains a %.2f:1 video asset.",
-              nativeAd.getMediaContent().getAspectRatio()));
+              nativeCustomFormatAd.getMediaContent().getAspectRatio()));
       // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
       // VideoController will call methods on this object when events occur in the video
       // lifecycle.
