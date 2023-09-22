@@ -2,13 +2,13 @@ package com.google.android.gms.example.rewardedvideoexample
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         adRequest,
         object : RewardedAdLoadCallback() {
           override fun onAdFailedToLoad(adError: LoadAdError) {
-            Log.d(TAG, adError?.message)
+            Log.d(TAG, adError.message)
             isLoading = false
             rewardedAd = null
           }

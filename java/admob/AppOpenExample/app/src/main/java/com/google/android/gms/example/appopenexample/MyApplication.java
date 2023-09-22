@@ -16,7 +16,6 @@
 package com.google.android.gms.example.appopenexample;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.content.Context;
 import android.os.Bundle;
@@ -36,7 +35,7 @@ import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback;
 import java.util.Date;
 
 /** Application class that initializes, loads and show ads when activities change states. */
-public class MyApplication extends Application
+public class MyApplication extends MultiDexApplication
     implements ActivityLifecycleCallbacks, DefaultLifecycleObserver {
 
   private AppOpenAdManager appOpenAdManager;

@@ -6,6 +6,7 @@ android {
     defaultConfig {
         applicationId "com.google.ads.rewardedinterstitialexample"
         minSdkVersion 19
+        multiDexEnabled true
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -19,8 +20,9 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.android.gms:play-services-ads:22.3.0'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
     implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
 }
