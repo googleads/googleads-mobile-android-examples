@@ -18,7 +18,10 @@ package com.google.android.gms.example.nativeadvancedexample
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
@@ -33,6 +36,7 @@ import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.example.nativeadvancedexample.databinding.ActivityMainBinding
 import com.google.android.gms.example.nativeadvancedexample.databinding.AdUnifiedBinding
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val TAG = "MainActivity"
 const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
@@ -40,7 +44,9 @@ const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
 /** A simple activity class that displays native ad formats. */
 class MainActivity : AppCompatActivity() {
 
+  private val isMobileAdsInitializeCalled = AtomicBoolean(false)
   private lateinit var mainActivityBinding: ActivityMainBinding
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
   private var currentNativeAd: NativeAd? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +57,66 @@ class MainActivity : AppCompatActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this) {}
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
+    googleMobileAdsConsentManager.gatherConsent { consentError ->
+      if (consentError != null) {
+        // Consent not obtained in current session.
+        Log.w(TAG, "${consentError.errorCode}. ${consentError.message}")
+      }
 
-    mainActivityBinding.refreshButton.setOnClickListener { refreshAd() }
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        mainActivityBinding.refreshButton.visibility = View.VISIBLE
+        initializeMobileAdsSdk()
+      }
 
-    refreshAd()
+      if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+        // Regenerate the options menu to include a privacy setting.
+        invalidateOptionsMenu()
+      }
+    }
+
+    // This sample attempts to load ads using consent obtained in the previous session.
+    if (googleMobileAdsConsentManager.canRequestAds) {
+      initializeMobileAdsSdk()
+    }
+
+    mainActivityBinding.refreshButton.setOnClickListener {
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        refreshAd()
+      }
+    }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.action_menu, menu)
+    menu.findItem(R.id.action_more)?.apply {
+      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
+    }
+    return super.onCreateOptionsMenu(menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val menuItemView = findViewById<View>(item.itemId)
+    val activity = this
+    PopupMenu(this, menuItemView).apply {
+      menuInflater.inflate(R.menu.popup_menu, menu)
+      show()
+      setOnMenuItemClickListener { popupMenuItem ->
+        when (popupMenuItem.itemId) {
+          R.id.privacy_settings -> {
+            // Handle changes to user consent.
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
+              if (formError != null) {
+                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+              }
+            }
+            true
+          }
+          else -> false
+        }
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   /**
@@ -228,6 +288,18 @@ class MainActivity : AppCompatActivity() {
     adLoader.loadAd(AdRequest.Builder().build())
 
     mainActivityBinding.videostatusText.text = ""
+  }
+
+  private fun initializeMobileAdsSdk() {
+    if (isMobileAdsInitializeCalled.getAndSet(true)) {
+      return
+    }
+
+    // Initialize the Mobile Ads SDK.
+    MobileAds.initialize(this) { initializationStatus ->
+      // Load an ad.
+      refreshAd()
+    }
   }
 
   override fun onDestroy() {

@@ -19,6 +19,8 @@ package com.google.android.gms.example.nativeadsexample
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,7 @@ import com.google.android.gms.example.nativeadsexample.databinding.ActivityMainB
 import com.google.android.gms.example.nativeadsexample.databinding.AdSimpleCustomTemplateBinding
 import com.google.android.gms.example.nativeadsexample.databinding.AdUnifiedBinding
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val TAG = "MainActivity"
 const val AD_MANAGER_AD_UNIT_ID = "/6499/example/native"
@@ -46,6 +49,8 @@ const val SIMPLE_TEMPLATE_ID = "10104090"
 /** A simple activity class that displays native ad formats. */
 class MainActivity : AppCompatActivity() {
 
+  private val isMobileAdsInitializeCalled = AtomicBoolean(false)
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
   private lateinit var customTemplateBinding: AdSimpleCustomTemplateBinding
   private lateinit var mainActivityBinding: ActivityMainBinding
   private var currentNativeAd: NativeAd? = null
@@ -59,20 +64,69 @@ class MainActivity : AppCompatActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
+    googleMobileAdsConsentManager.gatherConsent { consentError ->
+      if (consentError != null) {
+        // Consent not obtained in current session.
+        Log.w(TAG, "${consentError.errorCode}. ${consentError.message}")
+      }
 
-    mainActivityBinding.refreshButton.setOnClickListener {
-      refreshAd(
-        mainActivityBinding.nativeadsCheckbox.isChecked,
-        mainActivityBinding.customtemplateCheckbox.isChecked
-      )
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        mainActivityBinding.refreshButton.visibility = View.VISIBLE
+        initializeMobileAdsSdk()
+      }
+
+      if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+        // Regenerate the options menu to include a privacy setting.
+        invalidateOptionsMenu()
+      }
     }
 
-    refreshAd(
-      mainActivityBinding.nativeadsCheckbox.isChecked,
-      mainActivityBinding.customtemplateCheckbox.isChecked
-    )
+    // This sample attempts to load ads using consent obtained in the previous session.
+    if (googleMobileAdsConsentManager.canRequestAds) {
+      initializeMobileAdsSdk()
+    }
+
+    mainActivityBinding.refreshButton.setOnClickListener {
+      if (googleMobileAdsConsentManager.canRequestAds) {
+        refreshAd(
+          mainActivityBinding.nativeadsCheckbox.isChecked,
+          mainActivityBinding.customtemplateCheckbox.isChecked
+        )
+      }
+    }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.action_menu, menu)
+    menu?.findItem(R.id.action_more)?.apply {
+      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
+    }
+    return super.onCreateOptionsMenu(menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val menuItemView = findViewById<View>(item.itemId)
+    val activity = this
+    PopupMenu(this, menuItemView).apply {
+      menuInflater.inflate(R.menu.popup_menu, menu)
+      show()
+      setOnMenuItemClickListener { popupMenuItem ->
+        when (popupMenuItem.itemId) {
+          R.id.privacy_settings -> {
+            // Handle changes to user consent.
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
+              if (formError != null) {
+                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+              }
+            }
+            true
+          }
+          else -> false
+        }
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   /**
@@ -191,7 +245,6 @@ class MainActivity : AppCompatActivity() {
    * particular "simple" custom native ad format.
    *
    * @param nativeCustomFormatAd the object containing the ad's assets
-   *
    * @param adView the view to be populated
    */
   private fun populateSimpleTemplateAdView(nativeCustomFormatAd: NativeCustomFormatAd) {
@@ -245,7 +298,6 @@ class MainActivity : AppCompatActivity() {
    * corresponding "populate" method when one is successfully returned.
    *
    * @param requestNativeAds indicates whether native ads should be requested
-   *
    * @param requestCustomTemplateAds indicates whether custom template ads should be requested
    */
   private fun refreshAd(requestNativeAds: Boolean, requestCustomTemplateAds: Boolean) {
@@ -349,6 +401,21 @@ class MainActivity : AppCompatActivity() {
     adLoader.loadAd(AdManagerAdRequest.Builder().build())
 
     mainActivityBinding.videostatusText.text = ""
+  }
+
+  private fun initializeMobileAdsSdk() {
+    if (isMobileAdsInitializeCalled.getAndSet(true)) {
+      return
+    }
+
+    // Initialize the Mobile Ads SDK.
+    MobileAds.initialize(this) { initializationStatus ->
+      // Load an ad.
+      refreshAd(
+        mainActivityBinding.nativeadsCheckbox.isChecked,
+        mainActivityBinding.customtemplateCheckbox.isChecked
+      )
+    }
   }
 
   override fun onDestroy() {

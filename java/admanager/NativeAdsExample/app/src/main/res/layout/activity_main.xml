@@ -21,21 +21,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:checked="true"
-            android:text="Request Unified Native Ads" />
+            android:text="@string/request_unified" />
 
         <CheckBox
             android:id="@+id/cb_customtemplate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Request Custom Template Ads" />
+            android:text="@string/request_template" />
 
         <CheckBox
             android:id="@+id/cb_start_muted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Start video ads muted" />
+            android:text="@string/start_muted" />
 
         <Button
             android:id="@+id/btn_refresh"
@@ -44,7 +44,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
-            android:text="Refresh Ad" />
+            android:text="@string/refresh_ad"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_video_status"
@@ -52,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:text="Video status: "
+            android:text="@string/video_status"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>

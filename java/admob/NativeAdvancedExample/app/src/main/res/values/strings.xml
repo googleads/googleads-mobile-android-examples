@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">AdMob Native Advanced Example</string>
-    <string name="ad_attribution">Ad</string>
+    <string name="ad_attribution" translatable="false">Ad</string>
+    <string name="app_name" translatable="false">AdMob Native Advanced</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="refresh_ad" translatable="false">Refresh Ad</string>
+    <string name="start_muted" translatable="false">Start video ads muted</string>
+    <string name="video_status" translatable="false">Video status: </string>
 </resources>
