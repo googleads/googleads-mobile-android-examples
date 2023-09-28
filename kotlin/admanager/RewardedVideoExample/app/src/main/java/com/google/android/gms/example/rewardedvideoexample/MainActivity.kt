@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         adRequest,
         object : RewardedAdLoadCallback() {
           override fun onAdFailedToLoad(adError: LoadAdError) {
-            Log.d(TAG, adError?.message)
+            Log.d(TAG, adError.message)
             isLoading = false
             rewardedAd = null
           }
