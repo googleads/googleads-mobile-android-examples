@@ -37,9 +37,9 @@ public class MyActivity extends AppCompatActivity {
 
   private static final String TAG = "MyActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
+      GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
   private AdView adView;
-  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -60,18 +60,14 @@ public class MyActivity extends AppCompatActivity {
     // values/strings.xml.
     adView = findViewById(R.id.ad_view);
 
-    googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
-
     googleMobileAdsConsentManager.gatherConsent(
+        this,
         consentError -> {
           if (consentError != null) {
             // Consent not obtained in current session.
             Log.w(
                 TAG,
-                String.format(
-                    "%s: %s",
-                    consentError.getErrorCode(),
-                    consentError.getMessage()));
+                String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
           }
 
           if (googleMobileAdsConsentManager.canRequestAds()) {
@@ -82,8 +78,7 @@ public class MyActivity extends AppCompatActivity {
             // Regenerate the options menu to include a privacy setting.
             invalidateOptionsMenu();
           }
-        }
-    );
+        });
 
     // This sample attempts to load ads using consent obtained in the previous session.
     if (googleMobileAdsConsentManager.canRequestAds()) {
@@ -113,14 +108,9 @@ public class MyActivity extends AppCompatActivity {
                 this,
                 formError -> {
                   if (formError != null) {
-                    Toast.makeText(
-                            this,
-                            formError.getMessage(),
-                            Toast.LENGTH_SHORT)
-                        .show();
+                    Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
                   }
-                }
-            );
+                });
             return true;
           }
           return false;

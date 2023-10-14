@@ -35,8 +35,9 @@ private const val TAG = "MainActivity"
 class MyActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMyBinding
-  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
   private var isMobileAdsInitializeCalled = AtomicBoolean(false)
+  private var googleMobileAdsConsentManager =
+    GoogleMobileAdsConsentManager.getInstance(applicationContext)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -54,9 +55,7 @@ class MyActivity : AppCompatActivity() {
       RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
     )
 
-    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
-
-    googleMobileAdsConsentManager.gatherConsent { error ->
+    googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
         // Consent not obtained in current session.
         Log.d(TAG, "${error.errorCode}: ${error.message}")

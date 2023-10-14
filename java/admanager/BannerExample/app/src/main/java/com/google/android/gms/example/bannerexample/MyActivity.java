@@ -39,8 +39,9 @@ public class MyActivity extends AppCompatActivity {
 
   private static final String TAG = "MyActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
+      GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
   private AdManagerAdView adView;
-  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +62,8 @@ public class MyActivity extends AppCompatActivity {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
-    googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
-
     googleMobileAdsConsentManager.gatherConsent(
+        this,
         consentError -> {
           if (consentError != null) {
             // Consent not obtained in current session.
