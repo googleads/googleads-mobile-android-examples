@@ -27,9 +27,9 @@ const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+  private val isMobileAdsInitializeCalled = AtomicBoolean(false)
   private lateinit var binding: ActivityMainBinding
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
-  private var isMobileAdsInitializeCalled = AtomicBoolean(false)
   private var coinCount: Int = 0
   private var countdownTimer: CountDownTimer? = null
   private var gameOver = false
@@ -46,9 +46,8 @@ class MainActivity : AppCompatActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
-    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
-
-    googleMobileAdsConsentManager.gatherConsent { error ->
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(this)
+    googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
         // Consent not obtained in current session.
         Log.d(TAG, "${error.errorCode}: ${error.message}")

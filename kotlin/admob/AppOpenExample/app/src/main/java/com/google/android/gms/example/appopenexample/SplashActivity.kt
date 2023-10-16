@@ -21,6 +21,7 @@ private const val LOG_TAG = "SplashActivity"
 /** Splash Activity that inflates splash activity xml. */
 class SplashActivity : AppCompatActivity() {
 
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
   private val isMobileAdsInitializeCalled = AtomicBoolean(false)
   private var secondsRemaining: Long = 0L
 
@@ -34,13 +35,14 @@ class SplashActivity : AppCompatActivity() {
     // Create a timer so the SplashActivity will be displayed for a fixed amount of time.
     createTimer(COUNTER_TIME_MILLISECONDS)
 
-    GoogleMobileAdsConsentManager.getInstance(this).gatherConsent(this) { consentError ->
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
+    googleMobileAdsConsentManager.gatherConsent(this) { consentError ->
       if (consentError != null) {
         // Consent not obtained in current session.
         Log.w(LOG_TAG, String.format("%s: %s", consentError.errorCode, consentError.message))
       }
 
-      if (GoogleMobileAdsConsentManager.getInstance(this).canRequestAds) {
+      if (googleMobileAdsConsentManager.canRequestAds) {
         initializeMobileAdsSdk()
       }
 
@@ -50,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     // This sample attempts to load ads using consent obtained in the previous session.
-    if (GoogleMobileAdsConsentManager.getInstance(this).canRequestAds) {
+    if (googleMobileAdsConsentManager.canRequestAds) {
       initializeMobileAdsSdk()
     }
   }
@@ -79,7 +81,7 @@ class SplashActivity : AppCompatActivity() {
               override fun onShowAdComplete() {
                 // Check if the consent form is currently on screen before moving to the main
                 // activity.
-                if (GoogleMobileAdsConsentManager.getInstance(this@SplashActivity).canRequestAds) {
+                if (googleMobileAdsConsentManager.canRequestAds) {
                   startMainActivity()
                 }
               }

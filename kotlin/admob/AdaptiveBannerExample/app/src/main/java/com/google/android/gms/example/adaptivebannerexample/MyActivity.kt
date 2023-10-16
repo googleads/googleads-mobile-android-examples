@@ -37,11 +37,11 @@ private const val TAG = "MyActivity"
 /** Main Activity. Inflates main activity xml and child fragments. */
 class MyActivity : AppCompatActivity() {
 
+  private val isMobileAdsInitializeCalled = AtomicBoolean(false)
+  private val initialLayoutComplete = AtomicBoolean(false)
   private lateinit var binding: ActivityMyBinding
   private lateinit var adView: AdView
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
-  private val isMobileAdsInitializeCalled = AtomicBoolean(false)
-  private val initialLayoutComplete = AtomicBoolean(false)
 
   // Determine the screen width (less decorations) to use for the ad width.
   // If the ad hasn't been laid out, default to the full screen width.
@@ -73,8 +73,8 @@ class MyActivity : AppCompatActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
-    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this)
-    googleMobileAdsConsentManager.gatherConsent { error ->
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
+    googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
         // Consent not obtained in current session.
         Log.d(TAG, "${error.errorCode}: ${error.message}")
