@@ -34,10 +34,9 @@ private const val TAG = "MainActivity"
 /** Main Activity. Inflates main activity xml and child fragments. */
 class MyActivity : AppCompatActivity() {
 
+  private val isMobileAdsInitializeCalled = AtomicBoolean(false)
   private lateinit var binding: ActivityMyBinding
-  private var isMobileAdsInitializeCalled = AtomicBoolean(false)
-  private var googleMobileAdsConsentManager =
-    GoogleMobileAdsConsentManager.getInstance(applicationContext)
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -55,6 +54,7 @@ class MyActivity : AppCompatActivity() {
       RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
     )
 
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
     googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
         // Consent not obtained in current session.

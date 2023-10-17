@@ -15,16 +15,6 @@ import com.google.android.ump.UserMessagingPlatform
  * This is an example and you can choose another consent management platform to capture consent.
  */
 class GoogleMobileAdsConsentManager private constructor(context: Context) {
-  companion object {
-    @Volatile private var instance: GoogleMobileAdsConsentManager? = null
-
-    fun getInstance(context: Context) =
-      instance
-        ?: synchronized(this) {
-          instance ?: GoogleMobileAdsConsentManager(context).also { instance = it }
-        }
-  }
-
   private val consentInformation: ConsentInformation =
     UserMessagingPlatform.getConsentInformation(context)
 
@@ -85,5 +75,15 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
     onConsentFormDismissedListener: OnConsentFormDismissedListener
   ) {
     UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener)
+  }
+
+  companion object {
+    @Volatile private var instance: GoogleMobileAdsConsentManager? = null
+
+    fun getInstance(context: Context) =
+      instance
+        ?: synchronized(this) {
+          instance ?: GoogleMobileAdsConsentManager(context).also { instance = it }
+        }
   }
 }

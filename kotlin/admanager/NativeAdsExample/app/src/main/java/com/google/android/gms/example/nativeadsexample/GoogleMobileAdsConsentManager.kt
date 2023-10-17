@@ -1,6 +1,7 @@
 package com.google.android.gms.example.nativeadsexample
 
 import android.app.Activity
+import android.content.Context
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm.OnConsentFormDismissedListener
 import com.google.android.ump.ConsentInformation
@@ -13,9 +14,9 @@ import com.google.android.ump.UserMessagingPlatform
  * management platform) as one solution to capture consent for users in GDPR impacted countries.
  * This is an example and you can choose another consent management platform to capture consent.
  */
-class GoogleMobileAdsConsentManager(private val activity: Activity) {
+class GoogleMobileAdsConsentManager private constructor(context: Context) {
   private val consentInformation: ConsentInformation =
-    UserMessagingPlatform.getConsentInformation(activity)
+    UserMessagingPlatform.getConsentInformation(context)
 
   /** Interface definition for a callback to be invoked when consent gathering is complete. */
   fun interface OnConsentGatheringCompleteListener {
@@ -36,7 +37,10 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
    * Helper method to call the UMP SDK methods to request consent information and load/show a
    * consent form if necessary.
    */
-  fun gatherConsent(onConsentGatheringCompleteListener: OnConsentGatheringCompleteListener) {
+  fun gatherConsent(
+    activity: Activity,
+    onConsentGatheringCompleteListener: OnConsentGatheringCompleteListener
+  ) {
     // For testing purposes, you can force a DebugGeography of EEA or NOT_EEA.
     val debugSettings =
       ConsentDebugSettings.Builder(activity)
@@ -71,5 +75,15 @@ class GoogleMobileAdsConsentManager(private val activity: Activity) {
     onConsentFormDismissedListener: OnConsentFormDismissedListener
   ) {
     UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener)
+  }
+
+  companion object {
+    @Volatile private var instance: GoogleMobileAdsConsentManager? = null
+
+    fun getInstance(context: Context) =
+      instance
+        ?: synchronized(this) {
+          instance ?: GoogleMobileAdsConsentManager(context).also { instance = it }
+        }
   }
 }

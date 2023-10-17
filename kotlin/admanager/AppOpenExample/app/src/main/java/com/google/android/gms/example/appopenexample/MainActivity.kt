@@ -11,15 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 /** The main activity in the app. */
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
     val moreMenu = menu?.findItem(R.id.action_more)
-    moreMenu?.isVisible = GoogleMobileAdsConsentManager.getInstance(this).isPrivacyOptionsRequired
+    moreMenu?.isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -33,8 +37,7 @@ class MainActivity : AppCompatActivity() {
         when (popupMenuItem.itemId) {
           R.id.privacy_settings -> {
             // Handle changes to user consent.
-            GoogleMobileAdsConsentManager.getInstance(activity).showPrivacyOptionsForm(activity) {
-              formError ->
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
               if (formError != null) {
                 Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }

@@ -101,6 +101,8 @@ class MyApplication :
   /** Inner class that loads and shows app open ads. */
   private inner class AppOpenAdManager {
 
+    private val googleMobileAdsConsentManager =
+      GoogleMobileAdsConsentManager.getInstance(applicationContext)
     private var appOpenAd: AppOpenAd? = null
     private var isLoadingAd = false
     var isShowingAd = false
@@ -125,7 +127,6 @@ class MyApplication :
         context,
         AD_UNIT_ID,
         request,
-        AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
         object : AppOpenAdLoadCallback() {
           /**
            * Called when an app open ad has loaded.
@@ -202,7 +203,7 @@ class MyApplication :
       if (!isAdAvailable()) {
         Log.d(LOG_TAG, "The app open ad is not ready yet.")
         onShowAdCompleteListener.onShowAdComplete()
-        if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds) {
+        if (googleMobileAdsConsentManager.canRequestAds) {
           loadAd(activity)
         }
         return
@@ -221,7 +222,7 @@ class MyApplication :
             Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show()
 
             onShowAdCompleteListener.onShowAdComplete()
-            if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds) {
+            if (googleMobileAdsConsentManager.canRequestAds) {
               loadAd(activity)
             }
           }
@@ -234,7 +235,7 @@ class MyApplication :
             Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT).show()
 
             onShowAdCompleteListener.onShowAdComplete()
-            if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds) {
+            if (googleMobileAdsConsentManager.canRequestAds) {
               loadAd(activity)
             }
           }
