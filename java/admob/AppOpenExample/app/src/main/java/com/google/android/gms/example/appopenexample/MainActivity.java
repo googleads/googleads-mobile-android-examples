@@ -26,17 +26,22 @@ import android.widget.Toast;
 /** Main activity in the app. */
 public class MainActivity extends AppCompatActivity {
 
+  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
     MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(GoogleMobileAdsConsentManager.getInstance(this).isPrivacyOptionsRequired());
+    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -50,14 +55,13 @@ public class MainActivity extends AppCompatActivity {
         popupMenuItem -> {
           if (popupMenuItem.getItemId() == R.id.privacy_settings) {
             // Handle changes to user consent.
-            GoogleMobileAdsConsentManager.getInstance(this)
-                .showPrivacyOptionsForm(
-                    this,
-                    formError -> {
-                      if (formError != null) {
-                        Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
-                      }
-                    });
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(
+                this,
+                formError -> {
+                  if (formError != null) {
+                    Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
             return true;
           }
           return false;

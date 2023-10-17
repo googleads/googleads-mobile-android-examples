@@ -37,9 +37,9 @@ public class MyActivity extends AppCompatActivity {
 
   private static final String TAG = "MyActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
-  private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
-      GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
+  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
   private AdView adView;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -60,6 +60,8 @@ public class MyActivity extends AppCompatActivity {
     // values/strings.xml.
     adView = findViewById(R.id.ad_view);
 
+    googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
     googleMobileAdsConsentManager.gatherConsent(
         this,
         consentError -> {

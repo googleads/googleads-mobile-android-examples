@@ -73,8 +73,10 @@ public class MyActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {}
         });
 
-        googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
+        googleMobileAdsConsentManager =
+            GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
         googleMobileAdsConsentManager.gatherConsent(
+            this,
             consentError -> {
                 if (consentError != null) {
                     // Consent not obtained in current session.

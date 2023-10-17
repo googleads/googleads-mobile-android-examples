@@ -1,7 +1,7 @@
 package com.google.ads.rewardedinterstitialexample;
 
 import android.app.Activity;
-import androidx.annotation.NonNull;
+import android.content.Context;
 import com.google.android.ump.ConsentDebugSettings;
 import com.google.android.ump.ConsentForm.OnConsentFormDismissedListener;
 import com.google.android.ump.ConsentInformation;
@@ -16,19 +16,28 @@ import com.google.android.ump.UserMessagingPlatform;
  * consent for users in GDPR impacted countries. This is an example and
  * you can choose another consent management platform to capture consent.
  */
+@SuppressWarnings("NonFinalStaticField")
 public class GoogleMobileAdsConsentManager {
-  private final Activity activity;
+  private static GoogleMobileAdsConsentManager instance;
   private final ConsentInformation consentInformation;
+
+  /** Private constructor. */
+  private GoogleMobileAdsConsentManager(Context context) {
+    this.consentInformation = UserMessagingPlatform.getConsentInformation(context);
+  }
+
+  /** Public constructor. */
+  public static GoogleMobileAdsConsentManager getInstance(Context context) {
+    if (instance == null) {
+      instance = new GoogleMobileAdsConsentManager(context);
+    }
+
+    return instance;
+  }
 
   /** Interface definition for a callback to be invoked when consent gathering is complete. */
   public interface OnConsentGatheringCompleteListener {
     void consentGatheringComplete(FormError error);
-  }
-
-  /** Constructor */
-  public GoogleMobileAdsConsentManager(@NonNull Activity activity) {
-    this.activity = activity;
-    this.consentInformation = UserMessagingPlatform.getConsentInformation(activity);
   }
 
   /** Helper variable to determine if the app can request ads. */
@@ -42,10 +51,12 @@ public class GoogleMobileAdsConsentManager {
         == PrivacyOptionsRequirementStatus.REQUIRED;
   }
 
-  /** Helper method to call the UMP SDK methods to request consent information and load/present a
-   * consent form if necessary. */
+  /**
+   * Helper method to call the UMP SDK methods to request consent information and load/present a
+   * consent form if necessary.
+   */
   public void gatherConsent(
-      OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
+      Activity activity, OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
     // For testing purposes, you can force a DebugGeography of EEA or NOT_EEA.
     ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(activity)
         // .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
