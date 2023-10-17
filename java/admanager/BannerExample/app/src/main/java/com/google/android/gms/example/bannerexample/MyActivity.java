@@ -39,8 +39,7 @@ public class MyActivity extends AppCompatActivity {
 
   private static final String TAG = "MyActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
-  private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
-      GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
+  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
   private AdManagerAdView adView;
 
   @Override
@@ -62,6 +61,8 @@ public class MyActivity extends AppCompatActivity {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
+    googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
     googleMobileAdsConsentManager.gatherConsent(
         this,
         consentError -> {

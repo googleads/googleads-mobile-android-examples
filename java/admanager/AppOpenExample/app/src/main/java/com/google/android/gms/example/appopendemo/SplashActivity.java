@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SplashActivity extends AppCompatActivity {
   private static final String LOG_TAG = "SplashActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
 
   /**
    * Number of milliseconds to count down before showing the app open ad. This simulates the time
@@ -48,29 +49,30 @@ public class SplashActivity extends AppCompatActivity {
     // Create a timer so the SplashActivity will be displayed for a fixed amount of time.
     createTimer(COUNTER_TIME_MILLISECONDS);
 
-    GoogleMobileAdsConsentManager.getInstance(this)
-        .gatherConsent(
-            this,
-            consentError -> {
-              if (consentError != null) {
-                // Consent not obtained in current session.
-                Log.w(
-                    LOG_TAG,
-                    String.format(
-                        "%s: %s", consentError.getErrorCode(), consentError.getMessage()));
-              }
+    googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
+    googleMobileAdsConsentManager.gatherConsent(
+        this,
+        consentError -> {
+          if (consentError != null) {
+            // Consent not obtained in current session.
+            Log.w(
+                LOG_TAG,
+                String.format(
+                    "%s: %s", consentError.getErrorCode(), consentError.getMessage()));
+          }
 
-              if (GoogleMobileAdsConsentManager.getInstance(this).canRequestAds()) {
-                initializeMobileAdsSdk();
-              }
+          if (googleMobileAdsConsentManager.canRequestAds()) {
+            initializeMobileAdsSdk();
+          }
 
-              if (secondsRemaining <= 0) {
-                startMainActivity();
-              }
-            });
+          if (secondsRemaining <= 0) {
+            startMainActivity();
+          }
+        });
 
     // This sample attempts to load ads using consent obtained in the previous session.
-    if (GoogleMobileAdsConsentManager.getInstance(this).canRequestAds()) {
+    if (googleMobileAdsConsentManager.canRequestAds()) {
       initializeMobileAdsSdk();
     }
   }
@@ -106,8 +108,7 @@ public class SplashActivity extends AppCompatActivity {
                         // Check if the consent form is currently on screen before moving to the
                         // main
                         // activity.
-                        if (GoogleMobileAdsConsentManager.getInstance(SplashActivity.this)
-                            .canRequestAds()) {
+                        if (googleMobileAdsConsentManager.canRequestAds()) {
                           startMainActivity();
                         }
                       }

@@ -57,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
-    googleMobileAdsConsentManager = new GoogleMobileAdsConsentManager(this);
-
+    googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
     googleMobileAdsConsentManager.gatherConsent(
+        this,
         consentError -> {
           if (consentError != null) {
             // Consent not obtained in current session.

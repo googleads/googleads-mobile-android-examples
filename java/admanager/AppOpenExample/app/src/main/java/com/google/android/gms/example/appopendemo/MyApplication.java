@@ -128,6 +128,8 @@ public class MyApplication extends Application
     private static final String LOG_TAG = "AppOpenAdManager";
     private static final String AD_UNIT_ID = "/6499/example/app-open";
 
+    private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
     private AppOpenAd appOpenAd = null;
     private boolean isLoadingAd = false;
     private boolean isShowingAd = false;
@@ -235,7 +237,7 @@ public class MyApplication extends Application
       if (!isAdAvailable()) {
         Log.d(LOG_TAG, "The app open ad is not ready yet.");
         onShowAdCompleteListener.onShowAdComplete();
-        if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds()) {
+        if (googleMobileAdsConsentManager.canRequestAds()) {
           loadAd(activity);
         }
         return;
@@ -256,7 +258,7 @@ public class MyApplication extends Application
               Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show();
 
               onShowAdCompleteListener.onShowAdComplete();
-              if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds()) {
+              if (googleMobileAdsConsentManager.canRequestAds()) {
                 loadAd(activity);
               }
             }
@@ -272,7 +274,7 @@ public class MyApplication extends Application
                   .show();
 
               onShowAdCompleteListener.onShowAdComplete();
-              if (GoogleMobileAdsConsentManager.getInstance(activity).canRequestAds()) {
+              if (googleMobileAdsConsentManager.canRequestAds()) {
                 loadAd(activity);
               }
             }
