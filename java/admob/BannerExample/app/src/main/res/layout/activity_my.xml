@@ -4,8 +4,10 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/transparent"
     tools:context=".MyActivity"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
     tools:ignore="MergeRootFrame">
 
     <TextView
@@ -15,13 +17,11 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:text="@string/hello_world" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_view"
+    <FrameLayout
+        android:id="@+id/ad_view_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id" />
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
