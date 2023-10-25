@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:22.4.0'
     implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
 
-    def lifecycle_version = '2.3.1'
+    def lifecycle_version = '2.6.2'
     implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
