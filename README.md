@@ -78,6 +78,11 @@ documentation on using the Mobile Ads SDK.
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admanager/NativeAdsExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admanager/NativeAdsExample)
 
+# Downloads
+
+Please check out our [releases](https://github.com/googleads/googleads-mobile-android-examples/releases)
+for the latest downloads of our example apps.
+
 # GitHub issue tracker
 
 To file bugs, make feature requests, or suggest improvements for the

@@ -3,6 +3,8 @@
     package="com.google.example.gms.fullscreennativeexample">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Workaround for ExoPlayer dependency when targeting API 33: https://github.com/google/ExoPlayer/issues/10884 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
