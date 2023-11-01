@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="action_settings" translatable="false">Settings</string>
-    <string name="app_name" translatable="false">AdMob Adaptive Banner</string>
-    <string name="hello_world" translatable="false">Hello world!</string>
-    <string name="more_menu" translatable="false">More</string>
-    <string name="privacy_settings" translatable="false">Privacy Settings</string>
-</resources>
