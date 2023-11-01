@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name" translatable="false">Ad Manager Adaptive Banner</string>
-    <string name="more_menu" translatable="false">More</string>
-    <string name="privacy_settings" translatable="false">Privacy Settings</string>
-</resources>

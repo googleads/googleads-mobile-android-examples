@@ -36,7 +36,6 @@ jobs:
         - "kotlin/admob/NativeAdvancedExample"
         - "kotlin/admob/RewardedInterstitialExample"
         - "kotlin/admob/RewardedVideoExample"
-        - "java/admanager/AdaptiveBannerExample"
         - "java/admanager/AppOpenExample"
         - "java/admanager/BannerExample"
         - "java/admanager/InterstitialExample"

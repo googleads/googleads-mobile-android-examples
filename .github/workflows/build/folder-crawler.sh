@@ -5,7 +5,7 @@ set -eo pipefail
 # If you are changing the expected_projects_count value, you likely want to be
 # changing .github/workflows.build.yml to modify which samples are built
 # through GitHub actions.
-expected_projects_count=32
+expected_projects_count=31
 projects=()
 
 # Reading all directories having a settings.gradle file into the projects

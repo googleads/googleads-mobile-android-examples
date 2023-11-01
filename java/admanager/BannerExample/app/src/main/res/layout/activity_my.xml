@@ -4,24 +4,27 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/transparent"
     tools:context=".MyActivity"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     tools:ignore="MergeRootFrame">
 
-    <TextView
+    <Button
+        android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:text="@string/hello_world" />
+        android:layout_marginTop="112dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:text="@string/button_name"
+        android:visibility="gone" />
 
-    <com.google.android.gms.ads.admanager.AdManagerAdView
-        android:id="@+id/ad_view"
+    <FrameLayout
+        android:id="@+id/ad_view_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/ad_unit_id" />
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
