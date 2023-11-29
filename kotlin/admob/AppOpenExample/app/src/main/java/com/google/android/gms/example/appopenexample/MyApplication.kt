@@ -19,7 +19,7 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import java.util.Date
 
-private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/3419835294"
+private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921"
 private const val LOG_TAG = "MyApplication"
 
 /** Application class that initializes, loads and show ads when activities change states. */
