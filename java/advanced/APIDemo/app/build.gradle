@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'com.google.android.gms.example.apidemo'
-    compileSdkVersion 33
+    compileSdkVersion 34
     defaultConfig {
         applicationId "com.google.android.gms.example.apidemo"
         minSdkVersion 19
         multiDexEnabled true
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
     }
@@ -21,5 +21,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.gms:play-services-ads:22.5.0'
+    implementation 'com.google.android.gms:play-services-ads:22.6.0'
 }
