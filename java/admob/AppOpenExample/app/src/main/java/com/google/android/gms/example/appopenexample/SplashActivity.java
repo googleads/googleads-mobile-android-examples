@@ -15,13 +15,14 @@
  */
 package com.google.android.gms.example.appopenexample;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.example.appopenexample.MyApplication.OnShowAdCompleteListener;
 import java.util.concurrent.TimeUnit;
@@ -87,12 +88,14 @@ public class SplashActivity extends AppCompatActivity {
 
     CountDownTimer countDownTimer =
         new CountDownTimer(time, 1000) {
+          @SuppressLint("SetTextI18n")
           @Override
           public void onTick(long millisUntilFinished) {
             secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) + 1;
             counterTextView.setText("App is done loading in: " + secondsRemaining);
           }
 
+          @SuppressLint("SetTextI18n")
           @Override
           public void onFinish() {
             secondsRemaining = 0;

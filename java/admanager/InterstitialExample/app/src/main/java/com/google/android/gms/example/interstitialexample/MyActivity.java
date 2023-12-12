@@ -18,7 +18,6 @@ package com.google.android.gms.example.interstitialexample;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -244,8 +244,11 @@ public class MyActivity extends AppCompatActivity {
             adIsLoading = false;
             String error =
                 String.format(
+                    java.util.Locale.US,
                     "domain: %s, code: %d, message: %s",
-                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+                    loadAdError.getDomain(),
+                    loadAdError.getCode(),
+                    loadAdError.getMessage());
             Toast.makeText(
                     MyActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
                 .show();

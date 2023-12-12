@@ -1,10 +1,10 @@
 package com.google.android.gms.example.bannerrecyclerviewexample;
 
 import android.os.Bundle;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -159,8 +159,11 @@ public class MainActivity extends AppCompatActivity {
             // the next ad in the items list.
             String error =
                 String.format(
+                    java.util.Locale.US,
                     "domain: %s, code: %d, message: %s",
-                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+                    loadAdError.getDomain(),
+                    loadAdError.getCode(),
+                    loadAdError.getMessage());
             Log.e(
                 "MainActivity",
                 "The previous banner ad failed to load with error: "

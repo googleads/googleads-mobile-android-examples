@@ -16,8 +16,8 @@
 
 package com.google.example.gms.fullscreennativeexample;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+import androidx.recyclerview.widget.RecyclerView;
 
 /** ViewHolder instance which holds the actual feed. */
 public abstract class FeedViewHolder extends RecyclerView.ViewHolder {

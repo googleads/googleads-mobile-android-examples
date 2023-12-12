@@ -16,22 +16,24 @@
 
 package com.google.example.gms.fullscreennativeexample;
 
-import static com.google.android.exoplayer2.ExoPlayerLibraryInfo.TAG;
+import static android.content.ContentValues.TAG;
 
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.RawResourceDataSource;
+import androidx.annotation.OptIn;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.RawResourceDataSource;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerView;
 import com.google.example.gms.fullscreennativeexample.FeedAdapter.ContentFeedItem;
 
 /** A ViewHolder representing video content. */
 public class ContentViewHolder extends FeedViewHolder {
   private final PlayerView playerView;
-  private final SimpleExoPlayer player;
+  private final ExoPlayer player;
 
   public ContentViewHolder(View itemView) {
     super(itemView);
@@ -44,7 +46,7 @@ public class ContentViewHolder extends FeedViewHolder {
           }
         });
 
-    player = new SimpleExoPlayer.Builder(itemView.getContext()).build();
+    player = new ExoPlayer.Builder(itemView.getContext()).build();
     player.setRepeatMode(Player.REPEAT_MODE_ALL);
     playerView = (PlayerView) itemView.findViewById(R.id.player_view);
     playerView.setPlayer(player);
@@ -76,6 +78,7 @@ public class ContentViewHolder extends FeedViewHolder {
   }
 
   /** Expecting the id of raw resource video file. */
+  @OptIn(markerClass = UnstableApi.class)
   public void bind(ContentFeedItem contentFeedItem, int position) {
     Player player = this.getPlayer();
     Uri uri = RawResourceDataSource.buildRawResourceUri(contentFeedItem.getResourceId());
