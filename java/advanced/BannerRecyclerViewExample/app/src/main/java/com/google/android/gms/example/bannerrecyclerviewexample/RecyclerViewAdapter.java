@@ -1,15 +1,13 @@
 package com.google.android.gms.example.bannerrecyclerviewexample;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdView;
-
 import java.util.List;
 
 /**

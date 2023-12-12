@@ -1,5 +1,6 @@
 package com.google.android.gms.example.apidemo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ public class CustomControlsView extends LinearLayout {
   /*
    * Sets up the custom controls view with the provided VideoController.
    */
+  @SuppressLint("SetTextI18n")
   public void setMediaContent(MediaContent mediaContent) {
     controlsView.setVisibility(View.GONE);
     if (mediaContent.hasVideoContent()) {
@@ -104,6 +106,7 @@ public class CustomControlsView extends LinearLayout {
     videoController.setVideoLifecycleCallbacks(
         new VideoController.VideoLifecycleCallbacks() {
 
+          @SuppressLint("SetTextI18n")
           @Override
           public void onVideoMute(final boolean muted) {
             videoStatusText.setText(
@@ -112,6 +115,7 @@ public class CustomControlsView extends LinearLayout {
             super.onVideoMute(muted);
           }
 
+          @SuppressLint("SetTextI18n")
           @Override
           public void onVideoPause() {
             videoStatusText.setText("Video status: Video did pause.");
@@ -120,6 +124,7 @@ public class CustomControlsView extends LinearLayout {
             super.onVideoPause();
           }
 
+          @SuppressLint("SetTextI18n")
           @Override
           public void onVideoPlay() {
             videoStatusText.setText("Video status: Video did play.");
@@ -128,6 +133,7 @@ public class CustomControlsView extends LinearLayout {
             super.onVideoPlay();
           }
 
+          @SuppressLint("SetTextI18n")
           @Override
           public void onVideoStart() {
             videoStatusText.setText("Video status: Video did start.");
@@ -136,6 +142,7 @@ public class CustomControlsView extends LinearLayout {
             super.onVideoStart();
           }
 
+          @SuppressLint("SetTextI18n")
           @Override
           public void onVideoEnd() {
             videoStatusText.setText("Video status: Video playback has ended.");
