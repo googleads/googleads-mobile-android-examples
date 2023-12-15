@@ -16,12 +16,12 @@
 package com.google.android.gms.example.appopenexample;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
 /** Main activity in the app. */
 public class MainActivity extends AppCompatActivity {

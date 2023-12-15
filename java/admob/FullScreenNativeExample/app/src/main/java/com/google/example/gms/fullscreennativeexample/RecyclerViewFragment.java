@@ -17,13 +17,13 @@
 package com.google.example.gms.fullscreennativeexample;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.example.gms.fullscreennativeexample.FeedAdapter.AdFeedItem;
 import com.google.example.gms.fullscreennativeexample.NativeAdsPool.OnPoolRefreshedListener;
 
@@ -60,7 +60,7 @@ public class RecyclerViewFragment extends Fragment {
     nativeAdsPool = new NativeAdsPool(this.getContext());
     nativeAdsPool.init(
         (OnPoolRefreshedListener) () -> feedAdapter.add(new AdFeedItem(nativeAdsPool.pop())));
-    nativeAdsPool.refresh(/* numOfAds= */ 5);
+    nativeAdsPool.refresh(5);
     return rootView;
   }
 }

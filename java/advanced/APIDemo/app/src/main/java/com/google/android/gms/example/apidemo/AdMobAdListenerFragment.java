@@ -67,8 +67,11 @@ public class AdMobAdListenerFragment extends Fragment {
           public void onAdFailedToLoad(LoadAdError loadAdError) {
             String error =
                 String.format(
+                    java.util.Locale.US,
                     "domain: %s, code: %d, message: %s",
-                    loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
+                    loadAdError.getDomain(),
+                    loadAdError.getCode(),
+                    loadAdError.getMessage());
             showToast(String.format("Ad failed to load with error %s", error));
           }
 

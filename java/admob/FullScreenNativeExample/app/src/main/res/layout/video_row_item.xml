@@ -5,12 +5,12 @@
     android:background="#000000"
     android:gravity="center_vertical">
 
-    <com.google.android.exoplayer2.ui.PlayerView
+    <androidx.media3.ui.PlayerView
         android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical">
-    </com.google.android.exoplayer2.ui.PlayerView>
+    </androidx.media3.ui.PlayerView>
 
     <View
         android:id="@+id/overlay"
