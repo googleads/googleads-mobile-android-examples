@@ -22,6 +22,7 @@ jobs:
         - "java/advanced/BannerRecyclerViewExample"
         - "java/advanced/RewardedSSVExample"
         - "kotlin/advanced/APIDemo"
+        - "kotlin/advanced/InlineAdaptiveBannerExample"
         - "java/admob/AppOpenExample"
         - "java/admob/BannerExample"
         - "java/admob/FullScreenNativeExample"
