@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
     var i = 0
     while (i <= recyclerViewItems.size) {
       val adView = AdView(this@MainActivity)
-      adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth))
+      adView.setAdSize(AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(this, adWidth))
       adView.adUnitId = AD_UNIT_ID
       recyclerViewItems.add(i, adView)
       i += ITEMS_PER_AD
@@ -212,6 +212,6 @@ class MainActivity : AppCompatActivity() {
   companion object {
     // A banner ad is placed in every 8th position in the RecyclerView.
     const val ITEMS_PER_AD = 8
-    private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/4177191030"
+    private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1039341195"
   }
 }
