@@ -107,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
     private void addBannerAds() {
         // Loop through the items array and place a new banner ad in every ith position in
         // the items List.
+
+        // Using < instead of <= prevents the loop from accessing an index equal to the size of the list, avoiding IndexOutOfBoundsException by staying within the list's bounds.
+        // for (int i = 0; i < recyclerViewItems.size(); i += ITEMS_PER_AD) {
+        
         for (int i = 0; i <= recyclerViewItems.size(); i += ITEMS_PER_AD) {
             final AdView adView = new AdView(MainActivity.this);
             adView.setAdSize(AdSize.BANNER);
