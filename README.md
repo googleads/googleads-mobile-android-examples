@@ -52,10 +52,10 @@ documentation on using the Mobile Ads SDK.
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/advanced/APIDemo) -
     Provides additional examples for both AdMob and Ad Manager to help improve
     your mobile app integration of the Google Mobile Ads SDK.
-*   Banner RecyclerView:
-    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/advanced/BannerRecyclerViewExample) -
-    Provides an example for displaying ads from AdMob Banner ads in a
-    RecyclerView widget.
+*   Inline Adaptive Banner RecyclerView:
+    [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/advanced/InlineAdaptiveBannerExample) -
+    Provides an example for displaying ads from AdMob inline adaptive banner ads
+    in a RecyclerView widget.
 
 ## Ad Manager
 
