@@ -17,6 +17,7 @@
 package com.google.example.gms.nativeadsexample;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdAssetNames;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import com.google.android.gms.ads.nativead.NativeCustomFormatAd;
@@ -56,7 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MainActivity extends AppCompatActivity {
 
     private static final String AD_MANAGER_AD_UNIT_ID = "/6499/example/native";
-    private static final String SIMPLE_TEMPLATE_ID = "10104090";
+    private static final String SIMPLE_TEMPLATE_ID = "10063170";
     private static final String TAG = "MainActivity";
 
     private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
@@ -272,13 +274,33 @@ public class MainActivity extends AppCompatActivity {
    */
   private void populateSimpleTemplateAdView(
       final NativeCustomFormatAd nativeCustomFormatAd, View adView) {
-        TextView headline = adView.findViewById(R.id.simplecustom_headline);
-        TextView caption = adView.findViewById(R.id.simplecustom_caption);
 
+    // Render the AdChoices image.
+    String adChoicesKey = NativeAdAssetNames.ASSET_ADCHOICES_CONTAINER_VIEW;
+    NativeAd.Image adChoiceAsset = nativeCustomFormatAd.getImage(adChoicesKey);
+    Drawable adChoicesDrawable = adChoiceAsset != null ? adChoiceAsset.getDrawable() : null;
+    ImageView adChoicesIcon = adView.findViewById(R.id.simplecustom_adchoices);
+    if (adChoicesDrawable == null) {
+      adChoicesIcon.setVisibility(View.GONE);
+    } else {
+      adChoicesIcon.setVisibility(View.VISIBLE);
+      adChoicesIcon.setImageDrawable(adChoicesDrawable);
+      // Enable clicks on AdChoices.
+      adChoicesIcon.setOnClickListener(
+          new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              nativeCustomFormatAd.performClick(adChoicesKey);
+            }
+          });
+    }
+
+    TextView headline = adView.findViewById(R.id.simplecustom_headline);
+    TextView caption = adView.findViewById(R.id.simplecustom_caption);
     headline.setText(nativeCustomFormatAd.getText("Headline"));
     caption.setText(nativeCustomFormatAd.getText("Caption"));
 
-        FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
+    FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
 
     // Apps can check the MediaContent's hasVideoContent property to determine if the
     // NativeCustomFormatAd has a video asset.
