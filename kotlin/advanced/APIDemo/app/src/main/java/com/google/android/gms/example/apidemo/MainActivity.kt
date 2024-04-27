@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mainActivityBinding.drawerLayout,
         toolbar,
         R.string.navigation_drawer_open,
-        R.string.navigation_drawer_close
+        R.string.navigation_drawer_close,
       )
     mainActivityBinding.drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         R.id.nav_admob_adlistener -> AdMobAdListenerFragment()
         R.id.nav_admob_adtargeting -> AdMobAdTargetingFragment()
         R.id.nav_admob_bannersizes -> AdMobBannerSizesFragment()
+        R.id.nav_collapsible_banner -> CollapsibleBannerFragment()
         R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
         R.id.nav_gam_adsizes -> AdManagerMultipleAdSizesFragment()
         R.id.nav_gam_appevents -> AdManagerAppEventsFragment()
