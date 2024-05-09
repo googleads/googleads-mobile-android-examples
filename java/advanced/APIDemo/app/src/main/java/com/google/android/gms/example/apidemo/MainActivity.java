@@ -96,6 +96,9 @@ public class MainActivity extends AppCompatActivity
       case 10:
         trans.replace(R.id.container, new AdManagerCustomControlsFragment());
         break;
+      case 11:
+        trans.replace(R.id.container, new CollapsibleBannerFragment());
+        break;
     }
 
     trans.commit();
