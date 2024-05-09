@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 android {
     namespace 'com.google.android.gms.example.rewardedvideoexample'
     compileSdkVersion 34
