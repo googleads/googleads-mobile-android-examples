@@ -4,6 +4,12 @@ plugins {
     id 'java'
 }
 
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+}
+
 group = 'com.example.rewardedssv'
 version = '1.0.0'
 sourceCompatibility = JavaVersion.VERSION_17

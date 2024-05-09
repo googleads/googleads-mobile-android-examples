@@ -6,3 +6,9 @@ plugins {
 }
 
 tasks.register("clean", Delete::class) { delete(rootProject.buildDir) }
+
+tasks {
+    withType<JavaCompile> {
+        options.compilerArgs.add("-Xlint:deprecation")
+    }
+}

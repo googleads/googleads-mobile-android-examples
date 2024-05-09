@@ -18,4 +18,9 @@ allprojects {
         google()
         mavenCentral()
     }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
 }
