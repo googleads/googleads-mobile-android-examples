@@ -48,14 +48,14 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     fragmentBinding = FragmentAdmobCustomMuteThisAdBinding.inflate(inflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     fragmentBinding.btnRefresh.setOnClickListener { refreshAd() }
     fragmentBinding.btnMuteAd.setOnClickListener { showMuteReasonsDialog() }
@@ -201,7 +201,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
               Toast.makeText(
                   activity,
                   "Failed to load native ad with error $error",
-                  Toast.LENGTH_SHORT
+                  Toast.LENGTH_SHORT,
                 )
                 .show()
             }
@@ -229,7 +229,7 @@ class AdMobCustomMuteThisAdFragment : Fragment() {
       ArrayAdapter<MuteThisAdReasonWrapper>(
         requireActivity(),
         android.R.layout.simple_list_item_1,
-        wrappedReasons
+        wrappedReasons,
       )
     ) { dialog, which ->
       dialog.dismiss()

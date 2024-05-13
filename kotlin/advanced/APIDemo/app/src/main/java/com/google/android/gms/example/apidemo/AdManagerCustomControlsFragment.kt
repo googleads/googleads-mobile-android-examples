@@ -49,15 +49,14 @@ class AdManagerCustomControlsFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
+    savedInstanceState: Bundle?,
+  ): View {
     fragmentBinding = FragmentGamCustomcontrolsBinding.inflate(inflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     fragmentBinding.btnRefresh.setOnClickListener { refreshAd() }
 
     refreshAd()
@@ -139,7 +138,7 @@ class AdManagerCustomControlsFragment : Fragment() {
    */
   private fun populateSimpleTemplateAdView(
     nativeCustomFormatAd: NativeCustomFormatAd,
-    adView: View
+    adView: View,
   ) {
     val headline = adView.findViewById<TextView>(R.id.simplecustom_headline)
     val caption = adView.findViewById<TextView>(R.id.simplecustom_caption)
@@ -182,7 +181,7 @@ class AdManagerCustomControlsFragment : Fragment() {
     val builder =
       AdLoader.Builder(
         requireActivity(),
-        requireActivity().resources.getString(R.string.customcontrols_fragment_ad_unit_id)
+        requireActivity().resources.getString(R.string.customcontrols_fragment_ad_unit_id),
       )
 
     if (fragmentBinding.cbCustomFormat.isChecked) {
@@ -205,10 +204,10 @@ class AdManagerCustomControlsFragment : Fragment() {
           Toast.makeText(
               activity,
               "A custom click has occurred in the simple template",
-              Toast.LENGTH_SHORT
+              Toast.LENGTH_SHORT,
             )
             .show()
-        }
+        },
       )
     }
 
@@ -249,7 +248,7 @@ class AdManagerCustomControlsFragment : Fragment() {
               Toast.makeText(
                   activity,
                   "Failed to load native ad with error $error",
-                  Toast.LENGTH_SHORT
+                  Toast.LENGTH_SHORT,
                 )
                 .show()
             }

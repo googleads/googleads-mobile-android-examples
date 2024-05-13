@@ -24,16 +24,14 @@ class AdMobBannerSizesFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
+    savedInstanceState: Bundle?,
+  ): View {
     fragmentBinding = FragmentAdmobBannerSizesBinding.inflate(inflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-
-    val sizesArray: Array<String>
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     // It's a Mobile Ads SDK policy that only the banner, large banner, and smart banner ad
     // sizes are shown on phones, and that the full banner, leaderboard, and medium rectangle
@@ -42,20 +40,21 @@ class AdMobBannerSizesFragment : Fragment() {
 
     val screenSize = (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK)
 
-    if (
-      screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-        screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE
-    ) {
-      sizesArray = resources.getStringArray(R.array.bannersizes_largesizes)
-    } else {
-      sizesArray = resources.getStringArray(R.array.bannersizes_smallsizes)
-    }
+    val sizesArray =
+      if (
+        screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+          screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE
+      ) {
+        resources.getStringArray(R.array.bannersizes_largesizes)
+      } else {
+        resources.getStringArray(R.array.bannersizes_smallsizes)
+      }
 
     val adapter =
       ArrayAdapter<CharSequence>(
         this.requireContext(),
         android.R.layout.simple_spinner_dropdown_item,
-        sizesArray
+        sizesArray,
       )
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
     fragmentBinding.bannersizesSpnSize.adapter = adapter
@@ -74,9 +73,8 @@ class AdMobBannerSizesFragment : Fragment() {
         when (fragmentBinding.bannersizesSpnSize.selectedItemPosition) {
           0 -> AdSize.BANNER
           1 -> AdSize.LARGE_BANNER
-          2 -> AdSize.SMART_BANNER
-          3 -> AdSize.FULL_BANNER
-          4 -> AdSize.MEDIUM_RECTANGLE
+          2 -> AdSize.FULL_BANNER
+          3 -> AdSize.MEDIUM_RECTANGLE
           else -> AdSize.LEADERBOARD
         }
       )

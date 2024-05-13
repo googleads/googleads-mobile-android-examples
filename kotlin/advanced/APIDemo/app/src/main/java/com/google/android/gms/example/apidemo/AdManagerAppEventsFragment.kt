@@ -21,15 +21,14 @@ class AdManagerAppEventsFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     fragmentBinding = FragmentGamAppEventsBinding.inflate(layoutInflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     fragmentBinding.appeventsAvMain.appEventListener = AppEventListener { name, data ->
       // The Ad Manager ad that this fragment loads contains JavaScript code that sends App
       // Events to the host application. This AppEventListener receives those events,

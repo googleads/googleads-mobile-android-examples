@@ -22,14 +22,14 @@ class AdMobAdListenerFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     fragmentBinding = FragmentAdmobAdListenerBinding.inflate(inflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     fragmentBinding.listenerAdView.adListener =
       object : AdListener() {

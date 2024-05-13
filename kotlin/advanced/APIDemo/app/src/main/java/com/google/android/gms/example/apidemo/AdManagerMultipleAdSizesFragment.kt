@@ -22,14 +22,14 @@ class AdManagerMultipleAdSizesFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     fragmentBinding = FragmentGamMultipleAdSizesBinding.inflate(inflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     fragmentBinding.adsizesPavMain.adListener =
       object : AdListener() {

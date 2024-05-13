@@ -2,6 +2,7 @@ package com.google.android.gms.example.apidemo
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +22,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
 
+    // Handling onBackPressed.
+    val onBackPressedCallback: OnBackPressedCallback =
+      object : OnBackPressedCallback(/* enabled= */ true) {
+        override fun handleOnBackPressed() {
+          if (mainActivityBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mainActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
+          }
+        }
+      }
+    onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
     // Initialize the Mobile Ads SDK with an empty completion listener.
     MobileAds.initialize(this) {}
 
@@ -36,18 +48,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     toggle.syncState()
 
     mainActivityBinding.navView.setNavigationItemSelectedListener(this)
-
-    val trans = this.supportFragmentManager.beginTransaction()
-    trans.replace(R.id.container, AdMobAdListenerFragment())
-    trans.commit()
-  }
-
-  override fun onBackPressed() {
-    if (mainActivityBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      mainActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
-    } else {
-      super.onBackPressed()
-    }
   }
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {

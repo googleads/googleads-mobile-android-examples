@@ -20,20 +20,19 @@ class AdManagerCustomTargetingFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     fragmentBinding = FragmentGamCustomTargetingBinding.inflate(inflater)
     return fragmentBinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     val adapter =
       ArrayAdapter.createFromResource(
         requireView().context,
         R.array.customtargeting_sports,
-        android.R.layout.simple_spinner_item
+        android.R.layout.simple_spinner_item,
       )
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
     fragmentBinding.customtargetingSpnSport.adapter = adapter
@@ -43,7 +42,7 @@ class AdManagerCustomTargetingFragment : Fragment() {
         AdManagerAdRequest.Builder()
           .addCustomTargeting(
             getString(R.string.customtargeting_key),
-            fragmentBinding.customtargetingSpnSport.selectedItem as String
+            fragmentBinding.customtargetingSpnSport.selectedItem as String,
           )
           .build()
 
