@@ -16,12 +16,13 @@
 
 package com.google.android.gms.example.bannerexample
 
+import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowMetrics
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -44,21 +45,18 @@ class MyActivity : AppCompatActivity() {
   private lateinit var adView: AdManagerAdView
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
-  // Determine the screen width (less decorations) to use for the ad width.
-  // If the ad hasn't been laid out, default to the full screen width.
+  // Get the ad size with screen width.
   private val adSize: AdSize
     get() {
-      val display = windowManager.defaultDisplay
-      val outMetrics = DisplayMetrics()
-      display.getMetrics(outMetrics)
-
-      val density = outMetrics.density
-
-      var adWidthPixels = binding.adViewContainer.width.toFloat()
-      if (adWidthPixels == 0f) {
-        adWidthPixels = outMetrics.widthPixels.toFloat()
-      }
-
+      val displayMetrics = resources.displayMetrics
+      val adWidthPixels =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          val windowMetrics: WindowMetrics = this.windowManager.currentWindowMetrics
+          windowMetrics.bounds.width()
+        } else {
+          displayMetrics.widthPixels
+        }
+      val density = displayMetrics.density
       val adWidth = (adWidthPixels / density).toInt()
       return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }

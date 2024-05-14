@@ -16,16 +16,19 @@
 
 package com.google.android.gms.example.bannerexample;
 
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowMetrics;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -47,7 +50,7 @@ public class MyActivity extends AppCompatActivity {
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
   private AdView adView;
   private FrameLayout adContainerView;
-  private AtomicBoolean initialLayoutComplete = new AtomicBoolean(false);
+  private final AtomicBoolean initialLayoutComplete = new AtomicBoolean(false);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +192,8 @@ public class MyActivity extends AppCompatActivity {
         this,
         new OnInitializationCompleteListener() {
           @Override
-          public void onInitializationComplete(InitializationStatus initializationStatus) {}
+          public void onInitializationComplete(
+              @NonNull InitializationStatus initializationStatus) {}
         });
 
     // Load an ad.
@@ -198,21 +202,17 @@ public class MyActivity extends AppCompatActivity {
     }
   }
 
-  private AdSize getAdSize() {
-    // Determine the screen width (less decorations) to use for the ad width.
-    Display display = getWindowManager().getDefaultDisplay();
-    DisplayMetrics outMetrics = new DisplayMetrics();
-    display.getMetrics(outMetrics);
+  // Get the ad size with screen width.
+  public AdSize getAdSize() {
+    DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+    int adWidthPixels = displayMetrics.widthPixels;
 
-    float density = outMetrics.density;
-
-    float adWidthPixels = adContainerView.getWidth();
-
-    // If the ad hasn't been laid out, default to the full screen width.
-    if (adWidthPixels == 0) {
-      adWidthPixels = outMetrics.widthPixels;
+    if (VERSION.SDK_INT >= VERSION_CODES.R) {
+      WindowMetrics windowMetrics = this.getWindowManager().getCurrentWindowMetrics();
+      adWidthPixels = windowMetrics.getBounds().width();
     }
 
+    float density = displayMetrics.density;
     int adWidth = (int) (adWidthPixels / density);
     return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
   }
