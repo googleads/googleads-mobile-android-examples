@@ -27,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -68,22 +70,16 @@ public class AdManagerCustomControlsFragment extends Fragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    refresh = view.findViewById(R.id.btn_refresh);
+    startVideoAdsMuted = view.findViewById(R.id.cb_start_muted);
+    customControlsCheckbox = view.findViewById(R.id.cb_custom_controls);
+    nativeAdsCheckbox = view.findViewById(R.id.cb_native);
+    customFormatAdsCheckbox = view.findViewById(R.id.cb_custom_format);
+    customControlsView = view.findViewById(R.id.custom_controls);
 
-    refresh = getView().findViewById(R.id.btn_refresh);
-    startVideoAdsMuted = getView().findViewById(R.id.cb_start_muted);
-    customControlsCheckbox = getView().findViewById(R.id.cb_custom_controls);
-    nativeAdsCheckbox = getView().findViewById(R.id.cb_native);
-    customFormatAdsCheckbox = getView().findViewById(R.id.cb_custom_format);
-    customControlsView = getView().findViewById(R.id.custom_controls);
-
-    refresh.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View unusedView) {
-        refreshAd();
-      }
-    });
+    refresh.setOnClickListener(unusedView -> refreshAd());
 
     refreshAd();
   }
@@ -173,12 +169,7 @@ public class AdManagerCustomControlsFragment extends Fragment {
     headline.setText(nativeCustomFormatAd.getText("Headline"));
     caption.setText(nativeCustomFormatAd.getText("Caption"));
 
-    headline.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View unusedView) {
-        nativeCustomFormatAd.performClick("Headline");
-      }
-    });
+    headline.setOnClickListener(unusedView -> nativeCustomFormatAd.performClick("Headline"));
 
     FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
 
@@ -186,7 +177,7 @@ public class AdManagerCustomControlsFragment extends Fragment {
     // NativeCustomTemplateAd has a video asset.
     if (nativeCustomFormatAd.getMediaContent() != null
         && nativeCustomFormatAd.getMediaContent().hasVideoContent()) {
-      MediaView mediaView = new MediaView(getActivity());
+      MediaView mediaView = new MediaView(requireActivity());
       mediaView.setMediaContent(nativeCustomFormatAd.getMediaContent());
       mediaPlaceholder.addView(mediaView);
     } else {
@@ -194,12 +185,7 @@ public class AdManagerCustomControlsFragment extends Fragment {
       mainImage.setAdjustViewBounds(true);
       mainImage.setImageDrawable(nativeCustomFormatAd.getImage("MainImage").getDrawable());
 
-      mainImage.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View unusedView) {
-          nativeCustomFormatAd.performClick("MainImage");
-        }
-      });
+      mainImage.setOnClickListener(unusedView -> nativeCustomFormatAd.performClick("MainImage"));
       mediaPlaceholder.addView(mainImage);
     }
     customControlsView.setMediaContent(nativeCustomFormatAd.getMediaContent());
@@ -314,7 +300,3 @@ public class AdManagerCustomControlsFragment extends Fragment {
     customControlsView.reset();
   }
 }
-
-
-
-

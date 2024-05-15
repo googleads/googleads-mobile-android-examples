@@ -1,129 +1,106 @@
-/*
- * Copyright (C) 2015 Google, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import androidx.appcompat.app.ActionBar;
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationView;
 
-/**
- * {@link MainActivity} is the single activity for the application.  It contains a single {@link
- * NavigationDrawerFragment} in its drawer, and swaps demo fragments in and out of its {@link
- * android.widget.FrameLayout} as appropriate.
- */
+/** The main activity that controls the menu of the APIDemo app. */
 public class MainActivity extends AppCompatActivity
-    implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    implements NavigationView.OnNavigationItemSelectedListener {
 
-  public static final String LOG_TAG = "APIDemos";
-
-  private NavigationDrawerFragment navigationDrawerFragment;
-
-  /**
-   * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-   */
-  private CharSequence title;
+  public static final String LOG_TAG = "API_DEMO";
+  private ActivityMainBinding activityMainBinding;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(activityMainBinding.getRoot());
+    Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-    navigationDrawerFragment = (NavigationDrawerFragment)
-        getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-    title = getTitle();
+    // Initialize the Mobile Ads SDK with an empty completion listener.
+    MobileAds.initialize(this, initializationStatus -> {});
 
-    // Set up the drawer.
-    navigationDrawerFragment.setUp(
-        R.id.navigation_drawer,
-        (DrawerLayout) findViewById(R.id.drawer_layout));
+    ActionBarDrawerToggle toggle =
+        new ActionBarDrawerToggle(
+            this,
+            activityMainBinding.drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close);
+    activityMainBinding.drawerLayout.addDrawerListener(toggle);
+    toggle.syncState();
+
+    activityMainBinding.navigationView.setNavigationItemSelectedListener(this);
+
+    OnBackPressedCallback onBackPressedCallback =
+        new OnBackPressedCallback(true) {
+          @Override
+          public void handleOnBackPressed() {
+            if (activityMainBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+              activityMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
+            }
+          }
+        };
+    getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
   }
 
   @Override
-  public void onNavigationDrawerItemSelected(int position) {
-    // Update the main content by replacing fragments.
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction trans = fragmentManager.beginTransaction();
+  public boolean onNavigationItemSelected(MenuItem item) {
+    FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+    Fragment newFragment = new Fragment();
 
-    switch (position) {
-      case 0:
-        trans.replace(R.id.container, new AdMobAdListenerFragment());
+    switch (item.getItemId()) {
+      case R.id.nav_admob_adlistener:
+        newFragment = new AdMobAdListenerFragment();
         break;
-      case 1:
-        trans.replace(R.id.container, new AdMobAdTargetingFragment());
+      case R.id.nav_admob_adtargeting:
+        newFragment = new AdMobAdTargetingFragment();
         break;
-      case 2:
-        trans.replace(R.id.container, new AdMobBannerSizesFragment());
+      case R.id.nav_admob_bannersizes:
+        newFragment = new AdMobBannerSizesFragment();
         break;
-      case 3:
-        trans.replace(R.id.container, new AdMobCustomMuteThisAdFragment());
+      case R.id.nav_collapsible_banner:
+        newFragment = new CollapsibleBannerFragment();
         break;
-      case 4:
-        trans.replace(R.id.container, new AdManagerFluidSizeFragment());
+      case R.id.nav_admob_custommute:
+        newFragment = new AdMobCustomMuteThisAdFragment();
         break;
-      case 5:
-        trans.replace(R.id.container, new AdManagerPPIDFragment());
+      case R.id.nav_gam_adsizes:
+        newFragment = new AdManagerMultipleAdSizesFragment();
         break;
-      case 6:
-        trans.replace(R.id.container, new AdManagerCustomTargetingFragment());
+      case R.id.nav_gam_appevents:
+        newFragment = new AdManagerAppEventsFragment();
         break;
-      case 7:
-        trans.replace(R.id.container, new AdManagerCategoryExclusionFragment());
+      case R.id.nav_gam_customtargeting:
+        newFragment = new AdManagerCustomTargetingFragment();
         break;
-      case 8:
-        trans.replace(R.id.container, new AdManagerMultipleAdSizesFragment());
+      case R.id.nav_gam_fluid:
+        newFragment = new AdManagerFluidSizeFragment();
         break;
-      case 9:
-        trans.replace(R.id.container, new AdManagerAppEventsFragment());
+      case R.id.nav_gam_ppid:
+        newFragment = new AdManagerPPIDFragment();
         break;
-      case 10:
-        trans.replace(R.id.container, new AdManagerCustomControlsFragment());
+      case R.id.nav_gam_customcontrols:
+        newFragment = new AdManagerCustomControlsFragment();
         break;
-      case 11:
-        trans.replace(R.id.container, new CollapsibleBannerFragment());
+      default:
+        newFragment = new AdManagerCategoryExclusionFragment();
         break;
     }
-
+    trans.replace(R.id.container, newFragment);
     trans.commit();
-  }
-
-  public void restoreActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-    actionBar.setDisplayShowTitleEnabled(true);
-    actionBar.setTitle(title);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    if (!navigationDrawerFragment.isDrawerOpen()) {
-      getMenuInflater().inflate(R.menu.main, menu);
-      restoreActionBar();
-      return true;
-    }
-
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    return super.onOptionsItemSelected(item);
+    activityMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
+    return true;
   }
 }

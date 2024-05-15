@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+  <item android:title="AdMob">
+    <menu>
+      <item
+          android:id="@+id/nav_admob_adlistener"
+          android:title="AdListener" />
+      <item
+          android:id="@+id/nav_admob_adtargeting"
+          android:title="Ad targeting" />
+      <item
+          android:id="@+id/nav_admob_bannersizes"
+          android:title="Banner sizes" />
+      <item
+          android:id="@+id/nav_collapsible_banner"
+          android:title="Collapsible banner ad" />
+      <item
+          android:id="@+id/nav_admob_custommute"
+          android:title="Custom Mute This Ad" />
+    </menu>
+  </item>
+
+  <item android:title="Ad Manager">
+    <menu>
+      <item
+          android:id="@+id/nav_gam_adsizes"
+          android:title="Ad sizes" />
+      <item
+          android:id="@+id/nav_gam_appevents"
+          android:title="App events" />
+      <item
+          android:id="@+id/nav_gam_categoryexclusion"
+          android:title="Category exclusion" />
+      <item
+          android:id="@+id/nav_gam_customtargeting"
+          android:title="Custom targeting" />
+      <item
+          android:id="@+id/nav_gam_fluid"
+          android:title="Fluid size" />
+      <item
+          android:id="@+id/nav_gam_ppid"
+          android:title="PPID" />
+      <item
+          android:id="@+id/nav_gam_customcontrols"
+          android:title="Custom Video Controls" />
+    </menu>
+  </item>
+
+</menu>

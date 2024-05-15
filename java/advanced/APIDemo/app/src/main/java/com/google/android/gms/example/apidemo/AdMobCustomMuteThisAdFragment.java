@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
@@ -66,12 +68,11 @@ public class AdMobCustomMuteThisAdFragment extends Fragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    refresh = getView().findViewById(R.id.btn_refresh);
-    muteButton = getView().findViewById(R.id.btn_mute_ad);
-    adContainer = getView().findViewById(R.id.fl_adplaceholder);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    refresh = view.findViewById(R.id.btn_refresh);
+    muteButton = view.findViewById(R.id.btn_mute_ad);
+    adContainer = view.findViewById(R.id.fl_adplaceholder);
 
     refresh.setOnClickListener(new View.OnClickListener() {
       @Override

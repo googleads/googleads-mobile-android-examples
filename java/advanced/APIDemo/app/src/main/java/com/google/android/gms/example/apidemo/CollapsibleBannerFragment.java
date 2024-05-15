@@ -29,7 +29,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.example.apidemo.databinding.FragmentCollapsibleBannerBinding;
-import java.util.Objects;
 import java.util.UUID;
 
 /** The [CollapsibleBannerFragment] class demonstrates how to use a collapsible banner ad. */
@@ -92,6 +91,6 @@ public class CollapsibleBannerFragment extends Fragment implements OnGlobalLayou
     // Step 3: Load a banner ad.
     loadCollapsibleBanner();
 
-    Objects.requireNonNull(getView()).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    requireView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
   }
 }

@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
@@ -33,7 +35,6 @@ import com.google.android.gms.ads.admanager.AdManagerAdView;
 public class AdManagerCustomTargetingFragment extends Fragment {
 
   private Spinner sportsSpinner;
-  private Button loadButton;
   private AdManagerAdView adView;
 
   public AdManagerCustomTargetingFragment() {
@@ -46,15 +47,18 @@ public class AdManagerCustomTargetingFragment extends Fragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    sportsSpinner = getView().findViewById(R.id.customtargeting_spn_sport);
-    loadButton = getView().findViewById(R.id.customtargeting_btn_loadad);
-    adView = getView().findViewById(R.id.customtargeting_av_main);
+    sportsSpinner = view.findViewById(R.id.customtargeting_spn_sport);
+    Button loadButton = view.findViewById(R.id.customtargeting_btn_loadad);
+    adView = view.findViewById(R.id.customtargeting_av_main);
 
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getView().getContext(),
-        R.array.customtargeting_sports, android.R.layout.simple_spinner_item);
+    ArrayAdapter<CharSequence> adapter =
+        ArrayAdapter.createFromResource(
+            view.getContext(),
+            R.array.customtargeting_sports,
+            android.R.layout.simple_spinner_item);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     sportsSpinner.setAdapter(adapter);
 

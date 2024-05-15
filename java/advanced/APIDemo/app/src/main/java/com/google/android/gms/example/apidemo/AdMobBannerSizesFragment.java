@@ -74,44 +74,42 @@ public class AdMobBannerSizesFragment extends Fragment {
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     sizesSpinner.setAdapter(adapter);
 
-    loadButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (adView != null) {
-          adFrameLayout.removeView(adView);
-          adView.destroy();
-        }
+    loadButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (adView != null) {
+              adFrameLayout.removeView(adView);
+              adView.destroy();
+            }
 
-        adView = new AdView(getActivity());
-        adView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
-        adFrameLayout.addView(adView);
+            adView = new AdView(requireActivity());
+            adView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
+            adFrameLayout.addView(adView);
 
-        switch (sizesSpinner.getSelectedItemPosition()) {
-          case 0:
-            adView.setAdSize(AdSize.BANNER);
-            break;
-          case 1:
-            adView.setAdSize(AdSize.LARGE_BANNER);
-            break;
-          case 2:
-            adView.setAdSize(AdSize.SMART_BANNER);
-            break;
-          case 3:
-            adView.setAdSize(AdSize.FULL_BANNER);
-            break;
-          case 4:
-            adView.setAdSize(AdSize.MEDIUM_RECTANGLE);
-            break;
-          case 5:
-            adView.setAdSize(AdSize.LEADERBOARD);
-            break;
-          default:
-            // fall through.
-        }
+            switch (sizesSpinner.getSelectedItemPosition()) {
+              case 0:
+                adView.setAdSize(AdSize.BANNER);
+                break;
+              case 1:
+                adView.setAdSize(AdSize.LARGE_BANNER);
+                break;
+              case 2:
+                adView.setAdSize(AdSize.FULL_BANNER);
+                break;
+              case 3:
+                adView.setAdSize(AdSize.MEDIUM_RECTANGLE);
+                break;
+              case 4:
+                adView.setAdSize(AdSize.LEADERBOARD);
+                break;
+              default:
+                // fall through.
+            }
 
-        adView.loadAd(new AdRequest.Builder().build());
-      }
-    });
+            adView.loadAd(new AdRequest.Builder().build());
+          }
+        });
 
     return rootView;
   }

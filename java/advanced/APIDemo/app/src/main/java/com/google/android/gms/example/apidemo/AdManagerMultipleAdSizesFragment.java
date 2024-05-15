@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
@@ -48,19 +50,18 @@ public class AdManagerMultipleAdSizesFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
+    // Inflate the layout for this fragment.
     return inflater.inflate(R.layout.fragment_gam_multiple_ad_sizes, container, false);
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    loadButton = getView().findViewById(R.id.adsizes_btn_loadad);
-    cb120x20 = getView().findViewById(R.id.adsizes_cb_120x20);
-    cb320x50 = getView().findViewById(R.id.adsizes_cb_320x50);
-    cb300x250 = getView().findViewById(R.id.adsizes_cb_300x250);
-    adView = getView().findViewById(R.id.adsizes_pav_main);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    loadButton = view.findViewById(R.id.adsizes_btn_loadad);
+    cb120x20 = view.findViewById(R.id.adsizes_cb_120x20);
+    cb320x50 = view.findViewById(R.id.adsizes_cb_320x50);
+    cb300x250 = view.findViewById(R.id.adsizes_cb_300x250);
+    adView = view.findViewById(R.id.adsizes_pav_main);
 
     adView.setAdListener(new AdListener() {
       @Override

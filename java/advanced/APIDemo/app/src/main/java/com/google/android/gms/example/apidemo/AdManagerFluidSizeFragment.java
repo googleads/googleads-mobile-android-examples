@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
@@ -43,25 +45,25 @@ public class AdManagerFluidSizeFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
+    // Inflate the layout for this fragment.
     return inflater.inflate(R.layout.fragment_gam_fluid_size, container, false);
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    // The size for this AdManagerAdView is defined in the XML layout as AdSize.FLUID. It could
-    // also be set here by calling adView.setAdSizes(AdSize.FLUID).
+    // The size for this AdManagerAdView is defined in the XML layout as AdSize.FLUID.
+    // It could also be set here by calling adView.setAdSizes(AdSize.FLUID).
     //
     // An ad with fluid size will automatically stretch or shrink to fit the height of its
     // content, which can help layout designers cut down on excess whitespace.
-    adView = getView().findViewById(R.id.fluid_av_main);
+    adView = view.findViewById(R.id.fluid_av_main);
 
     AdManagerAdRequest request = new AdManagerAdRequest.Builder().build();
     adView.loadAd(request);
 
-    changeAdViewWidthButton = getView().findViewById(R.id.fluid_btn_change_width);
+    changeAdViewWidthButton = view.findViewById(R.id.fluid_btn_change_width);
     changeAdViewWidthButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {

@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -44,10 +46,10 @@ public class AdMobAdListenerFragment extends Fragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    adView = getView().findViewById(R.id.listener_av_main);
+    adView = view.findViewById(R.id.listener_av_main);
 
     adView.setAdListener(
         new AdListener() {
@@ -64,7 +66,7 @@ public class AdMobAdListenerFragment extends Fragment {
           }
 
           @Override
-          public void onAdFailedToLoad(LoadAdError loadAdError) {
+          public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
             String error =
                 String.format(
                     java.util.Locale.US,

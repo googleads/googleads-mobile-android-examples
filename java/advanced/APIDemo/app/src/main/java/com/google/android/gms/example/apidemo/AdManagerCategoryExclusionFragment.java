@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
@@ -43,12 +45,11 @@ public class AdManagerCategoryExclusionFragment extends Fragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    noExclusionsAdView = getView().findViewById(R.id.no_exclusions_av);
-    dogsExcludedAdView = getView().findViewById(R.id.exclusions_av_dogsexcluded);
-    catsExcludedAdView = getView().findViewById(R.id.exclusions_av_catsexcluded);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    noExclusionsAdView = view.findViewById(R.id.no_exclusions_av);
+    dogsExcludedAdView = view.findViewById(R.id.exclusions_av_dogsexcluded);
+    catsExcludedAdView = view.findViewById(R.id.exclusions_av_catsexcluded);
 
     AdManagerAdRequest noExclusionsRequest = new AdManagerAdRequest.Builder().build();
     AdManagerAdRequest dogsExcludedRequest = new AdManagerAdRequest.Builder()

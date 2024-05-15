@@ -23,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
@@ -35,73 +37,73 @@ import java.security.NoSuchAlgorithmException;
  */
 public class AdManagerPPIDFragment extends Fragment {
 
-    private Button loadAdButton;
-    private AdManagerAdView adView;
-    private EditText usernameEditText;
+  private AdManagerAdView adView;
+  private EditText usernameEditText;
 
-    public AdManagerPPIDFragment() {
-    }
+  public AdManagerPPIDFragment() {}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_gam_ppid, container, false);
-    }
+  @Override
+  public View onCreateView(
+      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_gam_ppid, container, false);
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    super.onCreate(savedInstanceState);
+    usernameEditText = view.findViewById(R.id.ppid_et_username);
+    Button loadAdButton = view.findViewById(R.id.ppid_btn_loadad);
+    adView = view.findViewById(R.id.ppid_pav_main);
 
-        usernameEditText = getView().findViewById(R.id.ppid_et_username);
-        loadAdButton = getView().findViewById(R.id.ppid_btn_loadad);
-        adView = getView().findViewById(R.id.ppid_pav_main);
+    loadAdButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            String username = usernameEditText.getText().toString();
 
-        loadAdButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = usernameEditText.getText().toString();
-
-                if (username.length() == 0) {
-                    Toast.makeText(AdManagerPPIDFragment.this.getActivity(),
-                            "The username cannot be empty", Toast.LENGTH_SHORT).show();
-                } else {
-                    String ppid = generatePPID(username);
-                    AdManagerAdRequest request = new AdManagerAdRequest.Builder()
-                            .setPublisherProvidedId(ppid)
-                            .build();
-                    adView.loadAd(request);
-                }
+            if (username.isEmpty()) {
+              Toast.makeText(
+                      AdManagerPPIDFragment.this.getActivity(),
+                      "The username cannot be empty.",
+                      Toast.LENGTH_SHORT)
+                  .show();
+            } else {
+              String ppid = generatePPID(username);
+              AdManagerAdRequest request =
+                  new AdManagerAdRequest.Builder().setPublisherProvidedId(ppid).build();
+              adView.loadAd(request);
             }
+          }
         });
-    }
+  }
 
-  // This is a simple method to generate a hash of a sample username to use as a PPID. It's being
-  // used here as a convenient stand-in for a true Publisher-Provided Identifier. In your own
-  // apps, you can decide for yourself how to generate the PPID value, though there are some
-  // restrictions on what the values can be. For details, see:
-  //
-  // https://support.google.com/dfp_premium/answer/2880055
+  // This method generates a hash of a sample username to use as a Publisher
+  // provided identifier (PPID). In your own apps, you can decide for yourself
+  // how to generate the PPID value, though there are some restrictions. For
+  // details, see:
+  // https://support.google.com/admanager/answer/2880055
   private String generatePPID(String username) {
-        StringBuilder ppid = new StringBuilder();
+    StringBuilder ppid = new StringBuilder();
 
-        try {
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(username.getBytes());
-            byte[] bytes = digest.digest();
+    try {
+      MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+      digest.update(username.getBytes());
+      byte[] bytes = digest.digest();
 
-            for (byte b : bytes) {
-                String hexed = Integer.toHexString(b & 0xFF);
+      for (byte b : bytes) {
+        StringBuilder hexed = new StringBuilder(Integer.toHexString(b & 0xFF));
 
-                while (hexed.length() < 2) {
-                    hexed = "0" + hexed;
-                }
-
-                ppid.append(hexed);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            Log.e(MainActivity.LOG_TAG, "Could not locate MD5 Digest.");
+        while (hexed.length() < 2) {
+          hexed.insert(0, "0");
         }
 
-        return ppid.toString();
+        ppid.append(hexed);
+      }
+    } catch (NoSuchAlgorithmException e) {
+      Log.e(MainActivity.LOG_TAG, "Could not locate MD5 Digest.");
     }
+
+    return ppid.toString();
+  }
 }

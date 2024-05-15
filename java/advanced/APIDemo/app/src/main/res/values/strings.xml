@@ -121,5 +121,6 @@
     <string name="customcontrols_view_mute" translatable="false">Mute</string>
     <string name="customcontrols_view_play" translatable="false">Play</string>
     <string name="customcontrols_view_video_status" translatable="false">Video Status: </string>
+  <string name="nav_header_explainer">Select an item to see a demo of an API feature. Code for each demo is self-contained it its own Fragment class.</string>
 
 </resources>

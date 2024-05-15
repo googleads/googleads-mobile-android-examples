@@ -20,13 +20,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.google.android.gms.ads.admanager.AppEventListener;
 
 /**
- * The {@link AdManagerAppEventsFragment} class demonstrates how to receive App Events from an Ad
+ * The {@link AdManagerAppEventsFragment} class demonstrates how to receive app events from an Ad
  * Manager creative.
  */
 public class AdManagerAppEventsFragment extends Fragment {
@@ -45,39 +47,39 @@ public class AdManagerAppEventsFragment extends Fragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    adView = view.findViewById(R.id.appevents_av_main);
 
-    adView = getView().findViewById(R.id.appevents_av_main);
+    adView.setAppEventListener(
+        new AppEventListener() {
+          @Override
+          public void onAppEvent(@NonNull String name, @NonNull String data) {
 
-    adView.setAppEventListener(new AppEventListener() {
-      @Override
-      public void onAppEvent(String name, String data) {
+            // The Ad Manager ad this fragment loads contains JavaScript code that sends App
+            // Events to this host application. This AppEventListener receives those events,
+            // and sets the background of the fragment to match the value sent in the app event.
+            // The ad will send "red" when it loads, "blue" five seconds later, and "green"
+            // if the user taps the ad.
 
-        // The Ad Manager ad this fragment loads contains JavaScript code that sends App
-        // Events to the host application. This AppEventListener receives those events,
-        // and sets the background of the fragment to match the data that comes in.
-        // The ad will send "red" when it loads, "blue" five seconds later, and "green"
-        // if the user taps the ad.
+            // This is just a demonstration, of course. Your apps can do much more interesting
+            // things with app events.
 
-        // This is just a demonstration, of course. Your apps can do much more interesting
-        // things with App Events.
-
-        if (name.equals("color")) {
-          switch (data) {
-            case "blue":
-              rootView.setBackgroundColor(Color.rgb(0xD0, 0xD0, 0xFF));
-              break;
-            case "red":
-              rootView.setBackgroundColor(Color.rgb(0xFF, 0xD0, 0xD0));
-              break;
-            case "green":
-              rootView.setBackgroundColor(Color.rgb(0xD0, 0xFF, 0xD0));
-              break;
+            if (name.equals("color")) {
+              switch (data) {
+                case "blue":
+                  rootView.setBackgroundColor(Color.rgb(0xD0, 0xD0, 0xFF));
+                  break;
+                case "red":
+                  rootView.setBackgroundColor(Color.rgb(0xFF, 0xD0, 0xD0));
+                  break;
+                case "green":
+                  rootView.setBackgroundColor(Color.rgb(0xD0, 0xFF, 0xD0));
+                  break;
+              }
+            }
           }
-        }
-      }
-    });
+        });
 
     AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
     adView.loadAd(adRequest);
