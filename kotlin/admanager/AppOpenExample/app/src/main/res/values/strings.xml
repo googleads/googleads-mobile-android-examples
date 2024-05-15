@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">AdMob App Open Example</string>
+    <string name="app_name" translatable="false">Ad Manager App Open Example</string>
     <string name="main_activity" translatable="false">Main Activity</string>
     <string name="main_activity_text" translatable="false">
         Leave and switch back to the app to see the ad.

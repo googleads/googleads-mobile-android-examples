@@ -6,9 +6,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
 import com.google.android.gms.ads.AdError
@@ -24,24 +23,28 @@ private const val LOG_TAG = "MyApplication"
 
 /** Application class that initializes, loads and show ads when activities change states. */
 class MyApplication :
-  MultiDexApplication(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
+  MultiDexApplication(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
 
   private lateinit var appOpenAdManager: AppOpenAdManager
   private var currentActivity: Activity? = null
 
-  override fun onCreate() {
-    super.onCreate()
+  override fun onCreate(owner: LifecycleOwner) {
+    super<DefaultLifecycleObserver>.onCreate(owner)
     registerActivityLifecycleCallbacks(this)
 
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     appOpenAdManager = AppOpenAdManager()
   }
 
-  /** LifecycleObserver method that shows the app open ad when the app moves to foreground. */
-  @OnLifecycleEvent(Lifecycle.Event.ON_START)
-  fun onMoveToForeground() {
-    // Show the ad (if available) when the app moves to foreground.
-    currentActivity?.let { appOpenAdManager.showAdIfAvailable(it) }
+  /**
+   * DefaultLifecycleObserver method that shows the app open ad when the app moves to foreground.
+   */
+  override fun onStart(owner: LifecycleOwner) {
+    super.onStart(owner)
+    currentActivity?.let {
+      // Show the ad (if available) when the app moves to foreground.
+      appOpenAdManager.showAdIfAvailable(it)
+    }
   }
 
   /** ActivityLifecycleCallback methods. */
@@ -151,7 +154,7 @@ class MyApplication :
             Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.message)
             Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show()
           }
-        }
+        },
       )
     }
 
@@ -182,7 +185,7 @@ class MyApplication :
           override fun onShowAdComplete() {
             // Empty because the user will go back to the activity that shows the ad.
           }
-        }
+        },
       )
     }
 
