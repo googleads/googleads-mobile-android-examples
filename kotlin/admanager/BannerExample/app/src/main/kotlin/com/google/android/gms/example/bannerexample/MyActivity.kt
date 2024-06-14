@@ -33,16 +33,17 @@ import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.google.android.gms.example.bannerexample.databinding.ActivityMyBinding
 import java.util.concurrent.atomic.AtomicBoolean
-
-private const val TAG = "MainActivity"
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /** Main Activity. Inflates main activity xml and child fragments. */
 class MyActivity : AppCompatActivity() {
 
   private val isMobileAdsInitializeCalled = AtomicBoolean(false)
   private val initialLayoutComplete = AtomicBoolean(false)
+  private var adView: AdManagerAdView? = null
   private lateinit var binding: ActivityMyBinding
-  private lateinit var adView: AdManagerAdView
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
   // Get the ad size with screen width.
@@ -65,9 +66,6 @@ class MyActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     binding = ActivityMyBinding.inflate(layoutInflater)
     setContentView(binding.root)
-
-    adView = AdManagerAdView(this)
-    binding.adViewContainer.addView(adView)
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -101,31 +99,23 @@ class MyActivity : AppCompatActivity() {
         loadBanner()
       }
     }
-
-    // Set your test devices. Check your logcat output for the hashed device ID to
-    // get test ads on a physical device. e.g.
-    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
-    // to get test ads on this device."
-    MobileAds.setRequestConfiguration(
-      RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
-    )
   }
 
   /** Called when leaving the activity. */
   public override fun onPause() {
-    adView.pause()
+    adView?.pause()
     super.onPause()
   }
 
   /** Called when returning to the activity. */
   public override fun onResume() {
     super.onResume()
-    adView.resume()
+    adView?.resume()
   }
 
   /** Called before the activity is destroyed. */
   public override fun onDestroy() {
-    adView.destroy()
+    adView?.destroy()
     super.onDestroy()
   }
 
@@ -160,14 +150,18 @@ class MyActivity : AppCompatActivity() {
   }
 
   private fun loadBanner() {
-    // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
-    adView.adUnitId = "/6499/example/banner"
+    // Create a new ad view.
+    val adView = AdManagerAdView(this)
+    adView.adUnitId = AD_UNIT_ID
     adView.setAdSize(adSize)
+    this.adView = adView
 
-    // Create an ad request.
-    val adRequest = AdManagerAdRequest.Builder().build()
+    // Replace ad container with new ad view.
+    binding.adViewContainer.removeAllViews()
+    binding.adViewContainer.addView(adView)
 
     // Start loading the ad in the background.
+    val adRequest = AdManagerAdRequest.Builder().build()
     adView.loadAd(adRequest)
   }
 
@@ -176,12 +170,34 @@ class MyActivity : AppCompatActivity() {
       return
     }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this) {}
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
 
-    // Load an ad.
-    if (initialLayoutComplete.get()) {
-      loadBanner()
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@MyActivity) {}
+
+      runOnUiThread {
+        // Load an ad on the main thread.
+        if (initialLayoutComplete.get()) {
+          loadBanner()
+        }
+      }
     }
+  }
+
+  companion object {
+    // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
+    private const val AD_UNIT_ID = "/21775744923/example/banner"
+    private const val TAG = "MainActivity"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }
