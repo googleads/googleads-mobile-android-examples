@@ -19,17 +19,25 @@ import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Main Activity. Inflates main activity xml. */
 @SuppressLint("SetTextI18n")
 public class MainActivity extends AppCompatActivity {
+
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
+
   private static final String AD_UNIT_ID = "/6499/example/rewarded-video";
   private static final long COUNTER_TIME = 10;
   private static final int GAME_OVER_REWARD = 1;
@@ -94,11 +102,7 @@ public class MainActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             startGame();
-            if (
-                rewardedAd != null
-                    && !isLoading
-                    && googleMobileAdsConsentManager.canRequestAds()
-            ) {
+            if (rewardedAd != null && !isLoading && googleMobileAdsConsentManager.canRequestAds()) {
               loadRewardedAd();
             }
           }
@@ -319,14 +323,20 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this, new OnInitializationCompleteListener() {
-      @Override
-      public void onInitializationComplete(InitializationStatus initializationStatus) {
-      }
-    });
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
 
-    // Load an ad.
-    loadRewardedAd();
+    new Thread(
+            () -> {
+              // Initialize the Google Mobile Ads SDK on a background thread.
+              MobileAds.initialize(this, initializationStatus -> {});
+
+              // Load an ad on the main thread.
+              runOnUiThread(() -> loadRewardedAd());
+            })
+        .start();
   }
 }

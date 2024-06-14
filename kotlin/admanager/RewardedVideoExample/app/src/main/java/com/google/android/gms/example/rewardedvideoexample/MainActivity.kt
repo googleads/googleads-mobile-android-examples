@@ -14,16 +14,15 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.example.rewardedvideoexample.databinding.ActivityMainBinding
 import java.util.concurrent.atomic.AtomicBoolean
-
-const val AD_UNIT_ID = "/6499/example/rewarded-video"
-const val COUNTER_TIME = 10L
-const val GAME_OVER_REWARD = 1
-const val TAG = "MainActivity"
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -165,7 +164,7 @@ class MainActivity : AppCompatActivity() {
             rewardedAd = ad
             isLoading = false
           }
-        }
+        },
       )
     }
   }
@@ -244,7 +243,7 @@ class MainActivity : AppCompatActivity() {
           val rewardType = rewardItem.type
           addCoins(rewardAmount)
           Log.d("TAG", "User earned the reward.")
-        }
+        },
       )
     }
   }
@@ -254,9 +253,33 @@ class MainActivity : AppCompatActivity() {
       return
     }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this) {}
-    // Load an ad.
-    loadRewardedAd()
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
+
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@MainActivity) {}
+      runOnUiThread {
+        // Load an ad on the main thread.
+        loadRewardedAd()
+      }
+    }
+  }
+
+  companion object {
+    // This is an ad unit ID for a test ad. Replace with your own rewarded ad unit ID.
+    private const val AD_UNIT_ID = "/6499/example/rewarded-video"
+    private const val COUNTER_TIME = 10L
+    private const val GAME_OVER_REWARD = 1
+    private const val TAG = "MainActivity"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }
