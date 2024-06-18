@@ -1,0 +1,14 @@
+<resources>
+  <string name="app_name">Jetpack Compose Demo</string>
+  <string name="main_title">Google Mobile Ads Sample</string>
+  <string name="mobileads_uninitialized">Google Mobile Ads SDK is not initialized.</string>
+  <string name="mobileads_consentRequired">Google Mobile Ads SDK requires consent.</string>
+  <string name="mobileads_consentObtained">Google Mobile Ads SDK obtained consent.</string>
+  <string name="mobileads_consentError">Google Mobile Ads SDK has a consent error.</string>
+  <string name="mobileads_consentFormError">Google Mobile Ads SDK has a consent form error.</string>
+  <string name="mobileads_initialized">Google Mobile Ads SDK is initialized.</string>
+  <string name="consent_show">Show Privacy Options Form</string>
+  <string name="adinspector_error">Failed to open ad inspector.</string>
+  <string name="adinspector_error_format">Failed to open ad inspector with error: %1$s</string>
+  <string name="adinspector">Ad Inspector</string>
+</resources>
