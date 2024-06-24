@@ -152,7 +152,10 @@ class MyActivity : AppCompatActivity() {
   private fun loadBanner() {
     // Create a new ad view.
     val adView = AdManagerAdView(this)
-    adView.adUnitId = AD_UNIT_ID
+
+    // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
+    adView.adUnitId = "/21775744923/example/banner"
+
     adView.setAdSize(adSize)
     this.adView = adView
 
