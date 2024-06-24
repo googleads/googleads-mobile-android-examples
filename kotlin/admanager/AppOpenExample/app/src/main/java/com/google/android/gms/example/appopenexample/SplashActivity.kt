@@ -7,16 +7,12 @@ import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
-
-/**
- * Number of milliseconds to count down before showing the app open ad. This simulates the time
- * needed to load the app.
- */
-private const val COUNTER_TIME_MILLISECONDS = 5000L
-
-private const val LOG_TAG = "SplashActivity"
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /** Splash Activity that inflates splash activity xml. */
 class SplashActivity : AppCompatActivity() {
@@ -85,7 +81,7 @@ class SplashActivity : AppCompatActivity() {
                   startMainActivity()
                 }
               }
-            }
+            },
           )
         }
       }
@@ -97,16 +93,39 @@ class SplashActivity : AppCompatActivity() {
       return
     }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this) {}
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
 
-    // Load an ad.
-    (application as MyApplication).loadAd(this)
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@SplashActivity) {}
+      runOnUiThread {
+        // Load an ad on the main thread.
+        (application as MyApplication).loadAd(this@SplashActivity)
+      }
+    }
   }
 
   /** Start the MainActivity. */
   fun startMainActivity() {
     val intent = Intent(this, MainActivity::class.java)
     startActivity(intent)
+  }
+
+  companion object {
+    // Number of milliseconds to count down before showing the app open ad. This simulates the time
+    // needed to load the app.
+    private const val COUNTER_TIME_MILLISECONDS = 5000L
+
+    private const val LOG_TAG = "SplashActivity"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

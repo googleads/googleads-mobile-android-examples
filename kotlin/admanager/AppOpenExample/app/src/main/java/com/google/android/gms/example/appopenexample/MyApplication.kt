@@ -18,9 +18,6 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import java.util.Date
 
-private const val AD_UNIT_ID = "/6499/example/app-open"
-private const val LOG_TAG = "MyApplication"
-
 /** Application class that initializes, loads and show ads when activities change states. */
 class MyApplication :
   MultiDexApplication(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
@@ -28,8 +25,8 @@ class MyApplication :
   private lateinit var appOpenAdManager: AppOpenAdManager
   private var currentActivity: Activity? = null
 
-  override fun onCreate(owner: LifecycleOwner) {
-    super<DefaultLifecycleObserver>.onCreate(owner)
+  override fun onCreate() {
+    super<MultiDexApplication>.onCreate()
     registerActivityLifecycleCallbacks(this)
 
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -252,5 +249,11 @@ class MyApplication :
       isShowingAd = true
       appOpenAd?.show(activity)
     }
+  }
+
+  companion object {
+    // This is an ad unit ID for a test ad. Replace with your own app open ad unit ID.
+    private const val AD_UNIT_ID = "/6499/example/app-open"
+    private const val LOG_TAG = "MyApplication"
   }
 }

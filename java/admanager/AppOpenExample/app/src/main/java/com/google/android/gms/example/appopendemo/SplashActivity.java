@@ -24,12 +24,22 @@ import android.util.Log;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.example.appopendemo.MyApplication.OnShowAdCompleteListener;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Splash Activity that inflates splash activity xml. */
 public class SplashActivity extends AppCompatActivity {
+
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
+
   private static final String LOG_TAG = "SplashActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
@@ -59,8 +69,7 @@ public class SplashActivity extends AppCompatActivity {
             // Consent not obtained in current session.
             Log.w(
                 LOG_TAG,
-                String.format(
-                    "%s: %s", consentError.getErrorCode(), consentError.getMessage()));
+                String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
           }
 
           if (googleMobileAdsConsentManager.canRequestAds()) {
@@ -122,12 +131,25 @@ public class SplashActivity extends AppCompatActivity {
       return;
     }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this);
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
 
-    // Load an ad.
-    Application application = getApplication();
-    ((MyApplication) application).loadAd(this);
+    new Thread(
+            () -> {
+              // Initialize the Google Mobile Ads SDK on a background thread.
+              MobileAds.initialize(this, initializationStatus -> {});
+
+              // Load an ad on the main thread.
+              runOnUiThread(
+                  () -> {
+                    Application application = getApplication();
+                    ((MyApplication) application).loadAd(this);
+                  });
+            })
+        .start();
   }
 
   /** Start the MainActivity. */
