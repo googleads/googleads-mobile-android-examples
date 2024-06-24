@@ -25,9 +25,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MediaAspectRatio;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
+import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -35,11 +37,20 @@ import java.util.concurrent.LinkedBlockingQueue;
  * production use case.
  */
 public class NativeAdsPool {
+
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
+
   private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/7342230711";
 
   private final Context context;
   private LinkedBlockingQueue<NativeAd> nativeAdsPool = null;
   private AdLoader adLoader;
+
   /** Listen to the refresh event from pool to handle new feeds. */
   public interface OnPoolRefreshedListener {
     public void onPoolRefreshed();
@@ -51,7 +62,19 @@ public class NativeAdsPool {
   }
 
   public void init(final OnPoolRefreshedListener listener) {
-    MobileAds.initialize(this.context);
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
+
+    new Thread(
+            () -> {
+              // Initialize the Google Mobile Ads SDK on a background thread.
+              MobileAds.initialize(this.context, initializationStatus -> {});
+            })
+        .start();
+
     AdLoader.Builder builder = new AdLoader.Builder(this.context, ADMOB_AD_UNIT_ID);
     VideoOptions videoOptions =
         new VideoOptions.Builder().setStartMuted(false).setCustomControlsRequested(true).build();

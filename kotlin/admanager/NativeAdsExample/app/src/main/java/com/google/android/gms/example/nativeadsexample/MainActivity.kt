@@ -28,6 +28,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.VideoController
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
@@ -42,10 +43,9 @@ import com.google.android.gms.example.nativeadsexample.databinding.AdSimpleCusto
 import com.google.android.gms.example.nativeadsexample.databinding.AdUnifiedBinding
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-
-private const val TAG = "MainActivity"
-const val AD_MANAGER_AD_UNIT_ID = "/6499/example/native"
-const val SIMPLE_TEMPLATE_ID = "10063170"
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /** A simple activity class that displays native ad formats. */
 class MainActivity : AppCompatActivity() {
@@ -326,7 +326,7 @@ class MainActivity : AppCompatActivity() {
     }
     mainActivityBinding.refreshButton.isEnabled = true
 
-    val builder = AdLoader.Builder(this, AD_MANAGER_AD_UNIT_ID)
+    val builder = AdLoader.Builder(this, AD_UNIT_ID)
     if (requestNativeAds) {
       builder.forNativeAd { nativeAd ->
         // If this callback occurs after the activity is destroyed, you must call
@@ -422,13 +422,21 @@ class MainActivity : AppCompatActivity() {
       return
     }
 
-    // Initialize the Mobile Ads SDK.
-    MobileAds.initialize(this) { initializationStatus ->
-      // Load an ad.
-      refreshAd(
-        mainActivityBinding.nativeadsCheckbox.isChecked,
-        mainActivityBinding.customtemplateCheckbox.isChecked,
-      )
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
+
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@MainActivity) {}
+      runOnUiThread {
+        // Load an ad on the main thread.
+        refreshAd(
+          mainActivityBinding.nativeadsCheckbox.isChecked,
+          mainActivityBinding.customtemplateCheckbox.isChecked,
+        )
+      }
     }
   }
 
@@ -436,5 +444,19 @@ class MainActivity : AppCompatActivity() {
     currentNativeAd?.destroy()
     currentCustomFormatAd?.destroy()
     super.onDestroy()
+  }
+
+  companion object {
+    // This is an ad unit ID for a test ad. Replace with your own native ad unit ID.
+    private const val AD_UNIT_ID = "/6499/example/native"
+    private const val SIMPLE_TEMPLATE_ID = "10063170"
+    private const val TAG = "MainActivity"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

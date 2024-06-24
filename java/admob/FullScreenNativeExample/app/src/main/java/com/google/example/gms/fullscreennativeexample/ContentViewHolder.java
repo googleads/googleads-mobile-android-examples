@@ -16,8 +16,6 @@
 
 package com.google.example.gms.fullscreennativeexample;
 
-import static android.content.ContentValues.TAG;
-
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +40,7 @@ public class ContentViewHolder extends FeedViewHolder {
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            Log.d(TAG, "Element " + getAbsoluteAdapterPosition() + " clicked.");
+            Log.d(VideoFeedsActivity.TAG, "Element " + getAbsoluteAdapterPosition() + " clicked.");
           }
         });
 
@@ -58,7 +56,7 @@ public class ContentViewHolder extends FeedViewHolder {
             new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                Log.d(TAG, "Overlay clicked.");
+                Log.d(VideoFeedsActivity.TAG, "Overlay clicked.");
                 if (player.isPlaying()) {
                   player.pause();
                 } else {
@@ -90,13 +88,13 @@ public class ContentViewHolder extends FeedViewHolder {
   public void attach() {
     getPlayer().prepare();
     getPlayer().play();
-    Log.d(TAG, "Playing " + getLayoutPosition());
+    Log.d(VideoFeedsActivity.TAG, "Playing " + getLayoutPosition());
   }
 
   /** Stops playing the video when the ViewHolder is no longer visible. */
   @Override
   public void detach() {
     getPlayer().stop();
-    Log.d(TAG, "Stopping # " + getLayoutPosition());
+    Log.d(VideoFeedsActivity.TAG, "Stopping # " + getLayoutPosition());
   }
 }

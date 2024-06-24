@@ -26,8 +26,6 @@ import java.util.ArrayList;
 
 /** Provide views to RecyclerView with data from mDataSet. */
 public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
-  private static final String TAG = "FeedAdapter";
-
   private final ArrayList<FeedItem> mDataSet = new ArrayList<>();
 
   /** Base class of the feed instance. */

@@ -37,119 +37,119 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * A simple activity class that displays native ad formats.
- */
+/** A simple activity class that displays native ad formats. */
 @SuppressLint("SetTextI18n")
 public class MainActivity extends AppCompatActivity {
 
-    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
-    private static final String TAG = "MainActivity";
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
-    private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
-    private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
-    private Button refresh;
-    private CheckBox startVideoAdsMuted;
-    private TextView videoStatus;
-    private NativeAd nativeAd;
+  private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
+  private static final String TAG = "MainActivity";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+  private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
+  private Button refresh;
+  private CheckBox startVideoAdsMuted;
+  private TextView videoStatus;
+  private NativeAd nativeAd;
 
-        refresh = findViewById(R.id.btn_refresh);
-        startVideoAdsMuted = findViewById(R.id.cb_start_muted);
-        videoStatus = findViewById(R.id.tv_video_status);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
-        // Log the Mobile Ads SDK version.
-        Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
+    refresh = findViewById(R.id.btn_refresh);
+    startVideoAdsMuted = findViewById(R.id.cb_start_muted);
+    videoStatus = findViewById(R.id.tv_video_status);
 
-        googleMobileAdsConsentManager =
-            GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
-        googleMobileAdsConsentManager.gatherConsent(
-            this,
-            consentError -> {
-                if (consentError != null) {
-                    // Consent not obtained in current session.
-                    Log.w(
-                        TAG,
-                        String.format(
-                            "%s: %s",
-                            consentError.getErrorCode(),
-                            consentError.getMessage()));
-                }
+    // Log the Mobile Ads SDK version.
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 
-                if (googleMobileAdsConsentManager.canRequestAds()) {
-                    refresh.setVisibility(View.VISIBLE);
-                    initializeMobileAdsSdk();
-                }
+    googleMobileAdsConsentManager =
+        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
+    googleMobileAdsConsentManager.gatherConsent(
+        this,
+        consentError -> {
+          if (consentError != null) {
+            // Consent not obtained in current session.
+            Log.w(
+                TAG,
+                String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
+          }
 
-                if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
-                    // Regenerate the options menu to include a privacy setting.
-                    invalidateOptionsMenu();
-                }
-            });
-
-        // This sample attempts to load ads using consent obtained in the previous session.
-        if (googleMobileAdsConsentManager.canRequestAds()) {
+          if (googleMobileAdsConsentManager.canRequestAds()) {
+            refresh.setVisibility(View.VISIBLE);
             initializeMobileAdsSdk();
-        }
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View unusedView) {
-                if (googleMobileAdsConsentManager.canRequestAds()) {
-                    refreshAd();
-                }
-            }
+          }
+
+          if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
+            // Regenerate the options menu to include a privacy setting.
+            invalidateOptionsMenu();
+          }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_menu, menu);
-        MenuItem moreMenu = menu.findItem(R.id.action_more);
-        moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
-        return true;
+    // This sample attempts to load ads using consent obtained in the previous session.
+    if (googleMobileAdsConsentManager.canRequestAds()) {
+      initializeMobileAdsSdk();
     }
+    refresh.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View unusedView) {
+            if (googleMobileAdsConsentManager.canRequestAds()) {
+              refreshAd();
+            }
+          }
+        });
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        View menuItemView = findViewById(item.getItemId());
-        PopupMenu popup = new PopupMenu(this, menuItemView);
-        popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-        popup.show();
-        popup.setOnMenuItemClickListener(
-            popupMenuItem -> {
-                if (popupMenuItem.getItemId() == R.id.privacy_settings) {
-                    // Handle changes to user consent.
-                    googleMobileAdsConsentManager.showPrivacyOptionsForm(
-                    this,
-                        formError -> {
-                            if (formError != null) {
-                                Toast.makeText(
-                                    this,
-                                    formError.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                            }
-                    });
-                    return true;
-                }
-                return false;
-            });
-        return super.onOptionsItemSelected(item);
-    }
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.action_menu, menu);
+    MenuItem moreMenu = menu.findItem(R.id.action_more);
+    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    View menuItemView = findViewById(item.getItemId());
+    PopupMenu popup = new PopupMenu(this, menuItemView);
+    popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup.show();
+    popup.setOnMenuItemClickListener(
+        popupMenuItem -> {
+          if (popupMenuItem.getItemId() == R.id.privacy_settings) {
+            // Handle changes to user consent.
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(
+                this,
+                formError -> {
+                  if (formError != null) {
+                    Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
+            return true;
+          }
+          return false;
+        });
+    return super.onOptionsItemSelected(item);
+  }
 
   /**
    * Populates a {@link NativeAdView} object with data from a given {@link NativeAd}.
@@ -158,79 +158,77 @@ public class MainActivity extends AppCompatActivity {
    * @param adView the view to be populated
    */
   private void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
-        // Set the media view.
-        adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
+    // Set the media view.
+    adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
 
-        // Set other ad assets.
-        adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
-        adView.setBodyView(adView.findViewById(R.id.ad_body));
-        adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
-        adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-        adView.setPriceView(adView.findViewById(R.id.ad_price));
-        adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
-        adView.setStoreView(adView.findViewById(R.id.ad_store));
-        adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
+    // Set other ad assets.
+    adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
+    adView.setBodyView(adView.findViewById(R.id.ad_body));
+    adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
+    adView.setIconView(adView.findViewById(R.id.ad_app_icon));
+    adView.setPriceView(adView.findViewById(R.id.ad_price));
+    adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
+    adView.setStoreView(adView.findViewById(R.id.ad_store));
+    adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
 
     // The headline and mediaContent are guaranteed to be in every NativeAd.
     ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
-        adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+    adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
 
     // These assets aren't guaranteed to be in every NativeAd, so it's important to
     // check before trying to display them.
     if (nativeAd.getBody() == null) {
-            adView.getBodyView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getBodyView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
-        }
+      adView.getBodyView().setVisibility(View.INVISIBLE);
+    } else {
+      adView.getBodyView().setVisibility(View.VISIBLE);
+      ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+    }
 
-        if (nativeAd.getCallToAction() == null) {
-            adView.getCallToActionView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getCallToActionView().setVisibility(View.VISIBLE);
-            ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
-        }
+    if (nativeAd.getCallToAction() == null) {
+      adView.getCallToActionView().setVisibility(View.INVISIBLE);
+    } else {
+      adView.getCallToActionView().setVisibility(View.VISIBLE);
+      ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+    }
 
-        if (nativeAd.getIcon() == null) {
-            adView.getIconView().setVisibility(View.GONE);
-        } else {
-            ((ImageView) adView.getIconView()).setImageDrawable(
-                nativeAd.getIcon().getDrawable());
-            adView.getIconView().setVisibility(View.VISIBLE);
-        }
+    if (nativeAd.getIcon() == null) {
+      adView.getIconView().setVisibility(View.GONE);
+    } else {
+      ((ImageView) adView.getIconView()).setImageDrawable(nativeAd.getIcon().getDrawable());
+      adView.getIconView().setVisibility(View.VISIBLE);
+    }
 
-        if (nativeAd.getPrice() == null) {
-            adView.getPriceView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getPriceView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
-        }
+    if (nativeAd.getPrice() == null) {
+      adView.getPriceView().setVisibility(View.INVISIBLE);
+    } else {
+      adView.getPriceView().setVisibility(View.VISIBLE);
+      ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
+    }
 
-        if (nativeAd.getStore() == null) {
-            adView.getStoreView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getStoreView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
-        }
+    if (nativeAd.getStore() == null) {
+      adView.getStoreView().setVisibility(View.INVISIBLE);
+    } else {
+      adView.getStoreView().setVisibility(View.VISIBLE);
+      ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
+    }
 
-        if (nativeAd.getStarRating() == null) {
-            adView.getStarRatingView().setVisibility(View.INVISIBLE);
-        } else {
-            ((RatingBar) adView.getStarRatingView())
-                .setRating(nativeAd.getStarRating().floatValue());
-            adView.getStarRatingView().setVisibility(View.VISIBLE);
-        }
+    if (nativeAd.getStarRating() == null) {
+      adView.getStarRatingView().setVisibility(View.INVISIBLE);
+    } else {
+      ((RatingBar) adView.getStarRatingView()).setRating(nativeAd.getStarRating().floatValue());
+      adView.getStarRatingView().setVisibility(View.VISIBLE);
+    }
 
-        if (nativeAd.getAdvertiser() == null) {
-            adView.getAdvertiserView().setVisibility(View.INVISIBLE);
-        } else {
-            ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
-            adView.getAdvertiserView().setVisibility(View.VISIBLE);
-        }
+    if (nativeAd.getAdvertiser() == null) {
+      adView.getAdvertiserView().setVisibility(View.INVISIBLE);
+    } else {
+      ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
+      adView.getAdvertiserView().setVisibility(View.VISIBLE);
+    }
 
-        // This method tells the Google Mobile Ads SDK that you have finished populating your
-        // native ad view with this native ad.
-        adView.setNativeAd(nativeAd);
+    // This method tells the Google Mobile Ads SDK that you have finished populating your
+    // native ad view with this native ad.
+    adView.setNativeAd(nativeAd);
 
     // Get the video controller for the ad. One will always be provided, even if the ad doesn't
     // have a video asset.
@@ -239,34 +237,34 @@ public class MainActivity extends AppCompatActivity {
     // Updates the UI to say whether or not this ad has a video asset.
     if (nativeAd.getMediaContent() != null && nativeAd.getMediaContent().hasVideoContent()) {
 
-            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
-            // VideoController will call methods on this object when events occur in the video
-            // lifecycle.
-            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-                @Override
-                public void onVideoEnd() {
-                    // Publishers should allow native ads to complete video playback before
-                    // refreshing or replacing them with another ad in the same UI location.
-                    refresh.setEnabled(true);
-                    videoStatus.setText("Video status: Video playback has ended.");
-                    super.onVideoEnd();
-                }
-            });
-        } else {
-            videoStatus.setText("Video status: Ad does not contain a video asset.");
-            refresh.setEnabled(true);
-        }
+      // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+      // VideoController will call methods on this object when events occur in the video
+      // lifecycle.
+      vc.setVideoLifecycleCallbacks(
+          new VideoController.VideoLifecycleCallbacks() {
+            @Override
+            public void onVideoEnd() {
+              // Publishers should allow native ads to complete video playback before
+              // refreshing or replacing them with another ad in the same UI location.
+              refresh.setEnabled(true);
+              videoStatus.setText("Video status: Video playback has ended.");
+              super.onVideoEnd();
+            }
+          });
+    } else {
+      videoStatus.setText("Video status: Ad does not contain a video asset.");
+      refresh.setEnabled(true);
     }
+  }
 
-    /**
-     * Creates a request for a new native ad based on the boolean parameters and calls the
-     * corresponding "populate" method when one is successfully returned.
-     *
-     */
-    private void refreshAd() {
-        refresh.setEnabled(false);
+  /**
+   * Creates a request for a new native ad based on the boolean parameters and calls the
+   * corresponding "populate" method when one is successfully returned.
+   */
+  private void refreshAd() {
+    refresh.setEnabled(false);
 
-        AdLoader.Builder builder = new AdLoader.Builder(this, ADMOB_AD_UNIT_ID);
+    AdLoader.Builder builder = new AdLoader.Builder(this, ADMOB_AD_UNIT_ID);
 
     builder.forNativeAd(
         new NativeAd.OnNativeAdLoadedListener() {
@@ -299,13 +297,12 @@ public class MainActivity extends AppCompatActivity {
           }
         });
 
-        VideoOptions videoOptions =
-            new VideoOptions.Builder().setStartMuted(startVideoAdsMuted.isChecked()).build();
+    VideoOptions videoOptions =
+        new VideoOptions.Builder().setStartMuted(startVideoAdsMuted.isChecked()).build();
 
-        NativeAdOptions adOptions =
-            new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
+    NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
 
-        builder.withNativeAdOptions(adOptions);
+    builder.withNativeAdOptions(adOptions);
 
     AdLoader adLoader =
         builder
@@ -330,33 +327,38 @@ public class MainActivity extends AppCompatActivity {
                 })
             .build();
 
-        adLoader.loadAd(new AdRequest.Builder().build());
+    adLoader.loadAd(new AdRequest.Builder().build());
 
-        videoStatus.setText("");
+    videoStatus.setText("");
+  }
+
+  private void initializeMobileAdsSdk() {
+    if (isMobileAdsInitializeCalled.getAndSet(true)) {
+      return;
     }
 
-    private void initializeMobileAdsSdk() {
-        if (isMobileAdsInitializeCalled.getAndSet(true)) {
-            return;
-        }
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
 
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(
-        this,
-            new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                    // Load an ad.
-                    refreshAd();
-                }
-            });
-    }
+    new Thread(
+            () -> {
+              // Initialize the Google Mobile Ads SDK on a background thread.
+              MobileAds.initialize(this, initializationStatus -> {});
 
-    @Override
-    protected void onDestroy() {
-        if (nativeAd != null) {
-            nativeAd.destroy();
-        }
-        super.onDestroy();
+              // Load an ad on the main thread.
+              runOnUiThread(() -> refreshAd());
+            })
+        .start();
+  }
+
+  @Override
+  protected void onDestroy() {
+    if (nativeAd != null) {
+      nativeAd.destroy();
     }
+    super.onDestroy();
+  }
 }
