@@ -165,6 +165,7 @@ public class MyActivity extends AppCompatActivity {
   }
 
   private void loadBanner() {
+    // [START create_ad_view]
     // Create a new ad view.
     adView = new AdManagerAdView(this);
     adView.setAdUnitId(AD_UNIT);
@@ -173,10 +174,13 @@ public class MyActivity extends AppCompatActivity {
     // Replace ad container with new ad view.
     adContainerView.removeAllViews();
     adContainerView.addView(adView);
+    // [END create_ad_view]
 
+    // [START load_ad]
     // Start loading the ad in the background.
     AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
     adView.loadAd(adRequest);
+    // [END load_ad]
   }
 
   private void initializeMobileAdsSdk() {

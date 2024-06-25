@@ -150,6 +150,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun loadBanner() {
+    // [START create_ad_view]
     // Create a new ad view.
     val adView = AdView(this)
     adView.adUnitId = AD_UNIT_ID
@@ -159,10 +160,13 @@ class MainActivity : AppCompatActivity() {
     // Replace ad container with new ad view.
     binding.adViewContainer.removeAllViews()
     binding.adViewContainer.addView(adView)
+    // [END create_ad_view]
 
+    // [START load_ad]
     // Start loading the ad in the background.
     val adRequest = AdRequest.Builder().build()
     adView.loadAd(adRequest)
+    // [END load_ad]
   }
 
   private fun initializeMobileAdsSdk() {
