@@ -1,11 +1,10 @@
-
-<com.google.android.gms.ads.nativead.NativeAdView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/native_ad_view"
-    android:scrollbars="none"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:scrollbars="none">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,53 +22,90 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <ImageView
-            android:id="@+id/ad_app_icon"
-            android:layout_width="@dimen/icon_layout_width"
-            android:layout_height="@dimen/icon_layout_height"
-            android:layout_marginTop="@dimen/icon_layout_margin_top"
-            android:layout_marginEnd="@dimen/icon_layout_margin_end"
-            android:adjustViewBounds="true"
-            android:background="@drawable/bg_circle"
-            android:outlineProvider="background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:id="@+id/ad_badge"
-            style="@style/AppTheme.AdAttribution"
-            android:layout_marginStart="@dimen/ad_badge_margin_start"
-            android:layout_marginBottom="@dimen/ad_badge_margin_bottom"
+            app:layout_constraintTop_toTopOf="parent"></com.google.android.gms.ads.nativead.MediaView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="#FAF9F9"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-        <TextView
-            android:id="@+id/ad_headline"
-            android:layout_width="@dimen/headline_width"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/headline_margin_start"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textSize="@dimen/headline_text_size"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/ad_badge"
-            app:layout_constraintStart_toEndOf="@id/ad_badge" />
-        <TextView
-            android:id="@+id/ad_body"
-            android:layout_width="@dimen/body_width"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textSize="@dimen/body_text_size"
-            app:layout_constraintStart_toStartOf="@id/ad_headline"
-            app:layout_constraintTop_toBottomOf="@id/ad_headline" />
-        <Button
-            android:id="@+id/ad_call_to_action"
-            android:layout_width="@dimen/cta_button_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cta_button_margin_top"
-            android:gravity="center"
-            android:textSize="@dimen/cta_button_text_size"
-            app:layout_constraintStart_toStartOf="@id/ad_badge"
-            app:layout_constraintTop_toBottomOf="@id/ad_badge" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/ad_app_icon"
+                android:layout_width="@dimen/icon_layout_width"
+                android:layout_height="@dimen/icon_layout_height"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="24dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/bg_circle"
+                android:outlineProvider="background"
+                app:layout_constraintBottom_toTopOf="@id/flow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal"
+                app:constraint_referenced_ids="ad_badge,ad_headline"
+                app:flow_horizontalStyle="spread_inside"
+                app:flow_verticalAlign="center"
+                app:flow_wrapMode="chain"
+                app:layout_constraintBottom_toTopOf="@id/ad_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/ad_badge"
+                style="@style/AppTheme.AdAttribution"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/ad_headline" />
+            <TextView
+                android:id="@+id/ad_headline"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:ellipsize="middle"
+                android:singleLine="false"
+                android:textSize="@dimen/headline_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/ad_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/ad_body"
+                android:layout_width="@dimen/body_width"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="@dimen/body_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/ad_call_to_action"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+            <Button
+                android:id="@+id/ad_call_to_action"
+                android:textStyle="bold"
+                android:layout_width="@dimen/cta_button_width"
+                android:layout_height="@dimen/cta_button_height"
+                android:layout_marginBottom="32dp"
+                android:background="#009688"
+                android:backgroundTint="#009688"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/cta_button_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.gms.ads.nativead.NativeAdView>

@@ -80,17 +80,14 @@ public class NativeAdsPool {
         new VideoOptions.Builder().setStartMuted(false).setCustomControlsRequested(true).build();
     NativeAdOptions adOptions =
         new NativeAdOptions.Builder()
-            .setMediaAspectRatio(MediaAspectRatio.ANY)
+            .setMediaAspectRatio(MediaAspectRatio.PORTRAIT)
             .setVideoOptions(videoOptions)
             .build();
     builder.withNativeAdOptions(adOptions);
     builder.forNativeAd(
-        new NativeAd.OnNativeAdLoadedListener() {
-          @Override
-          public void onNativeAdLoaded(final NativeAd nativeAd) {
-            push(nativeAd);
-            listener.onPoolRefreshed();
-          }
+        nativeAd -> {
+          push(nativeAd);
+          listener.onPoolRefreshed();
         });
     builder.withAdListener(
         new AdListener() {

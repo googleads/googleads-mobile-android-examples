@@ -16,8 +16,6 @@
 
 package com.google.example.gms.fullscreennativeexample;
 
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -56,9 +54,7 @@ public class AdsViewHolder extends FeedViewHolder {
     adView.setBodyView(adView.findViewById(R.id.ad_body));
     adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
     ImageView imageView = adView.findViewById(R.id.ad_app_icon);
-    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-      imageView.setClipToOutline(true);
-    }
+    imageView.setClipToOutline(true);
     adView.setIconView(imageView);
 
     // The headline and mediaContent are guaranteed to be in every NativeAd.

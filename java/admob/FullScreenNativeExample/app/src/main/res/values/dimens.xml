@@ -16,6 +16,7 @@
     <dimen name="body_width">300dp</dimen>
     <dimen name="body_text_size">12sp</dimen>
     <dimen name="cta_button_width">250dp</dimen>
+    <dimen name="cta_button_height">50dp</dimen>
     <dimen name="cta_button_margin_top">32dp</dimen>
     <dimen name="cta_button_text_size">12sp</dimen>
 </resources>
