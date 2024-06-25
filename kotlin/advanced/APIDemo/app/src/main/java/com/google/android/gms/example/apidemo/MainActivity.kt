@@ -8,8 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,8 +37,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       }
     onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
+
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@MainActivity) {}
+    }
 
     val toggle =
       ActionBarDrawerToggle(
@@ -77,5 +88,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   companion object {
     const val LOG_TAG = "APIDEMO"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

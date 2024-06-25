@@ -10,12 +10,21 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
+import java.util.Arrays;
 
 /** The main activity that controls the menu of the APIDemo app. */
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
+
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
   public static final String LOG_TAG = "API_DEMO";
   private ActivityMainBinding activityMainBinding;
@@ -28,8 +37,18 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this, initializationStatus -> {});
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
+
+    new Thread(
+            () -> {
+              // Initialize the Google Mobile Ads SDK on a background thread.
+              MobileAds.initialize(this, initializationStatus -> {});
+            })
+        .start();
 
     ActionBarDrawerToggle toggle =
         new ActionBarDrawerToggle(
