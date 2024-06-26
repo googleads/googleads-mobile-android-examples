@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">Jetpack Compose Demo</string>
+  <string name="main_title">Google Mobile Ads Sample</string>
+  <string name="main_status_uninitialized">Google Mobile Ads SDK is not initialized.</string>
+</resources>
