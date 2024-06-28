@@ -14,7 +14,7 @@ while IFS=' ' read -r -d $'\0'; do
   proj_dir=$(dirname "${REPLY}");
   echo "Project directory: $proj_dir"
   projects+=($proj_dir)
-done < <(find . -name "settings.gradle"  -print0)
+done < <(find . -name "settings.gradle*"  -print0)
 
 echo "There are ${#projects[@]} Android projects."
 echo "There are expected to be ${expected_projects_count} Android projects

@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
     googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
-        // Consent not obtained in current session.
+        // Consent not obtained in current session. [DELETE ME]
         Log.d(TAG, "${error.errorCode}: ${error.message}")
       }
 
