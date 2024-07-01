@@ -28,8 +28,8 @@ class MyApplication :
   private lateinit var appOpenAdManager: AppOpenAdManager
   private var currentActivity: Activity? = null
 
-  override fun onCreate(owner: LifecycleOwner) {
-    super<DefaultLifecycleObserver>.onCreate(owner)
+  override fun onCreate() {
+    super<MultiDexApplication>.onCreate()
     registerActivityLifecycleCallbacks(this)
 
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
