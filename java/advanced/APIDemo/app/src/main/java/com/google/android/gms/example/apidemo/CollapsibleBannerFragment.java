@@ -17,6 +17,7 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -70,6 +72,17 @@ public class CollapsibleBannerFragment extends Fragment implements OnGlobalLayou
     // Create an ad request.
     AdRequest adRequest =
         new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
+
+    // Listen to ad events.
+    adView.setAdListener(
+        new AdListener() {
+          @Override
+          public void onAdLoaded() {
+            Log.i(
+                MainActivity.LOG_TAG,
+                String.format("Ad loaded. adView.isCollapsible() is %b.", adView.isCollapsible()));
+          }
+        });
 
     // Start loading a collapsible banner ad.
     adView.loadAd(adRequest);

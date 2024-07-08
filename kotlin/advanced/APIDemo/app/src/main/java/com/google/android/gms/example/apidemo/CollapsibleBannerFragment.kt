@@ -17,12 +17,14 @@
 package com.google.android.gms.example.apidemo
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import com.google.ads.mediation.admob.AdMobAdapter
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -65,6 +67,17 @@ class CollapsibleBannerFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutLis
     // Create an ad request.
     val adRequest =
       AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter::class.java, extras).build()
+
+    // Listen to ad events.
+    adView.adListener =
+      object : AdListener() {
+        override fun onAdLoaded() {
+          Log.i(
+            MainActivity.LOG_TAG,
+            "Ad loaded. adView.isCollapsible() is ${adView.isCollapsible}.",
+          )
+        }
+      }
 
     // Start loading a collapsible banner ad.
     adView.loadAd(adRequest)
