@@ -56,17 +56,14 @@ public final class GoogleMobileAdsConsentManager {
   public void gatherConsent(
       Activity activity, OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
     // For testing purposes, you can force a DebugGeography of EEA or NOT_EEA.
-    ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(activity)
-        // .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-        // Check your logcat output for the hashed device ID e.g.
-        // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345")" to use
-        // the debug functionality.
-        .addTestDeviceHashedId("TEST-DEVICE-HASHED-ID")
-        .build();
+    ConsentDebugSettings debugSettings =
+        new ConsentDebugSettings.Builder(activity)
+            // .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+            .addTestDeviceHashedId(MyApplication.TEST_DEVICE_HASHED_ID)
+            .build();
 
-    ConsentRequestParameters params = new ConsentRequestParameters.Builder()
-        .setConsentDebugSettings(debugSettings)
-        .build();
+    ConsentRequestParameters params =
+        new ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build();
 
     // Requesting an update to consent information should be called on every app launch.
     consentInformation.requestConsentInfoUpdate(
@@ -80,14 +77,12 @@ public final class GoogleMobileAdsConsentManager {
                   onConsentGatheringCompleteListener.consentGatheringComplete(formError);
                 }),
         requestConsentError ->
-            onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError)
-    );
+            onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError));
   }
 
   /** Helper method to call the UMP SDK method to present the privacy options form. */
   public void showPrivacyOptionsForm(
-      Activity activity,
-      OnConsentFormDismissedListener onConsentFormDismissedListener) {
+      Activity activity, OnConsentFormDismissedListener onConsentFormDismissedListener) {
     UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener);
   }
 }

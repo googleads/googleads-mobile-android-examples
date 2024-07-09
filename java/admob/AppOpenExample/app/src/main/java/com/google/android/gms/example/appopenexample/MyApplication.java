@@ -39,6 +39,13 @@ import java.util.Date;
 public class MyApplication extends Application
     implements ActivityLifecycleCallbacks, DefaultLifecycleObserver {
 
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
+
   private AppOpenAdManager appOpenAdManager;
   private Activity currentActivity;
   private static final String TAG = "MyApplication";
@@ -117,8 +124,8 @@ public class MyApplication extends Application
   }
 
   /**
-   * Interface definition for a callback to be invoked when an app open ad is complete
-   * (i.e. dismissed or fails to show).
+   * Interface definition for a callback to be invoked when an app open ad is complete (i.e.
+   * dismissed or fails to show).
    */
   public interface OnShowAdCompleteListener {
     void onShowAdComplete();
