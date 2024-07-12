@@ -253,7 +253,7 @@ class MyApplication :
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own app open ad unit ID.
-    const val AD_UNIT_ID = "/6499/example/app-open"
+    const val AD_UNIT_ID = "/21775744923/example/app-open"
     const val LOG_TAG = "MyApplication"
 
     // Check your logcat output for the test device hashed ID e.g.

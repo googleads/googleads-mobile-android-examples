@@ -132,7 +132,7 @@ public class MyApplication extends Application
   private class AppOpenAdManager {
 
     private static final String LOG_TAG = "AppOpenAdManager";
-    private static final String AD_UNIT_ID = "/6499/example/app-open";
+    private static final String AD_UNIT_ID = "/21775744923/example/app-open";
 
     private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
         GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
