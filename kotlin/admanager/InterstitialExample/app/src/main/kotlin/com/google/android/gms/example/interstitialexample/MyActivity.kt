@@ -271,7 +271,7 @@ class MyActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own interstitial ad unit ID.
-    private const val AD_UNIT_ID = "/6499/example/interstitial"
+    private const val AD_UNIT_ID = "/21775744923/example/interstitial"
     private const val GAME_LENGTH_MILLISECONDS: Long = 3000
     private const val TAG = "MyActivity"
 

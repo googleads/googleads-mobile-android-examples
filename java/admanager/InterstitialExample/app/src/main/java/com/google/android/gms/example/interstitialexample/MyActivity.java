@@ -51,7 +51,7 @@ public class MyActivity extends AppCompatActivity {
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
   private static final long GAME_LENGTH_MILLISECONDS = 3000;
-  private static final String AD_UNIT_ID = "/6499/example/interstitial";
+  private static final String AD_UNIT_ID = "/21775744923/example/interstitial";
   private static final String TAG = "MyActivity";
 
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
