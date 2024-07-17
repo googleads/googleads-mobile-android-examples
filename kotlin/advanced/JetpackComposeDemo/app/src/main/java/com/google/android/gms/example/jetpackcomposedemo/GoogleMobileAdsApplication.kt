@@ -18,8 +18,14 @@ package com.google.android.gms.example.jetpackcomposedemo
 
 import android.app.Application
 
-class MobileAdsApplication : Application() {
+class GoogleMobileAdsApplication : Application() {
   companion object {
     const val TAG = "GoogleMobileAdsSample"
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

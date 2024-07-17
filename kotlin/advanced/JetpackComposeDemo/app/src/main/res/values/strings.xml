@@ -1,5 +1,10 @@
 <resources>
-  <string name="app_name">Jetpack Compose Demo</string>
-  <string name="main_title">Google Mobile Ads Sample</string>
-  <string name="main_status_uninitialized">Google Mobile Ads SDK is not initialized.</string>
+  <string name="app_name">Google Mobile Ads Jetpack Compose Demo</string>
+  <string name="version_format">Google Mobile Ads SDK Version: %s </string>
+  <string name="main_title">Google Mobile Ads</string>
+  <string name="nav_home">Home</string>
+  <string name="privacyoptions_open">Show Privacy Options Form</string>
+  <string name="privacyoptions_error">Privacy options failed to open.</string>
+  <string name="adinspector_error">Failed to open ad inspector.</string>
+  <string name="adinspector_open">Ad Inspector</string>
 </resources>
