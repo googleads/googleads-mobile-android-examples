@@ -17,3 +17,5 @@ dependencyResolutionManagement {
 rootProject.name = "Jetpack"
 
 include(":app")
+
+include(":compose-support")
