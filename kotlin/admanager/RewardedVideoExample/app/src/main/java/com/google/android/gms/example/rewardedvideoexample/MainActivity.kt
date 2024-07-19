@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own rewarded ad unit ID.
-    private const val AD_UNIT_ID = "/6499/example/rewarded-video"
+    private const val AD_UNIT_ID = "/21775744923/example/rewarded"
     private const val COUNTER_TIME = 10L
     private const val GAME_OVER_REWARD = 1
     private const val TAG = "MainActivity"
