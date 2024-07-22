@@ -301,7 +301,7 @@ class MainActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own rewarded interstitial ad unit ID.
-    private const val AD_UNIT_ID = "/21775744923/example/rewarded_interstitial"
+    private const val AD_UNIT_ID = "/21775744923/example/rewarded-interstitial"
     private const val GAME_COUNTER_TIME = 10L
     private const val GAME_OVER_REWARD = 1
     private const val MAIN_ACTIVITY_TAG = "MainActivity"

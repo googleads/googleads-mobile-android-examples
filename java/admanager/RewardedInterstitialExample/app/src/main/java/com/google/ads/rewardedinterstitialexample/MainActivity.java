@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
   // a debug device".
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
-  private static final String AD_UNIT_ID = "/21775744923/example/rewarded_interstitial";
+  private static final String AD_UNIT_ID = "/21775744923/example/rewarded-interstitial";
   private static final long COUNTER_TIME = 10;
   private static final int GAME_OVER_REWARD = 1;
   private static final String TAG = "MainActivity";
