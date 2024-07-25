@@ -132,8 +132,8 @@ public class MyActivity extends AppCompatActivity {
                     Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                 });
-          }
-          if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
             MobileAds.openAdInspector(
                 this,
                 error -> {
@@ -142,6 +142,7 @@ public class MyActivity extends AppCompatActivity {
                     Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                 });
+            return true;
           }
           return false;
         });
