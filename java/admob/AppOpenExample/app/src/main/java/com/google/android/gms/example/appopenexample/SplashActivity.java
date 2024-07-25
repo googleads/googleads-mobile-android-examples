@@ -35,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
   private static final String LOG_TAG = "SplashActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private final AtomicBoolean gatherConsentFinished = new AtomicBoolean(false);
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
 
   /**
@@ -51,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
     setContentView(R.layout.activity_splash);
 
     // Create a timer so the SplashActivity will be displayed for a fixed amount of time.
-    createTimer(COUNTER_TIME_MILLISECONDS);
+    createTimer();
 
     googleMobileAdsConsentManager =
         GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
@@ -63,6 +64,10 @@ public class SplashActivity extends AppCompatActivity {
             Log.w(
                 LOG_TAG,
                 String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
+          }
+
+          if (gatherConsentFinished.getAndSet(true)) {
+            startMainActivity();
           }
 
           if (googleMobileAdsConsentManager.canRequestAds()) {
@@ -80,16 +85,12 @@ public class SplashActivity extends AppCompatActivity {
     }
   }
 
-  /**
-   * Create the countdown timer, which counts down to zero and show the app open ad.
-   *
-   * @param time the number of milliseconds that the timer counts down from
-   */
-  private void createTimer(long time) {
+  /** Create the countdown timer, which counts down to zero and show the app open ad. */
+  private void createTimer() {
     final TextView counterTextView = findViewById(R.id.timer);
 
     CountDownTimer countDownTimer =
-        new CountDownTimer(time, 1000) {
+        new CountDownTimer(COUNTER_TIME_MILLISECONDS, 1000) {
           @SuppressLint("SetTextI18n")
           @Override
           public void onTick(long millisUntilFinished) {
@@ -111,9 +112,8 @@ public class SplashActivity extends AppCompatActivity {
                       @Override
                       public void onShowAdComplete() {
                         // Check if the consent form is currently on screen before moving to the
-                        // main
-                        // activity.
-                        if (googleMobileAdsConsentManager.canRequestAds()) {
+                        // main activity.
+                        if (gatherConsentFinished.get()) {
                           startMainActivity();
                         }
                       }
