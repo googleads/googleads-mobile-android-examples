@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="app_name">AdMob Banner Example</string>
     <string name="hello_world">Hello world!</string>
     <string name="more_menu" translatable="false">More</string>
