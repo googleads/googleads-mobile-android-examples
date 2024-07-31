@@ -48,7 +48,7 @@ public class MyActivity extends AppCompatActivity {
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
   // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
-  static final String AD_UNIT = "/21775744923/example/banner";
+  static final String AD_UNIT = "/21775744923/example/adaptive-banner";
   private static final String TAG = "MyActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
   private final AtomicBoolean initialLayoutComplete = new AtomicBoolean(false);

@@ -194,7 +194,7 @@ class MyActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
-    private const val AD_UNIT_ID = "/21775744923/example/banner"
+    private const val AD_UNIT_ID = "/21775744923/example/adaptive-banner"
     private const val TAG = "MainActivity"
 
     // Check your logcat output for the test device hashed ID e.g.
