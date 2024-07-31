@@ -1,0 +1,34 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.google.example.gms.fullscreennativeexample.MainActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+  <Button
+      android:enabled="false"
+      android:id="@+id/load_ad_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="16dp"
+      android:layout_marginTop="16dp"
+      android:text="@string/load_ad" />
+
+  <Button
+      android:enabled="false"
+      android:id="@+id/show_ad_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="16dp"
+      android:layout_marginTop="16dp"
+      android:text="@string/show_ad" />
+
+
+</LinearLayout>
+</ScrollView>
