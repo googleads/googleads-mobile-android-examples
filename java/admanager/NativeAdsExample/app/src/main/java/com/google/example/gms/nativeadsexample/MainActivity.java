@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
   // a debug device".
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
-  private static final String AD_MANAGER_AD_UNIT_ID = "/6499/example/native";
+  private static final String AD_MANAGER_AD_UNIT_ID = "/21775744923/example/native";
   private static final String SIMPLE_TEMPLATE_ID = "10063170";
   private static final String TAG = "MainActivity";
 
