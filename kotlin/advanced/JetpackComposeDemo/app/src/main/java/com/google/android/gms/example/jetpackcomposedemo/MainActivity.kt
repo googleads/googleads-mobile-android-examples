@@ -17,69 +17,35 @@
 package com.google.android.gms.example.jetpackcomposedemo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.example.jetpackcomposedemo.R
-import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
+import com.google.android.gms.ads.MobileAds
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+  private lateinit var mainViewModel: MainViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     // Display content edge-to-edge.
     enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
-    setContent {
-      JetpackComposeDemoTheme {
-        Surface(modifier = Modifier.fillMaxHeight(), color = MaterialTheme.colorScheme.background) {
-          MainScreen()
-        }
-      }
-    }
-  }
+    // Log the Mobile Ads SDK version.
+    Log.d(
+      GoogleMobileAdsApplication.TAG,
+      getString(R.string.version_format, MobileAds.getVersion()),
+    )
 
-  @Composable
-  @Preview
-  fun MainScreenPreview() {
-    JetpackComposeDemoTheme {
-      Surface(modifier = Modifier.fillMaxHeight(), color = MaterialTheme.colorScheme.background) {
-        MainScreen()
-      }
+    // Initialize the view model. This will gather consent and initialize Google Mobile Ads.
+    mainViewModel = MainViewModel.getInstance()
+    if (!mainViewModel.isInitCalled) {
+      lifecycleScope.launch { mainViewModel.init(this@MainActivity) }
     }
+    setContent { MainScreen(mainViewModel) }
   }
-
-  @OptIn(ExperimentalMaterial3Api::class)
-  @Composable
-  fun MainScreen() =
-    Scaffold(
-      topBar = { TopAppBar(title = { Text(resources.getString(R.string.main_title)) }) },
-      contentWindowInsets =
-        WindowInsets.systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
-    ) { innerPadding ->
-      Column(Modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
-        Text(resources.getString(R.string.main_title))
-        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-      }
-    }
 }

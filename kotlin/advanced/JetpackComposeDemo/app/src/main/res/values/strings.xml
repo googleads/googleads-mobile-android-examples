@@ -1,5 +1,25 @@
 <resources>
-  <string name="app_name">Jetpack Compose Demo</string>
-  <string name="main_title">Google Mobile Ads Sample</string>
-  <string name="main_status_uninitialized">Google Mobile Ads SDK is not initialized.</string>
+  <string name="app_name">Google Mobile Ads Jetpack Compose Demo</string>
+  <string name="adinspector_open_button">Ad Inspector</string>
+  <string name="banner_loaded">Banner ad was loaded.</string>
+  <string name="banner_failedToLoad">Banner ad failed to load.</string>
+  <string name="banner_impression">Banner ad had an impression.</string>
+  <string name="banner_clicked">Banner ad was clicked.</string>
+  <string name="main_title">Jetpack Compose Demo</string>
+  <string name="nav_home">Home</string>
+  <string name="nav_banner">Banner</string>
+  <string name="nav_lazy_banner">Lazy Banner</string>
+  <string name="privacy_options_open_button">Show Privacy Options Form</string>
+  <string name="text_best_practices">Google Mobile Ads best practices.</string>
+  <string name="text_reload">Reload Ad</string>
+  <string name="version_format">Google Mobile Ads SDK Version: %s </string>
+  <string-array name="tips">
+    <item>Always use test ads when in development.</item>
+    <item>Use adaptive banners for optimized ad sizes across devices.</item>
+    <item>Respect user privacy by obtaining consent for personalized ads.</item>
+    <item>Mediate multiple ad networks for maximum revenue potential.</item>
+    <item>Prioritize user experience by minimizing ad load times.</item>
+    <item>Leverage Compose\'s declarative nature for clean ad integration.</item>
+    <item>Test ad placements thoroughly on various devices and screen sizes.</item>
+  </string-array>
 </resources>
