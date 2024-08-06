@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MediaContent
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.nativead.MediaView
@@ -95,8 +94,6 @@ class AdManagerCustomControlsFragment : Fragment() {
     nativeAdBinding.adCallToAction.text = nativeAd.callToAction
     nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
 
-    nativeAd.mediaContent?.let { nativeAdBinding.adMedia.setMediaContent(it) }
-
     // These assets aren't guaranteed to be in every NativeAd, so it's important to
     // check before trying to display them.
     if (nativeAd.price == null) {
@@ -120,11 +117,16 @@ class AdManagerCustomControlsFragment : Fragment() {
       nativeAdBinding.adStars.visibility = View.VISIBLE
     }
 
+    // Custom Controls must be a added as a child of the native ad view.
+    nativeAd.mediaContent?.let {
+      val customControls = CustomControlsView(fragmentBinding.root.context)
+      nativeAdBinding.videoControlHolder.addView(customControls)
+      customControls.setMediaContent(it)
+      nativeAdBinding.adMedia.mediaContent = it
+    }
+
     // Assign native ad object to the native view.
     nativeAdView.setNativeAd(nativeAd)
-
-    val mediaContent: MediaContent? = nativeAd.mediaContent
-    mediaContent?.let { fragmentBinding.customControls.setMediaContent(it) }
 
     fragmentBinding.btnRefresh.isEnabled = true
   }
@@ -166,7 +168,12 @@ class AdManagerCustomControlsFragment : Fragment() {
       mainImage.setOnClickListener { nativeCustomFormatAd.performClick("MainImage") }
       mediaPlaceholder.addView(mainImage)
     }
-    mediaContent?.let { fragmentBinding.customControls.setMediaContent(it) }
+
+    nativeCustomFormatAd.mediaContent?.let {
+      val customControls = CustomControlsView(fragmentBinding.root.context)
+      val controlHolder = adView.findViewById<FrameLayout>(R.id.simplecustom_video_control_holder)
+      controlHolder.addView(customControls)
+    }
 
     fragmentBinding.btnRefresh.isEnabled = true
   }
@@ -257,7 +264,5 @@ class AdManagerCustomControlsFragment : Fragment() {
         .build()
 
     adLoader.loadAd(AdManagerAdRequest.Builder().build())
-
-    fragmentBinding.customControls.reset()
   }
 }
