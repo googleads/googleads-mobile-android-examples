@@ -130,19 +130,31 @@ public class MainActivity extends AppCompatActivity {
     View menuItemView = findViewById(item.getItemId());
     PopupMenu popup = new PopupMenu(this, menuItemView);
     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup
+        .getMenu()
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     popup.show();
     popup.setOnMenuItemClickListener(
         popupMenuItem -> {
           if (popupMenuItem.getItemId() == R.id.privacy_settings) {
             // Handle changes to user consent.
-            pauseGame();
             googleMobileAdsConsentManager.showPrivacyOptionsForm(
                 this,
                 formError -> {
                   if (formError != null) {
                     Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
                   }
-                  resumeGame();
+                });
+            return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            MobileAds.openAdInspector(
+                this,
+                error -> {
+                  // Error will be non-null if ad inspector closed due to an error.
+                  if (error != null) {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
                 });
             return true;
           }
