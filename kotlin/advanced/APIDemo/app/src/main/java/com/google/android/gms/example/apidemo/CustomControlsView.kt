@@ -16,7 +16,7 @@ import com.google.android.gms.ads.VideoController
  */
 class CustomControlsView
 @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int) :
+constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
   LinearLayout(context, attrs, defStyle) {
   private val playButton: Button
   private val muteButton: Button
