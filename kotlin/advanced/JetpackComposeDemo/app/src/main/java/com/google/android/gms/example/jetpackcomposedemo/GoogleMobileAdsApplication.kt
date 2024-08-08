@@ -18,8 +18,10 @@ package com.google.android.gms.example.jetpackcomposedemo
 
 import android.app.Application
 
-class MobileAdsApplication : Application() {
+class GoogleMobileAdsApplication : Application() {
   companion object {
     const val TAG = "GoogleMobileAdsSample"
+
+    const val BANNER_ADUNIT_ID = "ca-app-pub-3940256099942544/6300978111"
   }
 }
