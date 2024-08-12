@@ -1,50 +1,66 @@
-//
-//  Copyright (C) 2023 Google LLC
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 package com.google.example.gms.fullscreennativeexample;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoController.VideoLifecycleCallbacks;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdView;
-import com.google.example.gms.fullscreennativeexample.FeedAdapter.AdFeedItem;
+import com.google.example.gms.fullscreennativeexample.databinding.FragmentNativeAdBinding;
 
-/** A ViewHolder representing a native ad view. */
-public class AdsViewHolder extends FeedViewHolder {
+/** A fragment class that is managed by the MainActivity class. */
+public class NativeAdFragment extends Fragment {
 
-  public AdsViewHolder(View itemView) {
-    super(itemView);
+  private FragmentNativeAdBinding binding;
+
+  public NativeAdFragment() {
+    super(R.layout.fragment_native_ad);
   }
 
-  public void bind(AdFeedItem adFeedItem, int position) {
-    populateNativeAdView(adFeedItem.getNativeAd(), itemView.findViewById(R.id.native_ad_view));
+  @Nullable
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    binding = FragmentNativeAdBinding.inflate(getLayoutInflater());
+    return binding.getRoot();
   }
 
   @Override
-  public void attach() {}
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+    MainActivity mainActivity = ((MainActivity) getActivity());
+    if (mainActivity != null && mainActivity.getSupportActionBar() != null) {
+      mainActivity.getSupportActionBar().show();
+    }
+  }
 
   @Override
-  public void detach() {}
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    MainActivity mainActivity = ((MainActivity) getActivity());
+    if (mainActivity != null) {
+      populateNativeAdView(mainActivity.getNativeAd(), binding.innerLayout.nativeAdView);
 
-  public static void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
+      if (mainActivity.getSupportActionBar() != null) {
+        // Display the native ad in full-screen.
+        mainActivity.getSupportActionBar().hide();
+      }
+    }
+  }
+
+  private void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
     MediaView mediaView = adView.findViewById(R.id.ad_media);
     // Set the media view.
     adView.setMediaView(mediaView);
@@ -88,8 +104,6 @@ public class AdsViewHolder extends FeedViewHolder {
     // native ad view with this native ad.
     adView.setNativeAd(nativeAd);
 
-    // Get the video controller for the ad. One will always be provided,
-    // even if the ad doesn't have a video asset.
     VideoController videoController = nativeAd.getMediaContent().getVideoController();
 
     // Updates the UI to say whether or not this ad has a video asset.
