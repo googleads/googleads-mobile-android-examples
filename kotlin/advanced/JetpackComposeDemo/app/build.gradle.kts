@@ -44,7 +44,7 @@ dependencies {
   implementation("androidx.compose.ui:ui-graphics")
   implementation("androidx.compose.material3:material3")
   implementation("androidx.compose.foundation:foundation")
-  implementation("com.google.android.gms:play-services-ads:23.2.0")
+  implementation("com.google.android.gms:play-services-ads:23.3.0")
   implementation("com.google.android.ump:user-messaging-platform:3.0.0")
   debugImplementation("androidx.compose.ui:ui-tooling")
 }
