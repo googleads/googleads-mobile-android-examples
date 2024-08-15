@@ -35,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
   private static final String LOG_TAG = "SplashActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+  private final AtomicBoolean gatherConsentFinished = new AtomicBoolean(false);
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
 
   /**
@@ -64,6 +65,8 @@ public class SplashActivity extends AppCompatActivity {
                 LOG_TAG,
                 String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
           }
+
+          gatherConsentFinished.set(true);
 
           if (googleMobileAdsConsentManager.canRequestAds()) {
             initializeMobileAdsSdk();
@@ -107,9 +110,8 @@ public class SplashActivity extends AppCompatActivity {
                       @Override
                       public void onShowAdComplete() {
                         // Check if the consent form is currently on screen before moving to the
-                        // main
-                        // activity.
-                        if (googleMobileAdsConsentManager.canRequestAds()) {
+                        // main activity.
+                        if (gatherConsentFinished.get()) {
                           startMainActivity();
                         }
                       }

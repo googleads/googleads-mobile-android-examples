@@ -66,9 +66,7 @@ public class SplashActivity extends AppCompatActivity {
                 String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
           }
 
-          if (gatherConsentFinished.getAndSet(true)) {
-            startMainActivity();
-          }
+          gatherConsentFinished.set(true);
 
           if (googleMobileAdsConsentManager.canRequestAds()) {
             initializeMobileAdsSdk();
