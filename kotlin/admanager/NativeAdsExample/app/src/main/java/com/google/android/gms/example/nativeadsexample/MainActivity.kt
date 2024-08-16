@@ -448,8 +448,8 @@ class MainActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own native ad unit ID.
-    private const val AD_UNIT_ID = "/6499/example/native"
-    private const val SIMPLE_TEMPLATE_ID = "10063170"
+    private const val AD_UNIT_ID = "/21775744923/example/native"
+    private const val SIMPLE_TEMPLATE_ID = "12387226"
     private const val TAG = "MainActivity"
 
     // Check your logcat output for the test device hashed ID e.g.
