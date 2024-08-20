@@ -122,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
-    MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -132,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
     View menuItemView = findViewById(item.getItemId());
     PopupMenu popup = new PopupMenu(this, menuItemView);
     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup
+        .getMenu()
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     popup.show();
     popup.setOnMenuItemClickListener(
         popupMenuItem -> {
@@ -142,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
                 formError -> {
                   if (formError != null) {
                     Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
+            return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            MobileAds.openAdInspector(
+                this,
+                error -> {
+                  // Error will be non-null if ad inspector closed due to an error.
+                  if (error != null) {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                 });
             return true;
