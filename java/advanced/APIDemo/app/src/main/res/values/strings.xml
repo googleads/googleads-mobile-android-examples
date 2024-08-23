@@ -37,15 +37,15 @@
         <item>Smart Banner</item>
     </string-array>
 
-    <string name="appevents_adunitid" translatable="false">/6499/example/APIDemo/AppEvents</string>
+    <string name="appevents_adunitid" translatable="false">/21775744923/example/api-demo/app-events</string>
 
-    <string name="fluid_adunitid" translatable="false">/6499/example/APIDemo/Fluid</string>
+    <string name="fluid_adunitid" translatable="false">/21775744923/example/api-demo/fluid</string>
     <string name="fluid_btn_text" translatable="false">Change Ad Width</string>
     <string name="fluid_tv_current_width_text" translatable="false">320 dp</string>
     <string name="fluid_above" translatable="false">(this TextView is above the ad)</string>
     <string name="fluid_below" translatable="false">(this TextView is below the ad)</string>
 
-    <string name="customtargeting_adunitid" translatable="false">/6499/example/APIDemo/CustomTargeting</string>
+    <string name="customtargeting_adunitid" translatable="false">/21775744923/example/api-demo/custom-targeting</string>
     <string name="customtargeting_sport" translatable="false">Favorite Sport</string>
     <string name="customtargeting_loadad" translatable="false">Load New Ad</string>
     <string name="customtargeting_key" translatable="false">sportpref</string>
@@ -62,19 +62,19 @@
         <item>Softball</item>
     </string-array>
 
-    <string name="categoryexclusion_adunitid" translatable="false">/6499/example/APIDemo/CategoryExclusion</string>
+    <string name="categoryexclusion_adunitid" translatable="false">/21775744923/example/api-demo/category-exclusion</string>
     <string name="categoryexclusion_catscategoryname" translatable="false">apidemo_exclude_cats</string>
     <string name="categoryexclusion_dogscategoryname" translatable="false">apidemo_exclude_dogs</string>
     <string name="categoryexclusion_noexclusions" translatable="false">Banner (no exclusions - cats or dogs)</string>
     <string name="categoryexclusion_catsexcluded" translatable="false">Banner (excluding cats)</string>
     <string name="categoryexclusion_dogsexcluded" translatable="false">Banner (excluding dogs)</string>
 
-    <string name="ppid_adunitid"  translatable="false">/6499/example/APIDemo/PPID</string>
+    <string name="ppid_adunitid"  translatable="false">/21775744923/example/api-demo/ppid</string>
     <string name="ppid_username" translatable="false">Example Username</string>
     <string name="ppid_username_hint" translatable="false">e.g. "user123"</string>
     <string name="ppid_loadad" translatable="false">Load New Ad</string>
 
-    <string name="adsizes_adunitid" translatable="false">/6499/example/APIDemo/AdSizes</string>
+    <string name="adsizes_adunitid" translatable="false">/21775744923/example/api-demo/ad-sizes</string>
     <string name="adsizes_size" translatable="false">Available sizes</string>
     <string name="adsizes_loadad" translatable="false">Load New Ad</string>
 
@@ -110,8 +110,8 @@
     <string name="adsizes_fragment_title" translatable="false">Ad Manager Multiple Ad Sizes</string>
     <string name="ppid_fragment_title" translatable="false">Ad Manager PPID</string>
 
-    <string name="customcontrols_fragment_ad_unit_id" translatable="false">/6499/example/native-video</string>
-    <string name="customcontrols_fragment_template_id" translatable="false">10104090</string>
+    <string name="customcontrols_fragment_ad_unit_id" translatable="false">/21775744923/example/native-video</string>
+    <string name="customcontrols_fragment_template_id" translatable="false">12406343</string>
     <string name="customcontrols_fragment_request_native" translatable="false">Request Native Ads</string>
     <string name="customcontrols_fragment_request_custom_format" translatable="false">Request Custom Native Ad Formats</string>
     <string name="customcontrols_fragment_start_muted" translatable="false">Start video ads muted</string>
