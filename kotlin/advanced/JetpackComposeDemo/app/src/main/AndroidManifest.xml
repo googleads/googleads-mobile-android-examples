@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
   <application
-      android:name="com.google.android.gms.example.jetpackcomposedemo.MobileAdsApplication"
+      android:name="com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication"
       android:allowBackup="true"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
