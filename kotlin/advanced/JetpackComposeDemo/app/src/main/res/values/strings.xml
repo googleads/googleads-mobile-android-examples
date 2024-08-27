@@ -1,8 +1,9 @@
 <resources>
   <string name="app_name">Google Mobile Ads Jetpack Compose Demo</string>
-  <string name="adinspector_open_button">Ad inspector</string>
+  <string name="adinspector_open_button">Ad Inspector</string>
   <string name="main_title">Jetpack Compose Demo</string>
   <string name="nav_home">Home</string>
+  <string name="nav_banner">Banner</string>
   <string name="privacy_options_open_button">Show Privacy Options Form</string>
-  <string name="version_format">Google Mobile Ads SDK Version: %s </string>
+  <string name="text_reload">Reload Ad</string>
 </resources>

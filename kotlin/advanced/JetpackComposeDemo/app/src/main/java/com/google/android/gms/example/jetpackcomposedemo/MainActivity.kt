@@ -22,7 +22,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
-import com.example.jetpackcomposedemo.R
 import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.launch
 
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
     // Log the Mobile Ads SDK version.
     Log.d(
       GoogleMobileAdsApplication.TAG,
-      getString(R.string.version_format, MobileAds.getVersion()),
+      "Google Mobile Ads SDK Version: ${MobileAds.getVersion()}",
     )
 
     // Initialize the view model. This will gather consent and initialize Google Mobile Ads.

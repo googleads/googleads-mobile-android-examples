@@ -21,5 +21,7 @@ import android.app.Application
 class GoogleMobileAdsApplication : Application() {
   companion object {
     const val TAG = "GoogleMobileAdsSample"
+
+    const val BANNER_ADUNIT_ID = "ca-app-pub-3940256099942544/9214589741"
   }
 }

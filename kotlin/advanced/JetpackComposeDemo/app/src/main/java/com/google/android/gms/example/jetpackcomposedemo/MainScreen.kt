@@ -3,6 +3,7 @@ package com.google.android.gms.example.jetpackcomposedemo
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -72,11 +73,12 @@ fun MainScreen(googleMobileAdsViewModel: MainViewModel, modifier: Modifier = Mod
       )
     },
     contentWindowInsets =
-      WindowInsets.systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
+      WindowInsets.systemBars.only(WindowInsetsSides.Vertical + WindowInsetsSides.Horizontal),
   ) { innerPadding ->
     Column(Modifier.padding(innerPadding)) {
       NavHost(navController = navController, startDestination = NavDestinations.Home.name) {
-        composable(NavDestinations.Home.name) {}
+        composable(NavDestinations.Home.name) { HomeScreen(uiState, navController) }
+        composable(NavDestinations.Banner.name) { BannerScreen() }
       }
       Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
