@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 class MyActivity : AppCompatActivity() {
 
   private val isMobileAdsInitializeCalled = AtomicBoolean(false)
-  private val initialLayoutComplete = AtomicBoolean(false)
   private var adView: AdManagerAdView? = null
   private lateinit var binding: ActivityMyBinding
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
@@ -90,14 +89,6 @@ class MyActivity : AppCompatActivity() {
     // This sample attempts to load ads using consent obtained in the previous session.
     if (googleMobileAdsConsentManager.canRequestAds) {
       initializeMobileAdsSdk()
-    }
-
-    // Since we're loading the banner based on the adContainerView size, we need to wait until this
-    // view is laid out before we can get the width.
-    binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-      if (!initialLayoutComplete.getAndSet(true) && googleMobileAdsConsentManager.canRequestAds) {
-        loadBanner()
-      }
     }
   }
 
@@ -185,9 +176,7 @@ class MyActivity : AppCompatActivity() {
 
       runOnUiThread {
         // Load an ad on the main thread.
-        if (initialLayoutComplete.get()) {
-          loadBanner()
-        }
+        loadBanner()
       }
     }
   }

@@ -54,7 +54,6 @@ public class MyActivity extends AppCompatActivity {
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
   private AdView adView;
   private FrameLayout adContainerView;
-  private final AtomicBoolean initialLayoutComplete = new AtomicBoolean(false);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -91,18 +90,6 @@ public class MyActivity extends AppCompatActivity {
     if (googleMobileAdsConsentManager.canRequestAds()) {
       initializeMobileAdsSdk();
     }
-
-    // Since we're loading the banner based on the adContainerView size, we need to wait until this
-    // view is laid out before we can get the width.
-    adContainerView
-        .getViewTreeObserver()
-        .addOnGlobalLayoutListener(
-            () -> {
-              if (!initialLayoutComplete.getAndSet(true)
-                  && googleMobileAdsConsentManager.canRequestAds()) {
-                loadBanner();
-              }
-            });
   }
 
   @Override
@@ -210,12 +197,7 @@ public class MyActivity extends AppCompatActivity {
               MobileAds.initialize(this, initializationStatus -> {});
 
               // Load an ad on the main thread.
-              runOnUiThread(
-                  () -> {
-                    if (initialLayoutComplete.get()) {
-                      loadBanner();
-                    }
-                  });
+              runOnUiThread(this::loadBanner);
             })
         .start();
   }
