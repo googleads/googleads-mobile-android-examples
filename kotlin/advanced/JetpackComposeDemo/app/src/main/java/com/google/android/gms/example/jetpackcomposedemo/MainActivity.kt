@@ -17,17 +17,35 @@
 package com.google.android.gms.example.jetpackcomposedemo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.lifecycleScope
+import com.example.jetpackcomposedemo.R
+import com.google.android.gms.ads.MobileAds
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+  private lateinit var mainViewModel: MainViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     // Display content edge-to-edge.
     enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
-    setContent { MainScreen() }
+    // Log the Mobile Ads SDK version.
+    Log.d(
+      GoogleMobileAdsApplication.TAG,
+      getString(R.string.version_format, MobileAds.getVersion()),
+    )
+
+    // Initialize the view model. This will gather consent and initialize Google Mobile Ads.
+    mainViewModel = MainViewModel.getInstance()
+    if (!mainViewModel.isInitCalled) {
+      lifecycleScope.launch { mainViewModel.init(this@MainActivity) }
+    }
+    setContent { MainScreen(mainViewModel) }
   }
 }
