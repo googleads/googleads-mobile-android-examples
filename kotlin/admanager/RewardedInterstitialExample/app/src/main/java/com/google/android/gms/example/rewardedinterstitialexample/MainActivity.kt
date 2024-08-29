@@ -97,26 +97,35 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    val moreMenu = menu?.findItem(R.id.action_more)
-    moreMenu?.isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
     return super.onCreateOptionsMenu(menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     val menuItemView = findViewById<View>(item.itemId)
+    val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
           R.id.privacy_settings -> {
             pauseGame()
             // Handle changes to user consent.
-            googleMobileAdsConsentManager.showPrivacyOptionsForm(this@MainActivity) { formError ->
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
               if (formError != null) {
-                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
               resumeGame()
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }

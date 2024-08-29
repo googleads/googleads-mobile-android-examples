@@ -1,4 +1,5 @@
 <resources>
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="app_name" translatable="false">AdMob Interstitial</string>
     <string name="impossible_game" translatable="false">Impossible Game</string>
     <string name="more_menu" translatable="false">More</string>

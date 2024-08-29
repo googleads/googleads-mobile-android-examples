@@ -1,4 +1,5 @@
 <resources>
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="app_name" translatable="false">Ad Manager Rewarded Interstitial</string>
     <string name="default_coin_text" translatable="false">Coins: 0</string>
     <string name="impossible_game" translatable="false">Impossible Game</string>

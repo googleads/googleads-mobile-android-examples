@@ -84,7 +84,7 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
 
   /** Helper method to call the UMP SDK method to show the privacy options form. */
   fun showPrivacyOptionsForm(
-    activity: Activity,
+    activity: MainActivity,
     onConsentFormDismissedListener: OnConsentFormDismissedListener,
   ) {
     UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener)

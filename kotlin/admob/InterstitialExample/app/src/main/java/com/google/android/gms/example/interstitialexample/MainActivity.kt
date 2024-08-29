@@ -70,9 +70,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    menu?.findItem(R.id.action_more)?.apply {
-      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
-    }
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -81,6 +78,9 @@ class MainActivity : AppCompatActivity() {
     val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
@@ -92,6 +92,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
               resumeGame()
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }
