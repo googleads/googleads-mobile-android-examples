@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Google Mobile Ads SDK Support
+    url: https://developers.google.com/admob/support
+    about: Please file feature requests, bugs, and other issues to the official Google Mobile Ads SDK developer support channels.
+  - name: Google Mobile Ads Android Documentation
+    url: https://developers.google.com/admob/android/
+    about: The place to get started with the Android Google Mobile Ads SDK.
