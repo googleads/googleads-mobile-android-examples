@@ -110,7 +110,7 @@
     <string name="ppid_fragment_title" translatable="false">Ad Manager PPID</string>
 
     <string name="customcontrols_fragment_ad_unit_id" translatable="false">/21775744923/example/native-video</string>
-    <string name="customcontrols_fragment_template_id" translatable="false">12406343</string>
+    <string name="customcontrols_fragment_template_id" translatable="false">12387226</string>
     <string name="customcontrols_fragment_request_native" translatable="false">Request Native Ads</string>
     <string name="customcontrols_fragment_request_custom_format" translatable="false">Request Custom Native Ad Formats</string>
     <string name="customcontrols_fragment_start_muted" translatable="false">Start video ads muted</string>
