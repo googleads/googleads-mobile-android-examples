@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.example.jetpackcomposedemo
+package com.google.android.gms.example.jetpackcomposedemo.main
 
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +23,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {

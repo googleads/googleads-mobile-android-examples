@@ -1,4 +1,4 @@
-package com.google.android.gms.example.jetpackcomposedemo
+package com.google.android.gms.example.jetpackcomposedemo.main
 
 import android.app.Activity
 import android.content.Context
@@ -7,6 +7,8 @@ import android.widget.Toast
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.OnAdInspectorClosedListener
 import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication
+import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsConsentManager
 import com.google.android.ump.ConsentForm
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.Dispatchers

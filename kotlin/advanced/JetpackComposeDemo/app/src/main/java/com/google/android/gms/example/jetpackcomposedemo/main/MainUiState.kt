@@ -1,4 +1,4 @@
-package com.google.android.gms.example.jetpackcomposedemo
+package com.google.android.gms.example.jetpackcomposedemo.main
 
 /** UiState for the MainViewModel. */
 data class MainUiState(

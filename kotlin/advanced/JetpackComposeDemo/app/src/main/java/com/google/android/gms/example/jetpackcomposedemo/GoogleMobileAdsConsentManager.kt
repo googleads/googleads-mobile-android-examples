@@ -18,7 +18,7 @@ package com.google.android.gms.example.jetpackcomposedemo
 
 import android.app.Activity
 import android.content.Context
-import com.google.android.gms.example.jetpackcomposedemo.MainViewModel.Companion.TEST_DEVICE_HASHED_ID
+import com.google.android.gms.example.jetpackcomposedemo.main.MainViewModel.Companion.TEST_DEVICE_HASHED_ID
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm.OnConsentFormDismissedListener
 import com.google.android.ump.ConsentInformation

@@ -1,9 +1,8 @@
-package com.google.android.gms.example.jetpackcomposedemo
+package com.google.android.gms.example.jetpackcomposedemo.main
 
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -40,6 +39,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.jetpackcomposedemo.R
+import com.google.android.gms.example.jetpackcomposedemo.formats.BannerScreen
+import com.google.android.gms.example.jetpackcomposedemo.formats.LazyBannerScreen
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
 @Composable
@@ -79,6 +80,7 @@ fun MainScreen(googleMobileAdsViewModel: MainViewModel, modifier: Modifier = Mod
       NavHost(navController = navController, startDestination = NavDestinations.Home.name) {
         composable(NavDestinations.Home.name) { HomeScreen(uiState, navController) }
         composable(NavDestinations.Banner.name) { BannerScreen() }
+        composable(NavDestinations.LazyBanner.name) { LazyBannerScreen() }
       }
       Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
@@ -120,12 +122,18 @@ private fun MainTopBar(
         DropdownMenuItem(
           text = { Text(context.getString(R.string.adinspector_open_button)) },
           enabled = isMobileAdsInitialized,
-          onClick = onOpenAdInspector,
+          onClick = {
+            menuExpanded = false
+            onOpenAdInspector()
+          },
         )
         if (isPrivacyOptionsRequired) {
           DropdownMenuItem(
             text = { Text(context.getString(R.string.privacy_options_open_button)) },
-            onClick = onShowPrivacyOptionsForm,
+            onClick = {
+              menuExpanded = false
+              onShowPrivacyOptionsForm()
+            },
           )
         }
       }

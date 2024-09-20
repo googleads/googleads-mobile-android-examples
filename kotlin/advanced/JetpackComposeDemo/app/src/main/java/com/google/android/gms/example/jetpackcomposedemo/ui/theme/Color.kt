@@ -26,6 +26,4 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val ColorStateLoaded = Color(0xFF009900)
-val ColorStateUnloaded = Color(0xFFcc6600)
-val ColorStateError = Color(0xFFcc0000)
+val LightBlue = Color(0xFFADD8E6)

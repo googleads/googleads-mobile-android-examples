@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.example.jetpackcomposedemo
+package com.google.android.gms.example.jetpackcomposedemo.formats
 
 import android.content.Context
 import android.util.Log
@@ -44,7 +44,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.compose_util.BannerAd
-import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.BANNER_ADUNIT_ID
+import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.BANNER_AD_UNIT_ID
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.TAG
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
@@ -81,7 +81,7 @@ private fun loadAdaptiveBannerAd(context: Context, width: Int, isPreviewMode: Bo
     return adView
   }
 
-  adView.adUnitId = BANNER_ADUNIT_ID
+  adView.adUnitId = BANNER_AD_UNIT_ID
   val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, width)
   adView.setAdSize(adSize)
 
@@ -92,11 +92,11 @@ private fun loadAdaptiveBannerAd(context: Context, width: Int, isPreviewMode: Bo
       }
 
       override fun onAdFailedToLoad(error: LoadAdError) {
-        Log.e(TAG, "Banner ad failed to load.")
+        Log.e(TAG, "Banner ad failed to load: ${error.message}")
       }
 
       override fun onAdImpression() {
-        Log.d(TAG, "Banner ad had an impression.")
+        Log.d(TAG, "Banner ad recorded an impression.")
       }
 
       override fun onAdClicked() {

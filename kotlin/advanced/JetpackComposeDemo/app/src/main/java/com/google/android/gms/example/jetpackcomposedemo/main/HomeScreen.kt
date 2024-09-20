@@ -1,4 +1,4 @@
-package com.google.android.gms.example.jetpackcomposedemo
+package com.google.android.gms.example.jetpackcomposedemo.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,9 +25,16 @@ fun HomeScreen(
     Button(
       onClick = { navController.navigate(NavDestinations.Banner.name) },
       enabled = uiState.canRequestAds,
-      modifier = modifier.fillMaxWidth(),
+      modifier = Modifier.fillMaxWidth(),
     ) {
       Text(LocalContext.current.getString(R.string.nav_banner))
+    }
+    Button(
+      onClick = { navController.navigate(NavDestinations.LazyBanner.name) },
+      enabled = uiState.canRequestAds,
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Text(LocalContext.current.getString(R.string.nav_lazy_banner))
     }
   }
 }
