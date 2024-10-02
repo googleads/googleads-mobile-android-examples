@@ -23,11 +23,7 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
   }
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-  }
-  kotlinOptions { jvmTarget = "17" }
+
   buildFeatures { compose = true }
   composeOptions { kotlinCompilerExtensionVersion = "1.5.1" }
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
@@ -46,7 +42,7 @@ dependencies {
   implementation("androidx.compose.foundation:foundation")
   implementation("androidx.navigation:navigation-compose:2.7.7")
   implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
-  implementation("com.google.android.gms:play-services-ads:23.3.0")
+  implementation("com.google.android.gms:play-services-ads:23.4.0")
   implementation("com.google.android.ump:user-messaging-platform:3.0.0")
   implementation(project(":compose-util"))
   debugImplementation("androidx.compose.ui:ui-tooling")

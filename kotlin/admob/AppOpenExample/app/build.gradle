@@ -24,6 +24,13 @@ android {
     buildFeatures {
         viewBinding true
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -33,6 +40,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-process:2.8.3"
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'com.google.android.gms:play-services-ads:23.3.0'
+    implementation 'com.google.android.gms:play-services-ads:23.4.0'
     implementation 'com.google.android.ump:user-messaging-platform:3.0.0'
 }
