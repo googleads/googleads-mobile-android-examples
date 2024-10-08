@@ -16,6 +16,8 @@
     <meta-data
         android:name="com.google.android.gms.ads.APPLICATION_ID"
         android:value="ca-app-pub-3940256099942544~3347511713" />
+    <meta-data android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"
+        android:value="true" />
     <meta-data
         android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
         android:value="true" />
@@ -28,6 +30,11 @@
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
+    </activity>
+    <activity
+        android:name="com.google.android.gms.example.jetpackcomposedemo.NativeComposeActivity"
+        android:exported="true"
+        android:theme="@style/Theme.JetpackComposeDemo">
     </activity>
   </application>
 

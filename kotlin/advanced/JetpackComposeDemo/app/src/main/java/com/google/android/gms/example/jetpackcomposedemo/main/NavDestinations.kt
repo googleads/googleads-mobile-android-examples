@@ -4,4 +4,5 @@ enum class NavDestinations {
   Home,
   Banner,
   LazyBanner,
+  Native,
 }

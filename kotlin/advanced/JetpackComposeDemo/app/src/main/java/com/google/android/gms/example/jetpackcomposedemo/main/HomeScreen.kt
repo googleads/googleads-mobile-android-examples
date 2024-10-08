@@ -36,6 +36,13 @@ fun HomeScreen(
     ) {
       Text(LocalContext.current.getString(R.string.nav_lazy_banner))
     }
+    Button(
+      onClick = { navController.navigate(NavDestinations.Native.name) },
+      enabled = uiState.canRequestAds,
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Text(LocalContext.current.getString(R.string.nav_native))
+    }
   }
 }
 

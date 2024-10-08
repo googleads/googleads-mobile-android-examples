@@ -1,5 +1,3 @@
-package com.google.android.gms.compose_util
-
 /*
  * Copyright 2024 Google LLC
  *
@@ -15,6 +13,8 @@ package com.google.android.gms.compose_util
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.google.android.gms.compose_util
 
 import android.view.ViewGroup
 import android.widget.FrameLayout

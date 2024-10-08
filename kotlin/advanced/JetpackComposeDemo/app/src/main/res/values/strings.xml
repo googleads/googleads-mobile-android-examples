@@ -1,10 +1,12 @@
 <resources>
+  <string name="attribution">Ad</string>
   <string name="app_name">Google Mobile Ads Jetpack Compose Demo</string>
   <string name="adinspector_open_button">Ad Inspector</string>
   <string name="main_title">Jetpack Compose Demo</string>
   <string name="nav_home">Home</string>
   <string name="nav_banner">Banner</string>
   <string name="nav_lazy_banner">Lazy Banner</string>
+  <string name="nav_native">Native</string>
   <string name="privacy_options_open_button">Show Privacy Options Form</string>
   <string name="text_reload">Reload Ad</string>
   <string-array name="lazy_banner_filler_content">

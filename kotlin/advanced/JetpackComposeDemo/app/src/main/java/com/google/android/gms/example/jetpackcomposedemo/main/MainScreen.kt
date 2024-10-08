@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.jetpackcomposedemo.R
 import com.google.android.gms.example.jetpackcomposedemo.formats.BannerScreen
 import com.google.android.gms.example.jetpackcomposedemo.formats.LazyBannerScreen
+import com.google.android.gms.example.jetpackcomposedemo.formats.NativeScreen
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
 @Composable
@@ -81,6 +82,7 @@ fun MainScreen(googleMobileAdsViewModel: MainViewModel, modifier: Modifier = Mod
         composable(NavDestinations.Home.name) { HomeScreen(uiState, navController) }
         composable(NavDestinations.Banner.name) { BannerScreen() }
         composable(NavDestinations.LazyBanner.name) { LazyBannerScreen() }
+        composable(NavDestinations.Native.name) { NativeScreen() }
       }
       Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
