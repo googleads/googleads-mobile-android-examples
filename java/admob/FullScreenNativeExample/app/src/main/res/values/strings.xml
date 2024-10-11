@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name" translatable="false">AdMob Fullscreen Native Example</string>
+    <string name="app_name" translatable="false">Fullscreen Native Example</string>
     <string name="ad_attribution" translatable="false">Ad</string>
-    <string name="button_refresh_ad">Refresh Ad</string>
-    <string name="video_status_text">Video status: </string>
+    <string name="load_ad">Load ad</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="show_ad">Show ad</string>
 </resources>
