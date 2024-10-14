@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.google.android.gms.example.apidemo.AdManagerCustomControlsFragment">
+    tools:context=".AdManagerCustomControlsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,13 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp" />
-
-        <com.google.android.gms.example.apidemo.CustomControlsView
-            android:id="@+id/custom_controls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </com.google.android.gms.example.apidemo.CustomControlsView>
 
         <CheckBox
             android:id="@+id/cb_native"
