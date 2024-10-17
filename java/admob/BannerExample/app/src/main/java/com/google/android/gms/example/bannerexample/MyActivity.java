@@ -66,6 +66,7 @@ public class MyActivity extends AppCompatActivity {
 
     googleMobileAdsConsentManager =
         GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
+    // [START can_request_ads]
     googleMobileAdsConsentManager.gatherConsent(
         this,
         consentError -> {
@@ -79,17 +80,22 @@ public class MyActivity extends AppCompatActivity {
           if (googleMobileAdsConsentManager.canRequestAds()) {
             initializeMobileAdsSdk();
           }
+          // [START_EXCLUDE]
 
+          // [START add_privacy_options]
           if (googleMobileAdsConsentManager.isPrivacyOptionsRequired()) {
             // Regenerate the options menu to include a privacy setting.
             invalidateOptionsMenu();
           }
+          // [END add_privacy_options]
+          // [END_EXCLUDE]
         });
 
     // This sample attempts to load ads using consent obtained in the previous session.
     if (googleMobileAdsConsentManager.canRequestAds()) {
       initializeMobileAdsSdk();
     }
+    // [END can_request_ads]
   }
 
   @Override
@@ -182,15 +188,18 @@ public class MyActivity extends AppCompatActivity {
     // [END load_ad]
   }
 
+  // [START request_ads]
   private void initializeMobileAdsSdk() {
     if (isMobileAdsInitializeCalled.getAndSet(true)) {
       return;
     }
-
+    // [START_EXCLUDE silent] Hide from developer docs code snippet
     // Set your test devices.
     MobileAds.setRequestConfiguration(
-        new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID)).build());
-
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
+    // [END_EXCLUDE]
     new Thread(
             () -> {
               // Initialize the Google Mobile Ads SDK on a background thread.
@@ -201,6 +210,8 @@ public class MyActivity extends AppCompatActivity {
             })
         .start();
   }
+
+  // [END request_ads]
 
   // Get the ad size with screen width.
   public AdSize getAdSize() {

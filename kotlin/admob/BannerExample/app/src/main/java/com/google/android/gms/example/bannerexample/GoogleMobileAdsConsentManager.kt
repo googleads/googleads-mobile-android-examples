@@ -43,11 +43,14 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
   val canRequestAds: Boolean
     get() = consentInformation.canRequestAds()
 
+  // [START is_privacy_options_required]
   /** Helper variable to determine if the privacy options form is required. */
   val isPrivacyOptionsRequired: Boolean
     get() =
       consentInformation.privacyOptionsRequirementStatus ==
         ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+
+  // [END is_privacy_options_required]
 
   /**
    * Helper method to call the UMP SDK methods to request consent information and load/show a
@@ -66,6 +69,7 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
 
     val params = ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build()
 
+    // [START gather_consent]
     // Requesting an update to consent information should be called on every app launch.
     consentInformation.requestConsentInfoUpdate(
       activity,
@@ -80,6 +84,7 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
         onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError)
       },
     )
+    // [END gather_consent]
   }
 
   /** Helper method to call the UMP SDK method to show the privacy options form. */
@@ -87,7 +92,9 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
     activity: MainActivity,
     onConsentFormDismissedListener: OnConsentFormDismissedListener,
   ) {
+    // [START present_privacy_options_form]
     UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener)
+    // [END present_privacy_options_form]
   }
 
   companion object {

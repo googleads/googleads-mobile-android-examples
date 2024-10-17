@@ -59,11 +59,14 @@ public class GoogleMobileAdsConsentManager {
     return consentInformation.canRequestAds();
   }
 
+  // [START is_privacy_options_required]
   /** Helper variable to determine if the privacy options form is required. */
   public boolean isPrivacyOptionsRequired() {
     return consentInformation.getPrivacyOptionsRequirementStatus()
         == PrivacyOptionsRequirementStatus.REQUIRED;
   }
+
+  // [END is_privacy_options_required]
 
   /**
    * Helper method to call the UMP SDK methods to request consent information and load/present a
@@ -81,6 +84,7 @@ public class GoogleMobileAdsConsentManager {
     ConsentRequestParameters params =
         new ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build();
 
+    // [START gather_consent]
     // Requesting an update to consent information should be called on every app launch.
     consentInformation.requestConsentInfoUpdate(
         activity,
@@ -94,11 +98,14 @@ public class GoogleMobileAdsConsentManager {
                 }),
         requestConsentError ->
             onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError));
+    // [END gather_consent]
   }
 
   /** Helper method to call the UMP SDK method to present the privacy options form. */
   public void showPrivacyOptionsForm(
       Activity activity, OnConsentFormDismissedListener onConsentFormDismissedListener) {
+    // [START present_privacy_options_form]
     UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener);
+    // [END present_privacy_options_form]
   }
 }
