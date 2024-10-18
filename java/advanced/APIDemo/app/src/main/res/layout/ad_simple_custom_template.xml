@@ -32,4 +32,8 @@
         android:textColor="#888888"
         android:textStyle="italic" />
 
+    <FrameLayout
+        android:id="@+id/simplecustom_video_control_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
