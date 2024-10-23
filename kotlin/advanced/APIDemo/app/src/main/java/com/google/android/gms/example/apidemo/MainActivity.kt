@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding
+import com.google.android.gms.example.apidemo.preloading.AdMobPreloadMainFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,11 +72,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         R.id.nav_admob_bannersizes -> AdMobBannerSizesFragment()
         R.id.nav_collapsible_banner -> CollapsibleBannerFragment()
         R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
+        R.id.nav_admob_preload -> AdMobPreloadMainFragment()
         R.id.nav_gam_adsizes -> AdManagerMultipleAdSizesFragment()
         R.id.nav_gam_appevents -> AdManagerAppEventsFragment()
         R.id.nav_gam_customtargeting -> AdManagerCustomTargetingFragment()
         R.id.nav_gam_fluid -> AdManagerFluidSizeFragment()
         R.id.nav_gam_ppid -> AdManagerPPIDFragment()
+        R.id.nav_gam_customcontrols -> AdManagerCustomControlsFragment()
         R.id.nav_gam_customcontrols -> AdManagerCustomControlsFragment()
         else -> AdManagerCategoryExclusionFragment()
       }
