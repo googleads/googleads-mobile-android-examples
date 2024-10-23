@@ -82,7 +82,7 @@ fun NativeScreen() {
   }
 
   // Native ad composable.
-  SampleNativeTemplate(nativeAdState)
+  SampleNativeTemplate(nativeAdState())
 }
 
 @Composable
