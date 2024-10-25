@@ -56,16 +56,14 @@ public class AdManagerCustomControlsFragment extends Fragment {
   private CheckBox customControlsCheckbox;
   private CheckBox nativeAdsCheckbox;
   private CheckBox customFormatAdsCheckbox;
-  private CustomControlsView customControlsView;
   private NativeAd nativeAd;
   private NativeCustomFormatAd nativeCustomFormatAd;
 
-  public AdManagerCustomControlsFragment() {
-  }
+  public AdManagerCustomControlsFragment() {}
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+  public View onCreateView(
+      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_gam_customcontrols, container, false);
   }
 
@@ -77,7 +75,6 @@ public class AdManagerCustomControlsFragment extends Fragment {
     customControlsCheckbox = view.findViewById(R.id.cb_custom_controls);
     nativeAdsCheckbox = view.findViewById(R.id.cb_native);
     customFormatAdsCheckbox = view.findViewById(R.id.cb_custom_format);
-    customControlsView = view.findViewById(R.id.custom_controls);
 
     refresh.setOnClickListener(unusedView -> refreshAd());
 
@@ -111,6 +108,7 @@ public class AdManagerCustomControlsFragment extends Fragment {
     adView.setPriceView(adView.findViewById(R.id.ad_price));
     adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
     adView.setStoreView(adView.findViewById(R.id.ad_store));
+    adView.setMediaView(adView.findViewById(R.id.ad_media));
 
     // Some assets are guaranteed to be in every NativeAd.
     ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
@@ -137,19 +135,17 @@ public class AdManagerCustomControlsFragment extends Fragment {
     if (nativeAd.getStarRating() == null) {
       adView.getStarRatingView().setVisibility(View.INVISIBLE);
     } else {
-      ((RatingBar) adView.getStarRatingView())
-          .setRating(nativeAd.getStarRating().floatValue());
+      ((RatingBar) adView.getStarRatingView()).setRating(nativeAd.getStarRating().floatValue());
       adView.getStarRatingView().setVisibility(View.VISIBLE);
     }
 
+    // Set up the custom video controls.
+    MediaContent mediaContent = nativeAd.getMediaContent();
+    CustomControlsView customControls = adView.findViewById(R.id.custom_video_controls);
+    customControls.initialize(mediaContent, startVideoAdsMuted.isChecked());
+
     // Assign native ad object to the native view.
     adView.setNativeAd(nativeAd);
-
-    // Set up the custom video controls functionality.
-    MediaContent mediaContent = nativeAd.getMediaContent();
-    if (mediaContent != null) {
-      customControlsView.setMediaContent(mediaContent);
-    }
 
     refresh.setEnabled(true);
   }
@@ -161,38 +157,38 @@ public class AdManagerCustomControlsFragment extends Fragment {
    * @param nativeCustomFormatAd the object containing the ad's assets
    * @param adView the view to be populated
    */
-  private void populateSimpleTemplateAdView(final NativeCustomFormatAd nativeCustomFormatAd,
-      View adView) {
-    TextView headline = adView.findViewById(R.id.simplecustom_headline);
-    TextView caption = adView.findViewById(R.id.simplecustom_caption);
+  private void populateSimpleTemplateAdView(
+      final NativeCustomFormatAd nativeCustomFormatAd, View adView) {
+
+    TextView headline = adView.findViewById(R.id.headline);
+    TextView caption = adView.findViewById(R.id.caption);
+    CustomControlsView customControls = adView.findViewById(R.id.custom_video_controls);
+    MediaView mediaView = adView.findViewById(R.id.ad_media);
+    ImageView imageView = adView.findViewById(R.id.ad_image);
 
     headline.setText(nativeCustomFormatAd.getText("Headline"));
     caption.setText(nativeCustomFormatAd.getText("Caption"));
-
     headline.setOnClickListener(unusedView -> nativeCustomFormatAd.performClick("Headline"));
 
-    FrameLayout mediaPlaceholder = adView.findViewById(R.id.simplecustom_media_placeholder);
+    // Get the media content for the ad.
+    MediaContent mediaContent = nativeCustomFormatAd.getMediaContent();
 
-    // Apps can check the MediaContent's hasVideoContent property to determine if the
-    // NativeCustomTemplateAd has a video asset.
-    if (nativeCustomFormatAd.getMediaContent() != null
-        && nativeCustomFormatAd.getMediaContent().hasVideoContent()) {
-      MediaView mediaView = new MediaView(requireActivity());
-      mediaView.setMediaContent(nativeCustomFormatAd.getMediaContent());
-      mediaPlaceholder.addView(mediaView);
+    // Apps can check the MediaContent's hasVideoContent property to
+    // determine if the NativeCustomFormatAd has a video asset.
+    if (mediaContent != null && mediaContent.hasVideoContent()) {
+      mediaView.setVisibility(View.VISIBLE);
+      imageView.setVisibility(View.GONE);
+      mediaView.setMediaContent(mediaContent);
+      customControls.initialize(mediaContent, startVideoAdsMuted.isChecked());
     } else {
-      ImageView mainImage = new ImageView(getActivity());
-      mainImage.setAdjustViewBounds(true);
-      mainImage.setImageDrawable(nativeCustomFormatAd.getImage("MainImage").getDrawable());
-
-      mainImage.setOnClickListener(unusedView -> nativeCustomFormatAd.performClick("MainImage"));
-      mediaPlaceholder.addView(mainImage);
+      mediaView.setVisibility(View.GONE);
+      imageView.setVisibility(View.VISIBLE);
+      imageView.setImageDrawable(nativeCustomFormatAd.getImage("MainImage").getDrawable());
+      imageView.setOnClickListener(unusedView -> nativeCustomFormatAd.performClick("MainImage"));
     }
-    customControlsView.setMediaContent(nativeCustomFormatAd.getMediaContent());
 
     refresh.setEnabled(true);
   }
-
 
   /**
    * Creates a request for a new native ad based on the boolean parameters and calls the
@@ -202,8 +198,9 @@ public class AdManagerCustomControlsFragment extends Fragment {
     refresh.setEnabled(false);
 
     Resources resources = getActivity().getResources();
-    AdLoader.Builder builder = new AdLoader.Builder(getActivity(),
-        resources.getString(R.string.customcontrols_fragment_ad_unit_id));
+    AdLoader.Builder builder =
+        new AdLoader.Builder(
+            getActivity(), resources.getString(R.string.customcontrols_fragment_ad_unit_id));
 
     if (customFormatAdsCheckbox.isChecked()) {
       builder.forCustomFormatAd(
@@ -264,14 +261,13 @@ public class AdManagerCustomControlsFragment extends Fragment {
           });
     }
 
-    VideoOptions videoOptions = new VideoOptions.Builder()
-        .setStartMuted(startVideoAdsMuted.isChecked())
-        .setCustomControlsRequested(customControlsCheckbox.isChecked())
-        .build();
+    VideoOptions videoOptions =
+        new VideoOptions.Builder()
+            .setStartMuted(startVideoAdsMuted.isChecked())
+            .setCustomControlsRequested(customControlsCheckbox.isChecked())
+            .build();
 
-    NativeAdOptions adOptions = new NativeAdOptions.Builder()
-        .setVideoOptions(videoOptions)
-        .build();
+    NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
 
     builder.withNativeAdOptions(adOptions);
 
@@ -296,7 +292,5 @@ public class AdManagerCustomControlsFragment extends Fragment {
                 })
             .build();
     adLoader.loadAd(new AdManagerAdRequest.Builder().build());
-
-    customControlsView.reset();
   }
 }

@@ -2,12 +2,13 @@ package com.google.android.gms.example.apidemo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 
@@ -17,10 +18,9 @@ import com.google.android.gms.ads.VideoController;
  */
 public class CustomControlsView extends LinearLayout {
 
-  private Button playButton;
-  private Button muteButton;
+  private ImageButton playButton;
+  private ImageButton muteButton;
   private View controlsView;
-  private TextView videoStatusText;
   private boolean isVideoPlaying;
 
   public CustomControlsView(Context context) {
@@ -43,7 +43,6 @@ public class CustomControlsView extends LinearLayout {
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     inflater.inflate(R.layout.custom_video_controls, this, true);
 
-    videoStatusText = findViewById(R.id.tv_video_status);
     playButton = findViewById(R.id.btn_play);
     muteButton = findViewById(R.id.btn_mute);
     controlsView = findViewById(R.id.video_controls);
@@ -51,24 +50,17 @@ public class CustomControlsView extends LinearLayout {
   }
 
   /*
-   * Reset the custom controls view.
-   */
-  public void reset() {
-    controlsView.setVisibility(View.GONE);
-    videoStatusText.setText("");
-  }
-
-  /*
-   * Sets up the custom controls view with the provided VideoController.
+   * Sets up the custom controls view with the provided VideoController and mute state.
    */
   @SuppressLint("SetTextI18n")
-  public void setMediaContent(MediaContent mediaContent) {
+  public void initialize(MediaContent mediaContent, final boolean muted) {
     controlsView.setVisibility(View.GONE);
-    if (mediaContent.hasVideoContent()) {
-      videoStatusText.setText("Video status: Ad contains a video asset.");
-      configureVideoContent(mediaContent.getVideoController());
-    } else {
-      videoStatusText.setText("Video status: Ad does not contain a video asset.");
+    if (mediaContent != null && mediaContent.hasVideoContent()) {
+      VideoController videoController = mediaContent.getVideoController();
+      if (videoController.isCustomControlsEnabled()) {
+        configureVideoContent(mediaContent.getVideoController());
+        setMuteImage(muted);
+      }
     }
   }
 
@@ -76,9 +68,18 @@ public class CustomControlsView extends LinearLayout {
     return isVideoPlaying;
   }
 
+  private void setMuteImage(final boolean muted) {
+    Drawable img;
+    if (muted) {
+      img = ContextCompat.getDrawable(getContext(), R.drawable.video_mute);
+    } else {
+      img = ContextCompat.getDrawable(getContext(), R.drawable.video_unmute);
+    }
+    muteButton.setImageDrawable(img);
+  }
+
   private void configureVideoContent(final VideoController videoController) {
     if (videoController.isCustomControlsEnabled()) {
-      muteButton.setText(videoController.isMuted() ? "Unmute" : "Mute");
       controlsView.setVisibility(View.VISIBLE);
 
       muteButton.setOnClickListener(new View.OnClickListener() {
@@ -109,17 +110,15 @@ public class CustomControlsView extends LinearLayout {
           @SuppressLint("SetTextI18n")
           @Override
           public void onVideoMute(final boolean muted) {
-            videoStatusText.setText(
-                ("Video status: " + (muted ? "Video did mute" : "Video did un-mute")));
-            muteButton.setText(muted ? "Unmute" : "Mute");
+            setMuteImage(muted);
             super.onVideoMute(muted);
           }
 
           @SuppressLint("SetTextI18n")
           @Override
           public void onVideoPause() {
-            videoStatusText.setText("Video status: Video did pause.");
-            playButton.setText("Play");
+            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.video_play);
+            playButton.setImageDrawable(img);
             isVideoPlaying = false;
             super.onVideoPause();
           }
@@ -127,17 +126,18 @@ public class CustomControlsView extends LinearLayout {
           @SuppressLint("SetTextI18n")
           @Override
           public void onVideoPlay() {
-            videoStatusText.setText("Video status: Video did play.");
-            playButton.setText("Pause");
+            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.video_pause);
+            playButton.setImageDrawable(img);
             isVideoPlaying = true;
+            setMuteImage(videoController.isMuted());
             super.onVideoPlay();
           }
 
           @SuppressLint("SetTextI18n")
           @Override
           public void onVideoStart() {
-            videoStatusText.setText("Video status: Video did start.");
-            playButton.setText("Pause");
+            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.video_pause);
+            playButton.setImageDrawable(img);
             isVideoPlaying = true;
             super.onVideoStart();
           }
@@ -145,8 +145,8 @@ public class CustomControlsView extends LinearLayout {
           @SuppressLint("SetTextI18n")
           @Override
           public void onVideoEnd() {
-            videoStatusText.setText("Video status: Video playback has ended.");
-            playButton.setText("Play");
+            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.video_play);
+            playButton.setImageDrawable(img);
             isVideoPlaying = false;
             super.onVideoEnd();
           }
