@@ -83,6 +83,7 @@
         <item>AdMob - Ad Targeting</item>
         <item>AdMob - Banner Sizes</item>
         <item>AdMob - Custom Mute This Ad</item>
+        <item>AdMob - Ad preloading</item>
         <item>Ad Manager - Fluid Size</item>
         <item>Ad Manager - PPID</item>
         <item>Ad Manager - Custom Targeting</item>
@@ -120,4 +121,12 @@
     <string name="customcontrols_view_mute" translatable="false">Mute</string>
     <string name="customcontrols_view_play" translatable="false">Play</string>
     <string name="customcontrols_view_video_status" translatable="false">Video Status: </string>
+
+    <string name="preload_title">Ad Preloading</string>
+    <string name="preload_show_ad">Show Ad</string>
+    <string name="preload_available"><font color='green'>Available</font></string>
+    <string name="preload_exhausted"><font color='red'>Exhausted</font></string>
+    <string name="preload_interstitial">Interstitial Ad</string>
+    <string name="preload_rewarded">Rewarded Ad</string>
+    <string name="preload_app_open">App Open Ad</string>
 </resources>

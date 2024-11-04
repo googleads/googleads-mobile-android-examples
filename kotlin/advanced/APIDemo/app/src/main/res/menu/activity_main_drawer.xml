@@ -20,6 +20,9 @@
             <item
                 android:id="@+id/nav_admob_custommute"
                 android:title="Custom Mute This Ad" />
+            <item
+                android:id="@+id/nav_admob_preload"
+                android:title="Ad Preloading" />
         </menu>
     </item>
 
