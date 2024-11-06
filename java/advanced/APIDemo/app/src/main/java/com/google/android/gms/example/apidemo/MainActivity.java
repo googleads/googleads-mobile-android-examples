@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding;
+import com.google.android.gms.example.apidemo.preloading.AdMobPreloadingAdsFragment;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Arrays;
 
@@ -94,6 +95,9 @@ public class MainActivity extends AppCompatActivity
         break;
       case R.id.nav_admob_custommute:
         newFragment = new AdMobCustomMuteThisAdFragment();
+        break;
+      case R.id.nav_admob_preload:
+        newFragment = new AdMobPreloadingAdsFragment();
         break;
       case R.id.nav_gam_adsizes:
         newFragment = new AdManagerMultipleAdSizesFragment();
