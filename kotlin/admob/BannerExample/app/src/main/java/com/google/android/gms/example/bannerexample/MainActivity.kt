@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
   private lateinit var binding: ActivityMainBinding
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
+  // [START get_ad_size]
   // Get the ad size with screen width.
   private val adSize: AdSize
     get() {
@@ -60,6 +61,8 @@ class MainActivity : AppCompatActivity() {
       val adWidth = (adWidthPixels / density).toInt()
       return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
+
+  // [END get_ad_size]
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

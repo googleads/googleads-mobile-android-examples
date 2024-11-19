@@ -204,6 +204,7 @@ public class MyActivity extends AppCompatActivity {
         .start();
   }
 
+  // [START get_ad_size]
   // Get the ad size with screen width.
   public AdSize getAdSize() {
     DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -218,4 +219,5 @@ public class MyActivity extends AppCompatActivity {
     int adWidth = (int) (adWidthPixels / density);
     return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
   }
+  // [END get_ad_size]
 }
