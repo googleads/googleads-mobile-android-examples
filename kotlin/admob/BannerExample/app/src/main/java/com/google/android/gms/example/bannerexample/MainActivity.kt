@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
     googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
-    // [START can_request_ads]
     googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
         // Consent not obtained in current session.
@@ -83,15 +82,11 @@ class MainActivity : AppCompatActivity() {
       if (googleMobileAdsConsentManager.canRequestAds) {
         initializeMobileAdsSdk()
       }
-      // [START_EXCLUDE]
 
-      // [START add_privacy_options]
       if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
         // Regenerate the options menu to include a privacy setting.
         invalidateOptionsMenu()
       }
-      // [END add_privacy_options]
-      // [END_EXCLUDE]
     }
 
     // This sample attempts to load ads using consent obtained in the previous session.
@@ -178,17 +173,16 @@ class MainActivity : AppCompatActivity() {
     // [END load_ad]
   }
 
-  // [START request_ads]
   private fun initializeMobileAdsSdk() {
     if (isMobileAdsInitializeCalled.getAndSet(true)) {
       return
     }
-    // [START_EXCLUDE silent] // [START_EXCLUDE silent] Hide from developer docs code snippet
+
     // Set your test devices.
     MobileAds.setRequestConfiguration(
       RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
     )
-    // [END_EXCLUDE]
+
     CoroutineScope(Dispatchers.IO).launch {
       // Initialize the Google Mobile Ads SDK on a background thread.
       MobileAds.initialize(this@MainActivity) {}
@@ -199,8 +193,6 @@ class MainActivity : AppCompatActivity() {
       }
     }
   }
-
-  // [END request_ads]
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.

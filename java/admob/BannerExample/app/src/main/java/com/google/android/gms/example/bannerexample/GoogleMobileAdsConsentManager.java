@@ -59,14 +59,11 @@ public class GoogleMobileAdsConsentManager {
     return consentInformation.canRequestAds();
   }
 
-  // [START is_privacy_options_required]
   /** Helper variable to determine if the privacy options form is required. */
   public boolean isPrivacyOptionsRequired() {
     return consentInformation.getPrivacyOptionsRequirementStatus()
         == PrivacyOptionsRequirementStatus.REQUIRED;
   }
-
-  // [END is_privacy_options_required]
 
   /**
    * Helper method to call the UMP SDK methods to request consent information and load/present a
@@ -84,21 +81,34 @@ public class GoogleMobileAdsConsentManager {
     ConsentRequestParameters params =
         new ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build();
 
-    // [START gather_consent]
+    // [START request_consent_info_update]
     // Requesting an update to consent information should be called on every app launch.
     consentInformation.requestConsentInfoUpdate(
         activity,
         params,
-        () ->
-            UserMessagingPlatform.loadAndShowConsentFormIfRequired(
-                activity,
-                formError -> {
-                  // Consent has been gathered.
-                  onConsentGatheringCompleteListener.consentGatheringComplete(formError);
-                }),
-        requestConsentError ->
+        () -> // Called when consent information is successfully updated.
+            // [START_EXCLUDE silent]
+            loadAndShowConsentFormIfRequired(activity, onConsentGatheringCompleteListener),
+        // [END_EXCLUDE]
+        requestConsentError -> // Called when there's an error updating consent information.
+            // [START_EXCLUDE silent]
             onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError));
-    // [END gather_consent]
+    // [END_EXCLUDE]
+    // [END request_consent_info_update]
+  }
+
+  private void loadAndShowConsentFormIfRequired(
+      Activity activity, OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
+    // [START load_and_show_consent_form]
+    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+        activity,
+        formError -> {
+          // Consent gathering process is complete.
+          // [START_EXCLUDE silent]
+          onConsentGatheringCompleteListener.consentGatheringComplete(formError);
+          // [END_EXCLUDE]
+        });
+    // [END load_and_show_consent_form]
   }
 
   /** Helper method to call the UMP SDK method to present the privacy options form. */

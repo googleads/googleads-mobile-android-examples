@@ -69,22 +69,39 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
 
     val params = ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build()
 
-    // [START gather_consent]
+    // [START request_consent_info_update]
     // Requesting an update to consent information should be called on every app launch.
     consentInformation.requestConsentInfoUpdate(
       activity,
       params,
       {
-        UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
-          // Consent has been gathered.
-          onConsentGatheringCompleteListener.consentGatheringComplete(formError)
-        }
+        // Called when consent information is successfully updated.
+        // [START_EXCLUDE silent]
+        loadAndShowConsentFormIfRequired(activity, onConsentGatheringCompleteListener)
+        // [END_EXCLUDE]
       },
       { requestConsentError ->
+        // Called when there's an error updating consent information.
+        // [START_EXCLUDE silent]
         onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError)
+        // [END_EXCLUDE]
       },
     )
-    // [END gather_consent]
+    // [END request_consent_info_update]
+  }
+
+  private fun loadAndShowConsentFormIfRequired(
+    activity: Activity,
+    onConsentGatheringCompleteListener: OnConsentGatheringCompleteListener,
+  ) {
+    // [START load_and_show_consent_form]
+    UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
+      // Consent gathering process is complete.
+      // [START_EXCLUDE silent]
+      onConsentGatheringCompleteListener.consentGatheringComplete(formError)
+      // [END_EXCLUDE]
+    }
+    // [END load_and_show_consent_form]
   }
 
   /** Helper method to call the UMP SDK method to show the privacy options form. */
