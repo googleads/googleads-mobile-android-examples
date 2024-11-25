@@ -59,11 +59,14 @@ public class GoogleMobileAdsConsentManager {
     return consentInformation.canRequestAds();
   }
 
+  // [START is_privacy_options_required]
   /** Helper variable to determine if the privacy options form is required. */
   public boolean isPrivacyOptionsRequired() {
     return consentInformation.getPrivacyOptionsRequirementStatus()
         == PrivacyOptionsRequirementStatus.REQUIRED;
   }
+
+  // [END is_privacy_options_required]
 
   /**
    * Helper method to call the UMP SDK methods to request consent information and load/present a
