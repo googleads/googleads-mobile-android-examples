@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     binding.retryButton.visibility = View.INVISIBLE
     binding.retryButton.setOnClickListener {
       startGame()
-      if (rewardedAd == null && !isLoading && googleMobileAdsConsentManager.canRequestAds) {
+      if (!isLoading && googleMobileAdsConsentManager.canRequestAds) {
         loadRewardedAd()
       }
     }

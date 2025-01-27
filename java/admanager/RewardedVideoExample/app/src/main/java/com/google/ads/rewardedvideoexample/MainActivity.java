@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             startGame();
-            if (rewardedAd != null && !isLoading && googleMobileAdsConsentManager.canRequestAds()) {
+            if (!isLoading && googleMobileAdsConsentManager.canRequestAds()) {
               loadRewardedAd();
             }
           }
