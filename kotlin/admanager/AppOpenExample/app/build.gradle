@@ -9,7 +9,7 @@ android {
     compileSdkVersion 34
     defaultConfig {
         applicationId "com.google.android.gms.example.appopenexample"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 34
         multiDexEnabled true
         versionCode 1
@@ -38,6 +38,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-process:2.8.3"
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'com.google.android.gms:play-services-ads:23.6.0'
+    implementation 'com.google.android.gms:play-services-ads:24.0.0'
     implementation 'com.google.android.ump:user-messaging-platform:3.1.0'
 }

@@ -18,9 +18,6 @@
         android:value="ca-app-pub-3940256099942544~3347511713" />
     <meta-data android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"
         android:value="true" />
-    <meta-data
-        android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
-        android:value="true" />
 
     <activity
         android:name="com.google.android.gms.example.jetpackcomposedemo.main.MainActivity"
