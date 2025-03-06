@@ -43,7 +43,7 @@ import com.google.android.gms.ads.AdView
 @Composable
 fun BannerAd(adView: AdView, modifier: Modifier = Modifier) {
   var parent by remember { mutableStateOf<FrameLayout?>(null) }
-  // Ad load does not work in preview mode because it requires a network connection.
+  // Ad load does not work in preview mode because it requires a network connection..
   if (LocalInspectionMode.current) {
     Box { Text(text = "Google Mobile Ads preview banner.", modifier.align(Alignment.Center)) }
     return
