@@ -16,16 +16,11 @@
 
 package com.google.android.gms.compose_util
 
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,35 +37,17 @@ import com.google.android.gms.ads.AdView
  */
 @Composable
 fun BannerAd(adView: AdView, modifier: Modifier = Modifier) {
-  var parent by remember { mutableStateOf<FrameLayout?>(null) }
   // Ad load does not work in preview mode because it requires a network connection.
   if (LocalInspectionMode.current) {
     Box { Text(text = "Google Mobile Ads preview banner.", modifier.align(Alignment.Center)) }
     return
   }
 
-  AndroidView(
-    modifier = modifier.wrapContentSize(),
-    factory = { context -> FrameLayout(context).also { parent = it } },
-    update = { layout ->
-      disposeLayout(adView, layout)
-      layout.addView(adView)
-    },
-  )
+  AndroidView(modifier = modifier.wrapContentSize(), factory = { adView })
 
   // Pause and resume the AdView when the lifecycle is paused and resumed.
   LifecycleResumeEffect(adView) {
     adView.resume()
     onPauseOrDispose { adView.pause() }
   }
-
-  // Clean up the AdView after use.
-  DisposableEffect(Unit) { onDispose { disposeLayout(adView, parent) } }
-}
-
-/** Clean up the AdView after use. */
-private fun disposeLayout(adView: AdView, layout: FrameLayout?) {
-  // Ensure AdViews and Composable references are up to date.
-  (adView.parent as? ViewGroup)?.removeView(adView)
-  layout?.removeAllViews()
 }
