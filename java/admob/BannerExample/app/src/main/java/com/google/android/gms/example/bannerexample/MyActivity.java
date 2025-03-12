@@ -16,15 +16,11 @@
 
 package com.google.android.gms.example.bannerexample;
 
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowMetrics;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -168,7 +164,10 @@ public class MyActivity extends AppCompatActivity {
     // Create a new ad view.
     adView = new AdView(this);
     adView.setAdUnitId(AD_UNIT_ID);
-    adView.setAdSize(getAdSize());
+    // [START set_ad_size]
+    // Request an anchored adaptive banner with a width of 360.
+    adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360));
+    // [END set_ad_size]
 
     // Replace ad container with new ad view.
     adContainerView.removeAllViews();
@@ -176,7 +175,6 @@ public class MyActivity extends AppCompatActivity {
     // [END create_ad_view]
 
     // [START load_ad]
-    // Start loading the ad in the background.
     AdRequest adRequest = new AdRequest.Builder().build();
     adView.loadAd(adRequest);
     // [END load_ad]
@@ -203,21 +201,4 @@ public class MyActivity extends AppCompatActivity {
             })
         .start();
   }
-
-  // [START get_ad_size]
-  // Get the ad size with screen width.
-  public AdSize getAdSize() {
-    DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-    int adWidthPixels = displayMetrics.widthPixels;
-
-    if (VERSION.SDK_INT >= VERSION_CODES.R) {
-      WindowMetrics windowMetrics = this.getWindowManager().getCurrentWindowMetrics();
-      adWidthPixels = windowMetrics.getBounds().width();
-    }
-
-    float density = displayMetrics.density;
-    int adWidth = (int) (adWidthPixels / density);
-    return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
-  }
-  // [END get_ad_size]
 }

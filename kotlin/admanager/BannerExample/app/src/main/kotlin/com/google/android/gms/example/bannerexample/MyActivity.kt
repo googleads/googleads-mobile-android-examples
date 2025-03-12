@@ -16,13 +16,11 @@
 
 package com.google.android.gms.example.bannerexample
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowMetrics
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -44,25 +42,6 @@ class MyActivity : AppCompatActivity() {
   private var adView: AdManagerAdView? = null
   private lateinit var binding: ActivityMyBinding
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
-
-  // [START get_ad_size]
-  // Get the ad size with screen width.
-  private val adSize: AdSize
-    get() {
-      val displayMetrics = resources.displayMetrics
-      val adWidthPixels =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-          val windowMetrics: WindowMetrics = this.windowManager.currentWindowMetrics
-          windowMetrics.bounds.width()
-        } else {
-          displayMetrics.widthPixels
-        }
-      val density = displayMetrics.density
-      val adWidth = (adWidthPixels / density).toInt()
-      return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
-    }
-
-  // [END get_ad_size]
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -157,7 +136,10 @@ class MyActivity : AppCompatActivity() {
     // Create a new ad view.
     val adView = AdManagerAdView(this)
     adView.adUnitId = AD_UNIT_ID
-    adView.setAdSize(adSize)
+    // [START set_ad_size]
+    // Request an anchored adaptive banner with a width of 360.
+    adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360))
+    // [END set_ad_size]
     this.adView = adView
 
     // Replace ad container with new ad view.
@@ -166,7 +148,6 @@ class MyActivity : AppCompatActivity() {
     // [END create_ad_view]
 
     // [START load_ad]
-    // Start loading the ad in the background.
     val adRequest = AdManagerAdRequest.Builder().build()
     adView.loadAd(adRequest)
     // [END load_ad]
