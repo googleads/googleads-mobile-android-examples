@@ -48,7 +48,7 @@ dependencies {
   implementation("androidx.compose.foundation:foundation")
   implementation("androidx.navigation:navigation-compose:2.8.8")
   implementation("androidx.navigation:navigation-runtime-ktx:2.8.8")
-  implementation("com.google.android.gms:play-services-ads:24.0.0")
+  implementation("com.google.android.gms:play-services-ads:24.1.0")
   implementation("com.google.android.ump:user-messaging-platform:3.1.0")
   implementation(project(":compose-util"))
   debugImplementation("androidx.compose.ui:ui-tooling")
