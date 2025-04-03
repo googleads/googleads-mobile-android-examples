@@ -23,6 +23,13 @@ fun HomeScreen(
 ) {
   Column {
     Button(
+      onClick = { navController.navigate(NavDestinations.AdManagerBanner.name) },
+      enabled = uiState.canRequestAds,
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Text(LocalContext.current.getString(R.string.nav_admanager_banner))
+    }
+    Button(
       onClick = { navController.navigate(NavDestinations.Banner.name) },
       enabled = uiState.canRequestAds,
       modifier = Modifier.fillMaxWidth(),
