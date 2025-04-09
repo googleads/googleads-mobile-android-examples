@@ -48,19 +48,29 @@ import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplicat
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.TAG
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
+// [START banner_screen]
 @Composable
 fun BannerScreen(modifier: Modifier = Modifier) {
+
+  // Initialize required variables.
   val context = LocalContext.current
   val isPreviewMode = LocalInspectionMode.current
+  // Get the current screen width in density-independent pixels (dp).
+  // This is used to determine the appropriate banner ad size.
   val deviceWidth = LocalConfiguration.current.screenWidthDp
+  // Create a mutable state to hold the AdView instance.
+  // It's nullable because it might not be initialized yet or might be destroyed.
   var adView by remember { mutableStateOf<AdView?>(null) }
 
+  // LaunchedEffect is a composable that runs a side effect in a coroutine.
+  // It will be re-launched when any of its keys change.
+  // In this case, it will re-run if the context or deviceWidth changes.
   LaunchedEffect(context, deviceWidth) {
-    // Create a new AdView when size changes.
     adView?.destroy()
     adView = loadAdaptiveBannerAd(context, deviceWidth, isPreviewMode)
   }
 
+  // Place the ad view at the bottom of the screen.
   Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
     adView?.let { adView ->
       Box(modifier = Modifier.fillMaxWidth()) {
@@ -69,22 +79,39 @@ fun BannerScreen(modifier: Modifier = Modifier) {
     }
   }
 
-  // Clean up the AdView after use.
-  DisposableEffect(Unit) { onDispose { adView?.destroy() } }
+  // DisposableEffect runs code when the composable appears and disappears.
+  // 'Unit' means it runs only once when the screen is created.
+  DisposableEffect(Unit) {
+    // Destroy the AdView to release its resources and prevent memory leaks.
+    onDispose { adView?.destroy() }
+  }
 }
 
+// [END banner_screen]
+
+// [START create_ad_view]
 private fun loadAdaptiveBannerAd(context: Context, width: Int, isPreviewMode: Boolean): AdView {
+
   val adView = AdView(context)
 
-  // Do not load the AdView in preview mode.
+  // Prevent loading the AdView if the app is in preview mode.
   if (isPreviewMode) {
     return adView
   }
 
+  // Setup and load the adview.
+  // [START_EXCLUDE]
+  // Set the unique ID for this specific ad unit.
   adView.adUnitId = BANNER_AD_UNIT_ID
+
+  // [START set_ad_size]
+  // Set the adaptive banner ad size based on the current screen orientation.
   val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, width)
   adView.setAdSize(adSize)
+  // [END set_ad_size]
 
+  // [START add_listener]
+  // [Optional] Set an AdListener to receive callbacks for various ad events.
   adView.adListener =
     object : AdListener() {
       override fun onAdLoaded() {
@@ -103,11 +130,20 @@ private fun loadAdaptiveBannerAd(context: Context, width: Int, isPreviewMode: Bo
         Log.d(TAG, "Banner ad was clicked.")
       }
     }
+  // [END add_listener]
 
+  // [START load_ad]
+  // Create an AdRequest and load the ad.
   val adRequest = AdRequest.Builder().build()
   adView.loadAd(adRequest)
+  // [END load_ad]
+  // [END_EXCLUDE]
+
+  // Return the configured AdView instance.
   return adView
 }
+
+// [END create_ad_view]
 
 @Preview
 @Composable
