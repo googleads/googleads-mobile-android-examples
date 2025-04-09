@@ -38,6 +38,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-process:2.8.3"
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'com.google.android.gms:play-services-ads:24.1.0'
-    implementation 'com.google.android.ump:user-messaging-platform:3.1.0'
+    implementation 'com.google.android.gms:play-services-ads:24.2.0'
+    implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
 }
