@@ -29,7 +29,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.example.apidemo.databinding.FragmentCollapsibleBannerBinding
-import java.util.UUID
 
 /** The [CollapsibleBannerFragment] class demonstrates how to use a collapsible banner ad. */
 class CollapsibleBannerFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener {
@@ -60,9 +59,6 @@ class CollapsibleBannerFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutLis
     // the bottom of the bannerView.
     val extras = Bundle()
     extras.putString("collapsible", "bottom")
-
-    // Pass a UUID as a collapsible_request_id to limit collapsible ads on ad refreshing.
-    extras.putString("collapsible_request_id", UUID.randomUUID().toString())
 
     // Create an ad request.
     val adRequest =
