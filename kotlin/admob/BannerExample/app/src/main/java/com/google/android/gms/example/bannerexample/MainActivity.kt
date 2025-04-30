@@ -163,15 +163,18 @@ class MainActivity : AppCompatActivity() {
       RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
     )
 
+    // [START initialize_sdk]
     CoroutineScope(Dispatchers.IO).launch {
       // Initialize the Google Mobile Ads SDK on a background thread.
       MobileAds.initialize(this@MainActivity) {}
-
+      // [START_EXCLUDE silent]
       runOnUiThread {
         // Load an ad on the main thread.
         loadBanner()
       }
+      // [END_EXCLUDE]
     }
+    // [END initialize_sdk]
   }
 
   companion object {

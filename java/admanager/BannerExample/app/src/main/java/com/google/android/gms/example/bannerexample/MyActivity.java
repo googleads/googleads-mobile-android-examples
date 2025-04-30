@@ -191,14 +191,17 @@ public class MyActivity extends AppCompatActivity {
             .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
             .build());
 
+    // [START initialize_sdk]
     new Thread(
             () -> {
               // Initialize the Google Mobile Ads SDK on a background thread.
               MobileAds.initialize(this, initializationStatus -> {});
-
+              // [START_EXCLUDE silent]
               // Load an ad on the main thread.
               runOnUiThread(this::loadBanner);
+              // [END_EXCLUDE]
             })
         .start();
+    // [END initialize_sdk]
   }
 }
