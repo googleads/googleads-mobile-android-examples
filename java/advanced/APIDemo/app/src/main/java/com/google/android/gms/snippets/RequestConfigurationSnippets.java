@@ -8,9 +8,11 @@ import java.util.List;
 /** Java code snippets for the developer guide. */
 final class RequestConfigurationSnippets {
 
+  public static final String TEST_DEVICE_ID = "33BE2250B43518CCDA7DE426D04EE231";
+
   private void setTestDeviceIds() {
     // [START set_test_device_ids]
-    List<String> testDeviceIds = Arrays.asList("33BE2250B43518CCDA7DE426D04EE231");
+    List<String> testDeviceIds = Arrays.asList(TEST_DEVICE_ID);
     RequestConfiguration configuration =
         new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
     MobileAds.setRequestConfiguration(configuration);
