@@ -18,24 +18,22 @@ package com.google.android.gms.compose_util
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.AdChoicesView
 import com.google.android.gms.ads.nativead.MediaView
-import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 
 /**
@@ -46,71 +44,16 @@ internal val LocalNativeAdView = staticCompositionLocalOf<NativeAdView?> { null 
 /**
  * This is the Compose wrapper for a NativeAdView.
  *
- * @param nativeAdState The NativeAdState object containing ad configuration.
  * @param modifier The modifier to apply to the native ad.
- * @param nativeAdResult Unit which returns the loaded native ad.
  * @param content A composable function that defines the rest of the native ad view's elements.
  */
 @Composable
-fun NativeAdView(
-  nativeAdState: NativeAdState,
-  modifier: Modifier = Modifier,
-  nativeAdResult: (NativeAd) -> Unit,
-  content: @Composable () -> Unit,
-) {
+fun NativeAdView(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
   val localContext = LocalContext.current
   val nativeAdView = remember { NativeAdView(localContext).apply { id = View.generateViewId() } }
-  var lastNativeAd by remember { mutableStateOf<NativeAd?>(null) }
 
   AndroidView(
     factory = {
-      val adLoader = AdLoader.Builder(localContext, nativeAdState.adUnitId)
-      if (nativeAdState.nativeAdOptions != null) {
-        adLoader.withNativeAdOptions(nativeAdState.nativeAdOptions)
-      }
-      adLoader.withAdListener(
-        object : AdListener() {
-          override fun onAdFailedToLoad(error: LoadAdError) {
-            nativeAdState.onAdFailedToLoad?.invoke(error)
-          }
-
-          override fun onAdLoaded() {
-            nativeAdState.onAdLoaded?.invoke()
-          }
-
-          override fun onAdClicked() {
-            nativeAdState.onAdClicked?.invoke()
-          }
-
-          override fun onAdClosed() {
-            nativeAdState.onAdClosed?.invoke()
-          }
-
-          override fun onAdImpression() {
-            nativeAdState.onAdImpression?.invoke()
-          }
-
-          override fun onAdOpened() {
-            nativeAdState.onAdOpened?.invoke()
-          }
-
-          override fun onAdSwipeGestureClicked() {
-            nativeAdState.onAdSwipeGestureClicked?.invoke()
-          }
-        }
-      )
-
-      adLoader.forNativeAd { nativeAd ->
-        // Destroy old native ad assets to prevent memory leaks.
-        lastNativeAd?.destroy()
-        lastNativeAd = nativeAd
-
-        // Set the native ad on the native ad view.
-        nativeAdView.setNativeAd(nativeAd)
-        nativeAdResult(nativeAd)
-      }
-      adLoader.build().loadAd(nativeAdState.adRequest)
-
       nativeAdView.apply {
         layoutParams =
           ViewGroup.LayoutParams(
@@ -138,14 +81,6 @@ fun NativeAdView(
     },
     modifier = modifier,
   )
-
-  DisposableEffect(Unit) {
-    onDispose {
-      // Destroy old native ad assets to prevent memory leaks.
-      lastNativeAd?.destroy()
-      lastNativeAd = null
-    }
-  }
 }
 
 /**
@@ -355,4 +290,45 @@ fun NativeAdStoreView(modifier: Modifier = Modifier, content: @Composable () -> 
     },
     modifier = modifier,
   )
+}
+
+/**
+ * The composable for a ad attribution inside a NativeAdView. This composable must be invoked from
+ * within a `NativeAdView`.
+ *
+ * @param text The string identifying this view as an advertisement.
+ * @param modifier modify the native ad view element.
+ */
+@Composable
+fun NativeAdAttribution(text: String = "Ad", modifier: Modifier = Modifier) {
+  Box(
+    modifier =
+      modifier.background(ButtonDefaults.buttonColors().containerColor).clip(ButtonDefaults.shape)
+  ) {
+    Text(color = ButtonDefaults.buttonColors().contentColor, text = text)
+  }
+}
+
+/**
+ * The composable for a button inside a NativeAdView. This composable must be invoked from within a
+ * NativeAdView.
+ *
+ * The Jetpack Compose button implements a click handler which overrides the native ad click
+ * handler, causing issues. The NativeAdButton does not implement a click handler. To handle native
+ * ad clicks, use the NativeAd AdListener onAdClicked callback.
+ *
+ * @param text The string identifying this view as an advertisement.
+ * @param modifier modify the native ad view element.
+ */
+@Composable
+fun NativeAdButton(text: String, modifier: Modifier = Modifier) {
+  Box(
+    modifier =
+      modifier
+        .background(ButtonDefaults.buttonColors().containerColor)
+        .clip(ButtonDefaults.shape)
+        .padding(ButtonDefaults.ContentPadding)
+  ) {
+    Text(color = ButtonDefaults.buttonColors().contentColor, text = text)
+  }
 }
