@@ -4,6 +4,7 @@
   <string name="adinspector_open_button">Ad Inspector</string>
   <string name="main_title">Jetpack Compose Demo</string>
   <string name="nav_home">Home</string>
+  <string name="nav_admanager_banner">Ad Manager Banner</string>
   <string name="nav_banner">Banner</string>
   <string name="nav_lazy_banner">Lazy Banner</string>
   <string name="nav_native">Native</string>

@@ -35,22 +35,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.compose_util.BannerAd
-import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.BANNER_AD_UNIT_ID
+import com.google.android.gms.ads.admanager.AdManagerAdView
+import com.google.android.gms.compose_util.AdManagerBannerAd
+import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.ADMANANGER_ADAPTIVE_BANNER_AD_UNIT_ID
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.TAG
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
 @Composable
-fun BannerScreen(modifier: Modifier = Modifier) {
+fun AdManagerBannerScreen(modifier: Modifier = Modifier) {
   val context = LocalContext.current
   // [START create_ad_view]
-  val adView = remember { AdView(context) }
+  val adView = remember { AdManagerAdView(context) }
 
   // Setup and load the adview.
   // Set the unique ID for this specific ad unit.
-  adView.adUnitId = BANNER_AD_UNIT_ID
+  adView.adUnitId = ADMANANGER_ADAPTIVE_BANNER_AD_UNIT_ID
 
   // [START set_ad_size]
   // Set the adaptive banner ad size with a given width.
@@ -62,7 +62,7 @@ fun BannerScreen(modifier: Modifier = Modifier) {
   // Place the ad view at the bottom of the screen.
   Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
     Box(modifier = Modifier.fillMaxWidth()) {
-      BannerAd(adView, Modifier.align(Alignment.BottomCenter))
+      AdManagerBannerAd(adView, Modifier.align(Alignment.BottomCenter))
     }
   }
   // [END banner_screen]
@@ -107,8 +107,8 @@ fun BannerScreen(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-private fun BannerScreenPreview() {
+private fun AdManagerBannerScreenPreview() {
   JetpackComposeDemoTheme {
-    Surface(color = MaterialTheme.colorScheme.background) { BannerScreen() }
+    Surface(color = MaterialTheme.colorScheme.background) { AdManagerBannerScreen() }
   }
 }
