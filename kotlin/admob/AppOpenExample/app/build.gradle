@@ -25,6 +25,7 @@ android {
         viewBinding true
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -34,12 +35,13 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.lifecycle:lifecycle-process:2.8.3"
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'com.google.android.gms:play-services-ads:24.2.0'
+    implementation 'com.google.android.gms:play-services-ads:24.3.0'
     implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
 }

@@ -21,6 +21,7 @@ android {
     }
   }
   compileOptions {
+    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
@@ -31,6 +32,7 @@ android {
 }
 
 dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
   implementation("androidx.core:core-ktx:1.16.0")
   implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
   implementation(platform("androidx.compose:compose-bom:2025.04.01"))
@@ -38,7 +40,7 @@ dependencies {
   implementation("androidx.compose.ui:ui-graphics:1.8.0")
   implementation("androidx.compose.material3:material3")
   implementation("androidx.compose.foundation:foundation")
-  implementation("com.google.android.gms:play-services-ads:24.2.0")
+  implementation("com.google.android.gms:play-services-ads:24.3.0")
   implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
   debugImplementation("androidx.compose.ui:ui-tooling")
 }

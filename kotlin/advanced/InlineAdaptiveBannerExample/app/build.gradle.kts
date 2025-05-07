@@ -23,13 +23,12 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    isCoreLibraryDesugaringEnabled = true
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
 
-  kotlinOptions {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+  kotlinOptions { kotlinOptions.jvmTarget = "1.8" }
 
   buildFeatures { compose = true }
   composeOptions { kotlinCompilerExtensionVersion = "1.4.3" }
@@ -37,10 +36,11 @@ android {
 }
 
 dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
   implementation("androidx.compose.runtime:runtime:1.0.0")
   implementation("androidx.core:core-ktx:1.8.0")
   implementation("androidx.appcompat:appcompat:1.6.1")
   implementation("androidx.cardview:cardview:1.0.0")
   implementation("androidx.recyclerview:recyclerview:1.3.2")
-  implementation("com.google.android.gms:play-services-ads:24.2.0")
+  implementation("com.google.android.gms:play-services-ads:24.3.0")
 }

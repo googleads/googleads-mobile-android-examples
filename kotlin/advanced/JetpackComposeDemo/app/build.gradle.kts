@@ -25,6 +25,7 @@ android {
     }
   }
   compileOptions {
+    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
@@ -36,6 +37,7 @@ android {
 }
 
 dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
   implementation("androidx.activity:activity")
   implementation("androidx.activity:activity-ktx")
   implementation("androidx.activity:activity-compose:1.10.1")
@@ -47,7 +49,7 @@ dependencies {
   implementation("androidx.compose.material3:material3")
   implementation("androidx.compose.foundation:foundation")
   implementation("androidx.navigation:navigation-runtime-ktx:2.8.9")
-  implementation("com.google.android.gms:play-services-ads:24.2.0")
+  implementation("com.google.android.gms:play-services-ads:24.3.0")
   implementation("com.google.android.ump:user-messaging-platform:3.2.0")
   implementation(project(":compose-util"))
   implementation("androidx.navigation:navigation-compose:2.8.9")
