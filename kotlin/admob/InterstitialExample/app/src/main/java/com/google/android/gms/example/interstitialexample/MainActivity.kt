@@ -117,16 +117,25 @@ class MainActivity : AppCompatActivity() {
     }
     adIsLoading = true
 
-    val adRequest = AdRequest.Builder().build()
-
+    // [START load_ad]
     InterstitialAd.load(
       this,
       AD_UNIT_ID,
-      adRequest,
+      AdRequest.Builder().build(),
       object : InterstitialAdLoadCallback() {
+        override fun onAdLoaded(ad: InterstitialAd) {
+          Log.d(TAG, "Ad was loaded.")
+          interstitialAd = ad
+          // [START_EXCLUDE silent]
+          adIsLoading = false
+          Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+          // [END_EXCLUDE]
+        }
+
         override fun onAdFailedToLoad(adError: LoadAdError) {
           Log.d(TAG, adError.message)
           interstitialAd = null
+          // [START_EXCLUDE silent]
           adIsLoading = false
           val error =
             "domain: ${adError.domain}, code: ${adError.code}, " + "message: ${adError.message}"
@@ -136,16 +145,11 @@ class MainActivity : AppCompatActivity() {
               Toast.LENGTH_SHORT,
             )
             .show()
-        }
-
-        override fun onAdLoaded(ad: InterstitialAd) {
-          Log.d(TAG, "Ad was loaded.")
-          interstitialAd = ad
-          adIsLoading = false
-          Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+          // [END_EXCLUDE]
         }
       },
     )
+    // [END load_ad]
   }
 
   // Create the game timer, which counts down to the end of the level
@@ -173,9 +177,11 @@ class MainActivity : AppCompatActivity() {
   // Show the ad if it's ready. Otherwise restart the game.
   private fun showInterstitial() {
     if (interstitialAd != null) {
+      // [START set_fullscreen_callback]
       interstitialAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
+            // Called when fullscreen content is dismissed.
             Log.d(TAG, "Ad was dismissed.")
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
@@ -183,6 +189,7 @@ class MainActivity : AppCompatActivity() {
           }
 
           override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+            // Called when fullscreen content failed to show.
             Log.d(TAG, "Ad failed to show.")
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
@@ -190,11 +197,25 @@ class MainActivity : AppCompatActivity() {
           }
 
           override fun onAdShowedFullScreenContent() {
+            // Called when fullscreen content is shown.
             Log.d(TAG, "Ad showed fullscreen content.")
-            // Called when ad is dismissed.
+          }
+
+          override fun onAdImpression() {
+            // Called when an impression is recorded for an ad.
+            Log.d(TAG, "Ad recorded an impression.")
+          }
+
+          override fun onAdClicked() {
+            // Called when ad is clicked.
+            Log.d(TAG, "Ad was clicked.")
           }
         }
+      // [END set_fullscreen_callback]
+
+      // [START show_ad]
       interstitialAd?.show(this)
+      // [END show_ad]
     } else {
       startGame()
       if (googleMobileAdsConsentManager.canRequestAds) {
