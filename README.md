@@ -78,6 +78,20 @@ documentation on using the Mobile Ads SDK.
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/admanager/NativeAdsExample),
     [Kotlin](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/admanager/NativeAdsExample)
 
+# Documentation Snippets
+
+This repository also contains code snippets used in developer documentation for
+[AdMob](https://developers.google.com/admob/android) and
+[Ad Manager](https://developers.google.com/ad-manager/mobile-ads-sdk/android).
+These snippets live in the API Demo projects for Java and Kotlin under a
+`snippets` package.
+
+The idea is that by including the code snippets from documentation in a sample
+project, developers will gain more context on how to implement a specific API.
+
+In addition, by having CI running on this repo, we can ensure that the code
+snippets the documentation are in a working condition.
+
 # Downloads
 
 Please check out our [releases](https://github.com/googleads/googleads-mobile-android-examples/releases)
