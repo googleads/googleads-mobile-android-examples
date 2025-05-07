@@ -119,14 +119,25 @@ class MainActivity : AppCompatActivity() {
 
     val adRequest = AdRequest.Builder().build()
 
+    // [START load_ad]
     InterstitialAd.load(
       this,
       AD_UNIT_ID,
       adRequest,
       object : InterstitialAdLoadCallback() {
+        override fun onAdLoaded(ad: InterstitialAd) {
+          Log.d(TAG, "Ad was loaded.")
+          interstitialAd = ad
+          // [START_EXCLUDE silent]
+          adIsLoading = false
+          Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+          // [END_EXCLUDE]
+        }
+
         override fun onAdFailedToLoad(adError: LoadAdError) {
           Log.d(TAG, adError.message)
           interstitialAd = null
+          // [START_EXCLUDE silent]
           adIsLoading = false
           val error =
             "domain: ${adError.domain}, code: ${adError.code}, " + "message: ${adError.message}"
@@ -136,16 +147,11 @@ class MainActivity : AppCompatActivity() {
               Toast.LENGTH_SHORT,
             )
             .show()
-        }
-
-        override fun onAdLoaded(ad: InterstitialAd) {
-          Log.d(TAG, "Ad was loaded.")
-          interstitialAd = ad
-          adIsLoading = false
-          Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+          // [END_EXCLUDE]
         }
       },
     )
+    // [END load_ad]
   }
 
   // Create the game timer, which counts down to the end of the level
@@ -173,6 +179,7 @@ class MainActivity : AppCompatActivity() {
   // Show the ad if it's ready. Otherwise restart the game.
   private fun showInterstitial() {
     if (interstitialAd != null) {
+      // [START set_fullscreen_callback]
       interstitialAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
@@ -193,8 +200,22 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Ad showed fullscreen content.")
             // Called when ad is dismissed.
           }
+
+          override fun onAdImpression() {
+            Log.d(TAG, "Ad recorded an impression.")
+            // Called when an impression is recorded for an ad.
+          }
+
+          override fun onAdClicked() {
+            Log.d(TAG, "Ad was clicked.")
+            // Called when ad is clicked.
+          }
         }
+      // [END set_fullscreen_callback]
+
+      // [START show_ad]
       interstitialAd?.show(this)
+      // [END show_ad]
     } else {
       startGame()
       if (googleMobileAdsConsentManager.canRequestAds) {
