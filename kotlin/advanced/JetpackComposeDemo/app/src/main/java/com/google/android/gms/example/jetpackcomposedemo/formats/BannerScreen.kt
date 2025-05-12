@@ -27,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -61,9 +60,7 @@ fun BannerScreen(modifier: Modifier = Modifier) {
   // [START banner_screen]
   // Place the ad view at the bottom of the screen.
   Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
-    Box(modifier = Modifier.fillMaxWidth()) {
-      BannerAd(adView, Modifier.align(Alignment.BottomCenter))
-    }
+    Box(modifier = modifier.fillMaxWidth()) { BannerAd(adView, modifier) }
   }
   // [END banner_screen]
   // [END create_ad_view]
@@ -105,7 +102,7 @@ fun BannerScreen(modifier: Modifier = Modifier) {
   }
 }
 
-@Preview
+@Preview(apiLevel = 33)
 @Composable
 private fun BannerScreenPreview() {
   JetpackComposeDemoTheme {
