@@ -96,10 +96,12 @@ fun BannerScreen(modifier: Modifier = Modifier) {
     // [END load_ad]
   }
 
+  // [START dispose_ad]
   DisposableEffect(Unit) {
     // Destroy the AdView to prevent memory leaks when the screen is disposed.
     onDispose { adView.destroy() }
   }
+  // [END dispose_ad]
 }
 
 @Preview(apiLevel = 33)
