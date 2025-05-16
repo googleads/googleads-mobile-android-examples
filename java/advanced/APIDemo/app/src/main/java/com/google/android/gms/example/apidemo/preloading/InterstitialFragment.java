@@ -25,13 +25,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.ResponseInfo;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdPreloader;
+import com.google.android.gms.ads.preload.PreloadCallbackV2;
+import com.google.android.gms.ads.preload.PreloadConfiguration;
 import com.google.android.gms.example.apidemo.R;
 import com.google.android.gms.example.apidemo.databinding.FragmentPreloadItemBinding;
 
 /** A [Fragment] subclass that preloads an interstitial ad. */
-public class InterstitialFragment extends PreloadItemFragment {
+public class InterstitialFragment extends Fragment {
 
   // Replace this test ad unit ID with your own ad unit ID.
   public static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
@@ -43,10 +51,41 @@ public class InterstitialFragment extends PreloadItemFragment {
       @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     viewBinding = FragmentPreloadItemBinding.inflate(inflater, container, false);
 
-    // Initialize the UI.
+    startPreload();
     initializeUI();
 
     return viewBinding.getRoot();
+  }
+
+  private void startPreload() {
+    // Define a PreloadConfiguration.
+    PreloadConfiguration configuration = new PreloadConfiguration.Builder(AD_UNIT_ID).build();
+
+    // Define a callback to receive preload events.
+    PreloadCallbackV2 callback =
+        new PreloadCallbackV2() {
+          @Override
+          public void onAdPreloaded(
+              @NonNull String preloadId, @Nullable ResponseInfo responseInfo) {
+            Log.i(LOG_TAG, "Preload ad for " + preloadId + " is available.");
+            updateUI();
+          }
+
+          @Override
+          public void onAdsExhausted(@NonNull String preloadId) {
+            Log.i(LOG_TAG, "Preload ad  " + preloadId + " is exhausted.");
+          }
+
+          @Override
+          public void onAdFailedToPreload(@NonNull String preloadId, @NonNull AdError adError) {
+            Log.i(
+                LOG_TAG,
+                "Preload ad " + preloadId + " had an error : " + adError.getMessage() + ".");
+          }
+        };
+
+    // Start the preloading with a given preload Id, preload configuration, and callback.
+    InterstitialAdPreloader.start(AD_UNIT_ID, configuration, callback);
   }
 
   private void initializeUI() {
@@ -59,45 +98,30 @@ public class InterstitialFragment extends PreloadItemFragment {
     updateUI();
   }
 
-  // [START pollAndShowAd]
   private void pollAndShowAd() {
-    // [START isAdAvailable]
-    // Verify that a preloaded ad is available before polling for an ad.
-    if (!InterstitialAd.isAdAvailable(requireContext(), AD_UNIT_ID)) {
-      Log.w(LOG_TAG, "Preloaded interstitial ad ${AD_UNIT_ID} is not available.");
-      return;
-    }
-    // [END isAdAvailable]
     // Polling returns the next available ad and load another ad in the background.
-    InterstitialAd ad = InterstitialAd.pollAd(requireContext(), AD_UNIT_ID);
+    InterstitialAd ad = InterstitialAdPreloader.pollAd(AD_UNIT_ID);
     Activity activity = getActivity();
+
     if (activity != null && ad != null) {
       // Interact with the ad object as needed.
-      Log.d(LOG_TAG, "Interstitial ad response info: " + ad.getResponseInfo());
-      ad.setFullScreenContentCallback(
-          new FullScreenContentCallback() {
-            @Override
-            public void onAdImpression() {
-              Log.d(LOG_TAG, "Interstitial ad recorded an impression.");
-            }
-          });
       ad.setOnPaidEventListener(
-          value ->
-              Log.d(
-                  LOG_TAG,
-                  "Interstitial ad onPaidEvent: "
-                      + value.getValueMicros()
-                      + " "
-                      + value.getCurrencyCode()));
+          adValue -> {
+            Log.d(
+                LOG_TAG,
+                "Interstitial ad onPaidEvent: "
+                    + adValue.getValueMicros()
+                    + " "
+                    + adValue.getCurrencyCode());
+          });
+
+      // Show the ad immediately.
       ad.show(activity);
     }
   }
 
-  // [END pollAndShowAd]
-
-  @Override
-  public synchronized void updateUI() {
-    if (InterstitialAd.isAdAvailable(requireContext(), AD_UNIT_ID)) {
+  private void updateUI() {
+    if (InterstitialAdPreloader.isAdAvailable(AD_UNIT_ID)) {
       viewBinding.txtStatus.setText(getString(R.string.preload_available));
       viewBinding.btnShow.setEnabled(true);
     } else {
