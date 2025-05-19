@@ -53,42 +53,41 @@ class AdMobPreloadingAdsFragment : Fragment() {
 
   // [START start_preload]
   private fun startPreload() {
-    // Define the number of ads that can be preloaded for each ad unit.
-    val bufferSize = 2
-    // Define a list of PreloadConfiguration objects, specifying the ad unit ID and ad format for
-    // each ad unit to be preloaded.
+    // Define a list of PreloadConfiguration objects, specifying the ad unit ID and ad format.
     val preloadConfigs =
       listOf(
         PreloadConfiguration.Builder(InterstitialFragment.AD_UNIT_ID, AdFormat.INTERSTITIAL)
-          .setBufferSize(bufferSize)
           .build(),
-        PreloadConfiguration.Builder(RewardedFragment.AD_UNIT_ID, AdFormat.REWARDED)
-          .setBufferSize(bufferSize)
-          .build(),
-        PreloadConfiguration.Builder(AppOpenFragment.AD_UNIT_ID, AdFormat.APP_OPEN_AD)
-          .setBufferSize(bufferSize)
-          .build(),
+        PreloadConfiguration.Builder(RewardedFragment.AD_UNIT_ID, AdFormat.REWARDED).build(),
+        PreloadConfiguration.Builder(AppOpenFragment.AD_UNIT_ID, AdFormat.APP_OPEN_AD).build(),
       )
 
-    // Define a callback to receive preload availability events.
-    val callback =
-      object : PreloadCallback {
-        override fun onAdsAvailable(preloadConfig: PreloadConfiguration) {
-          Log.i(LOG_TAG, "Preload ad for ${ preloadConfig.adFormat } is available.")
-          updateUI()
-        }
-
-        override fun onAdsExhausted(preloadConfig: PreloadConfiguration) {
-          Log.i(LOG_TAG, "Preload ad for configuration ${ preloadConfig.adFormat } is exhausted.")
-          updateUI()
-        }
-      }
-
     // Start the preloading initialization process.
-    MobileAds.startPreload(this.requireContext(), preloadConfigs, callback)
+    // Be sure to pass an Activity context when calling startPreload() if you use mediation, as
+    // some mediation partners require an Activity context to load ads.
+    // Optional : Define a callback to receive preload availability events.
+    MobileAds.startPreload(this.requireContext(), preloadConfigs, getPreloadCallback())
   }
 
   // [END start_preload]
+
+  // [START set_callback]
+  private fun getPreloadCallback(): PreloadCallback {
+    return object : PreloadCallback {
+      override fun onAdsAvailable(preloadConfig: PreloadConfiguration) {
+        Log.i(LOG_TAG, "Preload ad for configuration ${preloadConfig.adFormat} is available.")
+        // [START_EXCLUDE]
+        updateUI()
+        // [END_EXCLUDE]
+      }
+
+      override fun onAdsExhausted(preloadConfig: PreloadConfiguration) {
+        Log.i(LOG_TAG, "Preload ad for configuration ${preloadConfig.adFormat} is exhausted.")
+      }
+    }
+  }
+
+  // [END set_callback]
 
   private fun addFragments() {
     addFragment(AppOpenFragment())
