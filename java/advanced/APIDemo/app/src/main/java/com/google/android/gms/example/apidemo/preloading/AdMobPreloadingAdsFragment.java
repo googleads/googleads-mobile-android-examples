@@ -41,7 +41,7 @@ public class AdMobPreloadingAdsFragment extends PreloadItemFragment {
 
   @Override
   public View onCreateView(
-      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // Inflate the layout.
     FragmentPreloadItemBinding viewBinding =
         FragmentPreloadItemBinding.inflate(getLayoutInflater());
@@ -57,43 +57,49 @@ public class AdMobPreloadingAdsFragment extends PreloadItemFragment {
 
   // [START start_preload]
   private void startPreload() {
-    // Define the number of ads that can be preloaded for each ad unit.
-    int bufferSize = 2;
-    // Define a list of PreloadConfiguration objects, specifying the ad unit ID and ad format for
-    // each ad unit to be preloaded.
+    // Define a list of PreloadConfiguration objects, specifying the ad unit ID and ad format.
     List<PreloadConfiguration> preloadConfigs =
         Arrays.asList(
             new PreloadConfiguration.Builder(InterstitialFragment.AD_UNIT_ID, AdFormat.INTERSTITIAL)
-                .setBufferSize(bufferSize)
                 .build(),
             new PreloadConfiguration.Builder(RewardedFragment.AD_UNIT_ID, AdFormat.REWARDED)
-                .setBufferSize(bufferSize)
                 .build(),
             new PreloadConfiguration.Builder(AppOpenFragment.AD_UNIT_ID, AdFormat.APP_OPEN_AD)
-                .setBufferSize(bufferSize)
                 .build());
 
-    // Define a callback to receive preload availability events.
-    PreloadCallback callback =
-        new PreloadCallback() {
-          @Override
-          public void onAdsAvailable(@NonNull PreloadConfiguration preloadConfig) {
-            Log.i(LOG_TAG, "Preload ad for " + preloadConfig.getAdFormat() + " is available.");
-            updateUI();
-          }
-
-          @Override
-          public void onAdsExhausted(@NonNull PreloadConfiguration preloadConfig) {
-            Log.i(LOG_TAG, "Preload ad for " + preloadConfig.getAdFormat() + " is exhausted.");
-            updateUI();
-          }
-        };
-
     // Start the preloading initialization process.
-    MobileAds.startPreload(this.requireContext(), preloadConfigs, callback);
+    // Be sure to pass an Activity context when calling startPreload() if you use mediation, as
+    // some mediation partners require an Activity context to load ads.
+    // Optional : Define a callback to receive preload availability events.
+    MobileAds.startPreload(this.requireContext(), preloadConfigs, getPreloadCallback());
   }
 
   // [END start_preload]
+
+  // [START set_callback]
+  private PreloadCallback getPreloadCallback() {
+    // Define a callback to receive preload availability events.
+    return new PreloadCallback() {
+      @Override
+      public void onAdsAvailable(@NonNull PreloadConfiguration preloadConfig) {
+        Log.i(
+            LOG_TAG,
+            "Preload ad for configuration " + preloadConfig.getAdFormat() + " is available.");
+        // [START_EXCLUDE]
+        updateUI();
+        // [END_EXCLUDE]
+      }
+
+      @Override
+      public void onAdsExhausted(@NonNull PreloadConfiguration preloadConfig) {
+        Log.i(
+            LOG_TAG,
+            "Preload ad for configuration " + preloadConfig.getAdFormat() + " is exhausted.");
+      }
+    };
+  }
+
+  // [END set_callback]
 
   private void addFragmentsUI() {
     addFragmentUI(new AppOpenFragment());
