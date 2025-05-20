@@ -21,6 +21,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.ads.AdValue
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.OnPaidEventListener
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.example.apidemo.MainActivity.Companion.LOG_TAG
 import com.google.android.gms.example.apidemo.R
@@ -61,7 +64,20 @@ class AppOpenFragment : PreloadItemFragment() {
     }
     // Polling returns the next available ad and load another ad in the background.
     val ad = AppOpenAd.pollAd(requireContext(), AD_UNIT_ID)
-    activity?.let { activity -> ad?.show(activity) }
+    if (ad != null) {
+      // Interact with the ad object as needed.
+      Log.d(LOG_TAG, "App open ad response info: " + ad.responseInfo)
+      ad.fullScreenContentCallback =
+        object : FullScreenContentCallback() {
+          override fun onAdImpression() {
+            Log.d(LOG_TAG, "App open ad recorded an impression.")
+          }
+        }
+      ad.onPaidEventListener = OnPaidEventListener { value: AdValue ->
+        Log.d(LOG_TAG, ("App open ad onPaidEvent: " + value.valueMicros + " " + value.currencyCode))
+      }
+      activity?.let { activity -> ad.show(activity) }
+    }
   }
 
   @Synchronized

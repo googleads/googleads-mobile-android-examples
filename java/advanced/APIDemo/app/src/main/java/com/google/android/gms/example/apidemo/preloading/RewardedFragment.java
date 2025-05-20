@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
@@ -70,6 +71,24 @@ public class RewardedFragment extends PreloadItemFragment {
     RewardedAd ad = RewardedAd.pollAd(requireContext(), AD_UNIT_ID);
     Activity activity = getActivity();
     if (activity != null && ad != null) {
+      // Interact with the ad object as needed.
+      Log.d(LOG_TAG, "Rewarded ad response info: " + ad.getResponseInfo());
+      ad.setFullScreenContentCallback(
+          new FullScreenContentCallback() {
+            @Override
+            public void onAdImpression() {
+              Log.d(LOG_TAG, "Rewarded ad recorded an impression.");
+            }
+          });
+      ad.setOnPaidEventListener(
+          value ->
+              Log.d(
+                  LOG_TAG,
+                  "Rewarded ad onPaidEvent: "
+                      + value.getValueMicros()
+                      + " "
+                      + value.getCurrencyCode()));
+
       ad.show(
           activity,
           new OnUserEarnedRewardListener() {

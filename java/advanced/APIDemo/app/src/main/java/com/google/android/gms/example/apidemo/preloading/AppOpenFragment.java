@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 import com.google.android.gms.example.apidemo.R;
 import com.google.android.gms.example.apidemo.databinding.FragmentPreloadItemBinding;
@@ -68,6 +69,23 @@ public class AppOpenFragment extends PreloadItemFragment {
     AppOpenAd ad = AppOpenAd.pollAd(requireContext(), AD_UNIT_ID);
     Activity activity = getActivity();
     if (activity != null && ad != null) {
+      // Interact with the ad object as needed.
+      Log.d(LOG_TAG, "App open ad response info: " + ad.getResponseInfo());
+      ad.setFullScreenContentCallback(
+          new FullScreenContentCallback() {
+            @Override
+            public void onAdImpression() {
+              Log.d(LOG_TAG, "App open ad recorded an impression.");
+            }
+          });
+      ad.setOnPaidEventListener(
+          value ->
+              Log.d(
+                  LOG_TAG,
+                  "App open ad onPaidEvent: "
+                      + value.getValueMicros()
+                      + " "
+                      + value.getCurrencyCode()));
       ad.show(activity);
     }
   }
