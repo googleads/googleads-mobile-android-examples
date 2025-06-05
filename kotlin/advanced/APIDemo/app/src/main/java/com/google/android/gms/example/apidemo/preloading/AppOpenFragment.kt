@@ -21,16 +21,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.ads.AdValue
-import com.google.android.gms.ads.FullScreenContentCallback
+import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.OnPaidEventListener
-import com.google.android.gms.ads.appopen.AppOpenAd
+import com.google.android.gms.ads.ResponseInfo
+import com.google.android.gms.ads.appopen.AppOpenAdPreloader
+import com.google.android.gms.ads.preload.PreloadCallbackV2
+import com.google.android.gms.ads.preload.PreloadConfiguration
 import com.google.android.gms.example.apidemo.MainActivity.Companion.LOG_TAG
 import com.google.android.gms.example.apidemo.R
 import com.google.android.gms.example.apidemo.databinding.FragmentPreloadItemBinding
 
 /** A [Fragment] subclass that preloads an app open ad. */
-class AppOpenFragment : PreloadItemFragment() {
+class AppOpenFragment : Fragment() {
 
   private lateinit var viewBinding: FragmentPreloadItemBinding
 
@@ -41,11 +44,39 @@ class AppOpenFragment : PreloadItemFragment() {
   ): View {
     viewBinding = FragmentPreloadItemBinding.inflate(inflater, container, false)
 
-    // Initialize the UI.
+    startPreload()
     initializeUI()
 
     return viewBinding.root
   }
+
+  private fun startPreload() {
+    // Define a PreloadConfiguration.
+    val configuration = PreloadConfiguration.Builder(AD_UNIT_ID).build()
+
+    // Define a callback to receive preload events.
+    val callback =
+      object : PreloadCallbackV2() {
+        override fun onAdPreloaded(preloadId: String, responseInfo: ResponseInfo?) {
+          Log.i(LOG_TAG, "Preload ad for $preloadId is available.")
+          updateUI()
+        }
+
+        override fun onAdsExhausted(preloadId: String) {
+          Log.i(LOG_TAG, "Preload ad for $preloadId is exhausted.")
+          updateUI()
+        }
+
+        override fun onAdFailedToPreload(preloadId: String, adError: AdError) {
+          Log.i(LOG_TAG, "Preload ad $preloadId failed to load with error: ${adError.message}.")
+        }
+      }
+
+    // Start the preloading with a given preload Id, preload configuration, and callback.
+    AppOpenAdPreloader.start(AD_UNIT_ID, configuration, callback)
+  }
+
+  // [END start_preload]
 
   private fun initializeUI() {
     viewBinding.txtTitle.text = getText(R.string.preload_app_open)
@@ -57,32 +88,21 @@ class AppOpenFragment : PreloadItemFragment() {
   }
 
   private fun pollAndShowAd() {
-    // Verify that an ad is available before polling for an ad.
-    if (!AppOpenAd.isAdAvailable(requireContext(), AD_UNIT_ID)) {
-      Log.w(LOG_TAG, "Preloaded app open ad ${AD_UNIT_ID} is not available.")
-      return
-    }
     // Polling returns the next available ad and load another ad in the background.
-    val ad = AppOpenAd.pollAd(requireContext(), AD_UNIT_ID)
-    if (ad != null) {
-      // Interact with the ad object as needed.
-      Log.d(LOG_TAG, "App open ad response info: " + ad.responseInfo)
-      ad.fullScreenContentCallback =
-        object : FullScreenContentCallback() {
-          override fun onAdImpression() {
-            Log.d(LOG_TAG, "App open ad recorded an impression.")
-          }
-        }
-      ad.onPaidEventListener = OnPaidEventListener { value: AdValue ->
-        Log.d(LOG_TAG, ("App open ad onPaidEvent: " + value.valueMicros + " " + value.currencyCode))
-      }
-      activity?.let { activity -> ad.show(activity) }
+    val ad = AppOpenAdPreloader.pollAd(AD_UNIT_ID)
+
+    // Interact with the ad as needed.
+    ad?.onPaidEventListener = OnPaidEventListener {
+      // TODO: Send the impression-level ad revenue information to your preferred
+      // analytics server directly within this callback.
     }
+
+    // Show the ad immediately.
+    activity?.let { activity -> ad?.show(activity) }
   }
 
-  @Synchronized
-  override fun updateUI() {
-    if (AppOpenAd.isAdAvailable(requireContext(), AD_UNIT_ID)) {
+  private fun updateUI() {
+    if (AppOpenAdPreloader.isAdAvailable(AD_UNIT_ID)) {
       viewBinding.txtStatus.text = getString(R.string.preload_available)
       viewBinding.btnShow.isEnabled = true
     } else {
@@ -92,6 +112,7 @@ class AppOpenFragment : PreloadItemFragment() {
   }
 
   companion object {
+    // Admob App Open Ad Unit ID.
     const val AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921"
   }
 }
