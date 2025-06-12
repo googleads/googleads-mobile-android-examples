@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.ads.AdValue
-import com.google.android.gms.ads.FullScreenContentCallback
+import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.OnPaidEventListener
-import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.ResponseInfo
+import com.google.android.gms.ads.interstitial.InterstitialAdPreloader
+import com.google.android.gms.ads.preload.PreloadCallbackV2
+import com.google.android.gms.ads.preload.PreloadConfiguration
 import com.google.android.gms.example.apidemo.MainActivity.Companion.LOG_TAG
 import com.google.android.gms.example.apidemo.R
 import com.google.android.gms.example.apidemo.databinding.FragmentPreloadItemBinding
 
 /** A [Fragment] subclass that preloads an interstitial ad. */
-class InterstitialFragment : PreloadItemFragment() {
+class InterstitialFragment : Fragment() {
 
   private lateinit var viewBinding: FragmentPreloadItemBinding
 
@@ -41,56 +44,57 @@ class InterstitialFragment : PreloadItemFragment() {
   ): View {
     viewBinding = FragmentPreloadItemBinding.inflate(inflater, container, false)
 
-    initializeUI()
+    // Define a PreloadConfiguration.
+    val configuration = PreloadConfiguration.Builder(AD_UNIT_ID).build()
 
-    return viewBinding.root
-  }
+    // [Optional] Define a callback to receive preload events.
+    val callback =
+      object : PreloadCallbackV2() {
+        override fun onAdPreloaded(preloadId: String, responseInfo: ResponseInfo?) {
+          Log.i(LOG_TAG, "Preload ad for $preloadId is available.")
+          updateUI()
+        }
 
-  private fun initializeUI() {
+        override fun onAdsExhausted(preloadId: String) {
+          Log.i(LOG_TAG, "Preload ad for $preloadId is exhausted.")
+          updateUI()
+        }
+
+        override fun onAdFailedToPreload(preloadId: String, adError: AdError) {
+          Log.i(LOG_TAG, "Preload ad $preloadId failed to load with error: ${adError.message}.")
+        }
+      }
+
+    // Start the preloading with a given preload ID, preload configuration, and callback.
+    InterstitialAdPreloader.start(AD_UNIT_ID, configuration, callback)
+
+    // Initialize the UI.
     viewBinding.txtTitle.text = getText(R.string.preload_interstitial)
     viewBinding.btnShow.setOnClickListener {
       pollAndShowAd()
       updateUI()
     }
     updateUI()
+
+    return viewBinding.root
   }
 
-  // [START pollAndShowAd]
   private fun pollAndShowAd() {
-    // [START isAdAvailable]
-    // Verify that a preloaded ad is available before polling for an ad.
-    if (!InterstitialAd.isAdAvailable(requireContext(), AD_UNIT_ID)) {
-      Log.w(LOG_TAG, "Preloaded interstitial ad ${AD_UNIT_ID} is not available.")
-      return
-    }
-    // [END isAdAvailable]
+    // pollAd() returns the next available ad and loads another ad in the background.
+    val ad = InterstitialAdPreloader.pollAd(AD_UNIT_ID)
 
-    // Polling returns the next available ad and load another ad in the background.
-    val ad = InterstitialAd.pollAd(requireContext(), AD_UNIT_ID)
-    if (ad != null) {
-      // Interact with the ad object as needed.
-      Log.d(LOG_TAG, "Interstitial ad response info: " + ad.responseInfo)
-      ad.fullScreenContentCallback =
-        object : FullScreenContentCallback() {
-          override fun onAdImpression() {
-            Log.d(LOG_TAG, "Interstitial ad recorded an impression.")
-          }
-        }
-      ad.onPaidEventListener = OnPaidEventListener { value: AdValue ->
-        Log.d(
-          LOG_TAG,
-          ("Interstitial ad onPaidEvent: " + value.valueMicros + " " + value.currencyCode),
-        )
-      }
-      activity?.let { activity -> ad.show(activity) }
+    // [Optional] Interact with the ad as needed.
+    ad?.onPaidEventListener = OnPaidEventListener {
+      // [Optional] Send the impression-level ad revenue information to your preferred
+      // analytics server directly within this callback.
     }
+
+    // Show the ad immediately.
+    activity?.let { activity -> ad?.show(activity) }
   }
 
-  // [END pollAndShowAd]
-
-  @Synchronized
-  override fun updateUI() {
-    if (InterstitialAd.isAdAvailable(requireContext(), AD_UNIT_ID)) {
+  private fun updateUI() {
+    if (InterstitialAdPreloader.isAdAvailable(AD_UNIT_ID)) {
       viewBinding.txtStatus.text = getString(R.string.preload_available)
       viewBinding.btnShow.isEnabled = true
     } else {
@@ -99,7 +103,8 @@ class InterstitialFragment : PreloadItemFragment() {
     }
   }
 
-  companion object {
+  private companion object {
+    // Sample interstitial ad unit ID.
     const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
   }
 }
