@@ -156,26 +156,27 @@ class MainActivity : AppCompatActivity() {
   private fun loadRewardedAd() {
     if (rewardedAd == null) {
       isLoading = true
-      var adRequest = AdManagerAdRequest.Builder().build()
 
+      // [START load_ad]
       RewardedAd.load(
         this,
         AD_UNIT_ID,
-        adRequest,
+        AdManagerAdRequest.Builder().build(),
         object : RewardedAdLoadCallback() {
-          override fun onAdFailedToLoad(adError: LoadAdError) {
-            Log.d(TAG, adError.message)
-            isLoading = false
-            rewardedAd = null
-          }
-
           override fun onAdLoaded(ad: RewardedAd) {
             Log.d(TAG, "Ad was loaded.")
             rewardedAd = ad
             isLoading = false
           }
+
+          override fun onAdFailedToLoad(adError: LoadAdError) {
+            Log.d(TAG, adError.message)
+            rewardedAd = null
+            isLoading = false
+          }
         },
       )
+      // [END load_ad]
     }
   }
 
@@ -220,19 +221,24 @@ class MainActivity : AppCompatActivity() {
   private fun showRewardedVideo() {
     binding.showVideoButton.visibility = View.INVISIBLE
     if (rewardedAd != null) {
+      // [START set_content_callback]
       rewardedAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
+            // Called when fullscreen content is dismissed.
             Log.d(TAG, "Ad was dismissed.")
-            if (googleMobileAdsConsentManager.canRequestAds) {
-              loadRewardedAd()
-            }
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
             rewardedAd = null
+            // [START_EXCLUDE silent]
+            if (googleMobileAdsConsentManager.canRequestAds) {
+              loadRewardedAd()
+            }
+            // [END_EXCLUDE]
           }
 
           override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+            // Called when fullscreen content failed to show.
             Log.d(TAG, "Ad failed to show.")
             // Don't forget to set the ad reference to null so you
             // don't show the ad a second time.
@@ -240,21 +246,36 @@ class MainActivity : AppCompatActivity() {
           }
 
           override fun onAdShowedFullScreenContent() {
+            // Called when fullscreen content is shown.
             Log.d(TAG, "Ad showed fullscreen content.")
-            // Called when ad is dismissed.
+          }
+
+          override fun onAdImpression() {
+            // Called when an impression is recorded for an ad.
+            Log.d(TAG, "Ad recorded an impression.")
+          }
+
+          override fun onAdClicked() {
+            // Called when an ad is clicked.
+            Log.d(TAG, "Ad was clicked.")
           }
         }
+      // [END set_content_callback]
 
+      // [START show_ad]
       rewardedAd?.show(
         this,
         OnUserEarnedRewardListener { rewardItem ->
+          Log.d(TAG, "User earned the reward.")
           // Handle the reward.
           val rewardAmount = rewardItem.amount
           val rewardType = rewardItem.type
+          // [START_EXCLUDE silent]
           addCoins(rewardAmount)
-          Log.d("TAG", "User earned the reward.")
+          // [END_EXCLUDE]
         },
       )
+      // [END show_ad]
     }
   }
 
