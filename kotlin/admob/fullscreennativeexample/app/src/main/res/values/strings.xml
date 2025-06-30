@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name" translatable="false">Fullscreen Native Example</string>
+    <string name="ad_attribution" translatable="false">Ad</string>
+    <string name="load_ad" translatable="true">Load ad</string>
+    <string name="more_menu" translatable="true">More</string>
+    <string name="privacy_settings" translatable="true">Privacy Settings</string>
+    <string name="show_ad">Show ad</string>
+</resources>
