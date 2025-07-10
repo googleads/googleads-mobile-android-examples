@@ -18,8 +18,9 @@ import com.google.android.gms.ads.AdapterResponseInfo
 
 /** Kotlin code snippets for the developer guide. */
 class ResponseInfoSnippets {
-  private fun getAdSourceName(loadedAdapterResponseInfo: AdapterResponseInfo): String {
-    // [START get_ad_source_name]
+  // [START get_ad_source_name]
+  private fun getUniqueAdSourceName(loadedAdapterResponseInfo: AdapterResponseInfo): String {
+
     var adSourceName = loadedAdapterResponseInfo.adSourceName
     if (adSourceName == "Custom Event") {
       if (
@@ -29,7 +30,7 @@ class ResponseInfoSnippets {
         adSourceName = "Sample Ad Network (Custom Event)"
       }
     }
-    // [END get_ad_source_name]
     return adSourceName
   }
+  // [END get_ad_source_name]
 }

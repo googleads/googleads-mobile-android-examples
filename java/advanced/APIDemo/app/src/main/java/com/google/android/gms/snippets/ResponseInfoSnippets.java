@@ -20,8 +20,9 @@ import com.google.android.gms.ads.AdapterResponseInfo;
 /** Java code snippets for the developer guide. */
 public class ResponseInfoSnippets {
 
-  private String getAdSourceName(@NonNull AdapterResponseInfo loadedAdapterResponseInfo) {
-    // [START get_ad_source_name]
+  // [START get_ad_source_name]
+  private String getUniqueAdSourceName(@NonNull AdapterResponseInfo loadedAdapterResponseInfo) {
+
     String adSourceName = loadedAdapterResponseInfo.getAdSourceName();
     if (adSourceName.equals("Custom Event")) {
       if (loadedAdapterResponseInfo
@@ -30,7 +31,7 @@ public class ResponseInfoSnippets {
         adSourceName = "Sample Ad Network (Custom Event)";
       }
     }
-    // [END get_ad_source_name]
     return adSourceName;
   }
+  // [END get_ad_source_name]
 }
