@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding
+import com.google.android.gms.example.apidemo.fullscreennative.FullScreenNativeLoadingFragment
 import com.google.android.gms.example.apidemo.preloading.AdMobPreloadingAdsFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun handleOnBackPressed() {
           if (mainActivityBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             mainActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
+          } else {
+            supportFragmentManager.popBackStackImmediate()
           }
         }
       }
@@ -71,6 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         R.id.nav_admob_adtargeting -> AdMobAdTargetingFragment()
         R.id.nav_admob_bannersizes -> AdMobBannerSizesFragment()
         R.id.nav_collapsible_banner -> CollapsibleBannerFragment()
+        R.id.nav_full_screen_native_loading -> FullScreenNativeLoadingFragment()
         R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
         R.id.nav_admob_preload -> AdMobPreloadingAdsFragment()
         R.id.nav_gam_adsizes -> AdManagerMultipleAdSizesFragment()
@@ -90,7 +94,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   companion object {
     const val LOG_TAG = "APIDEMO"
-
     // Check your logcat output for the test device hashed ID e.g.
     // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
     // to get test ads on this device" or

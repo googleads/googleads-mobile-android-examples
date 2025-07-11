@@ -21,6 +21,8 @@
     <string name="targeting_rating_ma" translatable="false">MA</string>
     <string name="bannersizes_size" translatable="false">Size</string>
     <string name="bannersizes_loadad" translatable="false">Load New Ad</string>
+    <string name="load_ad" translatable="true">Load ad</string>
+    <string name="show_ad" translatable="true">Show ad</string>
 
     <string-array name="bannersizes_largesizes" translatable="false">
         <item>Banner</item>
