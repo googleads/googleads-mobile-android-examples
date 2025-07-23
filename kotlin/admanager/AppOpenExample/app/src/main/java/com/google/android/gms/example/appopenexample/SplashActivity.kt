@@ -17,9 +17,9 @@ import kotlinx.coroutines.launch
 /** Splash Activity that inflates splash activity xml. */
 class SplashActivity : AppCompatActivity() {
 
+  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
   private val isMobileAdsInitializeCalled = AtomicBoolean(false)
   private val gatherConsentFinished = AtomicBoolean(false)
-  private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
   private var secondsRemaining: Long = 0L
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
     setContentView(R.layout.activity_splash)
 
     // Log the Mobile Ads SDK version.
-    Log.d(LOG_TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
     // Create a timer so the SplashActivity will be displayed for a fixed amount of time.
     createTimer()
@@ -36,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
     googleMobileAdsConsentManager.gatherConsent(this) { consentError ->
       if (consentError != null) {
         // Consent not obtained in current session.
-        Log.w(LOG_TAG, String.format("%s: %s", consentError.errorCode, consentError.message))
+        Log.w(TAG, String.format("%s: %s", consentError.errorCode, consentError.message))
       }
 
       gatherConsentFinished.set(true)
@@ -70,18 +70,13 @@ class SplashActivity : AppCompatActivity() {
           secondsRemaining = 0
           counterTextView.text = "Done."
 
-          (application as MyApplication).showAdIfAvailable(
-            this@SplashActivity,
-            object : MyApplication.OnShowAdCompleteListener {
-              override fun onShowAdComplete() {
-                // Check if the consent form is currently on screen before moving to the main
-                // activity.
-                if (gatherConsentFinished.get()) {
-                  startMainActivity()
-                }
-              }
-            },
-          )
+          (application as MyApplication).showAdIfAvailable(this@SplashActivity) {
+            // Check if the consent form is currently on screen before moving to the main
+            // activity.
+            if (gatherConsentFinished.get()) {
+              startMainActivity()
+            }
+          }
         }
       }
     countDownTimer.start()
@@ -94,9 +89,7 @@ class SplashActivity : AppCompatActivity() {
 
     // Set your test devices.
     MobileAds.setRequestConfiguration(
-      RequestConfiguration.Builder()
-        .setTestDeviceIds(listOf(MyApplication.TEST_DEVICE_HASHED_ID))
-        .build()
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
     )
 
     CoroutineScope(Dispatchers.IO).launch {
@@ -119,7 +112,12 @@ class SplashActivity : AppCompatActivity() {
     // Number of milliseconds to count down before showing the app open ad. This simulates the time
     // needed to load the app.
     private const val COUNTER_TIME_MILLISECONDS = 5000L
-
-    private const val LOG_TAG = "SplashActivity"
+    private const val TAG = "SplashActivity"
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }
