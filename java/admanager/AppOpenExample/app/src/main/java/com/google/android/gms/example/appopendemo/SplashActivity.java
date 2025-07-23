@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /** Splash Activity that inflates splash activity xml. */
 public class SplashActivity extends AppCompatActivity {
 
-  private static final String LOG_TAG = "SplashActivity";
+  private static final String TAG = "SplashActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
   private final AtomicBoolean gatherConsentFinished = new AtomicBoolean(false);
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
@@ -62,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
           if (consentError != null) {
             // Consent not obtained in current session.
             Log.w(
-                LOG_TAG,
+                TAG,
                 String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
           }
 

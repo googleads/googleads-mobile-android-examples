@@ -45,7 +45,7 @@ class GoogleMobileAdsConsentManager private constructor(context: Context) {
     val debugSettings =
       ConsentDebugSettings.Builder(activity)
         // .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-        .addTestDeviceHashedId(MyApplication.TEST_DEVICE_HASHED_ID)
+        .addTestDeviceHashedId(SplashActivity.TEST_DEVICE_HASHED_ID)
         .build()
 
     val params = ConsentRequestParameters.Builder().setConsentDebugSettings(debugSettings).build()
