@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   // Determine the screen width to use for the ad width.
+  // [START get_ad_width]
   public int getAdWidth() {
     DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
     int adWidthPixels = displayMetrics.widthPixels;
@@ -142,13 +143,17 @@ public class MainActivity extends AppCompatActivity {
     return (int) (adWidthPixels / density);
   }
 
+  // [END get_ad_width]
+
   /** Adds banner ads to the items list. */
   private void addBannerAds() {
     // Loop through the items array and place a new banner ad in every ith position in
     // the items List.
     for (int i = 0; i <= recyclerViewItems.size(); i += ITEMS_PER_AD) {
+      // [START create_banner_ad_view]
       final AdView adView = new AdView(MainActivity.this);
       adView.setAdSize(AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(this, getAdWidth()));
+      // [END create_banner_ad_view]
       adView.setAdUnitId(AD_UNIT_ID);
       recyclerViewItems.add(i, adView);
     }

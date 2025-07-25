@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   // Determine the screen width to use for the ad width.
+  // [START get_ad_width]
   private val adWidth: Int
     get() {
       val displayMetrics = resources.displayMetrics
@@ -79,6 +80,8 @@ class MainActivity : AppCompatActivity() {
       val density = displayMetrics.density
       return (adWidthPixels / density).toInt()
     }
+
+  // [END get_ad_width]
 
   override fun onResume() {
     for (item in recyclerViewItems) {
@@ -113,8 +116,10 @@ class MainActivity : AppCompatActivity() {
     // the items List.
     var i = 0
     while (i <= recyclerViewItems.size) {
+      // [START create_banner_ad_view]
       val adView = AdView(this@MainActivity)
       adView.setAdSize(AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(this, adWidth))
+      // [END create_banner_ad_view]
       adView.adUnitId = AD_UNIT_ID
       recyclerViewItems.add(i, adView)
       i += ITEMS_PER_AD
