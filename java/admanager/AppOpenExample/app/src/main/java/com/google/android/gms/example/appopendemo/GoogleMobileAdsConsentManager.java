@@ -59,7 +59,7 @@ public final class GoogleMobileAdsConsentManager {
     ConsentDebugSettings debugSettings =
         new ConsentDebugSettings.Builder(activity)
             // .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-            .addTestDeviceHashedId(MyApplication.TEST_DEVICE_HASHED_ID)
+            .addTestDeviceHashedId(SplashActivity.TEST_DEVICE_HASHED_ID)
             .build();
 
     ConsentRequestParameters params =
