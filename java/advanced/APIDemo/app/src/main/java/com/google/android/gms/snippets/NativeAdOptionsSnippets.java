@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.util.Log;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.MediaAspectRatio;
 import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
@@ -46,6 +47,16 @@ final class NativeAdOptionsSnippets {
     AdLoader loader =
         new AdLoader.Builder(context, AD_UNIT_ID).withNativeAdOptions(nativeAdOptions).build();
     // [END set_media_aspect_ratio]
+  }
+
+  private void setMediaAspectRatioPortrait(Context context) {
+    // [START set_media_aspect_ratio_portrait]
+    NativeAdOptions nativeAdOptions =
+        new NativeAdOptions.Builder().setMediaAspectRatio(MediaAspectRatio.PORTRAIT).build();
+
+    AdLoader loader =
+        new AdLoader.Builder(context, AD_UNIT_ID).withNativeAdOptions(nativeAdOptions).build();
+    // [END set_media_aspect_ratio_portrait]
   }
 
   private void setImageDownloadOptions(Context context) {
