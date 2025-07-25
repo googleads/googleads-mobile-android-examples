@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.google.android.gms.example.apidemo"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -50,5 +50,5 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1'
 
     // Google Play Services
-    implementation 'com.google.android.gms:play-services-ads:24.4.0'
+    implementation 'com.google.android.gms:play-services-ads:24.5.0'
 }
