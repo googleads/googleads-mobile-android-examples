@@ -54,6 +54,7 @@ class CollapsibleBannerFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutLis
     view.viewTreeObserver.addOnGlobalLayoutListener(this)
   }
 
+  // [START load_collapsible_banner]
   private fun loadCollapsibleBanner() {
     // Create an extra parameter that aligns the bottom of the expanded ad to
     // the bottom of the bannerView.
@@ -64,20 +65,26 @@ class CollapsibleBannerFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutLis
     val adRequest =
       AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter::class.java, extras).build()
 
+    // [START_EXCLUDE]
     // Listen to ad events.
     adView.adListener =
       object : AdListener() {
+        // [START check_collapsibility]
         override fun onAdLoaded() {
           Log.i(
             MainActivity.LOG_TAG,
             "Ad loaded. adView.isCollapsible() is ${adView.isCollapsible}.",
           )
         }
+        // [END check_collapsibility]
       }
+    // [END_EXCLUDE]
 
     // Start loading a collapsible banner ad.
     adView.loadAd(adRequest)
   }
+
+  // [END load_collapsible_banner]
 
   // Use the fragment width as the ad width when layout is finished.
   override fun onGlobalLayout() {

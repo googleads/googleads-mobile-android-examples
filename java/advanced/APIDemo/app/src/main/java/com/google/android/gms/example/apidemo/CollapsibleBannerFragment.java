@@ -59,6 +59,7 @@ public class CollapsibleBannerFragment extends Fragment implements OnGlobalLayou
     view.getViewTreeObserver().addOnGlobalLayoutListener(this);
   }
 
+  // [START load_collapsible_banner]
   private void loadCollapsibleBanner() {
     // Create an extra parameter that aligns the bottom of the expanded ad to
     // the bottom of the bannerView.
@@ -69,20 +70,26 @@ public class CollapsibleBannerFragment extends Fragment implements OnGlobalLayou
     AdRequest adRequest =
         new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
 
+    // [START_EXCLUDE]
     // Listen to ad events.
     adView.setAdListener(
         new AdListener() {
           @Override
+          // [START check_collapsibility]
           public void onAdLoaded() {
             Log.i(
                 MainActivity.LOG_TAG,
                 String.format("Ad loaded. adView.isCollapsible() is %b.", adView.isCollapsible()));
           }
+          // [END check_collapsibility]
         });
+    // [END_EXCLUDE]
 
     // Start loading a collapsible banner ad.
     adView.loadAd(adRequest);
   }
+
+  // [END load_collapsible_banner]
 
   @Override
   public void onGlobalLayout() {
