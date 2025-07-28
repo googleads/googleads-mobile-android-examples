@@ -24,9 +24,13 @@ private class RequestConfigurationSnippets {
 
   private fun setTestDeviceIds() {
     // [START set_test_device_ids]
-    val testDeviceIds = listOf("33BE2250B43518CCDA7DE426D04EE231")
+    val testDeviceIds = listOf(TEST_DEVICE_ID)
     val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
     MobileAds.setRequestConfiguration(configuration)
     // [END set_test_device_ids]
+  }
+
+  companion object {
+    const val TEST_DEVICE_ID = "33BE2250B43518CCDA7DE426D04EE231"
   }
 }
