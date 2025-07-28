@@ -18,6 +18,7 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.MediaAspectRatio
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.nativead.AdChoicesView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -36,6 +37,15 @@ class NativeAdOptionsSnippets {
 
     val loader = AdLoader.Builder(context, AD_UNIT_ID).withNativeAdOptions(nativeAdOptions).build()
     // [END set_media_aspect_ratio]
+  }
+
+  private fun setMediaAspectRatioPortrait(context: Context) {
+    // [START set_media_aspect_ratio_portrait]
+    val nativeAdOptions =
+      NativeAdOptions.Builder().setMediaAspectRatio(MediaAspectRatio.PORTRAIT).build()
+
+    val loader = AdLoader.Builder(context, AD_UNIT_ID).withNativeAdOptions(nativeAdOptions).build()
+    // [END set_media_aspect_ratio_portrait]
   }
 
   private fun setImageDownloadOptions(context: Context) {
