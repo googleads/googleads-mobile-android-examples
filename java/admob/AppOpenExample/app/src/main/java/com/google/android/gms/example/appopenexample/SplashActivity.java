@@ -33,6 +33,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /** Splash Activity that inflates splash activity xml. */
 public class SplashActivity extends AppCompatActivity {
 
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
   private static final String LOG_TAG = "SplashActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
   private final AtomicBoolean gatherConsentFinished = new AtomicBoolean(false);
@@ -129,7 +135,7 @@ public class SplashActivity extends AppCompatActivity {
     // Set your test devices.
     MobileAds.setRequestConfiguration(
         new RequestConfiguration.Builder()
-            .setTestDeviceIds(Arrays.asList(MyApplication.TEST_DEVICE_HASHED_ID))
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
             .build());
 
     new Thread(
