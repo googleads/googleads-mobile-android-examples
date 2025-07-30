@@ -48,6 +48,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1'
+    implementation 'androidx.lifecycle:lifecycle-process:2.9.2'
 
     // Google Play Services
     implementation 'com.google.android.gms:play-services-ads:24.5.0'
