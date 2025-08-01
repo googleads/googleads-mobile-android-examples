@@ -61,10 +61,8 @@ public class CustomNativeOMIDSnippets {
   private void startOpenMeasurement(
       NativeCustomFormatAd ad, ViewGroup nativeCustomFormatAdContainer) {
     DisplayOpenMeasurement displayOpenMeasurement = ad.getDisplayOpenMeasurement();
-    if (displayOpenMeasurement != null) {
-      displayOpenMeasurement.setView(nativeCustomFormatAdContainer);
-      displayOpenMeasurement.start();
-    }
+    displayOpenMeasurement.setView(nativeCustomFormatAdContainer);
+    displayOpenMeasurement.start();
   }
   // [END start_open_measurement]
 }
