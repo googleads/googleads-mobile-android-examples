@@ -1,0 +1,102 @@
+// Copyright 2025 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.google.android.gms.snippets
+
+import android.content.Context
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+
+/** Kotlin code snippets for the developer guide. */
+internal object NativeAdSnippets {
+
+  private const val AD_UNIT_ID = "/21775744923/example/native"
+
+  private fun createAdLoader(context: Context) {
+    // [START create_ad_loader]
+    lateinit var adLoader: AdLoader
+    adLoader =
+      AdLoader.Builder(context, AD_UNIT_ID)
+        .forNativeAd { nativeAd ->
+          // The native ad loaded successfully. You can show the ad.
+          if (adLoader.isLoading) {
+            // The AdLoader is still loading ads.
+            // Expect more adLoaded or onAdFailedToLoad callbacks.
+          } else {
+            // The AdLoader has finished loading ads.
+          }
+        }
+        .withAdListener(
+          object : AdListener() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+              // The native ad load failed. Check the adError message for failure reasons.
+            }
+          }
+        )
+        // Use the NativeAdOptions.Builder class to specify individual options settings.
+        .withNativeAdOptions(NativeAdOptions.Builder().build())
+        .build()
+    // [END create_ad_loader]
+  }
+
+  private fun setAdLoaderListener(adLoaderBuilder: AdLoader.Builder) {
+    // [START set_ad_listener]
+    adLoaderBuilder.withAdListener(
+      object : AdListener() {
+        // Set the AdListener to listen to ad events.
+      }
+    )
+    // [END set_ad_listener]
+  }
+
+  private fun loadAd(adLoader: AdLoader) {
+    // [START load_ad]
+    adLoader.loadAd(AdRequest.Builder().build())
+    // [END load_ad]
+  }
+
+  private fun loadAdAdManager(adLoader: AdLoader) {
+    // [START load_ad_ad_manager]
+    adLoader.loadAd(AdManagerAdRequest.Builder().build())
+    // [END load_ad_ad_manager]
+  }
+
+  private fun loadAds(adLoader: AdLoader) {
+    // [START load_ads]
+    // Load three native ads.
+    adLoader.loadAds(AdRequest.Builder().build(), 3)
+    // [END load_ads]
+  }
+
+  private fun handleAdLoaded(adLoaderBuilder: AdLoader.Builder) {
+    // [START handle_ad_loaded]
+    adLoaderBuilder
+      .forNativeAd { nativeAd ->
+        // This callback will be invoked when a native ad is successfully loaded.
+      }
+      .build()
+    // [END handle_ad_loaded]
+  }
+
+  private fun destroyAd(nativeAd: NativeAd) {
+    // [START destroy_ad]
+    nativeAd.destroy()
+    // [END destroy_ad]
+  }
+}
