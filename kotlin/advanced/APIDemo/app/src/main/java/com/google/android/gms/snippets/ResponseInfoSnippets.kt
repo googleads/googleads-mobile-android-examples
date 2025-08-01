@@ -14,6 +14,8 @@
 
 package com.google.android.gms.snippets
 
+import android.util.Log
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.AdapterResponseInfo
 
 /** Kotlin code snippets for the developer guide. */
@@ -32,5 +34,16 @@ class ResponseInfoSnippets {
     }
     return adSourceName
   }
+
   // [END get_ad_source_name]
+
+  private fun getMediationAdapterClassNameFromAd(ad: AdView) {
+    // [START get_adapter_class_name]
+    Log.d(TAG, "Adapter class name:" + ad.responseInfo?.mediationAdapterClassName)
+    // [END get_adapter_class_name]
+  }
+
+  private companion object {
+    const val TAG = "ResponseInfoSnippets"
+  }
 }
