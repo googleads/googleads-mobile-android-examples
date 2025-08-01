@@ -52,10 +52,9 @@ class CustomNativeOMIDSnippets {
     ad: NativeCustomFormatAd,
     nativeCustomFormatAdContainer: ViewGroup,
   ) {
-    ad.getDisplayOpenMeasurement()?.let { displayOpenMeasurement ->
-      displayOpenMeasurement.setView(nativeCustomFormatAdContainer)
-      displayOpenMeasurement.start()
-    }
+    val displayOpenMeasurement = ad.displayOpenMeasurement
+    displayOpenMeasurement.setView(nativeCustomFormatAdContainer)
+    displayOpenMeasurement.start()
   }
 
   // [END start_open_measurement]
