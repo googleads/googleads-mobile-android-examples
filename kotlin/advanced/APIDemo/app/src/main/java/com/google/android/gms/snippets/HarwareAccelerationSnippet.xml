@@ -1,0 +1,6 @@
+<application android:hardwareAccelerated="true">
+    <!-- For activities that use ads, hardwareAcceleration should be true. -->
+    <activity android:hardwareAccelerated="true" />
+    <!-- For activities that don't use ads, hardwareAcceleration can be false. -->
+    <activity android:hardwareAccelerated="false" />
+</application>
