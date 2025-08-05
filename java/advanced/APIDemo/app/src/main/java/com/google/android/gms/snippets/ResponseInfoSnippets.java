@@ -14,11 +14,16 @@
 
 package com.google.android.gms.snippets;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdapterResponseInfo;
+import com.google.android.gms.ads.ResponseInfo;
 
 /** Java code snippets for the developer guide. */
 public class ResponseInfoSnippets {
+
+  private static final String TAG = "ResponseInfoSnippets";
 
   // [START get_ad_source_name]
   private String getUniqueAdSourceName(@NonNull AdapterResponseInfo loadedAdapterResponseInfo) {
@@ -33,5 +38,17 @@ public class ResponseInfoSnippets {
     }
     return adSourceName;
   }
+
   // [END get_ad_source_name]
+
+  private void getMediationAdapterClassNameFromAd(AdView ad) {
+    // [START get_adapter_class_name]
+    ResponseInfo responseInfo = ad.getResponseInfo();
+    String adapterClassName = null;
+    if (responseInfo != null) {
+      adapterClassName = responseInfo.getMediationAdapterClassName();
+    }
+    Log.d(TAG, "Adapter class name: " + adapterClassName);
+    // [END get_adapter_class_name]
+  }
 }
