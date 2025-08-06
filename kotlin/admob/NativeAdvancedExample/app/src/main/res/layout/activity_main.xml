@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:id="@+id/videostatus_text"
+            android:id="@+id/video_status_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 
