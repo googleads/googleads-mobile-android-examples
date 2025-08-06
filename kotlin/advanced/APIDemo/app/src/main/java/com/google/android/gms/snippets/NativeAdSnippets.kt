@@ -14,7 +14,11 @@
 
 package com.google.android.gms.snippets
 
+import android.app.Activity
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.FrameLayout
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -22,6 +26,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.example.apidemo.databinding.NativeAdBinding
 
 /** Kotlin code snippets for the developer guide. */
 internal class NativeAdSnippets {
@@ -82,6 +87,106 @@ internal class NativeAdSnippets {
       }
       .build()
     // [END handle_ad_loaded]
+  }
+
+  private fun handleAdLoadedWithDisplay(
+    adLoaderBuilder: AdLoader.Builder,
+    activity: Activity,
+    layoutInflater: LayoutInflater,
+    layoutPlaceholder: FrameLayout,
+  ) {
+    // [START handle_ad_loaded_with_display]
+    adLoaderBuilder
+      .forNativeAd { nativeAd ->
+        // This callback is invoked when a native ad is successfully loaded.
+        activity.runOnUiThread {
+          val nativeAdBinding = NativeAdBinding.inflate(layoutInflater)
+          val adView = nativeAdBinding.root
+
+          // Populate and register the native ad asset views.
+          displayNativeAdView(nativeAd, nativeAdBinding)
+
+          // Remove all old ad views and add the new native ad
+          // view to the view hierarchy.
+          layoutPlaceholder.removeAllViews()
+          layoutPlaceholder.addView(adView)
+        }
+      }
+      .build()
+    // [END handle_ad_loaded_with_display]
+  }
+
+  private fun displayNativeAdView(nativeAd: NativeAd, nativeAdBinding: NativeAdBinding) {
+    // [START display_native_ad]
+    val nativeAdView = nativeAdBinding.root
+
+    // Set the media view.
+    nativeAdView.mediaView = nativeAdBinding.adMedia
+
+    // Set other ad assets.
+    nativeAdView.headlineView = nativeAdBinding.adHeadline
+    nativeAdView.bodyView = nativeAdBinding.adBody
+    nativeAdView.callToActionView = nativeAdBinding.adCallToAction
+    nativeAdView.iconView = nativeAdBinding.adAppIcon
+    nativeAdView.priceView = nativeAdBinding.adPrice
+    nativeAdView.starRatingView = nativeAdBinding.adStars
+    nativeAdView.storeView = nativeAdBinding.adStore
+    nativeAdView.advertiserView = nativeAdBinding.adAdvertiser
+
+    nativeAdBinding.adHeadline.text = nativeAd.headline
+    nativeAd.mediaContent?.let { nativeAdBinding.adMedia.setMediaContent(it) }
+
+    if (nativeAd.body == null) {
+      nativeAdBinding.adBody.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adBody.text = nativeAd.body
+      nativeAdBinding.adBody.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.callToAction == null) {
+      nativeAdBinding.adCallToAction.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adCallToAction.text = nativeAd.callToAction
+      nativeAdBinding.adCallToAction.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.icon == null) {
+      nativeAdBinding.adAppIcon.visibility = View.GONE
+    } else {
+      nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+      nativeAdBinding.adAppIcon.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.price == null) {
+      nativeAdBinding.adPrice.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adPrice.text = nativeAd.price
+      nativeAdBinding.adPrice.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.store == null) {
+      nativeAdBinding.adStore.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adStore.text = nativeAd.store
+      nativeAdBinding.adStore.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.starRating == null) {
+      nativeAdBinding.adStars.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
+      nativeAdBinding.adStars.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.advertiser == null) {
+      nativeAdBinding.adAdvertiser.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adAdvertiser.text = nativeAd.advertiser
+      nativeAdBinding.adAdvertiser.visibility = View.VISIBLE
+    }
+
+    nativeAdView.setNativeAd(nativeAd)
+    // [END display_native_ad]
   }
 
   private fun destroyAd(nativeAd: NativeAd) {
