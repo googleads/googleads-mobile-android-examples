@@ -22,27 +22,33 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /** Kotlin code snippets for the developer guide. */
 internal class NativeAdSnippets {
 
   private fun createAdLoader(context: Context) {
     // [START create_ad_loader]
-    val adLoader =
-      AdLoader.Builder(context, AD_UNIT_ID)
-        .forNativeAd { nativeAd ->
-          // The native ad loaded successfully. You can show the ad.
-        }
-        .withAdListener(
-          object : AdListener() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-              // The native ad load failed. Check the adError message for failure reasons.
-            }
+    // It is recommended to call AdLoader.Builder on a background thread.
+    CoroutineScope(Dispatchers.IO).launch {
+      val adLoader =
+        AdLoader.Builder(context, AD_UNIT_ID)
+          .forNativeAd { nativeAd ->
+            // The native ad loaded successfully. You can show the ad.
           }
-        )
-        // Use the NativeAdOptions.Builder class to specify individual options settings.
-        .withNativeAdOptions(NativeAdOptions.Builder().build())
-        .build()
+          .withAdListener(
+            object : AdListener() {
+              override fun onAdFailedToLoad(adError: LoadAdError) {
+                // The native ad load failed. Check the adError message for failure reasons.
+              }
+            }
+          )
+          // Use the NativeAdOptions.Builder class to specify individual options settings.
+          .withNativeAdOptions(NativeAdOptions.Builder().build())
+          .build()
+    }
     // [END create_ad_loader]
   }
 

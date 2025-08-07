@@ -38,23 +38,30 @@ final class NativeAdSnippets {
 
   private void createAdLoader(Context context) {
     // [START create_ad_loader]
-    AdLoader adLoader =
-        new AdLoader.Builder(context, AD_UNIT_ID)
-            .forNativeAd(
-                new NativeAd.OnNativeAdLoadedListener() {
-                  @Override
-                  // The native ad loaded successfully. You can show the ad.
-                  public void onNativeAdLoaded(@NonNull NativeAd nativeAd) {}
-                })
-            .withAdListener(
-                new AdListener() {
-                  @Override
-                  // The native ad load failed. Check the adError message for failure reasons.
-                  public void onAdFailedToLoad(@NonNull LoadAdError adError) {}
-                })
-            // Use the NativeAdOptions.Builder class to specify individual options settings.
-            .withNativeAdOptions(new NativeAdOptions.Builder().build())
-            .build();
+    // It is recommended to call AdLoader.Builder on a background thread.
+    new Thread(
+            () -> {
+              AdLoader adLoader =
+                  new AdLoader.Builder(context, AD_UNIT_ID)
+                      .forNativeAd(
+                          new NativeAd.OnNativeAdLoadedListener() {
+                            @Override
+                            // The native ad loaded successfully. You can show the ad.
+                            public void onNativeAdLoaded(@NonNull NativeAd nativeAd) {}
+                          })
+                      .withAdListener(
+                          new AdListener() {
+                            @Override
+                            // The native ad load failed. Check the adError message for failure
+                            // reasons.
+                            public void onAdFailedToLoad(@NonNull LoadAdError adError) {}
+                          })
+                      // Use the NativeAdOptions.Builder class to specify individual options
+                      // settings.
+                      .withNativeAdOptions(new NativeAdOptions.Builder().build())
+                      .build();
+            })
+        .start();
     // [END create_ad_loader]
   }
 
