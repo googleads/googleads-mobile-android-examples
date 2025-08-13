@@ -92,6 +92,13 @@ final class NativeAdSnippets {
     // [END load_ads]
   }
 
+  private void loadAdsWithAdManagerAdRequest(AdLoader adLoader) {
+    // [START load_ads_ad_manager]
+    // Load three native ads.
+    adLoader.loadAds(new AdManagerAdRequest.Builder().build(), 3);
+    // [END load_ads_ad_manager]
+  }
+
   private void handleAdLoaded(AdLoader.Builder adLoaderBuilder) {
     // [START handle_ad_loaded]
     adLoaderBuilder

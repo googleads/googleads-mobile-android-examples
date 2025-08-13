@@ -80,6 +80,13 @@ internal class NativeAdSnippets {
     // [END load_ads]
   }
 
+  private fun loadAdsWithAdManagerAdRequest(adLoader: AdLoader) {
+    // [START load_ads_ad_manager]
+    // Load three native ads.
+    adLoader.loadAds(AdManagerAdRequest.Builder().build(), 3)
+    // [END load_ads_ad_manager]
+  }
+
   private fun handleAdLoaded(adLoaderBuilder: AdLoader.Builder) {
     // [START handle_ad_loaded]
     adLoaderBuilder
