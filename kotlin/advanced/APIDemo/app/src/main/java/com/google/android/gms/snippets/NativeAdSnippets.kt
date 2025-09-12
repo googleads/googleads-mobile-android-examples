@@ -15,6 +15,9 @@
 package com.google.android.gms.snippets
 
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.FrameLayout
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -22,9 +25,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /** Kotlin code snippets for the developer guide. */
 internal class NativeAdSnippets {
@@ -97,10 +97,166 @@ internal class NativeAdSnippets {
     // [END handle_ad_loaded]
   }
 
+  private fun addNativeAdView(layoutInflater: LayoutInflater, frameLayout: FrameLayout) {
+    // [START add_ad_view]
+    activity.runOnUiThread {
+      // Inflate the native ad view and add it to the view hierarchy.
+      val nativeAdBinding = NativeAdBinding.inflate(layoutInflater)
+      val adView = nativeAdBinding.root
+
+      // Display and register the native ad asset views here.
+      populateNativeAdView(nativeAd, nativeAdBinding)
+      registerNativeAdAssets(nativeAd, nativeAdBinding)
+
+      // Remove all old ad views and add the new native.
+      frameLayout.removeAllViews()
+      // Add the new native ad view to the view hierarchy.
+      frameLayout.addView(adView)
+    }
+    // [END add_ad_view]
+  }
+
+  // [START register_native_ad_assets]
+  private fun registerNativeAdAssets(nativeAd: NativeAd, nativeAdBinding: NativeAdBinding) {
+    // Set the native ad view elements.
+    val nativeAdView = nativeAdBinding.root
+    nativeAdView.advertiserView = nativeAdBinding.adAdvertiser
+    nativeAdView.bodyView = nativeAdBinding.adBody
+    nativeAdView.callToActionView = nativeAdBinding.adCallToAction
+    nativeAdView.headlineView = nativeAdBinding.adHeadline
+    nativeAdView.iconView = nativeAdBinding.adAppIcon
+    nativeAdView.priceView = nativeAdBinding.adPrice
+    nativeAdView.starRatingView = nativeAdBinding.adStars
+    nativeAdView.storeView = nativeAdBinding.adStore
+
+    // Set the media view.
+    nativeAdView.mediaView = nativeAdBinding.adMedia
+
+    // Add other ad assets as defined by your native ad view class.
+
+    // [START set_native_ad]
+    // This method tells the Google Mobile Ads SDK that you have finished populating your
+    // native ad view with this native ad.
+    nativeAdView.setNativeAd(nativeAd)
+    // [END set_native_ad]
+  }
+
+  // [END register_native_ad_assets]
+
+  // [START populate_native_ad_view]
+  private fun populateNativeAdView(nativeAd: NativeAd, nativeAdBinding: NativeAdBinding) {
+    // Set the view element with the native ad assets.
+    nativeAdBinding.adAdvertiser.text = nativeAd.advertiser
+    nativeAdBinding.adBody.text = nativeAd.body
+    nativeAdBinding.adCallToAction.text = nativeAd.callToAction
+    nativeAdBinding.adHeadline.text = nativeAd.headline
+    nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+    nativeAdBinding.adPrice.text = nativeAd.price
+    nativeAd.starRating?.toFloat().also { value ->
+      if (value != null) {
+        nativeAdBinding.adStars.rating = value
+      }
+    }
+    nativeAdBinding.adStore.text = nativeAd.store
+  }
+
+  // [END populate_native_ad_view]
+
+  // [START display_native_ad]
+  private fun displayNativeAdView(nativeAd: NativeAd, nativeAdBinding: NativeAdBinding) {
+    val nativeAdView = nativeAdBinding.root
+
+    // Set the media view.
+    nativeAdView.mediaView = nativeAdBinding.adMedia
+
+    // Set other ad assets.
+    nativeAdView.headlineView = nativeAdBinding.adHeadline
+    nativeAdView.bodyView = nativeAdBinding.adBody
+    nativeAdView.callToActionView = nativeAdBinding.adCallToAction
+    nativeAdView.iconView = nativeAdBinding.adAppIcon
+    nativeAdView.priceView = nativeAdBinding.adPrice
+    nativeAdView.starRatingView = nativeAdBinding.adStars
+    nativeAdView.storeView = nativeAdBinding.adStore
+    nativeAdView.advertiserView = nativeAdBinding.adAdvertiser
+
+    nativeAdBinding.adHeadline.text = nativeAd.headline
+    nativeAd.mediaContent?.let { nativeAdBinding.adMedia.setMediaContent(it) }
+
+    if (nativeAd.body == null) {
+      nativeAdBinding.adBody.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adBody.text = nativeAd.body
+      nativeAdBinding.adBody.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.callToAction == null) {
+      nativeAdBinding.adCallToAction.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adCallToAction.text = nativeAd.callToAction
+      nativeAdBinding.adCallToAction.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.icon == null) {
+      nativeAdBinding.adAppIcon.visibility = View.GONE
+    } else {
+      nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+      nativeAdBinding.adAppIcon.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.price == null) {
+      nativeAdBinding.adPrice.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adPrice.text = nativeAd.price
+      nativeAdBinding.adPrice.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.store == null) {
+      nativeAdBinding.adStore.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adStore.text = nativeAd.store
+      nativeAdBinding.adStore.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.starRating == null) {
+      nativeAdBinding.adStars.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
+      nativeAdBinding.adStars.visibility = View.VISIBLE
+    }
+
+    if (nativeAd.advertiser == null) {
+      nativeAdBinding.adAdvertiser.visibility = View.INVISIBLE
+    } else {
+      nativeAdBinding.adAdvertiser.text = nativeAd.advertiser
+      nativeAdBinding.adAdvertiser.visibility = View.VISIBLE
+    }
+
+    nativeAdView.setNativeAd(nativeAd)
+  }
+
+  // [END display_native_ad]
+
   private fun destroyAd(nativeAd: NativeAd) {
     // [START destroy_ad]
     nativeAd.destroy()
     // [END destroy_ad]
+  }
+
+  private fun setEventCallback(nativeAd: NativeAd) {
+    // [START set_event_callback]
+    nativeAd.adEventCallback =
+      object : NativeAdEventCallback {
+        override fun onAdClicked() {
+          Log.d(Constant.TAG, "Native ad recorded a click.")
+        }
+      }
+    // [END set_event_callback]
+  }
+
+  private fun setImageScaleType(mediaView: MediaView, imageScaleType: ImageView.ScaleType) {
+    // [START set_image_scale_type]
+    mediaView.imageScaleType = ImageView.ScaleType.CENTER_CROP
+    // [END set_image_scale_type]
   }
 
   private companion object {
