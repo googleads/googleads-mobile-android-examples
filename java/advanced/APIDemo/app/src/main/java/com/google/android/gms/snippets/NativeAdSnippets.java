@@ -110,9 +110,92 @@ final class NativeAdSnippets {
     // [END handle_ad_loaded]
   }
 
+  private void addNativeAdView(lLayoutInflater layoutInflater, FrameLayout frameLayout) {
+    // [START add_ad_view]
+    activity.runOnUiThread(
+        () -> {
+          // Inflate the native ad view and add it to the view hierarchy.
+          NativeAdBinding nativeAdBinding = NativeAdBinding.inflate(layoutInflater);
+          View adView = nativeAdBinding.getRoot();
+
+          // Display and register the native ad asset views here.
+          populateNativeAdView(nativeAd, nativeAdBinding);
+          registerNativeAdAssets(nativeAd, nativeAdBinding);
+
+          // Remove all old ad views and add the new native.
+          frameLayout.removeAllViews();
+          // Add the new native ad view to the view hierarchy.
+          frameLayout.addView(adView);
+        });
+    // [END add_ad_view]
+  }
+
+  // [START register_native_ad_assets]
+  private void registerNativeAdAssets(NativeAd nativeAd, NativeAdBinding nativeAdBinding) {
+    // Set the native ad view elements.
+    NativeAdView nativeAdView = nativeAdBinding.getRoot();
+    nativeAdView.setAdvertiserView(nativeAdBinding.adAdvertiser);
+    nativeAdView.setBodyView(nativeAdBinding.adBody);
+    nativeAdView.setCallToActionView(nativeAdBinding.adCallToAction);
+    nativeAdView.setHeadlineView(nativeAdBinding.adHeadline);
+    nativeAdView.setIconView(nativeAdBinding.adAppIcon);
+    nativeAdView.setPriceView(nativeAdBinding.adPrice);
+    nativeAdView.setStarRatingView(nativeAdBinding.adStars);
+    nativeAdView.setStoreView(nativeAdBinding.adStore);
+
+    // Set the media view.
+    nativeAdView.setMediaView(nativeAdBinding.adMedia);
+
+    // Add other ad assets as defined by your native ad view class.
+
+    // [START set_native_ad]
+    // This method tells the Google Mobile Ads SDK that you have finished populating your
+    // native ad view with this native ad.
+    nativeAdView.setNativeAd(nativeAd);
+    // [END set_native_ad]
+  }
+
+  // [END register_native_ad_assets]
+
+  // [START populate_native_ad_view]
+  private void populateNativeAdView(NativeAd nativeAd, NativeAdBinding nativeAdBinding) {
+    // Set the view element with the native ad assets.
+    nativeAdBinding.adAdvertiser.setText(nativeAd.getAdvertiser());
+    nativeAdBinding.adBody.setText(nativeAd.getBody());
+    nativeAdBinding.adCallToAction.setText(nativeAd.getCallToAction());
+    nativeAdBinding.adHeadline.setText(nativeAd.getHeadline());
+    nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.getIcon().getDrawable());
+    nativeAdBinding.adPrice.setText(nativeAd.getPrice());
+    Double starRating = nativeAd.getStarRating();
+    if (starRating != null) {
+      nativeAdBinding.adStars.setRating(starRating.floatValue());
+    }
+    nativeAdBinding.adStore.setText(nativeAd.getStore());
+  }
+
+  // [END populate_native_ad_view]
+
+  private void setEventCallback(NativeAd nativeAd) {
+    // [START set_event_callback]
+    nativeAd.setAdEventCallback(
+        new NativeAdEventCallback() {
+          @Override
+          public void onAdClicked() {
+            Log.d(Constant.TAG, "Native ad recorded a click.");
+          }
+        });
+    // [END set_event_callback]
+  }
+
   private void destroyAd(NativeAd nativeAd) {
     // [START destroy_ad]
     nativeAd.destroy();
     // [END destroy_ad]
+  }
+
+  private void setImageScaleType(MediaView mediaView, ImageView.ScaleType imageScaleType) {
+    // [START set_image_scale_type]
+    mediaView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+    // [END set_image_scale_type]
   }
 }
