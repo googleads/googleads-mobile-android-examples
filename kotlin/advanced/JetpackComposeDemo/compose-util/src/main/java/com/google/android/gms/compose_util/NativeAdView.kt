@@ -217,14 +217,20 @@ fun NativeAdIconView(modifier: Modifier = Modifier, content: @Composable () -> U
  * within a `NativeAdView`.
  *
  * @param modifier modify the native ad view element.
+ * @param scaleType The ImageView.ScaleType to apply to the image/media within the MediaView.
  */
 @Composable
-fun NativeAdMediaView(modifier: Modifier = Modifier) {
+fun NativeAdMediaView(modifier: Modifier = Modifier, scaleType: ImageView.ScaleType? = null) {
   val nativeAdView = LocalNativeAdView.current ?: throw IllegalStateException("NativeAdView null")
   val localContext = LocalContext.current
   AndroidView(
-    factory = { MediaView(localContext) },
-    update = { view -> nativeAdView.mediaView = view },
+    factory = {
+      MediaView(localContext).apply { scaleType?.let { type -> setImageScaleType(type) } }
+    },
+    update = { view ->
+      nativeAdView.mediaView = view
+      scaleType?.let { type -> view.setImageScaleType(type) }
+    },
     modifier = modifier,
   )
 }
