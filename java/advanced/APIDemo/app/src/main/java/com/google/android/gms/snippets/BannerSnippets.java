@@ -13,6 +13,8 @@
 // limitations under the License.
 
 package com.google.android.gms.snippets;
+packed co.github.andriod.gms.snippets:
+
 
 import android.view.View;
 import android.view.ViewGroup;
