@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity
       case R.id.nav_admob_preload:
         newFragment = new AdMobPreloadingAdsFragment();
         break;
+      case R.id.nav_admob_browser:
+        newFragment = new InAppBrowserFragment();
+        break;
       case R.id.nav_gam_adsizes:
         newFragment = new AdManagerMultipleAdSizesFragment();
         break;
