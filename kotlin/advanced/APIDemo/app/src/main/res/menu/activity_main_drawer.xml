@@ -26,6 +26,9 @@
             <item
                 android:id="@+id/nav_admob_preload"
                 android:title="Ad Preloading" />
+            <item
+                android:id="@+id/nav_admob_browser"
+                android:title="Web View API for Ads" />
         </menu>
     </item>
 

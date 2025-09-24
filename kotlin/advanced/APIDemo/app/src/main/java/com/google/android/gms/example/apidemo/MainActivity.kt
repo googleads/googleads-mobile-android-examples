@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         R.id.nav_full_screen_native_loading -> FullScreenNativeLoadingFragment()
         R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
         R.id.nav_admob_preload -> AdMobPreloadingAdsFragment()
+        R.id.nav_admob_browser -> InAppBrowserFragment()
         R.id.nav_gam_adsizes -> AdManagerMultipleAdSizesFragment()
         R.id.nav_gam_appevents -> AdManagerAppEventsFragment()
         R.id.nav_gam_customtargeting -> AdManagerCustomTargetingFragment()
