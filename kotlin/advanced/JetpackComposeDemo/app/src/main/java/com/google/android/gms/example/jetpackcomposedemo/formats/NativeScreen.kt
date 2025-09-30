@@ -134,7 +134,7 @@ fun DisplayNativeAdView(nativeAd: NativeAd) {
   val context = LocalContext.current
   Box(modifier = Modifier.padding(8.dp).wrapContentHeight(Alignment.Top)) {
     // Call the NativeAdView composable to display the native ad.
-    NativeAdView {
+    NativeAdView(nativeAd) {
       // Inside the NativeAdView composable, display the native ad assets.
       Column(Modifier.align(Alignment.TopStart).wrapContentHeight(Alignment.Top)) {
         // Display the ad attribution.

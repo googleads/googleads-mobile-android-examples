@@ -44,11 +44,16 @@ internal val LocalNativeAdView = staticCompositionLocalOf<NativeAdView?> { null 
 /**
  * This is the Compose wrapper for a NativeAdView.
  *
+ * @param nativeAd The `NativeAd` object containing the ad assets to be displayed in this view.
  * @param modifier The modifier to apply to the native ad.
  * @param content A composable function that defines the rest of the native ad view's elements.
  */
 @Composable
-fun NativeAdView(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun NativeAdView(
+  nativeAd: NativeAd,
+  modifier: Modifier = Modifier,
+  content: @Composable () -> Unit,
+) {
   val localContext = LocalContext.current
   val nativeAdView = remember { NativeAdView(localContext).apply { id = View.generateViewId() } }
 
@@ -81,6 +86,7 @@ fun NativeAdView(modifier: Modifier = Modifier, content: @Composable () -> Unit)
     },
     modifier = modifier,
   )
+  SideEffect { nativeAdView.setNativeAd(nativeAd) }
 }
 
 /**
