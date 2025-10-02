@@ -14,6 +14,7 @@
 
 package com.google.android.gms.snippets
 
+import android.util.Log
 import android.view.ViewGroup
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdView
@@ -76,6 +77,35 @@ private class BannerSnippets : AppEventListener {
   }
 
   // [END destroy]
+
+  fun handleOnAdFailedToLoad() {
+    adView?.adListener =
+      object : AdListener() {
+        // [START handle_on_ad_failed_to_load]
+        override fun onAdFailedToLoad(error: LoadAdError) {
+          // Gets the domain from which the error came.
+          val errorDomain = error.domain
+          // Gets the error code. See
+          // https://developers.google.com/admob/android/reference/com/google/android/gms/ads/AdRequest#constant-summary
+          // for a list of possible codes.
+          val errorCode = error.code
+          // Gets an error message.
+          // For example "Account not approved yet". See
+          // https://support.google.com/admob/answer/9905175 for explanations of
+          // common errors.
+          val errorMessage = error.message
+          // Gets additional response information about the request. See
+          // https://developers.google.com/admob/android/response-info
+          // information.
+          val responseInfo = error.responseInfo
+          // Gets the cause of the error, if available.
+          val cause = error.cause
+          // All of this information is available using the error's toString() method.
+          Log.d("Ads", error.toString())
+        }
+        // [END handle_on_ad_failed_to_load]
+      }
+  }
 
   fun manualImpressionCounting() {
     // [START enable_manual_impressions]
