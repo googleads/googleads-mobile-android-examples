@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(mainActivityBinding.root)
+    setSupportActionBar(mainActivityBinding.toolBar)
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
