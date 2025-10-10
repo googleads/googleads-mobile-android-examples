@@ -51,5 +51,5 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-process:2.9.2'
 
     // Google Play Services
-    implementation 'com.google.android.gms:play-services-ads:24.6.0'
+    implementation 'com.google.android.gms:play-services-ads:24.7.0'
 }

@@ -38,7 +38,7 @@ dependencies {
   implementation("androidx.compose.ui:ui-graphics:1.8.0")
   implementation("androidx.compose.material3:material3")
   implementation("androidx.compose.foundation:foundation")
-  implementation("com.google.android.gms:play-services-ads:24.6.0")
+  implementation("com.google.android.gms:play-services-ads:24.7.0")
   implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
   debugImplementation("androidx.compose.ui:ui-tooling")
 }
