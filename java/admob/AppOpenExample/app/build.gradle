@@ -25,5 +25,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.lifecycle:lifecycle-process:2.8.4"
     implementation 'com.google.android.gms:play-services-ads:24.7.0'
-    implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
+    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
 }
