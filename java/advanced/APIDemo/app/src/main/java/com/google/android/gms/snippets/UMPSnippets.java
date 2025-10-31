@@ -34,9 +34,7 @@ final class UMPSnippets {
             info -> {
               String appSetId = info.getId();
               ConsentRequestParameters params =
-                  new ConsentRequestParameters.Builder()
-                      //  .setConsentSyncId(appSetId)
-                      .build();
+                  new ConsentRequestParameters.Builder().setConsentSyncId(appSetId).build();
             });
     // [END sync_consent_identifier]
   }

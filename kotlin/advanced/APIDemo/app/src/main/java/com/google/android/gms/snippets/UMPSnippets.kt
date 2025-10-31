@@ -29,10 +29,7 @@ private class UMPSnippets {
     val client = AppSet.getClient(activity)
     client.appSetIdInfo.addOnSuccessListener { info: AppSetIdInfo ->
       val appSetId = info.id
-      val params =
-        ConsentRequestParameters.Builder()
-          //  .setConsentSyncId(appSetId)
-          .build()
+      val params = ConsentRequestParameters.Builder().setConsentSyncId(appSetId).build()
     }
     // [END sync_consent_identifier]
   }
