@@ -73,10 +73,11 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    setSupportActionBar(findViewById(R.id.toolBar));
 
-    refresh = findViewById(R.id.btn_refresh);
-    startVideoAdsMuted = findViewById(R.id.cb_start_muted);
-    videoStatus = findViewById(R.id.tv_video_status_text);
+    refresh = findViewById(R.id.refresh_button);
+    startVideoAdsMuted = findViewById(R.id.start_muted_checkbox);
+    videoStatus = findViewById(R.id.video_status_text);
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
@@ -304,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.nativeAd.destroy();
                       }
                       MainActivity.this.nativeAd = nativeAd;
-                      FrameLayout frameLayout = findViewById(R.id.fl_adplaceholder);
+                      FrameLayout frameLayout = findViewById(R.id.ad_frame);
                       NativeAdView adView =
                           (NativeAdView)
                               getLayoutInflater().inflate(R.layout.ad_unified, frameLayout, false);
