@@ -17,11 +17,36 @@
 package com.google.android.gms.snippets
 
 import android.app.Activity
+import android.content.Context
+import androidx.preference.PreferenceManager
 import com.google.android.gms.appset.AppSet
 import com.google.android.gms.appset.AppSetIdInfo
 import com.google.android.ump.ConsentRequestParameters
 
 private class UMPSnippets {
+
+  private fun setTagForUnderAgeOfConsent() {
+    // [START set_tag_for_under_age_of_consent]
+    val params =
+      ConsentRequestParameters.Builder()
+        // Indicate the user is under age of consent.
+        .setTagForUnderAgeOfConsent(true)
+        .build()
+    // [END set_tag_for_under_age_of_consent]
+  }
+
+  private fun readConsentChoices(context: Context) {
+    // [START read_consent_choices]
+    val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+    // Example value: "1111111111"
+    val purposeConsents = sharedPref.getString("IABTCF_PurposeConsents", "")
+    // Purposes are zero-indexed. Index 0 contains information about Purpose 1.
+    if (!purposeConsents.isNullOrEmpty()) {
+      val purposeOneString = purposeConsents.first().toString()
+      val hasConsentForPurposeOne = purposeOneString == "1"
+    }
+    // [END read_consent_choices]
+  }
 
   private fun syncConsentIdentifier(activity: Activity) {
     // [START sync_consent_identifier]

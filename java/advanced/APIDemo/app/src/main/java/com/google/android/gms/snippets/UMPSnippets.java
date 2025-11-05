@@ -17,12 +17,38 @@
 package com.google.android.gms.snippets;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import com.google.android.gms.appset.AppSet;
 import com.google.android.gms.appset.AppSetIdClient;
 import com.google.android.ump.ConsentRequestParameters;
 
 final class UMPSnippets {
+
+  private void setTagForUnderAgeOfConsent() {
+    // [START set_tag_for_under_age_of_consent]
+    ConsentRequestParameters params =
+        new ConsentRequestParameters.Builder()
+            // Indicate the user is under age of consent.
+            .setTagForUnderAgeOfConsent(true)
+            .build();
+    // [END set_tag_for_under_age_of_consent]
+  }
+
+  private void readConsentChoices(Context context) {
+    // [START read_consent_choices]
+    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+    // Example value: "1111111111"
+    String purposeConsents = sharedPref.getString("IABTCF_PurposeConsents", "");
+    // Purposes are zero-indexed. Index 0 contains information about Purpose 1.
+    if (!purposeConsents.isEmpty()) {
+      String purposeOneString = String.valueOf(purposeConsents.charAt(0));
+      boolean hasConsentForPurposeOne = purposeOneString.equals("1");
+    }
+    // [END read_consent_choices]
+  }
 
   private void syncConsentIdentifier(@NonNull Activity activity) {
     // [START sync_consent_identifier]
