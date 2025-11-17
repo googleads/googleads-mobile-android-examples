@@ -1,4 +1,4 @@
-package com.google.android.gms.snippets;
+ package com.google.android.gms.snippets;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
