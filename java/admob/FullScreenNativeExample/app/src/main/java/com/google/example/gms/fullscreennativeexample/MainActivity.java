@@ -10,6 +10,9 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -49,6 +52,20 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
+    setSupportActionBar(binding.toolBar);
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.fragmentContainerView,
+        (view, insets) -> {
+          Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+          // Apply only the bottom inset.
+          view.setPadding(
+              view.getPaddingLeft(),
+              view.getPaddingTop(),
+              view.getPaddingRight(),
+              systemBarsInsets.bottom);
+          return insets;
+        });
 
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
 

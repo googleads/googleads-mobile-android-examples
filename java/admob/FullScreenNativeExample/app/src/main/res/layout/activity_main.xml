@@ -1,6 +1,33 @@
-<androidx.fragment.app.FragmentContainerView
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_container_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.google.example.gms.fullscreennativeexample.MainFragment" />
+    android:orientation="vertical">
+
+  <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fitsSystemWindows="true"
+      android:background="@color/material_dynamic_primary0"
+      >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:titleTextColor="@android:color/white"
+        app:title="@string/app_name" />
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <androidx.fragment.app.FragmentContainerView
+      android:id="@+id/fragment_container_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:name="com.google.example.gms.fullscreennativeexample.MainFragment"
+      />
+
+</LinearLayout>
