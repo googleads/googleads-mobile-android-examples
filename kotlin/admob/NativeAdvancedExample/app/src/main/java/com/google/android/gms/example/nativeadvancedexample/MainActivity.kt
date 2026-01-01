@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(mainActivityBinding.root)
+    setSupportActionBar(mainActivityBinding.toolBar)
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -90,9 +91,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    menu.findItem(R.id.action_more)?.apply {
-      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
-    }
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -101,6 +99,9 @@ class MainActivity : AppCompatActivity() {
     val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
@@ -108,8 +109,15 @@ class MainActivity : AppCompatActivity() {
             // Handle changes to user consent.
             googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
               if (formError != null) {
-                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }
@@ -217,12 +225,12 @@ class MainActivity : AppCompatActivity() {
             // Publishers should allow native ads to complete video playback before
             // refreshing or replacing them with another ad in the same UI location.
             mainActivityBinding.refreshButton.isEnabled = true
-            mainActivityBinding.videostatusText.text = "Video status: Video playback has ended."
+            mainActivityBinding.videoStatusText.text = "Video status: Video playback has ended."
             super.onVideoEnd()
           }
         }
     } else {
-      mainActivityBinding.videostatusText.text = "Video status: Ad does not contain a video asset."
+      mainActivityBinding.videoStatusText.text = "Video status: Ad does not contain a video asset."
       mainActivityBinding.refreshButton.isEnabled = true
     }
   }
@@ -233,62 +241,66 @@ class MainActivity : AppCompatActivity() {
    */
   private fun refreshAd() {
     mainActivityBinding.refreshButton.isEnabled = false
+    mainActivityBinding.videoStatusText.text = ""
 
-    val builder = AdLoader.Builder(this, AD_UNIT_ID)
+    // It is recommended to call AdLoader.Builder on a background thread.
+    CoroutineScope(Dispatchers.IO).launch {
+      val builder = AdLoader.Builder(this@MainActivity, AD_UNIT_ID)
 
-    builder.forNativeAd { nativeAd ->
-      // OnUnifiedNativeAdLoadedListener implementation.
-      // If this callback occurs after the activity is destroyed, you must call
-      // destroy and return or you may get a memory leak.
-      var activityDestroyed = false
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        activityDestroyed = isDestroyed
+      builder.forNativeAd { nativeAd ->
+        // OnLoadedListener implementation.
+        // If this callback occurs after the activity is destroyed, you must call
+        // destroy and return or you may get a memory leak.
+        var activityDestroyed = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          activityDestroyed = isDestroyed
+        }
+        if (activityDestroyed || isFinishing || isChangingConfigurations) {
+          nativeAd.destroy()
+          return@forNativeAd
+        }
+        // You must call destroy on old ads when you are done with them,
+        // otherwise you will have a memory leak.
+        currentNativeAd?.destroy()
+        currentNativeAd = nativeAd
+        val unifiedAdBinding = AdUnifiedBinding.inflate(layoutInflater)
+        populateNativeAdView(nativeAd, unifiedAdBinding)
+        mainActivityBinding.adFrame.removeAllViews()
+        mainActivityBinding.adFrame.addView(unifiedAdBinding.root)
       }
-      if (activityDestroyed || isFinishing || isChangingConfigurations) {
-        nativeAd.destroy()
-        return@forNativeAd
-      }
-      // You must call destroy on old ads when you are done with them,
-      // otherwise you will have a memory leak.
-      currentNativeAd?.destroy()
-      currentNativeAd = nativeAd
-      val unifiedAdBinding = AdUnifiedBinding.inflate(layoutInflater)
-      populateNativeAdView(nativeAd, unifiedAdBinding)
-      mainActivityBinding.adFrame.removeAllViews()
-      mainActivityBinding.adFrame.addView(unifiedAdBinding.root)
-    }
 
-    val videoOptions =
-      VideoOptions.Builder().setStartMuted(mainActivityBinding.startMutedCheckbox.isChecked).build()
+      val videoOptions =
+        VideoOptions.Builder()
+          .setStartMuted(mainActivityBinding.startMutedCheckbox.isChecked)
+          .build()
 
-    val adOptions = NativeAdOptions.Builder().setVideoOptions(videoOptions).build()
+      val adOptions = NativeAdOptions.Builder().setVideoOptions(videoOptions).build()
 
-    builder.withNativeAdOptions(adOptions)
+      builder.withNativeAdOptions(adOptions)
 
-    val adLoader =
-      builder
-        .withAdListener(
-          object : AdListener() {
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-              val error =
-                """
-           domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
-          """"
-              mainActivityBinding.refreshButton.isEnabled = true
-              Toast.makeText(
-                  this@MainActivity,
-                  "Failed to load native ad with error $error",
-                  Toast.LENGTH_SHORT,
-                )
-                .show()
+      val adLoader =
+        builder
+          .withAdListener(
+            object : AdListener() {
+              override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                val error =
+                  """
+             domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
+            """"
+                mainActivityBinding.refreshButton.isEnabled = true
+                Toast.makeText(
+                    this@MainActivity,
+                    "Failed to load native ad with error $error",
+                    Toast.LENGTH_SHORT,
+                  )
+                  .show()
+              }
             }
-          }
-        )
-        .build()
+          )
+          .build()
 
-    adLoader.loadAd(AdRequest.Builder().build())
-
-    mainActivityBinding.videostatusText.text = ""
+      adLoader.loadAd(AdRequest.Builder().build())
+    }
   }
 
   private fun initializeMobileAdsSdk() {

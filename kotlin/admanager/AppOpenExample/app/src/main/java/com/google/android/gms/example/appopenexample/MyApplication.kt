@@ -18,27 +18,28 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import java.util.Date
 
-private const val AD_UNIT_ID = "/6499/example/app-open"
-private const val LOG_TAG = "MyApplication"
-
 /** Application class that initializes, loads and show ads when activities change states. */
+// [START application_class]
 class MyApplication :
   MultiDexApplication(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
 
   private lateinit var appOpenAdManager: AppOpenAdManager
   private var currentActivity: Activity? = null
 
-  override fun onCreate(owner: LifecycleOwner) {
-    super<DefaultLifecycleObserver>.onCreate(owner)
+  override fun onCreate() {
+    super<MultiDexApplication>.onCreate()
     registerActivityLifecycleCallbacks(this)
 
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     appOpenAdManager = AppOpenAdManager()
   }
 
+  // [END application_class]
+
   /**
    * DefaultLifecycleObserver method that shows the app open ad when the app moves to foreground.
    */
+  // [START lifecycle_observer_events]
   override fun onStart(owner: LifecycleOwner) {
     super.onStart(owner)
     currentActivity?.let {
@@ -47,7 +48,10 @@ class MyApplication :
     }
   }
 
+  // [END lifecycle_observer_events]
+
   /** ActivityLifecycleCallback methods. */
+  // [START activity_lifecycle_callbacks]
   override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
 
   override fun onActivityStarted(activity: Activity) {
@@ -69,6 +73,8 @@ class MyApplication :
   override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
   override fun onActivityDestroyed(activity: Activity) {}
+
+  // [END activity_lifecycle_callbacks]
 
   /**
    * Shows an app open ad.
@@ -102,6 +108,7 @@ class MyApplication :
   }
 
   /** Inner class that loads and shows app open ads. */
+  // [START manager_class]
   private inner class AppOpenAdManager {
 
     private val googleMobileAdsConsentManager =
@@ -113,6 +120,8 @@ class MyApplication :
     /** Keep track of the time an app open ad is loaded to ensure you don't show an expired ad. */
     private var loadTime: Long = 0
 
+    // [END manager_class]
+
     /**
      * Load an ad.
      *
@@ -123,41 +132,36 @@ class MyApplication :
       if (isLoadingAd || isAdAvailable()) {
         return
       }
-
       isLoadingAd = true
-      val request = AdManagerAdRequest.Builder().build()
+      // [START load_ad]
       AppOpenAd.load(
         context,
         AD_UNIT_ID,
-        request,
+        AdManagerAdRequest.Builder().build(),
         object : AppOpenAdLoadCallback() {
-          /**
-           * Called when an app open ad has loaded.
-           *
-           * @param ad the loaded app open ad.
-           */
           override fun onAdLoaded(ad: AppOpenAd) {
+            // Called when an app open ad has loaded.
+            Log.d(LOG_TAG, "App open ad loaded.")
+            Toast.makeText(context, "Ad was loaded.", Toast.LENGTH_SHORT).show()
+
             appOpenAd = ad
             isLoadingAd = false
             loadTime = Date().time
-            Log.d(LOG_TAG, "onAdLoaded.")
-            Toast.makeText(context, "onAdLoaded", Toast.LENGTH_SHORT).show()
           }
 
-          /**
-           * Called when an app open ad has failed to load.
-           *
-           * @param loadAdError the error.
-           */
           override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+            // Called when an app open ad has failed to load.
+            Log.d(LOG_TAG, "App open ad failed to load with error: " + loadAdError.message)
+            Toast.makeText(context, "Ad failed to load.", Toast.LENGTH_SHORT).show()
+
             isLoadingAd = false
-            Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.message)
-            Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show()
           }
         },
       )
+      // [END load_ad]
     }
 
+    // [START ad_expiration]
     /** Check if ad was loaded more than n hours ago. */
     private fun wasLoadTimeLessThanNHoursAgo(numHours: Long): Boolean {
       val dateDifference: Long = Date().time - loadTime
@@ -167,11 +171,11 @@ class MyApplication :
 
     /** Check if ad exists and can be shown. */
     private fun isAdAvailable(): Boolean {
-      // Ad references in the app open beta will time out after four hours, but this time limit
-      // may change in future beta versions. For details, see:
-      // https://support.google.com/admob/answer/9341964?hl=en
+      // For time interval details, see: https://support.google.com/admob/answer/9341964
       return appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4)
     }
+
+    // [END ad_expiration]
 
     /**
      * Show the ad if one isn't already showing.
@@ -252,5 +256,18 @@ class MyApplication :
       isShowingAd = true
       appOpenAd?.show(activity)
     }
+  }
+
+  companion object {
+    // This is an ad unit ID for a test ad. Replace with your own app open ad unit ID.
+    const val AD_UNIT_ID = "/21775744923/example/app-open"
+    const val LOG_TAG = "MyApplication"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

@@ -1,7 +1,6 @@
 package com.google.ads.rewardedinterstitialexample;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -120,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
-    MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -130,12 +127,16 @@ public class MainActivity extends AppCompatActivity {
     View menuItemView = findViewById(item.getItemId());
     PopupMenu popup = new PopupMenu(this, menuItemView);
     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup
+        .getMenu()
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     popup.show();
     popup.setOnMenuItemClickListener(
         popupMenuItem -> {
           if (popupMenuItem.getItemId() == R.id.privacy_settings) {
-            // Handle changes to user consent.
             pauseGame();
+            // Handle changes to user consent.
             googleMobileAdsConsentManager.showPrivacyOptionsForm(
                 this,
                 formError -> {
@@ -143,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                   resumeGame();
+                });
+            return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            MobileAds.openAdInspector(
+                this,
+                error -> {
+                  // Error will be non-null if ad inspector closed due to an error.
+                  if (error != null) {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
                 });
             return true;
           }
@@ -180,36 +191,33 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void loadRewardedInterstitialAd() {
-    if (rewardedInterstitialAd == null) {
-      isLoadingAds = true;
-
-      AdRequest adRequest = new AdRequest.Builder().build();
-      // Use the test ad unit ID to load an ad.
-      RewardedInterstitialAd.load(
-          MainActivity.this,
-          AD_UNIT_ID,
-          adRequest,
-          new RewardedInterstitialAdLoadCallback() {
-            @Override
-            public void onAdLoaded(RewardedInterstitialAd ad) {
-              Log.d(TAG, "onAdLoaded");
-
-              rewardedInterstitialAd = ad;
-              isLoadingAds = false;
-              Toast.makeText(MainActivity.this, "onAdLoaded", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-              Log.d(TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
-
-              // Handle the error.
-              rewardedInterstitialAd = null;
-              isLoadingAds = false;
-              Toast.makeText(MainActivity.this, "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
-            }
-          });
+    // If the ad is already loaded, don't try to load it again.
+    if (rewardedInterstitialAd != null) {
+      return;
     }
+    isLoadingAds = true;
+
+    // [START load_ad]
+    RewardedInterstitialAd.load(
+        MainActivity.this,
+        AD_UNIT_ID,
+        new AdRequest.Builder().build(),
+        new RewardedInterstitialAdLoadCallback() {
+          @Override
+          public void onAdLoaded(RewardedInterstitialAd ad) {
+            Log.d(TAG, "Ad was loaded.");
+            rewardedInterstitialAd = ad;
+            isLoadingAds = false;
+          }
+
+          @Override
+          public void onAdFailedToLoad(LoadAdError loadAdError) {
+            Log.d(TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
+            rewardedInterstitialAd = null;
+            isLoadingAds = false;
+          }
+        });
+    // [END load_ad]
   }
 
   private void addCoins(int coins) {
@@ -289,61 +297,66 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
 
+    // [START set_content_callback]
     rewardedInterstitialAd.setFullScreenContentCallback(
         new FullScreenContentCallback() {
-          /** Called when ad showed the full screen content. */
-          @Override
-          public void onAdShowedFullScreenContent() {
-            Log.d(TAG, "onAdShowedFullScreenContent");
-
-            Toast.makeText(MainActivity.this, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT)
-                .show();
-          }
-
-          /** Called when the ad failed to show full screen content. */
-          @Override
-          public void onAdFailedToShowFullScreenContent(AdError adError) {
-            Log.d(TAG, "onAdFailedToShowFullScreenContent: " + adError.getMessage());
-
-            // Don't forget to set the ad reference to null so you
-            // don't show the ad a second time.
-            rewardedInterstitialAd = null;
-            if (googleMobileAdsConsentManager.canRequestAds()) {
-              loadRewardedInterstitialAd();
-            }
-
-            Toast.makeText(
-                    MainActivity.this, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT)
-                .show();
-          }
-
-          /** Called when full screen content is dismissed. */
           @Override
           public void onAdDismissedFullScreenContent() {
-            // Don't forget to set the ad reference to null so you
-            // don't show the ad a second time.
+            // Called when fullscreen content is dismissed.
+            Log.d(TAG, "The ad was dismissed.");
+            // Make sure to set your reference to null so you don't
+            // show it a second time.
             rewardedInterstitialAd = null;
-            Log.d(TAG, "onAdDismissedFullScreenContent");
-            Toast.makeText(MainActivity.this, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT)
-                .show();
             if (googleMobileAdsConsentManager.canRequestAds()) {
-              // Preload the next rewarded interstitial ad.
               loadRewardedInterstitialAd();
             }
           }
-        });
 
-    Activity activityContext = MainActivity.this;
+          @Override
+          public void onAdFailedToShowFullScreenContent(AdError adError) {
+            // Called when fullscreen content failed to show.
+            Log.d(TAG, "The ad failed to show.");
+            // Make sure to set your reference to null so you don't
+            // show it a second time.
+            rewardedInterstitialAd = null;
+          }
+
+          @Override
+          public void onAdShowedFullScreenContent() {
+            // Called when fullscreen content is shown.
+            Log.d(TAG, "The ad was shown.");
+          }
+
+          @Override
+          public void onAdImpression() {
+            // Called when an impression is recorded for an ad.
+            Log.d(TAG, "The ad recorded an impression.");
+          }
+
+          @Override
+          public void onAdClicked() {
+            // Called when ad is clicked.
+            Log.d(TAG, "The ad was clicked.");
+          }
+        });
+    // [END set_content_callback]
+
+    // [START show_ad]
     rewardedInterstitialAd.show(
-        activityContext,
+        MainActivity.this,
         new OnUserEarnedRewardListener() {
           @Override
           public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-            // Handle the reward.
             Log.d(TAG, "The user earned the reward.");
+            // Handle the reward.
+            int rewardAmount = rewardItem.getAmount();
+            String rewardType = rewardItem.getType();
+            // [START_EXCLUDE silent]
             addCoins(rewardItem.getAmount());
+            // [END_EXCLUDE]
           }
         });
+    // [END show_ad]
   }
 
   private void initializeMobileAdsSdk() {

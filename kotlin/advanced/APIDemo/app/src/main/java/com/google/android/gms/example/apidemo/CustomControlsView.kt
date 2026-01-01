@@ -4,9 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.google.android.gms.ads.MediaContent
 import com.google.android.gms.ads.VideoController
 
@@ -16,12 +15,11 @@ import com.google.android.gms.ads.VideoController
  */
 class CustomControlsView
 @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int) :
+constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
   LinearLayout(context, attrs, defStyle) {
-  private val playButton: Button
-  private val muteButton: Button
+  private val playButton: ImageButton
+  private val muteButton: ImageButton
   private val controlsView: View
-  private val videoStatusText: TextView
   private var isVideoPlaying: Boolean = false
 
   init {
@@ -31,37 +29,38 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int) :
     playButton = findViewById(R.id.btn_play)
     muteButton = findViewById(R.id.btn_mute)
     controlsView = findViewById(R.id.video_controls)
-    videoStatusText = findViewById(R.id.tv_video_status)
     controlsView.visibility = View.GONE
   }
 
   /*
-   * Reset the custom controls view.
+   * Sets up the custom controls view with the provided VideoController and mute state.
    */
-  fun reset() {
+  fun initialize(mediaContent: MediaContent?, muted: Boolean) {
     controlsView.visibility = View.GONE
-    videoStatusText.text = ""
-  }
-
-  /*
-   * Sets up the custom controls view with the provided VideoController.
-   */
-  fun setMediaContent(mediaContent: MediaContent) {
-    controlsView.visibility = View.GONE
-    if (mediaContent.hasVideoContent()) {
+    if (
+      mediaContent != null &&
+        mediaContent.hasVideoContent() &&
+        mediaContent.videoController.isCustomControlsEnabled
+    ) {
       configureVideoContent(mediaContent.videoController)
-    } else {
-      videoStatusText.text = "Video status: Ad does not contain a video asset."
+      setMuteImage(muted)
     }
+  }
+
+  private fun setMuteImage(isMuted: Boolean) {
+    val muteResource =
+      if (isMuted) {
+        R.drawable.video_mute
+      } else {
+        R.drawable.video_unmute
+      }
+    muteButton.setImageResource(muteResource)
   }
 
   private fun configureVideoContent(videoController: VideoController) {
     if (videoController.isCustomControlsEnabled) {
-      muteButton.text = if (videoController.isMuted) "Unmute" else "Mute"
       controlsView.visibility = View.VISIBLE
-
       muteButton.setOnClickListener { videoController.mute(!videoController.isMuted) }
-
       playButton.setOnClickListener {
         if (isVideoPlaying) {
           videoController.pause()
@@ -78,36 +77,31 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int) :
       object : VideoController.VideoLifecycleCallbacks() {
 
         override fun onVideoMute(muted: Boolean) {
-          videoStatusText.text =
-            "Video status: " + if (muted) "Video did mute" else "Video did un-mute"
-          muteButton.text = if (muted) "Unmute" else "Mute"
+          setMuteImage(muted)
           super.onVideoMute(muted)
         }
 
         override fun onVideoPause() {
-          videoStatusText.text = "Video status: Video did pause."
-          playButton.text = "Play"
+          playButton.setImageResource(R.drawable.video_play)
           isVideoPlaying = false
           super.onVideoPause()
         }
 
         override fun onVideoPlay() {
-          videoStatusText.text = "Video status: Video did play."
-          playButton.text = "Pause"
+          playButton.setImageResource(R.drawable.video_pause)
           isVideoPlaying = true
+          setMuteImage(videoController.isMuted)
           super.onVideoPlay()
         }
 
         override fun onVideoStart() {
-          videoStatusText.text = "Video status: Video did start."
-          playButton.text = "Pause"
+          playButton.setImageResource(R.drawable.video_pause)
           isVideoPlaying = true
           super.onVideoStart()
         }
 
         override fun onVideoEnd() {
-          videoStatusText.text = "Video status: Video playback has ended."
-          playButton.text = "Play"
+          playButton.setImageResource(R.drawable.video_play)
           isVideoPlaying = false
           super.onVideoEnd()
         }

@@ -13,10 +13,16 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.util.ArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 
@@ -30,6 +36,17 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
+
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@MainActivity) {}
+    }
+
     val recyclerView: RecyclerView? = findViewById(R.id.recycler_view)
 
     // The size of the RecyclerView depends on the height of the ad.
@@ -50,6 +67,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   // Determine the screen width to use for the ad width.
+  // [START get_ad_width]
   private val adWidth: Int
     get() {
       val displayMetrics = resources.displayMetrics
@@ -63,6 +81,8 @@ class MainActivity : AppCompatActivity() {
       val density = displayMetrics.density
       return (adWidthPixels / density).toInt()
     }
+
+  // [END get_ad_width]
 
   override fun onResume() {
     for (item in recyclerViewItems) {
@@ -97,8 +117,10 @@ class MainActivity : AppCompatActivity() {
     // the items List.
     var i = 0
     while (i <= recyclerViewItems.size) {
+      // [START create_banner_ad_view]
       val adView = AdView(this@MainActivity)
       adView.setAdSize(AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(this, adWidth))
+      // [END create_banner_ad_view]
       adView.adUnitId = AD_UNIT_ID
       recyclerViewItems.add(i, adView)
       i += ITEMS_PER_AD
@@ -210,8 +232,16 @@ class MainActivity : AppCompatActivity() {
   }
 
   companion object {
+    private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1039341195"
+
     // A banner ad is placed in every 8th position in the RecyclerView.
     const val ITEMS_PER_AD = 8
-    private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1039341195"
+
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

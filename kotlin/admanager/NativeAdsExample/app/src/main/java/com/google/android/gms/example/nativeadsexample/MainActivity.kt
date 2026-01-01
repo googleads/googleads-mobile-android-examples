@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(mainActivityBinding.root)
+    setSupportActionBar(mainActivityBinding.toolBar)
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
@@ -100,9 +101,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    menu?.findItem(R.id.action_more)?.apply {
-      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
-    }
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -111,6 +109,9 @@ class MainActivity : AppCompatActivity() {
     val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
@@ -118,8 +119,15 @@ class MainActivity : AppCompatActivity() {
             // Handle changes to user consent.
             googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
               if (formError != null) {
-                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }
@@ -448,8 +456,8 @@ class MainActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own native ad unit ID.
-    private const val AD_UNIT_ID = "/6499/example/native"
-    private const val SIMPLE_TEMPLATE_ID = "10063170"
+    private const val AD_UNIT_ID = "/21775744923/example/native"
+    private const val SIMPLE_TEMPLATE_ID = "12387226"
     private const val TAG = "MainActivity"
 
     // Check your logcat output for the test device hashed ID e.g.

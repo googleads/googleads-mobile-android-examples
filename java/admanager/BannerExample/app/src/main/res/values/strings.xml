@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="app_name" translatable="false">BannerExample</string>
     <string name="hello_world" translatable="false">Hello world!</string>
     <string name="button_name" translatable="false">Load Ad</string>

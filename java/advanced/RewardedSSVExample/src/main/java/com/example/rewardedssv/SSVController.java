@@ -1,5 +1,7 @@
 package com.example.rewardedssv;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.google.crypto.tink.subtle.Base64;
 import com.google.crypto.tink.subtle.EcdsaVerifyJce;
 import com.google.crypto.tink.subtle.EllipticCurves;
@@ -10,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.ECPublicKey;
 import java.util.Enumeration;
@@ -101,9 +102,7 @@ public class SSVController {
       https://developers.google.com/admob/android/rewarded-video-ssv#get_content_to_be_verified
     */
     byte[] payload =
-        queryString
-            .substring(0, queryString.indexOf(SIGNATURE_PARAM_KEY) - 1)
-            .getBytes(Charset.forName("UTF-8"));
+        queryString.substring(0, queryString.indexOf(SIGNATURE_PARAM_KEY) - 1).getBytes(UTF_8);
 
     response.put("payload", new String(payload));
     response.put("key_id", keyId.toString());

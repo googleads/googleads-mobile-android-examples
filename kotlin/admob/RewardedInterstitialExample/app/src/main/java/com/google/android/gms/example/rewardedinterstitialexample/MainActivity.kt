@@ -42,13 +42,13 @@ class MainActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     // Log the Mobile Ads SDK version.
-    Log.d(MAIN_ACTIVITY_TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
 
     googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
     googleMobileAdsConsentManager.gatherConsent(this) { error ->
       if (error != null) {
         // Consent not obtained in current session.
-        Log.d(MAIN_ACTIVITY_TAG, "${error.errorCode}: ${error.message}")
+        Log.d(TAG, "${error.errorCode}: ${error.message}")
       }
 
       startGame()
@@ -98,26 +98,35 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    val moreMenu = menu?.findItem(R.id.action_more)
-    moreMenu?.isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
     return super.onCreateOptionsMenu(menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     val menuItemView = findViewById<View>(item.itemId)
+    val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
           R.id.privacy_settings -> {
             pauseGame()
             // Handle changes to user consent.
-            googleMobileAdsConsentManager.showPrivacyOptionsForm(this@MainActivity) { formError ->
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
               if (formError != null) {
-                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
               resumeGame()
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }
@@ -147,30 +156,27 @@ class MainActivity : AppCompatActivity() {
   private fun loadRewardedInterstitialAd() {
     if (rewardedInterstitialAd == null) {
       isLoadingAds = true
-      val adRequest = AdRequest.Builder().build()
 
-      // Load an ad.
+      // [START load_ad]
       RewardedInterstitialAd.load(
         this,
         AD_UNIT_ID,
-        adRequest,
+        AdRequest.Builder().build(),
         object : RewardedInterstitialAdLoadCallback() {
-          override fun onAdFailedToLoad(adError: LoadAdError) {
-            super.onAdFailedToLoad(adError)
-            Log.d(MAIN_ACTIVITY_TAG, "onAdFailedToLoad: ${adError.message}")
+          override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
+            Log.d(TAG, "Ad was loaded.")
+            rewardedInterstitialAd = rewardedAd
             isLoadingAds = false
-            rewardedInterstitialAd = null
           }
 
-          override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
-            super.onAdLoaded(rewardedAd)
-            Log.d(MAIN_ACTIVITY_TAG, "Ad was loaded.")
-
-            rewardedInterstitialAd = rewardedAd
+          override fun onAdFailedToLoad(adError: LoadAdError) {
+            Log.d(TAG, "onAdFailedToLoad: ${adError.message}")
+            rewardedInterstitialAd = null
             isLoadingAds = false
           }
         },
       )
+      // [END load_ad]
     }
   }
 
@@ -206,14 +212,11 @@ class MainActivity : AppCompatActivity() {
           gameOver = true
 
           if (rewardedInterstitialAd == null) {
-            Log.d(
-              MAIN_ACTIVITY_TAG,
-              "The game is over but the rewarded interstitial ad wasn't ready yet.",
-            )
+            Log.d(TAG, "The game is over but the rewarded interstitial ad wasn't ready yet.")
             return
           }
 
-          Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad is ready.")
+          Log.d(TAG, "The rewarded interstitial ad is ready.")
           val rewardAmount = rewardedInterstitialAd!!.rewardItem.amount
           val rewardType = rewardedInterstitialAd!!.rewardItem.type
           introduceVideoAd(rewardAmount, rewardType)
@@ -228,12 +231,12 @@ class MainActivity : AppCompatActivity() {
     dialog.setAdDialogInteractionListener(
       object : AdDialogFragment.AdDialogInteractionListener {
         override fun onShowAd() {
-          Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad is starting.")
+          Log.d(TAG, "The rewarded interstitial ad is starting.")
           showRewardedVideo()
         }
 
         override fun onCancelAd() {
-          Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad was skipped before it starts.")
+          Log.d(TAG, "The rewarded interstitial ad was skipped before it starts.")
         }
       }
     )
@@ -242,42 +245,62 @@ class MainActivity : AppCompatActivity() {
 
   private fun showRewardedVideo() {
     if (rewardedInterstitialAd == null) {
-      Log.d(MAIN_ACTIVITY_TAG, "The rewarded interstitial ad wasn't ready yet.")
+      Log.d(TAG, "The rewarded interstitial ad wasn't ready yet.")
       return
     }
 
-    rewardedInterstitialAd!!.fullScreenContentCallback =
+    // [START set_content_callback]
+    rewardedInterstitialAd?.fullScreenContentCallback =
       object : FullScreenContentCallback() {
         override fun onAdDismissedFullScreenContent() {
-          Log.d(MAIN_ACTIVITY_TAG, "Ad was dismissed.")
-
+          // Called when fullscreen content is dismissed.
+          Log.d(TAG, "Ad was dismissed.")
           // Don't forget to set the ad reference to null so you
           // don't show the ad a second time.
           rewardedInterstitialAd = null
-
+          // [START_EXCLUDE silent]
           if (googleMobileAdsConsentManager.canRequestAds) {
-            // Preload the next rewarded interstitial ad.
             loadRewardedInterstitialAd()
           }
+          // [END_EXCLUDE]
         }
 
         override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-          Log.d(MAIN_ACTIVITY_TAG, "Ad failed to show.")
-
+          // Called when fullscreen content failed to show.
+          Log.d(TAG, "Ad failed to show.")
           // Don't forget to set the ad reference to null so you
           // don't show the ad a second time.
           rewardedInterstitialAd = null
         }
 
         override fun onAdShowedFullScreenContent() {
-          Log.d(MAIN_ACTIVITY_TAG, "Ad showed fullscreen content.")
+          // Called when fullscreen content is shown.
+          Log.d(TAG, "Ad showed fullscreen content.")
+        }
+
+        override fun onAdImpression() {
+          // Called when an impression is recorded for an ad.
+          Log.d(TAG, "Ad recorded an impression.")
+        }
+
+        override fun onAdClicked() {
+          // Called when an ad is clicked.
+          Log.d(TAG, "Ad was clicked.")
         }
       }
+    // [END set_content_callback]
 
+    // [START show_ad]
     rewardedInterstitialAd?.show(this) { rewardItem ->
+      Log.d(TAG, "User earned the reward.")
+      // Handle the reward.
+      val rewardAmount = rewardItem.amount
+      val rewardType = rewardItem.type
+      // [START_EXCLUDE silent]
       addCoins(rewardItem.amount)
-      Log.d("TAG", "User earned the reward.")
+      // [END_EXCLUDE]
     }
+    // [END show_ad]
   }
 
   private fun initializeMobileAdsSdk() {
@@ -305,7 +328,7 @@ class MainActivity : AppCompatActivity() {
     private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/5354046379"
     private const val GAME_COUNTER_TIME = 10L
     private const val GAME_OVER_REWARD = 1
-    private const val MAIN_ACTIVITY_TAG = "MainActivity"
+    private const val TAG = "MainActivity"
 
     // Check your logcat output for the test device hashed ID e.g.
     // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))

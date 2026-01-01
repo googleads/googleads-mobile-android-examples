@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
   // a debug device".
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
-  private static final String AD_MANAGER_AD_UNIT_ID = "/6499/example/native";
-  private static final String SIMPLE_TEMPLATE_ID = "10063170";
+  private static final String AD_MANAGER_AD_UNIT_ID = "/21775744923/example/native";
+  private static final String SIMPLE_TEMPLATE_ID = "12387226";
   private static final String TAG = "MainActivity";
 
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    setSupportActionBar(findViewById(R.id.toolBar));
 
     refresh = findViewById(R.id.btn_refresh);
     requestNativeAds = findViewById(R.id.cb_nativeads);
@@ -127,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
-    MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -137,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
     View menuItemView = findViewById(item.getItemId());
     PopupMenu popup = new PopupMenu(this, menuItemView);
     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup
+        .getMenu()
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     popup.show();
     popup.setOnMenuItemClickListener(
         popupMenuItem -> {
@@ -147,6 +150,16 @@ public class MainActivity extends AppCompatActivity {
                 formError -> {
                   if (formError != null) {
                     Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
+            return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            MobileAds.openAdInspector(
+                this,
+                error -> {
+                  // Error will be non-null if ad inspector closed due to an error.
+                  if (error != null) {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                 });
             return true;

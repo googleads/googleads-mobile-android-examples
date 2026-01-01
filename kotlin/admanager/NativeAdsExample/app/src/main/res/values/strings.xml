@@ -1,6 +1,7 @@
 <resources>
     <string name="ad_attribution" translatable="false">Ad</string>
     <string name="ad_choices" translatable="false">Ad Choices icon</string>
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="app_name" translatable="false">Ad Manager Native Advanced</string>
     <string name="more_menu" translatable="false">More</string>
     <string name="privacy_settings" translatable="false">Privacy Settings</string>

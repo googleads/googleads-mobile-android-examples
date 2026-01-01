@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="app_name" translatable="false">Ad Manager Interstitial</string>
     <string name="done" translatable="false">done!</string>
     <string name="impossible_game" translatable="false">Impossible Game</string>

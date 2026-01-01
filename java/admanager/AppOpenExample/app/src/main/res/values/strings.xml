@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">AdMob App Open Example</string>
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
+    <string name="app_name" translatable="false">Ad Manager App Open Example</string>
     <string name="main_activity" translatable="false">Main Activity</string>
     <string name="main_activity_text" translatable="false">
         Leave and switch back to the app to see the ad.
@@ -8,5 +9,5 @@
     <string name="more_menu" translatable="false">More</string>
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="splash_activity_image_text" translatable="false">Splash Activity Image</string>
-    <string name="splash_activity_text" translatable="false">AdMob App Open Example</string>
+    <string name="splash_activity_text" translatable="false">Ad Manager App Open Example</string>
 </resources>

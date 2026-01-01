@@ -16,15 +16,11 @@
 
 package com.google.android.gms.example.bannerexample;
 
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowMetrics;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -48,10 +44,9 @@ public class MyActivity extends AppCompatActivity {
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
   // This is an ad unit ID for a test ad. Replace with your own banner ad unit ID.
-  static final String AD_UNIT = "/21775744923/example/banner";
+  static final String AD_UNIT = "/21775744923/example/adaptive-banner";
   private static final String TAG = "MyActivity";
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
-  private final AtomicBoolean initialLayoutComplete = new AtomicBoolean(false);
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
   private AdManagerAdView adView;
   private FrameLayout adContainerView;
@@ -91,25 +86,11 @@ public class MyActivity extends AppCompatActivity {
     if (googleMobileAdsConsentManager.canRequestAds()) {
       initializeMobileAdsSdk();
     }
-
-    // Since we're loading the banner based on the adContainerView size, we need to wait until this
-    // view is laid out before we can get the width.
-    adContainerView
-        .getViewTreeObserver()
-        .addOnGlobalLayoutListener(
-            () -> {
-              if (!initialLayoutComplete.getAndSet(true)
-                  && googleMobileAdsConsentManager.canRequestAds()) {
-                loadBanner();
-              }
-            });
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
-    MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -118,6 +99,10 @@ public class MyActivity extends AppCompatActivity {
     View menuItemView = findViewById(item.getItemId());
     PopupMenu popup = new PopupMenu(this, menuItemView);
     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup
+        .getMenu()
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     popup.show();
     popup.setOnMenuItemClickListener(
         popupMenuItem -> {
@@ -128,6 +113,16 @@ public class MyActivity extends AppCompatActivity {
                 formError -> {
                   if (formError != null) {
                     Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
+            return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            MobileAds.openAdInspector(
+                this,
+                error -> {
+                  // Error will be non-null if ad inspector closed due to an error.
+                  if (error != null) {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                 });
             return true;
@@ -169,7 +164,10 @@ public class MyActivity extends AppCompatActivity {
     // Create a new ad view.
     adView = new AdManagerAdView(this);
     adView.setAdUnitId(AD_UNIT);
-    adView.setAdSize(getAdSize());
+    // [START set_ad_size]
+    // Request an anchored adaptive banner with a width of 360.
+    adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360));
+    // [END set_ad_size]
 
     // Replace ad container with new ad view.
     adContainerView.removeAllViews();
@@ -177,7 +175,6 @@ public class MyActivity extends AppCompatActivity {
     // [END create_ad_view]
 
     // [START load_ad]
-    // Start loading the ad in the background.
     AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
     adView.loadAd(adRequest);
     // [END load_ad]
@@ -194,34 +191,17 @@ public class MyActivity extends AppCompatActivity {
             .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
             .build());
 
+    // [START initialize_sdk]
     new Thread(
             () -> {
               // Initialize the Google Mobile Ads SDK on a background thread.
               MobileAds.initialize(this, initializationStatus -> {});
-
+              // [START_EXCLUDE silent]
               // Load an ad on the main thread.
-              runOnUiThread(
-                  () -> {
-                    if (initialLayoutComplete.get()) {
-                      loadBanner();
-                    }
-                  });
+              runOnUiThread(this::loadBanner);
+              // [END_EXCLUDE]
             })
         .start();
-  }
-
-  // Get the ad size with screen width.
-  public AdSize getAdSize() {
-    DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-    int adWidthPixels = displayMetrics.widthPixels;
-
-    if (VERSION.SDK_INT >= VERSION_CODES.R) {
-      WindowMetrics windowMetrics = this.getWindowManager().getCurrentWindowMetrics();
-      adWidthPixels = windowMetrics.getBounds().width();
-    }
-
-    float density = displayMetrics.density;
-    int adWidth = (int) (adWidthPixels / density);
-    return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    // [END initialize_sdk]
   }
 }

@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'com.google.example.gms.nativeadvancedexample'
-    compileSdkVersion 34
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.google.example.gms.nativeadvancedexample"
-        minSdkVersion 21
+        minSdkVersion 23
         multiDexEnabled true
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
     }
@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.gms:play-services-ads:23.1.0'
-    implementation 'com.google.android.ump:user-messaging-platform:2.2.0'
+    implementation 'com.google.android.gms:play-services-ads:24.9.0'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
 }

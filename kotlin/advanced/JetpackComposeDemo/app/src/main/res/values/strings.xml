@@ -1,0 +1,24 @@
+<resources>
+  <string name="attribution">Ad</string>
+  <string name="app_name">Google Mobile Ads Jetpack Compose Demo</string>
+  <string name="adinspector_open_button">Ad Inspector</string>
+  <string name="main_title">Jetpack Compose Demo</string>
+  <string name="nav_home">Home</string>
+  <string name="nav_admanager_banner">Ad Manager Banner</string>
+  <string name="nav_banner">Banner</string>
+  <string name="nav_lazy_banner">Lazy Banner</string>
+  <string name="nav_native">Native</string>
+  <string name="privacy_options_open_button">Show Privacy Options Form</string>
+  <string name="text_reload">Reload Ad</string>
+  <string-array name="lazy_banner_filler_content">
+    <item>Semper adhibitiones probationales in evolutione adhibe.</item>
+    <item>Utere vexillis adaptivis in linea pro praeconiis intra materiam pascendi.</item>
+    <item>Utere vexillis adaptivis pro magnitudinibus praeconiorum per machinas optimizatis.</item>
+    <item>Imple consensum ad recipienda praeconia personalizata in EEA permittenda.</item>
+    <item>Permitte fontes praeconiorum licitantes ad vectigal praeconiorum emendandum.</item>
+    <item>Voca MobileAds.initialize() in filo secundario ad ANRs vitandos.</item>
+    <item>Loca praeconiorum diligenter in variis machinis et magnitudinibus tegumentorum proba.</item>
+    <item>Utere Inspectore Praeconiorum ad inquisitiones et responsa praeconiorum corrigenda.</item>
+    <item>Habes responsum in hoc exemplo? Fac nos scire in Github!</item>
+  </string-array>
+</resources>

@@ -16,13 +16,11 @@
 
 package com.google.android.gms.example.bannerexample
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowMetrics
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -41,26 +39,9 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
   private val isMobileAdsInitializeCalled = AtomicBoolean(false)
-  private val initialLayoutComplete = AtomicBoolean(false)
   private var adView: AdView? = null
   private lateinit var binding: ActivityMainBinding
   private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
-
-  // Get the ad size with screen width.
-  private val adSize: AdSize
-    get() {
-      val displayMetrics = resources.displayMetrics
-      val adWidthPixels =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-          val windowMetrics: WindowMetrics = this.windowManager.currentWindowMetrics
-          windowMetrics.bounds.width()
-        } else {
-          displayMetrics.widthPixels
-        }
-      val density = displayMetrics.density
-      val adWidth = (adWidthPixels / density).toInt()
-      return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
-    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -91,14 +72,6 @@ class MainActivity : AppCompatActivity() {
     if (googleMobileAdsConsentManager.canRequestAds) {
       initializeMobileAdsSdk()
     }
-
-    // Since we're loading the banner based on the adContainerView size, we need to wait until this
-    // view is laid out before we can get the width.
-    binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-      if (!initialLayoutComplete.getAndSet(true) && googleMobileAdsConsentManager.canRequestAds) {
-        loadBanner()
-      }
-    }
   }
 
   /** Called when leaving the activity. */
@@ -121,24 +94,33 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    val moreMenu = menu?.findItem(R.id.action_more)
-    moreMenu?.isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
     return super.onCreateOptionsMenu(menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     val menuItemView = findViewById<View>(item.itemId)
+    val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
           R.id.privacy_settings -> {
             // Handle changes to user consent.
-            googleMobileAdsConsentManager.showPrivacyOptionsForm(this@MainActivity) { formError ->
+            googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
               if (formError != null) {
-                Toast.makeText(this@MainActivity, formError.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }
@@ -154,7 +136,10 @@ class MainActivity : AppCompatActivity() {
     // Create a new ad view.
     val adView = AdView(this)
     adView.adUnitId = AD_UNIT_ID
-    adView.setAdSize(adSize)
+    // [START set_ad_size]
+    // Request an anchored adaptive banner with a width of 360.
+    adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360))
+    // [END set_ad_size]
     this.adView = adView
 
     // Replace ad container with new ad view.
@@ -163,7 +148,6 @@ class MainActivity : AppCompatActivity() {
     // [END create_ad_view]
 
     // [START load_ad]
-    // Start loading the ad in the background.
     val adRequest = AdRequest.Builder().build()
     adView.loadAd(adRequest)
     // [END load_ad]
@@ -179,17 +163,18 @@ class MainActivity : AppCompatActivity() {
       RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
     )
 
+    // [START initialize_sdk]
     CoroutineScope(Dispatchers.IO).launch {
       // Initialize the Google Mobile Ads SDK on a background thread.
       MobileAds.initialize(this@MainActivity) {}
-
+      // [START_EXCLUDE silent]
       runOnUiThread {
         // Load an ad on the main thread.
-        if (initialLayoutComplete.get()) {
-          loadBanner()
-        }
+        loadBanner()
       }
+      // [END_EXCLUDE]
     }
+    // [END initialize_sdk]
   }
 
   companion object {

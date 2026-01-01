@@ -17,6 +17,7 @@
 package com.google.android.gms.example.apidemo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +26,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.example.apidemo.databinding.FragmentCollapsibleBannerBinding;
-import java.util.UUID;
 
 /** The [CollapsibleBannerFragment] class demonstrates how to use a collapsible banner ad. */
 public class CollapsibleBannerFragment extends Fragment implements OnGlobalLayoutListener {
@@ -58,22 +59,37 @@ public class CollapsibleBannerFragment extends Fragment implements OnGlobalLayou
     view.getViewTreeObserver().addOnGlobalLayoutListener(this);
   }
 
+  // [START load_collapsible_banner]
   private void loadCollapsibleBanner() {
     // Create an extra parameter that aligns the bottom of the expanded ad to
     // the bottom of the bannerView.
     Bundle extras = new Bundle();
     extras.putString("collapsible", "bottom");
 
-    // Pass a UUID as a collapsible_request_id to limit collapsible ads on ad refreshing.
-    extras.putString("collapsible_request_id", UUID.randomUUID().toString());
-
     // Create an ad request.
     AdRequest adRequest =
         new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
 
+    // [START_EXCLUDE]
+    // Listen to ad events.
+    adView.setAdListener(
+        new AdListener() {
+          @Override
+          // [START check_collapsibility]
+          public void onAdLoaded() {
+            Log.i(
+                MainActivity.LOG_TAG,
+                String.format("Ad loaded. adView.isCollapsible() is %b.", adView.isCollapsible()));
+          }
+          // [END check_collapsibility]
+        });
+    // [END_EXCLUDE]
+
     // Start loading a collapsible banner ad.
     adView.loadAd(adRequest);
   }
+
+  // [END load_collapsible_banner]
 
   @Override
   public void onGlobalLayout() {

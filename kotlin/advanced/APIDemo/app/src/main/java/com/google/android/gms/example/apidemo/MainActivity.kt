@@ -8,8 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.example.apidemo.databinding.ActivityMainBinding
+import com.google.android.gms.example.apidemo.fullscreennative.FullScreenNativeLoadingFragment
+import com.google.android.gms.example.apidemo.preloading.AdMobPreloadingAdsFragment
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,13 +34,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun handleOnBackPressed() {
           if (mainActivityBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             mainActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
+          } else {
+            supportFragmentManager.popBackStackImmediate()
           }
         }
       }
     onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
-    // Initialize the Mobile Ads SDK with an empty completion listener.
-    MobileAds.initialize(this) {}
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+      RequestConfiguration.Builder().setTestDeviceIds(listOf(TEST_DEVICE_HASHED_ID)).build()
+    )
+
+    CoroutineScope(Dispatchers.IO).launch {
+      // Initialize the Google Mobile Ads SDK on a background thread.
+      MobileAds.initialize(this@MainActivity) {}
+    }
 
     val toggle =
       ActionBarDrawerToggle(
@@ -59,7 +74,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         R.id.nav_admob_adtargeting -> AdMobAdTargetingFragment()
         R.id.nav_admob_bannersizes -> AdMobBannerSizesFragment()
         R.id.nav_collapsible_banner -> CollapsibleBannerFragment()
+        R.id.nav_full_screen_native_loading -> FullScreenNativeLoadingFragment()
         R.id.nav_admob_custommute -> AdMobCustomMuteThisAdFragment()
+        R.id.nav_admob_preload -> AdMobPreloadingAdsFragment()
+        R.id.nav_admob_browser -> InAppBrowserFragment()
         R.id.nav_gam_adsizes -> AdManagerMultipleAdSizesFragment()
         R.id.nav_gam_appevents -> AdManagerAppEventsFragment()
         R.id.nav_gam_customtargeting -> AdManagerCustomTargetingFragment()
@@ -77,5 +95,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   companion object {
     const val LOG_TAG = "APIDEMO"
+    // Check your logcat output for the test device hashed ID e.g.
+    // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+    // to get test ads on this device" or
+    // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+    // a debug device".
+    const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
   }
 }

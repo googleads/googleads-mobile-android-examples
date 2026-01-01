@@ -90,9 +90,6 @@ class MyActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.action_menu, menu)
-    menu?.findItem(R.id.action_more)?.apply {
-      isVisible = googleMobileAdsConsentManager.isPrivacyOptionsRequired
-    }
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -101,6 +98,9 @@ class MyActivity : AppCompatActivity() {
     val activity = this
     PopupMenu(this, menuItemView).apply {
       menuInflater.inflate(R.menu.popup_menu, menu)
+      menu
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
       show()
       setOnMenuItemClickListener { popupMenuItem ->
         when (popupMenuItem.itemId) {
@@ -112,6 +112,13 @@ class MyActivity : AppCompatActivity() {
                 Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
               }
               resumeGame()
+            }
+            true
+          }
+          R.id.ad_inspector -> {
+            MobileAds.openAdInspector(activity) { error ->
+              // Error will be non-null if ad inspector closed due to an error.
+              error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
             }
             true
           }
@@ -129,16 +136,26 @@ class MyActivity : AppCompatActivity() {
       return
     }
     adIsLoading = true
-    val adRequest = AdManagerAdRequest.Builder().build()
 
+    // [START load_ad]
     AdManagerInterstitialAd.load(
       this,
       AD_UNIT_ID,
-      adRequest,
+      AdManagerAdRequest.Builder().build(),
       object : AdManagerInterstitialAdLoadCallback() {
+        override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
+          Log.d(TAG, "Ad was loaded.")
+          this@MyActivity.interstitialAd = interstitialAd
+          // [START_EXCLUDE silent]
+          adIsLoading = false
+          Toast.makeText(this@MyActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+          // [END_EXCLUDE]
+        }
+
         override fun onAdFailedToLoad(adError: LoadAdError) {
           Log.d(TAG, adError.message)
           interstitialAd = null
+          // [START_EXCLUDE silent]
           adIsLoading = false
           val error =
             "domain: ${adError.domain}, code: ${adError.code}, " + "message: ${adError.message}"
@@ -148,16 +165,11 @@ class MyActivity : AppCompatActivity() {
               Toast.LENGTH_SHORT,
             )
             .show()
-        }
-
-        override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
-          Log.d(TAG, "Ad was loaded.")
-          this@MyActivity.interstitialAd = interstitialAd
-          adIsLoading = false
-          Toast.makeText(this@MyActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+          // [END_EXCLUDE]
         }
       },
     )
+    // [END load_ad]
   }
 
   private fun createTimer(milliseconds: Long) {
@@ -197,24 +209,45 @@ class MyActivity : AppCompatActivity() {
   private fun showInterstitial() {
     // Show the ad if it's ready. Otherwise restart the game.
     if (interstitialAd != null) {
+      // [START set_fullscreen_callback]
       interstitialAd?.fullScreenContentCallback =
         object : FullScreenContentCallback() {
           override fun onAdDismissedFullScreenContent() {
-            interstitialAd = null
+            // Called when fullscreen content is dismissed.
             Log.d(TAG, "Ad was dismissed.")
+            // Don't forget to set the ad reference to null so you
+            // don't show the ad a second time.
+            interstitialAd = null
           }
 
           override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-            interstitialAd = null
+            // Called when fullscreen content failed to show.
             Log.d(TAG, "Ad failed to show.")
+            // Don't forget to set the ad reference to null so you
+            // don't show the ad a second time.
+            interstitialAd = null
           }
 
           override fun onAdShowedFullScreenContent() {
+            // Called when fullscreen content is shown.
             Log.d(TAG, "Ad showed fullscreen content.")
           }
-        }
 
+          override fun onAdImpression() {
+            // Called when an impression is recorded for an ad.
+            Log.d(TAG, "Ad recorded an impression.")
+          }
+
+          override fun onAdClicked() {
+            // Called when ad is clicked.
+            Log.d(TAG, "Ad was clicked.")
+          }
+        }
+      // [END set_fullscreen_callback]
+
+      // [START show_ad]
       interstitialAd?.show(this)
+      // [END show_ad]
     } else {
       startGame()
       if (googleMobileAdsConsentManager.canRequestAds) {
@@ -271,7 +304,7 @@ class MyActivity : AppCompatActivity() {
 
   companion object {
     // This is an ad unit ID for a test ad. Replace with your own interstitial ad unit ID.
-    private const val AD_UNIT_ID = "/6499/example/interstitial"
+    private const val AD_UNIT_ID = "/21775744923/example/interstitial"
     private const val GAME_LENGTH_MILLISECONDS: Long = 3000
     private const val TAG = "MyActivity"
 

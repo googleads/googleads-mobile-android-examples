@@ -51,7 +51,7 @@ public class MyActivity extends AppCompatActivity {
   public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
 
   private static final long GAME_LENGTH_MILLISECONDS = 3000;
-  private static final String AD_UNIT_ID = "/6499/example/interstitial";
+  private static final String AD_UNIT_ID = "/21775744923/example/interstitial";
   private static final String TAG = "MyActivity";
 
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
@@ -157,8 +157,6 @@ public class MyActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
-    MenuItem moreMenu = menu.findItem(R.id.action_more);
-    moreMenu.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     return true;
   }
 
@@ -167,6 +165,10 @@ public class MyActivity extends AppCompatActivity {
     View menuItemView = findViewById(item.getItemId());
     PopupMenu popup = new PopupMenu(this, menuItemView);
     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+    popup
+        .getMenu()
+        .findItem(R.id.privacy_settings)
+        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
     popup.show();
     popup.setOnMenuItemClickListener(
         popupMenuItem -> {
@@ -182,6 +184,16 @@ public class MyActivity extends AppCompatActivity {
                   resumeGame();
                 });
             return true;
+          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
+            MobileAds.openAdInspector(
+                this,
+                error -> {
+                  // Error will be non-null if ad inspector closed due to an error.
+                  if (error != null) {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                  }
+                });
+            return true;
           }
           return false;
         });
@@ -194,26 +206,26 @@ public class MyActivity extends AppCompatActivity {
       return;
     }
     adIsLoading = true;
-    AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
+    // [START load_ad]
     AdManagerInterstitialAd.load(
         this,
         AD_UNIT_ID,
-        adRequest,
+        new AdManagerAdRequest.Builder().build(),
         new AdManagerInterstitialAdLoadCallback() {
           @Override
           public void onAdLoaded(@NonNull AdManagerInterstitialAd interstitialAd) {
-            // The mInterstitialAd reference will be null until
-            // an ad is loaded.
+            Log.d(TAG, "Ad was loaded.");
             MyActivity.this.interstitialAd = interstitialAd;
+            // [START_EXCLUDE silent]
             adIsLoading = false;
-            Log.i(TAG, "onAdLoaded");
             Toast.makeText(MyActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
+            // [START set_fullscreen_callback]
             interstitialAd.setFullScreenContentCallback(
                 new FullScreenContentCallback() {
                   @Override
                   public void onAdDismissedFullScreenContent() {
                     // Called when fullscreen content is dismissed.
-                    Log.d("TAG", "The ad was dismissed.");
+                    Log.d(TAG, "The ad was dismissed.");
                     // Make sure to set your reference to null so you don't
                     // show it a second time.
                     MyActivity.this.interstitialAd = null;
@@ -222,7 +234,7 @@ public class MyActivity extends AppCompatActivity {
                   @Override
                   public void onAdFailedToShowFullScreenContent(AdError adError) {
                     // Called when fullscreen content failed to show.
-                    Log.d("TAG", "The ad failed to show.");
+                    Log.d(TAG, "The ad failed to show.");
                     // Make sure to set your reference to null so you don't
                     // show it a second time.
                     MyActivity.this.interstitialAd = null;
@@ -231,16 +243,30 @@ public class MyActivity extends AppCompatActivity {
                   @Override
                   public void onAdShowedFullScreenContent() {
                     // Called when fullscreen content is shown.
-                    Log.d("TAG", "The ad was shown.");
+                    Log.d(TAG, "The ad was shown.");
+                  }
+
+                  @Override
+                  public void onAdImpression() {
+                    // Called when an impression is recorded for an ad.
+                    Log.d(TAG, "The ad recorded an impression.");
+                  }
+
+                  @Override
+                  public void onAdClicked() {
+                    // Called when ad is clicked.
+                    Log.d(TAG, "The ad was clicked.");
                   }
                 });
+            // [END set_fullscreen_callback]
+            // [END_EXCLUDE]
           }
 
           @Override
           public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-            // Handle the error
-            Log.i(TAG, loadAdError.getMessage());
+            Log.d(TAG, loadAdError.getMessage());
             interstitialAd = null;
+            // [START_EXCLUDE silent]
             adIsLoading = false;
             String error =
                 String.format(
@@ -252,20 +278,27 @@ public class MyActivity extends AppCompatActivity {
             Toast.makeText(
                     MyActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
                 .show();
+            // [END_EXCLUDE]
           }
         });
+    // [END load_ad]
   }
 
   private void showInterstitial() {
     // Show the ad if it's ready. Otherwise restart the game.
+    // [START show_ad]
     if (interstitialAd != null) {
       interstitialAd.show(this);
     } else {
+      Log.d(TAG, "The interstitial ad is still loading.");
+      // [START_EXCLUDE silent]
       startGame();
       if (googleMobileAdsConsentManager.canRequestAds()) {
         loadAd();
       }
+      // [END_EXCLUDE]
     }
+    // [END show_ad]
   }
 
   private void startGame() {

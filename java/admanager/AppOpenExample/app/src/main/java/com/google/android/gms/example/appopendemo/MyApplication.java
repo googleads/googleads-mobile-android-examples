@@ -36,12 +36,12 @@ import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback;
 import java.util.Date;
 
 /** Application class that initializes, loads and show ads when activities change states. */
+// [START application_class]
 public class MyApplication extends Application
     implements ActivityLifecycleCallbacks, DefaultLifecycleObserver {
 
   private AppOpenAdManager appOpenAdManager;
   private Activity currentActivity;
-  private static final String TAG = "MyApplication";
 
   @Override
   public void onCreate() {
@@ -52,14 +52,20 @@ public class MyApplication extends Application
     appOpenAdManager = new AppOpenAdManager();
   }
 
+  // [END application_class]
+
   /** LifecycleObserver method that shows the app open ad when the app moves to foreground. */
+  // [START lifecycle_observer_events]
   @Override
   public void onStart(@NonNull LifecycleOwner owner) {
     DefaultLifecycleObserver.super.onStart(owner);
     appOpenAdManager.showAdIfAvailable(currentActivity);
   }
 
+  // [END lifecycle_observer_events]
+
   /** ActivityLifecycleCallback methods. */
+  // [START activity_lifecycle_callbacks]
   @Override
   public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
 
@@ -88,6 +94,8 @@ public class MyApplication extends Application
 
   @Override
   public void onActivityDestroyed(@NonNull Activity activity) {}
+
+  // [END activity_lifecycle_callbacks]
 
   /**
    * Load an app open ad.
@@ -122,10 +130,11 @@ public class MyApplication extends Application
   }
 
   /** Inner class that loads and shows app open ads. */
+  // [START manager_class]
   private class AppOpenAdManager {
 
     private static final String LOG_TAG = "AppOpenAdManager";
-    private static final String AD_UNIT_ID = "/6499/example/app-open";
+    private static final String AD_UNIT_ID = "/21775744923/example/app-open";
 
     private final GoogleMobileAdsConsentManager googleMobileAdsConsentManager =
         GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
@@ -139,6 +148,8 @@ public class MyApplication extends Application
     /** Constructor. */
     public AppOpenAdManager() {}
 
+    // [END manager_class]
+
     /**
      * Load an ad.
      *
@@ -149,43 +160,37 @@ public class MyApplication extends Application
       if (isLoadingAd || isAdAvailable()) {
         return;
       }
-
       isLoadingAd = true;
-      AdManagerAdRequest request = new AdManagerAdRequest.Builder().build();
+      // [START load_ad]
       AppOpenAd.load(
           context,
           AD_UNIT_ID,
-          request,
+          new AdManagerAdRequest.Builder().build(),
           new AppOpenAdLoadCallback() {
-            /**
-             * Called when an app open ad has loaded.
-             *
-             * @param ad the loaded app open ad.
-             */
             @Override
             public void onAdLoaded(AppOpenAd ad) {
+              // Called when an app open ad has loaded.
+              Log.d(LOG_TAG, "App open ad loaded.");
+              Toast.makeText(context, "Ad was loaded.", Toast.LENGTH_SHORT).show();
+
               appOpenAd = ad;
               isLoadingAd = false;
               loadTime = (new Date()).getTime();
-
-              Log.d(LOG_TAG, "onAdLoaded.");
-              Toast.makeText(context, "onAdLoaded", Toast.LENGTH_SHORT).show();
             }
 
-            /**
-             * Called when an app open ad has failed to load.
-             *
-             * @param loadAdError the error.
-             */
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
+              // Called when an app open ad has failed to load.
+              Log.d(LOG_TAG, "App open ad failed to load with error: " + loadAdError.getMessage());
+              Toast.makeText(context, "Ad failed to load.", Toast.LENGTH_SHORT).show();
+
               isLoadingAd = false;
-              Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
-              Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
             }
           });
+      // [END load_ad]
     }
 
+    // [START ad_expiration]
     /** Check if ad was loaded more than n hours ago. */
     private boolean wasLoadTimeLessThanNHoursAgo(long numHours) {
       long dateDifference = (new Date()).getTime() - loadTime;
@@ -195,11 +200,11 @@ public class MyApplication extends Application
 
     /** Check if ad exists and can be shown. */
     private boolean isAdAvailable() {
-      // Ad references in the app open beta will time out after four hours, but this time limit
-      // may change in future beta versions. For details, see:
-      // https://support.google.com/admob/answer/9341964?hl=en
+      // For time interval details, see: https://support.google.com/admob/answer/9341964
       return appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4);
     }
+
+    // [END ad_expiration]
 
     /**
      * Show the ad if one isn't already showing.

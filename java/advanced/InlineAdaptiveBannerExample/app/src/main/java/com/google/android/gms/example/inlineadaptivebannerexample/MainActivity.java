@@ -15,11 +15,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.json.JSONArray;
@@ -37,6 +40,13 @@ import org.json.JSONObject;
  */
 public class MainActivity extends AppCompatActivity {
 
+  // Check your logcat output for the test device hashed ID e.g.
+  // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+  // to get test ads on this device" or
+  // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+  // a debug device".
+  public static final String TEST_DEVICE_HASHED_ID = "ABCDEF012345";
+
   private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1039341195";
 
   // A banner ad is placed in every 8th position in the RecyclerView.
@@ -49,6 +59,19 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    // Set your test devices.
+    MobileAds.setRequestConfiguration(
+        new RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+            .build());
+
+    new Thread(
+            () -> {
+              // Initialize the Google Mobile Ads SDK on a background thread.
+              MobileAds.initialize(this, initializationStatus -> {});
+            })
+        .start();
 
     // The RecyclerView that holds and displays banner ads and menu items.
     RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -106,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   // Determine the screen width to use for the ad width.
+  // [START get_ad_width]
   public int getAdWidth() {
     DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
     int adWidthPixels = displayMetrics.widthPixels;
@@ -119,13 +143,17 @@ public class MainActivity extends AppCompatActivity {
     return (int) (adWidthPixels / density);
   }
 
+  // [END get_ad_width]
+
   /** Adds banner ads to the items list. */
   private void addBannerAds() {
     // Loop through the items array and place a new banner ad in every ith position in
     // the items List.
     for (int i = 0; i <= recyclerViewItems.size(); i += ITEMS_PER_AD) {
+      // [START create_banner_ad_view]
       final AdView adView = new AdView(MainActivity.this);
       adView.setAdSize(AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(this, getAdWidth()));
+      // [END create_banner_ad_view]
       adView.setAdUnitId(AD_UNIT_ID);
       recyclerViewItems.add(i, adView);
     }

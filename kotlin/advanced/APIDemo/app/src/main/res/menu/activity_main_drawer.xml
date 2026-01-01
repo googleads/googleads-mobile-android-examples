@@ -18,8 +18,17 @@
                 android:id="@+id/nav_collapsible_banner"
                 android:title="Collapsible banner ad" />
             <item
+                android:id="@+id/nav_full_screen_native_loading"
+                android:title="Full screen native ad" />
+            <item
                 android:id="@+id/nav_admob_custommute"
                 android:title="Custom Mute This Ad" />
+            <item
+                android:id="@+id/nav_admob_preload"
+                android:title="Ad Preloading" />
+            <item
+                android:id="@+id/nav_admob_browser"
+                android:title="Web View API for Ads" />
         </menu>
     </item>
 

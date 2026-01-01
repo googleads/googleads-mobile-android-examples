@@ -5,7 +5,7 @@ set -eo pipefail
 # If you are changing the expected_projects_count value, you likely want to be
 # changing .github/workflows.build.yml to modify which samples are built
 # through GitHub actions.
-expected_projects_count=29
+expected_projects_count=31
 projects=()
 
 # Reading all directories having a settings.gradle file into the projects
@@ -14,7 +14,7 @@ while IFS=' ' read -r -d $'\0'; do
   proj_dir=$(dirname "${REPLY}");
   echo "Project directory: $proj_dir"
   projects+=($proj_dir)
-done < <(find . -name "settings.gradle"  -print0)
+done < <(find . -name "settings.gradle*"  -print0)
 
 echo "There are ${#projects[@]} Android projects."
 echo "There are expected to be ${expected_projects_count} Android projects
