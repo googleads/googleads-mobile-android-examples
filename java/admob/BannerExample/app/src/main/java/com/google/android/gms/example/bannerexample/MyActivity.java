@@ -25,6 +25,9 @@ import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -55,7 +58,17 @@ public class MyActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_my);
+    setSupportActionBar(findViewById(R.id.toolBar));
     adContainerView = findViewById(R.id.ad_view_container);
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+        findViewById(R.id.main),
+        (view, insets) -> {
+          Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+          view.setPadding(
+              systemBarsInsets.left, 0, systemBarsInsets.right, systemBarsInsets.bottom);
+          return insets;
+        });
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
