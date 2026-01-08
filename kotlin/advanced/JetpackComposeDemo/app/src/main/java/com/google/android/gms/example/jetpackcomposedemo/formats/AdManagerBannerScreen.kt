@@ -37,7 +37,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.google.android.gms.compose_util.AdManagerBannerAd
-import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.ADMANANGER_ADAPTIVE_BANNER_AD_UNIT_ID
+import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.ADMANAGER_ADAPTIVE_BANNER_AD_UNIT_ID
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.TAG
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
@@ -49,7 +49,7 @@ fun AdManagerBannerScreen(modifier: Modifier = Modifier) {
 
   // Setup and load the adview.
   // Set the unique ID for this specific ad unit.
-  adView.adUnitId = ADMANANGER_ADAPTIVE_BANNER_AD_UNIT_ID
+  adView.adUnitId = ADMANAGER_ADAPTIVE_BANNER_AD_UNIT_ID
 
   // [START set_ad_size]
   // Set the adaptive banner ad size with a given width.
