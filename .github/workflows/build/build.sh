@@ -12,7 +12,7 @@ while IFS=' ' read -r -d $'\0'; do
   proj_dir=$(dirname "${REPLY}");
   (echo "${proj_dir}" | grep -E "(kotlin|java)" | grep -E "${REGEX}" )  \
    && projects+=("${proj_dir#./}")
-done < <(find . -maxdepth 4 -mindepth 4 -name "build.gradle"  -print0)
+done < <(find . -maxdepth 4 -mindepth 4 -name "build.gradle*"  -print0)
 
 CHANGES="$(git --no-pager diff --name-only "${COMMIT_RANGE}")";
 echo "Commit range: ${COMMIT_RANGE}; \n Changes: ${CHANGES}";
