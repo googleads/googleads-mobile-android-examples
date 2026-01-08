@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -107,7 +108,7 @@ private fun MainTopBar(
 
   TopAppBar(
     modifier = modifier,
-    title = { Text(context.getString(R.string.main_title)) },
+    title = { Text(stringResource(R.string.main_title)) },
     navigationIcon = {
       if (isNavigationEnabled) {
         IconButton(onClick = navigateBack) {
@@ -124,7 +125,7 @@ private fun MainTopBar(
       }
       DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
         DropdownMenuItem(
-          text = { Text(context.getString(R.string.adinspector_open_button)) },
+          text = { Text(stringResource(R.string.adinspector_open_button)) },
           enabled = isMobileAdsInitialized,
           onClick = {
             menuExpanded = false
@@ -133,7 +134,7 @@ private fun MainTopBar(
         )
         if (isPrivacyOptionsRequired) {
           DropdownMenuItem(
-            text = { Text(context.getString(R.string.privacy_options_open_button)) },
+            text = { Text(stringResource(R.string.privacy_options_open_button)) },
             onClick = {
               menuExpanded = false
               onShowPrivacyOptionsForm()
