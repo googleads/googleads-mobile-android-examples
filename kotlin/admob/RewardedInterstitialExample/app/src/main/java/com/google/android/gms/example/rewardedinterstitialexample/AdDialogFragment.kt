@@ -47,7 +47,7 @@ class AdDialogFragment : DialogFragment() {
 
     // Inflate and set the layout for the dialog
     // Pass null as the parent view because its going in the dialog layout
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.activity!!)
+    val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
     builder.setView(view)
 
     val args = arguments
