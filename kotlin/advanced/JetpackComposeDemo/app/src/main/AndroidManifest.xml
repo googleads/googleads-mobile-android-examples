@@ -28,11 +28,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity
-        android:name="com.google.android.gms.example.jetpackcomposedemo.NativeComposeActivity"
-        android:exported="true"
-        android:theme="@style/Theme.JetpackComposeDemo">
-    </activity>
   </application>
 
 </manifest>

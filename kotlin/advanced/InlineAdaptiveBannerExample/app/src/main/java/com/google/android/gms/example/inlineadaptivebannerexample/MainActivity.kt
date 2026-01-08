@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowMetrics
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    setSupportActionBar(findViewById(R.id.toolbar))
 
     // Set your test devices.
     MobileAds.setRequestConfiguration(
@@ -48,6 +51,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     val recyclerView: RecyclerView? = findViewById(R.id.recycler_view)
+
+    recyclerView?.let {
+      ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        view.setPadding(insets.left, 0, insets.right, insets.bottom)
+        WindowInsetsCompat.CONSUMED
+      }
+    }
 
     // The size of the RecyclerView depends on the height of the ad.
     recyclerView?.setHasFixedSize(false)
