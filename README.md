@@ -56,6 +56,7 @@ documentation on using the Mobile Ads SDK.
     [Java](https://github.com/googleads/googleads-mobile-android-examples/tree/main/java/advanced/InlineAdaptiveBannerExample) -
     Provides an example for displaying ads from AdMob inline adaptive banner ads
     in a RecyclerView widget.
+*   Jetpack Compose: [Sample](https://github.com/googleads/googleads-mobile-android-examples/tree/main/kotlin/advanced/JetpackComposeDemo)
 
 ## Ad Manager
 
