@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowMetrics
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    setSupportActionBar(findViewById(R.id.toolbar))
 
     // Set your test devices.
     MobileAds.setRequestConfiguration(
@@ -45,6 +48,13 @@ class MainActivity : AppCompatActivity() {
     CoroutineScope(Dispatchers.IO).launch {
       // Initialize the Google Mobile Ads SDK on a background thread.
       MobileAds.initialize(this@MainActivity) {}
+    }
+
+    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.coordinator)) { view, windowInsets
+      ->
+      val systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+      windowInsets
     }
 
     val recyclerView: RecyclerView? = findViewById(R.id.recycler_view)
