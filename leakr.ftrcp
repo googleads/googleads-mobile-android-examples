@@ -1,0 +1,26 @@
+# This is the LEAKR file type recipe for all Android GMA SDK examples.
+# See https://g3doc.corp.google.com/testing/leakr/g3doc/recipes.md
+name: "gma_android_sdk_examples_leakr"
+desc: "Overrides to default leakr behavior."
+
+file_config:{
+  name: "Skip checking Gradle JAR file without context"
+  desc: "This rule matches the file without context"
+  pattern: "^.*?gradle-wrapper.jar$"
+  compression: COMPRESSION_ZIP
+  scan_mode: SCAN_SKIP
+  viable_target: true
+  file_group: FG_ARCHIVE_ZIP
+  context: DEFAULT_TARGET_TYPE
+}
+
+file_config:{
+  name: "Skip checking Gradle JAR in an archive"
+  desc: "This rule matches the file in an archive"
+  pattern: "^.*?gradle-wrapper.jar$"
+  compression: COMPRESSION_ZIP
+  scan_mode: SCAN_SKIP
+  viable_target: true
+  file_group: FG_ARCHIVE_ZIP
+  context: ARCHIVE_DEFAULT
+}
