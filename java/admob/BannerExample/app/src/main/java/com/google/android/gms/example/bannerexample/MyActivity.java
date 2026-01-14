@@ -178,8 +178,8 @@ public class MyActivity extends AppCompatActivity {
     adView = new AdView(this);
     adView.setAdUnitId(AD_UNIT_ID);
     // [START set_ad_size]
-    // Request an anchored adaptive banner with a width of 360.
-    adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360));
+    // Request a large anchored adaptive banner with a width of 360.
+    adView.setAdSize(AdSize.getLargeAnchoredAdaptiveBannerAdSize(this, 360));
     // [END set_ad_size]
 
     // Replace ad container with new ad view.
