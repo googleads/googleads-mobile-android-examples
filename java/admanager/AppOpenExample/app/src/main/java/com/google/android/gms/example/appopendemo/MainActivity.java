@@ -22,6 +22,9 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.ads.MobileAds;
 
 /** Main activity in the app. */
@@ -33,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    setSupportActionBar(findViewById(R.id.toolBar));
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+        findViewById(R.id.container),
+        (view, insets) -> {
+          Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+          view.setPadding(
+              systemBarsInsets.left, 0, systemBarsInsets.right, systemBarsInsets.bottom);
+          return insets;
+        });
 
     googleMobileAdsConsentManager =
         GoogleMobileAdsConsentManager.getInstance(getApplicationContext());

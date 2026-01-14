@@ -8,6 +8,8 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.ads.MobileAds
 
 /** The main activity in the app. */
@@ -18,6 +20,13 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    setSupportActionBar(findViewById(R.id.toolBar))
+
+    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.container)) { view, insets ->
+      val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+      insets
+    }
 
     // Override the default implementation when the user presses the back key.
     val onBackPressedCallback: OnBackPressedCallback =
