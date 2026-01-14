@@ -36,9 +36,9 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.compose_util.BannerAd
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.BANNER_AD_UNIT_ID
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.TAG
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.BannerAd
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
 @Composable
