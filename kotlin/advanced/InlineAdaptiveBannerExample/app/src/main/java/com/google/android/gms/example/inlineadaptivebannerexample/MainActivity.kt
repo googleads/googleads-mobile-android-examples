@@ -21,6 +21,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets.UTF_8
 import java.util.ArrayList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -231,7 +232,7 @@ class MainActivity : AppCompatActivity() {
     try {
       var jsonDataString: String? = null
       inputStream = resources.openRawResource(R.raw.menu_items_json)
-      val bufferedReader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
+      val bufferedReader = BufferedReader(InputStreamReader(inputStream, UTF_8))
       while (bufferedReader.readLine().also { jsonDataString = it } != null) {
         builder.append(jsonDataString)
       }
