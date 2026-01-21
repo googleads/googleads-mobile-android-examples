@@ -1,5 +1,7 @@
 package com.google.android.gms.example.inlineadaptivebannerexample;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -262,8 +264,7 @@ public class MainActivity extends AppCompatActivity {
     try {
       String jsonDataString = null;
       inputStream = getResources().openRawResource(R.raw.menu_items_json);
-      BufferedReader bufferedReader =
-          new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, UTF_8));
       while ((jsonDataString = bufferedReader.readLine()) != null) {
         builder.append(jsonDataString);
       }
