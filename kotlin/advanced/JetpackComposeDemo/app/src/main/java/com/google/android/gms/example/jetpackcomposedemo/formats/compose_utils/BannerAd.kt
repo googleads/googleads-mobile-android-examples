@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.compose_util
+package com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
