@@ -52,8 +52,8 @@ fun BannerScreen(modifier: Modifier = Modifier) {
   adView.adUnitId = BANNER_AD_UNIT_ID
 
   // [START set_ad_size]
-  // Set the adaptive banner ad size with a given width.
-  val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(LocalContext.current, 360)
+  // Set a large anchored adaptive banner ad size with a given width.
+  val adSize = AdSize.getLargeAnchoredAdaptiveBannerAdSize(LocalContext.current, 360)
   adView.setAdSize(adSize)
   // [END set_ad_size]
 

@@ -148,8 +148,8 @@ class MainActivity : AppCompatActivity() {
     val adView = AdView(this)
     adView.adUnitId = AD_UNIT_ID
     // [START set_ad_size]
-    // Request an anchored adaptive banner with a width of 360.
-    adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360))
+    // Request a large anchored adaptive banner with a width of 360.
+    adView.setAdSize(AdSize.getLargeAnchoredAdaptiveBannerAdSize(this, 360))
     // [END set_ad_size]
     this.adView = adView
 
