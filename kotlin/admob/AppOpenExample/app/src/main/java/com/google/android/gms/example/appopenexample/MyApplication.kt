@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.multidex.MultiDexApplication
+import androidx.multidex.Application
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -21,13 +21,13 @@ import java.util.Date
 /** Application class that initializes, loads and show ads when activities change states. */
 // [START application_class]
 class MyApplication :
-  MultiDexApplication(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+  Application(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
 
   private lateinit var appOpenAdManager: AppOpenAdManager
   private var currentActivity: Activity? = null
 
   override fun onCreate() {
-    super<MultiDexApplication>.onCreate()
+    super<Application>.onCreate()
     registerActivityLifecycleCallbacks(this)
 
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
