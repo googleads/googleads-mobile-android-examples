@@ -48,19 +48,19 @@ import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.compose_util.NativeAdAttribution
-import com.google.android.gms.compose_util.NativeAdBodyView
-import com.google.android.gms.compose_util.NativeAdButton
-import com.google.android.gms.compose_util.NativeAdCallToActionView
-import com.google.android.gms.compose_util.NativeAdHeadlineView
-import com.google.android.gms.compose_util.NativeAdIconView
-import com.google.android.gms.compose_util.NativeAdMediaView
-import com.google.android.gms.compose_util.NativeAdPriceView
-import com.google.android.gms.compose_util.NativeAdStarRatingView
-import com.google.android.gms.compose_util.NativeAdStoreView
-import com.google.android.gms.compose_util.NativeAdView
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.NATIVE_AD_UNIT_ID
 import com.google.android.gms.example.jetpackcomposedemo.GoogleMobileAdsApplication.Companion.TAG
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdAttribution
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdBodyView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdButton
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdCallToActionView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdHeadlineView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdIconView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdMediaView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdPriceView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdStarRatingView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdStoreView
+import com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils.NativeAdView
 import com.google.android.gms.example.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
 // [START ad_listener]

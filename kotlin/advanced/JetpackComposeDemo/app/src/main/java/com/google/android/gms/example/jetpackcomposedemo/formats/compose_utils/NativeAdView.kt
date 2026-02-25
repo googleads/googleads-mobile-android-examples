@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.compose_util
+package com.google.android.gms.example.jetpackcomposedemo.formats.compose_utils
 
 import android.view.ViewGroup
 import android.widget.ImageView
