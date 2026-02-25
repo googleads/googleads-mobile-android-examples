@@ -79,50 +79,36 @@ public class MainActivity extends AppCompatActivity
   public boolean onNavigationItemSelected(MenuItem item) {
     FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
     Fragment newFragment = new Fragment();
+    int id = item.getItemId();
 
-    switch (item.getItemId()) {
-      case R.id.nav_admob_adlistener:
-        newFragment = new AdMobAdListenerFragment();
-        break;
-      case R.id.nav_admob_adtargeting:
-        newFragment = new AdMobAdTargetingFragment();
-        break;
-      case R.id.nav_admob_bannersizes:
-        newFragment = new AdMobBannerSizesFragment();
-        break;
-      case R.id.nav_collapsible_banner:
-        newFragment = new CollapsibleBannerFragment();
-        break;
-      case R.id.nav_admob_custommute:
-        newFragment = new AdMobCustomMuteThisAdFragment();
-        break;
-      case R.id.nav_admob_preload:
-        newFragment = new AdMobPreloadingAdsFragment();
-        break;
-      case R.id.nav_admob_browser:
-        newFragment = new InAppBrowserFragment();
-        break;
-      case R.id.nav_gam_adsizes:
-        newFragment = new AdManagerMultipleAdSizesFragment();
-        break;
-      case R.id.nav_gam_appevents:
-        newFragment = new AdManagerAppEventsFragment();
-        break;
-      case R.id.nav_gam_customtargeting:
-        newFragment = new AdManagerCustomTargetingFragment();
-        break;
-      case R.id.nav_gam_fluid:
-        newFragment = new AdManagerFluidSizeFragment();
-        break;
-      case R.id.nav_gam_ppid:
-        newFragment = new AdManagerPPIDFragment();
-        break;
-      case R.id.nav_gam_customcontrols:
-        newFragment = new AdManagerCustomControlsFragment();
-        break;
-      default:
-        newFragment = new AdManagerCategoryExclusionFragment();
-        break;
+    if (id == R.id.nav_admob_adlistener) {
+      newFragment = new AdMobAdListenerFragment();
+    } else if (id == R.id.nav_admob_adtargeting) {
+      newFragment = new AdMobAdTargetingFragment();
+    } else if (id == R.id.nav_admob_bannersizes) {
+      newFragment = new AdMobBannerSizesFragment();
+    } else if (id == R.id.nav_collapsible_banner) {
+      newFragment = new CollapsibleBannerFragment();
+    } else if (id == R.id.nav_admob_custommute) {
+      newFragment = new AdMobCustomMuteThisAdFragment();
+    } else if (id == R.id.nav_admob_preload) {
+      newFragment = new AdMobPreloadingAdsFragment();
+    } else if (id == R.id.nav_admob_browser) {
+      newFragment = new InAppBrowserFragment();
+    } else if (id == R.id.nav_gam_adsizes) {
+      newFragment = new AdManagerMultipleAdSizesFragment();
+    } else if (id == R.id.nav_gam_appevents) {
+      newFragment = new AdManagerAppEventsFragment();
+    } else if (id == R.id.nav_gam_customtargeting) {
+      newFragment = new AdManagerCustomTargetingFragment();
+    } else if (id == R.id.nav_gam_fluid) {
+      newFragment = new AdManagerFluidSizeFragment();
+    } else if (id == R.id.nav_gam_ppid) {
+      newFragment = new AdManagerPPIDFragment();
+    } else if (id == R.id.nav_gam_customcontrols) {
+      newFragment = new AdManagerCustomControlsFragment();
+    } else {
+      newFragment = new AdManagerCategoryExclusionFragment();
     }
     trans.replace(R.id.container, newFragment);
     trans.commit();

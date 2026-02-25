@@ -1,28 +1,30 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    namespace 'com.google.android.gms.example.bannerexample'
-    compileSdkVersion 35
+    namespace = 'com.google.android.gms.example.bannerexample'
+    compileSdkVersion(35)
     defaultConfig {
         applicationId "com.google.android.gms.example.bannerexample"
-        minSdkVersion 23
-        targetSdkVersion 35
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
+        minSdkVersion(23)
+        targetSdkVersion(35)
+        versionCode(1)
+        versionName = "1.0"
+        multiDexEnabled = true
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
         }
     }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'com.google.android.gms:play-services-ads:25.0.0'
-    implementation 'com.google.android.material:material:1.13.0'
-    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
+    implementation('androidx.appcompat:appcompat:1.2.0')
+    implementation('androidx.constraintlayout:constraintlayout:2.2.1')
+    implementation('com.google.android.gms:play-services-ads:25.0.0')
+    implementation('com.google.android.material:material:1.13.0')
+    implementation('com.google.android.ump:user-messaging-platform:4.0.0')
 }
