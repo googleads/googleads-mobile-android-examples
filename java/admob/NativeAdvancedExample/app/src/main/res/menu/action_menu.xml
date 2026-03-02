@@ -5,5 +5,15 @@
         android:id="@+id/action_more"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/more_menu"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/ad_inspector"
+                android:title="@string/ad_inspector" />
+            <item
+                android:id="@+id/privacy_settings"
+                android:title="@string/privacy_settings"
+                android:visible="false" />
+        </menu>
+    </item>
 </menu>
