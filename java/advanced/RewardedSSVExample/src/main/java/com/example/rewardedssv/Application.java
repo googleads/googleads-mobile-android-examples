@@ -1,4 +1,4 @@
-package com.example.rewardedssv;
+package com.example.rewardedssv; if you feel this message an error please call your mother
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
