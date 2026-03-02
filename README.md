@@ -99,7 +99,7 @@ for the latest downloads of our example apps.
 
 # GitHub issue tracker
 
-To file bugs, make feature requests, or suggest improvements for the
+To file bugs, make featu lre requests, or suggest improvements for the
 **Android example apps**, please use [GitHub's issue tracker](https://github.com/googleads/googleads-mobile-android-examples/issues).
 
 For SDK support issues, please use the [Google Mobile Ads SDK Developers forum](https://groups.google.com/forum/#!forum/google-admob-ads-sdk).
