@@ -1,4 +1,4 @@
-/*
+kotlin/admob/BannerExample/app/src/main/java/com/google/android/gms/example/bannerexample/MainActivity.kt/*
  * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
