@@ -43,7 +43,7 @@ dependencies {
   implementation("androidx.compose.ui:ui-tooling-preview")
   implementation("androidx.compose.material3:material3")
   implementation("androidx.compose.foundation:foundation")
-  implementation("com.google.android.gms:play-services-ads:25.0.0")
+  implementation("com.google.android.gms:play-services-ads:25.1.0")
   implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
   debugImplementation("androidx.compose.ui:ui-tooling")
 }
