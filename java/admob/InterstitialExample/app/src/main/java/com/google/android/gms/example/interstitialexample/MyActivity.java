@@ -204,8 +204,8 @@ public class MyActivity extends AppCompatActivity {
             Toast.makeText(
                     MyActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
                 .show();
+            // [END_EXCLUDE]
           }
-          // [END_EXCLUDE]
         });
     // [END load_ad]
   }
