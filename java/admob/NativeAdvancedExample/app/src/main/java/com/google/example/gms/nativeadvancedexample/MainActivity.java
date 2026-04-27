@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Google, Inc.
+ * Copyright (C) 2026 Google, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.AdListener;
@@ -40,10 +33,11 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
+import com.google.example.gms.nativeadvancedexample.databinding.ActivityMainBinding;
+import com.google.example.gms.nativeadvancedexample.databinding.AdUnifiedBinding;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,20 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
   private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
   private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
-  private Button refresh;
-  private CheckBox startVideoAdsMuted;
-  private TextView videoStatus;
+  private ActivityMainBinding binding;
   private NativeAd nativeAd;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    setSupportActionBar(findViewById(R.id.toolBar));
-
-    refresh = findViewById(R.id.refresh_button);
-    startVideoAdsMuted = findViewById(R.id.start_muted_checkbox);
-    videoStatus = findViewById(R.id.video_status_text);
+    binding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
+    setSupportActionBar(binding.toolBar);
 
     // Log the Mobile Ads SDK version.
     Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
@@ -95,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
           }
 
           if (googleMobileAdsConsentManager.canRequestAds()) {
-            refresh.setVisibility(View.VISIBLE);
+            binding.refreshButton.setVisibility(View.VISIBLE);
             initializeMobileAdsSdk();
           }
 
@@ -109,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     if (googleMobileAdsConsentManager.canRequestAds()) {
       initializeMobileAdsSdk();
     }
-    refresh.setOnClickListener(
+    binding.refreshButton.setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View unusedView) {
@@ -123,44 +112,36 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_menu, menu);
+    MenuItem privacyItem = menu.findItem(R.id.privacy_settings);
+    if (privacyItem != null) {
+      privacyItem.setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
+    }
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    View menuItemView = findViewById(item.getItemId());
-    PopupMenu popup = new PopupMenu(this, menuItemView);
-    popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-    popup
-        .getMenu()
-        .findItem(R.id.privacy_settings)
-        .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired());
-    popup.show();
-    popup.setOnMenuItemClickListener(
-        popupMenuItem -> {
-          if (popupMenuItem.getItemId() == R.id.privacy_settings) {
-            // Handle changes to user consent.
-            googleMobileAdsConsentManager.showPrivacyOptionsForm(
-                this,
-                formError -> {
-                  if (formError != null) {
-                    Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
-                  }
-                });
-            return true;
-          } else if (popupMenuItem.getItemId() == R.id.ad_inspector) {
-            MobileAds.openAdInspector(
-                this,
-                error -> {
-                  // Error will be non-null if ad inspector closed due to an error.
-                  if (error != null) {
-                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                  }
-                });
-            return true;
-          }
-          return false;
-        });
+    if (item.getItemId() == R.id.privacy_settings) {
+      // Handle changes to user consent.
+      googleMobileAdsConsentManager.showPrivacyOptionsForm(
+          this,
+          formError -> {
+            if (formError != null) {
+              Toast.makeText(this, formError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+          });
+      return true;
+    } else if (item.getItemId() == R.id.ad_inspector) {
+      MobileAds.openAdInspector(
+          this,
+          error -> {
+            // Error will be non-null if ad inspector closed due to an error.
+            if (error != null) {
+              Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+          });
+      return true;
+    }
     return super.onOptionsItemSelected(item);
   }
 
@@ -168,75 +149,77 @@ public class MainActivity extends AppCompatActivity {
    * Populates a {@link NativeAdView} object with data from a given {@link NativeAd}.
    *
    * @param nativeAd the object containing the ad's assets
-   * @param adView the view to be populated
+   * @param adBinding the binding object of the ad view
    */
-  private void populateNativeAdView(NativeAd nativeAd, NativeAdView adView) {
+  private void populateNativeAdView(NativeAd nativeAd, AdUnifiedBinding adBinding) {
+    NativeAdView adView = (NativeAdView) adBinding.getRoot();
+
     // Set the media view.
-    adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
+    adView.setMediaView(adBinding.adMedia);
 
     // Set other ad assets.
-    adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
-    adView.setBodyView(adView.findViewById(R.id.ad_body));
-    adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
-    adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-    adView.setPriceView(adView.findViewById(R.id.ad_price));
-    adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
-    adView.setStoreView(adView.findViewById(R.id.ad_store));
-    adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
+    adView.setHeadlineView(adBinding.adHeadline);
+    adView.setBodyView(adBinding.adBody);
+    adView.setCallToActionView(adBinding.adCallToAction);
+    adView.setIconView(adBinding.adAppIcon);
+    adView.setPriceView(adBinding.adPrice);
+    adView.setStarRatingView(adBinding.adStars);
+    adView.setStoreView(adBinding.adStore);
+    adView.setAdvertiserView(adBinding.adAdvertiser);
 
     // The headline and mediaContent are guaranteed to be in every NativeAd.
-    ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
-    adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+    adBinding.adHeadline.setText(nativeAd.getHeadline());
+    adBinding.adMedia.setMediaContent(nativeAd.getMediaContent());
 
     // These assets aren't guaranteed to be in every NativeAd, so it's important to
     // check before trying to display them.
     if (nativeAd.getBody() == null) {
-      adView.getBodyView().setVisibility(View.INVISIBLE);
+      adBinding.adBody.setVisibility(View.INVISIBLE);
     } else {
-      adView.getBodyView().setVisibility(View.VISIBLE);
-      ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+      adBinding.adBody.setVisibility(View.VISIBLE);
+      adBinding.adBody.setText(nativeAd.getBody());
     }
 
     if (nativeAd.getCallToAction() == null) {
-      adView.getCallToActionView().setVisibility(View.INVISIBLE);
+      adBinding.adCallToAction.setVisibility(View.INVISIBLE);
     } else {
-      adView.getCallToActionView().setVisibility(View.VISIBLE);
-      ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+      adBinding.adCallToAction.setVisibility(View.VISIBLE);
+      adBinding.adCallToAction.setText(nativeAd.getCallToAction());
     }
 
     if (nativeAd.getIcon() == null) {
-      adView.getIconView().setVisibility(View.GONE);
+      adBinding.adAppIcon.setVisibility(View.GONE);
     } else {
-      ((ImageView) adView.getIconView()).setImageDrawable(nativeAd.getIcon().getDrawable());
-      adView.getIconView().setVisibility(View.VISIBLE);
+      adBinding.adAppIcon.setImageDrawable(nativeAd.getIcon().getDrawable());
+      adBinding.adAppIcon.setVisibility(View.VISIBLE);
     }
 
     if (nativeAd.getPrice() == null) {
-      adView.getPriceView().setVisibility(View.INVISIBLE);
+      adBinding.adPrice.setVisibility(View.INVISIBLE);
     } else {
-      adView.getPriceView().setVisibility(View.VISIBLE);
-      ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
+      adBinding.adPrice.setVisibility(View.VISIBLE);
+      adBinding.adPrice.setText(nativeAd.getPrice());
     }
 
     if (nativeAd.getStore() == null) {
-      adView.getStoreView().setVisibility(View.INVISIBLE);
+      adBinding.adStore.setVisibility(View.INVISIBLE);
     } else {
-      adView.getStoreView().setVisibility(View.VISIBLE);
-      ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
+      adBinding.adStore.setVisibility(View.VISIBLE);
+      adBinding.adStore.setText(nativeAd.getStore());
     }
 
     if (nativeAd.getStarRating() == null) {
-      adView.getStarRatingView().setVisibility(View.INVISIBLE);
+      adBinding.adStars.setVisibility(View.INVISIBLE);
     } else {
-      ((RatingBar) adView.getStarRatingView()).setRating(nativeAd.getStarRating().floatValue());
-      adView.getStarRatingView().setVisibility(View.VISIBLE);
+      adBinding.adStars.setRating(nativeAd.getStarRating().floatValue());
+      adBinding.adStars.setVisibility(View.VISIBLE);
     }
 
     if (nativeAd.getAdvertiser() == null) {
-      adView.getAdvertiserView().setVisibility(View.INVISIBLE);
+      adBinding.adAdvertiser.setVisibility(View.INVISIBLE);
     } else {
-      ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
-      adView.getAdvertiserView().setVisibility(View.VISIBLE);
+      adBinding.adAdvertiser.setText(nativeAd.getAdvertiser());
+      adBinding.adAdvertiser.setVisibility(View.VISIBLE);
     }
 
     // This method tells the Google Mobile Ads SDK that you have finished populating your
@@ -259,14 +242,14 @@ public class MainActivity extends AppCompatActivity {
             public void onVideoEnd() {
               // Publishers should allow native ads to complete video playback before
               // refreshing or replacing them with another ad in the same UI location.
-              refresh.setEnabled(true);
-              videoStatus.setText("Video status: Video playback has ended.");
+              binding.refreshButton.setEnabled(true);
+              binding.videoStatusText.setText("Video status: Video playback has ended.");
               super.onVideoEnd();
             }
           });
     } else {
-      videoStatus.setText("Video status: Ad does not contain a video asset.");
-      refresh.setEnabled(true);
+      binding.videoStatusText.setText("Video status: Ad does not contain a video asset.");
+      binding.refreshButton.setEnabled(true);
     }
   }
 
@@ -275,8 +258,10 @@ public class MainActivity extends AppCompatActivity {
    * corresponding "populate" method when one is successfully returned.
    */
   private void refreshAd() {
-    refresh.setEnabled(false);
-    videoStatus.setText("");
+    binding.refreshButton.setEnabled(false);
+    binding.videoStatusText.setText("");
+
+    boolean startMuted = binding.startMutedCheckbox.isChecked();
 
     // It is recommended to call AdLoader.Builder on a background thread.
     new Thread(
@@ -291,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                       // If this callback occurs after the activity is destroyed, you must call
                       // destroy and return or you may get a memory leak.
                       boolean isDestroyed = false;
-                      refresh.setEnabled(true);
+                      binding.refreshButton.setEnabled(true);
                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         isDestroyed = isDestroyed();
                       }
@@ -305,18 +290,16 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.nativeAd.destroy();
                       }
                       MainActivity.this.nativeAd = nativeAd;
-                      FrameLayout frameLayout = findViewById(R.id.ad_frame);
-                      NativeAdView adView =
-                          (NativeAdView)
-                              getLayoutInflater().inflate(R.layout.ad_unified, frameLayout, false);
-                      populateNativeAdView(nativeAd, adView);
-                      frameLayout.removeAllViews();
-                      frameLayout.addView(adView);
+                      AdUnifiedBinding adBinding =
+                          AdUnifiedBinding.inflate(getLayoutInflater(), binding.adFrame, false);
+                      populateNativeAdView(nativeAd, adBinding);
+                      binding.adFrame.removeAllViews();
+                      binding.adFrame.addView(adBinding.getRoot());
                     }
                   });
 
               VideoOptions videoOptions =
-                  new VideoOptions.Builder().setStartMuted(startVideoAdsMuted.isChecked()).build();
+                  new VideoOptions.Builder().setStartMuted(startMuted).build();
 
               NativeAdOptions adOptions =
                   new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
@@ -329,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                           new AdListener() {
                             @Override
                             public void onAdFailedToLoad(LoadAdError loadAdError) {
-                              refresh.setEnabled(true);
+                              binding.refreshButton.setEnabled(true);
                               String error =
                                   String.format(
                                       Locale.getDefault(),
