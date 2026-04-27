@@ -1,5 +1,5 @@
 ---
-name: gma-integrate
+name: gma-android-integrate
 description: Provides technical specifications and implementation details for
   the play-services-ads Google Mobile Ads SDK
   (com.google.android.gms:play-services-ads), including Gradle dependencies,
