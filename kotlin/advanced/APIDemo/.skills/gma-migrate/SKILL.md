@@ -1,5 +1,5 @@
 ---
-name: gma-migrate
+name: gma-migrate-to-next-gen
 description: Migrates applications from the old Google Mobile Ads (GMA) SDK
   (com.google.android.gms:play-services-ads) to the new GMA Next-Gen SDK
   (com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk). Use when
