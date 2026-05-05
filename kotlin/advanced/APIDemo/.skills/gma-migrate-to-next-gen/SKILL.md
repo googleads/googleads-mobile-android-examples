@@ -7,7 +7,7 @@ description: Migrates applications from the old Google Mobile Ads (GMA) SDK
   Includes comprehensive mapping tables for imports, classes, and method
   signatures to help determine migration steps.
 metadata:
-  version: 1.0
+  version: 1.1
 ---
 
 # AI Migration Agent Instructions for the Google Mobile Ads SDK
@@ -90,6 +90,7 @@ This table covers the main classes and their GMA Next-Gen SDK equivalents.
 |:---------------------------|:-------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Core**                   |                                                                                      |                                                                                                                                                                                       |
 | Initialization             | `MobileAds`                                                                          | `MobileAds`, `initialization.InitializationConfig`                                                                                                                                    |
+| Initialization Listener    | `initialization.OnInitializationCompleteListener`                                    | `initialization.OnAdapterInitializationCompleteListener`                                                                                                                              |
 | Ad Request                 | `AdRequest`                                                                          | *Format specific* (e.g. `common.AdRequest`, `banner.BannerAdRequest`, `nativead.NativeAdRequest`) (Ad Unit ID is declared in `Builder`. Load() no longer takes an activity)           |
 | Load Error                 | `LoadAdError`                                                                        | `common.LoadAdError` (`LoadAdError` no longer has a domain variable. REMOVE the domain variable if found.)                                                                            |
 | Full Screen Show Error     | `AdError` (within `FullScreenContentCallback`)                                       | `common.FullScreenContentError` (within format-specific `AdEventCallback`)                                                                                                            |
