@@ -1,6 +1,5 @@
 plugins {
   id("com.android.library")
-  id("org.jetbrains.kotlin.android")
   id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -43,7 +42,7 @@ dependencies {
   implementation("androidx.compose.ui:ui-tooling-preview")
   implementation("androidx.compose.material3:material3")
   implementation("androidx.compose.foundation:foundation")
-  implementation("com.google.android.gms:play-services-ads:25.2.0")
+  implementation("com.google.android.gms:play-services-ads:25.3.0")
   implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
   debugImplementation("androidx.compose.ui:ui-tooling")
 }
