@@ -16,6 +16,7 @@
 
 package com.google.android.gms.snippets
 
+import com.google.android.gms.ads.AgeRestrictedTreatment
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 
@@ -81,6 +82,42 @@ private class RequestConfigurationSnippets {
         .build()
     MobileAds.setRequestConfiguration(requestConfiguration)
     // [END set_publisher_privacy_treatment]
+  }
+
+  private fun setChildAgeTreatment() {
+    // [START set_child_age_treatment]
+    val requestConfiguration =
+      MobileAds.getRequestConfiguration()
+        .toBuilder()
+        // Indicate that ad requests should have child age treatment.
+        .setAgeRestrictedTreatment(AgeRestrictedTreatment.CHILD)
+        .build()
+    MobileAds.setRequestConfiguration(requestConfiguration)
+    // [END set_child_age_treatment]
+  }
+
+  private fun setTeenAgeTreatment() {
+    // [START set_teen_age_treatment]
+    val requestConfiguration =
+      MobileAds.getRequestConfiguration()
+        .toBuilder()
+        // Indicate that ad requests should have teen age treatment.
+        .setAgeRestrictedTreatment(AgeRestrictedTreatment.TEEN)
+        .build()
+    MobileAds.setRequestConfiguration(requestConfiguration)
+    // [END set_teen_age_treatment]
+  }
+
+  private fun setUnspecifiedAgeTreatment() {
+    // [START set_unspecified_age_treatment]
+    val requestConfiguration =
+      MobileAds.getRequestConfiguration()
+        .toBuilder()
+        // Indicate that ad requests should have unspecified age treatment.
+        .setAgeRestrictedTreatment(AgeRestrictedTreatment.UNSPECIFIED)
+        .build()
+    MobileAds.setRequestConfiguration(requestConfiguration)
+    // [END set_unspecified_age_treatment]
   }
 
   companion object {

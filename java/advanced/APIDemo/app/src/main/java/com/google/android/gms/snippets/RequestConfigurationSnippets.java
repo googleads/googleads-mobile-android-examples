@@ -1,5 +1,6 @@
 package com.google.android.gms.snippets;
 
+import com.google.android.gms.ads.AgeRestrictedTreatment;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import java.util.Arrays;
@@ -66,5 +67,38 @@ final class RequestConfigurationSnippets {
             .build();
     MobileAds.setRequestConfiguration(requestConfiguration);
     // [END set_publisher_privacy_treatment]
+  }
+
+  private void setChildAgeTreatment() {
+    // [START set_child_age_treatment]
+    RequestConfiguration requestConfiguration =
+        MobileAds.getRequestConfiguration().toBuilder()
+            // Indicate that ad requests should have child age treatment.
+            .setAgeRestrictedTreatment(AgeRestrictedTreatment.CHILD)
+            .build();
+    MobileAds.setRequestConfiguration(requestConfiguration);
+    // [END set_child_age_treatment]
+  }
+
+  private void setTeenAgeTreatment() {
+    // [START set_teen_age_treatment]
+    RequestConfiguration requestConfiguration =
+        MobileAds.getRequestConfiguration().toBuilder()
+            // Indicate that ad requests should have teen age treatment.
+            .setAgeRestrictedTreatment(AgeRestrictedTreatment.TEEN)
+            .build();
+    MobileAds.setRequestConfiguration(requestConfiguration);
+    // [END set_teen_age_treatment]
+  }
+
+  private void setUnspecifiedAgeTreatment() {
+    // [START set_unspecified_age_treatment]
+    RequestConfiguration requestConfiguration =
+        MobileAds.getRequestConfiguration().toBuilder()
+            // Indicate that ad requests should have unspecified age treatment.
+            .setAgeRestrictedTreatment(AgeRestrictedTreatment.UNSPECIFIED)
+            .build();
+    MobileAds.setRequestConfiguration(requestConfiguration);
+    // [END set_unspecified_age_treatment]
   }
 }
