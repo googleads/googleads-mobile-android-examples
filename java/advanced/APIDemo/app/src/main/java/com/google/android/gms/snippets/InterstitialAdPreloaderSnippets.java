@@ -75,9 +75,9 @@ final class InterstitialAdPreloaderSnippets extends Fragment {
 
   private void bufferSize() {
     // [START set_buffer_size]
-    // Define a PreloadConfiguration and buffer up to 5 preloaded ads.
+    // Define a PreloadConfiguration and buffer up to 3 preloaded ads.
     PreloadConfiguration configuration =
-        new PreloadConfiguration.Builder(AD_UNIT_ID).setBufferSize(5).build();
+        new PreloadConfiguration.Builder(AD_UNIT_ID).setBufferSize(3).build();
     // [END set_buffer_size]
   }
 
