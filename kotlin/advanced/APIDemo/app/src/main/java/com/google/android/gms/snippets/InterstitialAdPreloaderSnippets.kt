@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,8 @@ private class InterstitialAdPreloaderSnippets {
 
   private fun bufferSize() {
     // [START set_buffer_size]
-    // Define a PreloadConfiguration and buffer up to 5 preloaded ads.
-    val configuration = PreloadConfiguration.Builder(AD_UNIT_ID).setBufferSize(5).build()
+    // Define a PreloadConfiguration and buffer up to 3 preloaded ads.
+    val configuration = PreloadConfiguration.Builder(AD_UNIT_ID).setBufferSize(3).build()
     // [END set_buffer_size]
   }
 
