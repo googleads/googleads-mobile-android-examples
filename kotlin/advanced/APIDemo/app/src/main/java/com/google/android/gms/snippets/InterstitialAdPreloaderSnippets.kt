@@ -66,8 +66,8 @@ private class InterstitialAdPreloaderSnippets {
 
   private fun bufferSize() {
     // [START set_buffer_size]
-    // Define a PreloadConfiguration and buffer up to 3 preloaded ads.
-    val configuration = PreloadConfiguration.Builder(AD_UNIT_ID).setBufferSize(3).build()
+    // Define a PreloadConfiguration and set the buffer size to 2 preloaded ads.
+    val configuration = PreloadConfiguration.Builder(AD_UNIT_ID).setBufferSize(2).build()
     // [END set_buffer_size]
   }
 
