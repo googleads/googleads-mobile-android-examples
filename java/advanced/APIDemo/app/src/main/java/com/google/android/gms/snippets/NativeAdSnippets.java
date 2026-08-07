@@ -14,15 +14,23 @@
 
 package com.google.android.gms.snippets;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
+import com.google.android.gms.ads.nativead.NativeAdView;
+import com.google.android.gms.example.apidemo.databinding.NativeAdBinding;
 
 /** Java code snippets for the developer guide. */
 final class NativeAdSnippets {
@@ -32,9 +40,6 @@ final class NativeAdSnippets {
   // see https://developers.google.com/admob/android/test-ads.
   // and https://developers.google.com/ad-manager/mobile-ads-sdk/android/test-ads.
   private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
-  private static final String VIDEO_AD_UNIT_ID = "ca-app-pub-3940256099942544/1044960115";
-  private static final String ADMANAGER_AD_UNIT_ID = "/21775744923/example/native";
-  private static final String ADMANAGER_VIDEO_AD_UNIT_ID = "/21775744923/example/native-video";
 
   private void createAdLoader(Context context) {
     // [START create_ad_loader]
@@ -52,9 +57,33 @@ final class NativeAdSnippets {
                       .withAdListener(
                           new AdListener() {
                             @Override
-                            // The native ad load failed. Check the adError message for failure
-                            // reasons.
+                            // Called when the user is about to return to the application after
+                            // clicking on an ad.
+                            public void onAdClosed() {}
+
+                            @Override
+                            // Called when an ad request failed.
                             public void onAdFailedToLoad(@NonNull LoadAdError adError) {}
+
+                            @Override
+                            // Called when an ad opens an overlay that covers the screen.
+                            public void onAdOpened() {}
+
+                            @Override
+                            // Called when an ad is received.
+                            public void onAdLoaded() {}
+
+                            @Override
+                            // Called when a click is recorded for an ad.
+                            public void onAdClicked() {}
+
+                            @Override
+                            // Called when an impression is recorded for an ad.
+                            public void onAdImpression() {}
+
+                            @Override
+                            // Called when a swipe gesture on an ad is recorded as a click.
+                            public void onAdSwipeGestureClicked() {}
                           })
                       // Use the NativeAdOptions.Builder class to specify individual options
                       // settings.
@@ -110,9 +139,142 @@ final class NativeAdSnippets {
     // [END handle_ad_loaded]
   }
 
+  private void addNativeAdView(
+      NativeAd nativeAd,
+      Activity activity,
+      LayoutInflater layoutInflater,
+      FrameLayout frameLayout) {
+    // [START add_ad_view]
+    activity.runOnUiThread(
+        () -> {
+          // Inflate the native ad view and add it to the view hierarchy.
+          NativeAdBinding nativeAdBinding = NativeAdBinding.inflate(layoutInflater);
+          View adView = nativeAdBinding.getRoot();
+
+          // Display and register the native ad asset views here.
+          displayAndRegisterNativeAd(nativeAd, nativeAdBinding);
+
+          // Remove all old ad views and add the new native.
+          frameLayout.removeAllViews();
+          // Add the new native ad view to the view hierarchy.
+          frameLayout.addView(adView);
+        });
+    // [END add_ad_view]
+  }
+
+  // [START display_native_ad]
+  private void displayAndRegisterNativeAd(NativeAd nativeAd, NativeAdBinding nativeAdBinding) {
+    // [START populate_native_ad_view]
+    // Populate all native ad view assets with the native ad.
+    nativeAdBinding.adMedia.setMediaContent(nativeAd.getMediaContent());
+    nativeAdBinding.adAdvertiser.setText(nativeAd.getAdvertiser());
+    nativeAdBinding.adBody.setText(nativeAd.getBody());
+    nativeAdBinding.adCallToAction.setText(nativeAd.getCallToAction());
+    nativeAdBinding.adHeadline.setText(nativeAd.getHeadline());
+    nativeAdBinding.adAppIcon.setImageDrawable(nativeAd.getIcon().getDrawable());
+    nativeAdBinding.adPrice.setText(nativeAd.getPrice());
+    Double starRating = nativeAd.getStarRating();
+    if (starRating != null) {
+      nativeAdBinding.adStars.setRating(starRating.floatValue());
+    }
+    nativeAdBinding.adStore.setText(nativeAd.getStore());
+    // [END populate_native_ad_view]
+
+    // [START hide_native_ad_view_assets]
+    // Hide all native ad view assets that are not returned within the native ad.
+    nativeAdBinding.adAdvertiser.setVisibility(
+        (nativeAd.getAdvertiser() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adBody.setVisibility((nativeAd.getBody() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adCallToAction.setVisibility(
+        (nativeAd.getCallToAction() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adHeadline.setVisibility(
+        (nativeAd.getHeadline() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adAppIcon.setVisibility(
+        (nativeAd.getIcon() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adPrice.setVisibility((nativeAd.getPrice() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adStars.setVisibility(
+        (nativeAd.getStarRating() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adMedia.setVisibility(
+        (nativeAd.getMediaContent() == null) ? View.GONE : View.VISIBLE);
+    nativeAdBinding.adStore.setVisibility((nativeAd.getStore() == null) ? View.GONE : View.VISIBLE);
+    // [END hide_native_ad_view_assets]
+
+    // [START register_native_ad_assets]
+    // Register all native ad assets with the native ad view.
+    NativeAdView nativeAdView = nativeAdBinding.getRoot();
+    nativeAdView.setAdvertiserView(nativeAdBinding.adAdvertiser);
+    nativeAdView.setBodyView(nativeAdBinding.adBody);
+    nativeAdView.setCallToActionView(nativeAdBinding.adCallToAction);
+    nativeAdView.setHeadlineView(nativeAdBinding.adHeadline);
+    nativeAdView.setIconView(nativeAdBinding.adAppIcon);
+    nativeAdView.setPriceView(nativeAdBinding.adPrice);
+    nativeAdView.setStarRatingView(nativeAdBinding.adStars);
+    nativeAdView.setStoreView(nativeAdBinding.adStore);
+    nativeAdView.setMediaView(nativeAdBinding.adMedia);
+    // [END register_native_ad_assets]
+
+    // [START set_native_ad]
+    // This method tells the Google Mobile Ads SDK that you have finished populating your
+    // native ad view with this native ad.
+    nativeAdView.setNativeAd(nativeAd);
+    // [END set_native_ad]
+  }
+
+  // [END display_native_ad]
+
+  private void setEventCallback(AdLoader.Builder adLoader) {
+    // [START set_event_callback]
+    adLoader
+        .withAdListener(
+            new AdListener() {
+              @Override
+              public void onAdClosed() {
+                // Called when the user is about to return to the application after clicking an ad.
+              }
+
+              @Override
+              public void onAdFailedToLoad(LoadAdError adError) {
+                // Called when an ad request failed.
+              }
+
+              @Override
+              public void onAdOpened() {
+                // Called when an ad opens an overlay that covers the screen.
+              }
+
+              @Override
+              public void onAdLoaded() {
+                // Called when an ad is received.
+              }
+
+              @Override
+              public void onAdClicked() {
+                // Called when a click is recorded for an ad.
+              }
+
+              @Override
+              public void onAdImpression() {
+                // Called when an impression is recorded for an ad.
+              }
+
+              @Override
+              public void onAdSwipeGestureClicked() {
+                // Called when a swipe gesture on an ad is recorded as a click.
+              }
+            })
+        .build();
+    // [END set_event_callback]
+  }
+
   private void destroyAd(NativeAd nativeAd) {
     // [START destroy_ad]
     nativeAd.destroy();
     // [END destroy_ad]
+  }
+
+  private void setImageScaleType(MediaView mediaView) {
+    // [START set_image_scale_type]
+    mediaView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+    // [END set_image_scale_type]
   }
 }
