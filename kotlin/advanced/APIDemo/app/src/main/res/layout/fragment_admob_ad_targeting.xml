@@ -31,68 +31,36 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/targeting_tv_child"
+                android:id="@+id/targeting_tv_age_restricted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/targeting_child"
+                android:text="@string/targeting_age_restricted"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RadioGroup
-                android:id="@+id/targeting_rg_child"
+                android:id="@+id/targeting_rg_age_restricted"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/targeting_rb_tfcd_yes"
+                    android:id="@+id/targeting_rb_child"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes" />
+                    android:text="@string/child" />
 
                 <RadioButton
-                    android:id="@+id/targeting_rb_tfcd_no"
+                    android:id="@+id/targeting_rb_teen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="@string/teen" />
 
                 <RadioButton
-                    android:id="@+id/targeting_rb_tfcd_unspecified"
+                    android:id="@+id/targeting_rb_unspecified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/unspecified" />
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/targeting_tv_tfua"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/targeting_tfua"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <RadioGroup
-                android:id="@+id/targeting_rg_tfua"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/targeting_rb_tfua_yes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/yes" />
-
-                <RadioButton
-                    android:id="@+id/targeting_rb_tfua_no"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no" />
-
-                <RadioButton
-                    android:id="@+id/targeting_rb_tfua_unspecified"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/unspecified" />
             </RadioGroup>
 

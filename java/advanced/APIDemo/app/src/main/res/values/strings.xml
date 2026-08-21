@@ -11,8 +11,9 @@
 
     <string name="ad_attribution" translatable="false">Ad</string>
 
-    <string name="targeting_child" translatable="false">Tag for child-directed treatment</string>
-    <string name="targeting_tfua" translatable="false">Tag for users under the age of consent in Europe</string>
+    <string name="targeting_age_restricted" translatable="false">Age-restricted treatment</string>
+    <string name="child" translatable="false">Child</string>
+    <string name="teen" translatable="false">Teen</string>
     <string name="targeting_rating" translatable="false">Max ad content rating</string>
     <string name="targeting_load" translatable="false">Load Ad</string>
     <string name="targeting_rating_g" translatable="false">G</string>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AgeRestrictedTreatment
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.example.apidemo.databinding.FragmentAdmobAdTargetingBinding
@@ -31,36 +32,14 @@ class AdMobAdTargetingFragment : Fragment() {
       val builder = MobileAds.getRequestConfiguration().toBuilder()
 
       when {
-        fragmentBinding.targetingRbTfcdUnspecified.isChecked -> {
-          builder.setTagForChildDirectedTreatment(
-            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED
-          )
+        fragmentBinding.targetingRbChild.isChecked -> {
+          builder.setAgeRestrictedTreatment(AgeRestrictedTreatment.CHILD)
         }
-        fragmentBinding.targetingRbTfcdYes.isChecked -> {
-          builder.setTagForChildDirectedTreatment(
-            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE
-          )
+        fragmentBinding.targetingRbTeen.isChecked -> {
+          builder.setAgeRestrictedTreatment(AgeRestrictedTreatment.TEEN)
         }
-        fragmentBinding.targetingRbTfcdNo.isChecked -> {
-          builder.setTagForChildDirectedTreatment(
-            RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE
-          )
-        }
-      }
-
-      when {
-        fragmentBinding.targetingRbTfuaUnspecified.isChecked -> {
-          builder.setTagForUnderAgeOfConsent(
-            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_UNSPECIFIED
-          )
-        }
-        fragmentBinding.targetingRbTfuaYes.isChecked -> {
-          builder.setTagForUnderAgeOfConsent(RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE)
-        }
-        fragmentBinding.targetingRbTfuaNo.isChecked -> {
-          builder.setTagForUnderAgeOfConsent(
-            RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE
-          )
+        fragmentBinding.targetingRbUnspecified.isChecked -> {
+          builder.setAgeRestrictedTreatment(AgeRestrictedTreatment.UNSPECIFIED)
         }
       }
 
