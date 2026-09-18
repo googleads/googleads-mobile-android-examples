@@ -7,7 +7,7 @@ android {
     compileSdkVersion(35)
     defaultConfig {
         applicationId "com.google.example.gms.nativeadsexample"
-        minSdkVersion(23)
+        minSdkVersion(24)
         multiDexEnabled = true
         targetSdkVersion(35)
         versionCode(1)
@@ -23,7 +23,7 @@ android {
 
 dependencies {
     implementation('androidx.appcompat:appcompat:1.2.0')
-    implementation('com.google.android.gms:play-services-ads:25.4.0')
+    implementation('com.google.android.gms:play-services-ads:25.5.0')
     implementation('com.google.android.material:material:1.13.0')
     implementation('com.google.android.ump:user-messaging-platform:4.0.0')
 }
